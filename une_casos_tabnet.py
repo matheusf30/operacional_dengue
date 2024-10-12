@@ -1,28 +1,5 @@
 """
 #################################################################################################
-REGISTRO SINAN/SC >>>(DATASUS)
-Atentar aos dados provenientes do TabNet... https://tabnet.datasus.gov.br/
-
---Seleções:
->>> LINHAS: Município de Infecção;
->>> COLUNAS: Semana Epidemilógica dos 1ºs sinais.
-
---Períodos:
->>> Haverá um arquivo por ano.
-
---Seleções Disponíveis(Filtros):
->>> UF F.infecção: 42 Santa Catarina (Desconsiderados todas as outras UFs, Ignorado e Exterior);
-
->>> Classificação Final: Dengue Clássico, Dengue com Complicações, Febre Hemorrágica do Dengue,
-                         Síndrome do Choque do Dengue, Dengue e Dengue com Sinais de alarme.
-(Nesse filtro foram desconsiderados: Ignorado, Branco, Descartado e Inconclusivo);
-
->>> Critério de Confirmação: Laboratorial e Clínico-Epidemiológico.
-(Nesse filtro foram desconsiderados: Ignorado, Branco e Em Investigação);
-
->>>(Também não foram filtrados por sorotipo, pois não há confirmação laboratorial de todos.)
-
-#################################################################################################
 REGISTRO SINAN/SC >>>(DIVESC)
 Atentar aos dados provenientes do TabNet... http://200.19.223.105/cgi-bin/dh?sinan/def/dengon.def
 
@@ -59,69 +36,36 @@ warnings.simplefilter("ignore", category = UserWarning)
 
 
 ### Encaminhamento aos Diretórios
-_local = "IFSC" # OPÇÕES>>> "GH" | "CASA" | "IFSC"
-if _local == "GH": # _ = Variável Privada
-    caminho_dados = "https://raw.githubusercontent.com/matheusf30/dados_dengue/main/"
-elif _local == "CASA":
-    caminho_dados = "C:\\Users\\Desktop\\Documents\\GitHub\\dados_dengue\\"
-elif _local == "IFSC":
-    caminho_dados = "/home/sifapsc/scripts/matheus/dados_dengue/"
-else:
-    print("CAMINHO NÃO RECONHECIDO! VERIFICAR LOCAL!")
+caminho_github = "https://raw.githubusercontent.com/matheusf30/dados_dengue/main/" # WEB
+caminho_dados = "/home/meteoro/scripts/matheus/operacional_dengue/dados_operacao/" # CLUSTER
+caminho_operacional = 
+caminho_shape = "/media/dados/shapefiles/SC/" #SC_Municipios_2022.shp
+caminho_gfs = "/media/dados/operacao/gfs/0p25/" #202410/20241012/ #prec_daily_gfs_2024101212.nc
+caminho_merge = "/media/dados/operacao/merge/daily/2024/" #MERGE_CPTEC_DAILY_SB_2024.nc
+caminho_merge2 = "/media/dados/operacao/merge/CDO.MERGE" #MERGE_CPTEC_DAILY_2024.nc@
+caminho_samet = "/media/dados/operacao/samet/daily/" #/TMAX/2024/ #SAMeT_CPTEC_DAILY_SB_TMAX_2024.nc
+caminho_samet2 = "/media/dados/operacao/samet/CDO.SAMET/" #SAMeT_CPTEC_DAILY_SB_TMAX_2024.nc@
 
-print(f"\nOS DADOS UTILIZADOS ESTÃO ALOCADOS NOS SEGUINTES CAMINHOS:\n\n{caminho_dados}\n\n")
-
-### Apresentação de Abertura
-print("""
-Este roteiro automatiza os casos ao ponto de salvar xy.
-Similar acontece aos focos ao executar sequencialmente:
-- une_focos_dive.py;
-- focos_timespace.py;
-- focos_pivot.py;
-""")
+### Renomeação variáveis pelos arquivos
+ANO_ESCOLHIDO = str(datetime.today().year)
+#prec_daily_gfs_2024101212.nc
+#temp_min_daily_gfs_2024101200.nc
+#temp_mean_daily_gfs_2024101200.nc
+#temp_max_daily_gfs_2024101200.nc
+#MERGE_CPTEC_DAILY_SB_2024.nc
+#SAMeT_CPTEC_DAILY_SB_TMAX_2024.nc
+municipios = "shapefiles/SC_Municipios_2022.shp"
+# Fonte: TABNET/DATASUS - SINAN/SC
+casos24 = "A173120200_135_184_253.csv"
+serie_casos = "casos_dive_pivot_total.csv"
+### Abrindo Arquivos
+municipios = gpd.read_file(f"{caminho_dados}{municipios}", low_memory = False)
+serie_casos = pd.read_csv(f"")
+casos24 = pd.read_csv(f"{caminho_operacional}{casos24}", skiprows = 5,
+                      sep = ";", encoding = "latin1", engine = "python")
 
 ## Dados "Brutos"
-_fonte = "DIVESC" # DIVESC" | "DATASUS"
-if _fonte == "DATASUS":
-	print("""
-Casos Prováveis por Semana epidem. 1º Sintomas(s) segundo Município infecção
-UF F.infecção: 42 Santa Catarina
-Class. Final: Dengue Clássico, Dengue com complicações, Febre Hemorrágica do Dengue, Síndrome do Choque do Dengue, Dengue, Dengue com sinais de alarme
-Criterio conf.: Laboratórial, Clínico-epidemiológico
-Período: 2014 - [...]
- Fonte: Ministério da Saúde/SVSA - Sistema de Informação de Agravos de Notificação - Sinan Net
-
-Notas:
-
-    Para os casos prováveis foram incluídas todas notificações, exceto casos descartados.
-    As bases de dados de dengue aqui disponíveis compõem um banco único a partir de 2014, podendo haver pequenas divergências com os dados disponibilizados pelo CGARB (Coordenação Geral de Vigilância de Arboviroses - CGARB) em sua série histórica, que para tal, realiza análise ano a ano, com a base congelada para cada ano analisado.
-    Para tabular os casos graves (classificação final igual a dengue com complicações, febre hemorrágica da dengue, síndrome do choque da dengue, dengue com sinais de alarme e dengue grave) é necessário considerar também o critério de confirmação (laboratorial e clínico-epidemiológico).
-    A partir de 2020 o estado do Espírito Santo passou a utilizar o sistema e-SUS Vigilância em Saúde. Portanto, para os casos de Arboviroses urbanas do Espírito Santo foram considerados apenas os dados disponibilizados pelo Sinan online (dengue e chikungunya) e Sinan Net (zika).
-    Períodos Disponíveis ou período - Correspondem aos anos de notificação dos casos e semana epidemiológica, em cada período pode apresentar notificações com data de notificação do ano anterior (semana epidemiológica 52 ou 53) e posterior (semana epidemiológica 01).
-    Para cálculo da incidência recomenda-se utilizar locais de residência.
-    Dados de 2014 atualizados em 13/07/2015.
-    Dados de 2015 atualizados em 27/09/2016.
-    Dados de 2016 atualizados em 06/07/2017.
-    Dados de 2017 atualizados em 18/07/2018.
-    Dados de 2018 atualizados em 01/10/2019.
-    Dados de 2019 atualizados em 10/07/2020.
-    Dados de 2020 atualizados em 23/07/2021.
-    Dados de 2021 atualizados em 12/07/2022.
-    Dados de 2022 atualizados em 18/07/2023.
-    Dados de 2023 atualizados em 04/03/2024 à 01 hora, sujeitos à revisão.
-    Dados de 2024 atualizados em 11/03/2024 às 08 horas, sujeitos à revisão.
-<<<<<<< HEAD
-
-=======
->>>>>>> 72ec65a... Iniciando com dados brutos TabNet/DiveSC.
-    * Dados disponibilizados no TABNET em março de 2024. 
-
-Legenda:
--	- Dado numérico igual a 0 não resultante de arredondamento.
-0; 0,0	- Dado numérico igual a 0 resultante de arredondamento de um dado originalmente positivo.
-""")
-elif _fonte == "DIVESC":
-	print("""
+print("""
  INVESTIGAÇÃO DENGUE A PARTIR DE 2014
 Frequência por Mun infec SC e Sem.Epid.Sintomas
 Classificacao Nova: Dengue com complicações, Febre Hemorrágica do Dengue, Síndrome do Choque do Dengue, Dengue, Dengue com sinais de alarme, Dengre grave
@@ -152,79 +96,6 @@ Legenda:
 -	- Dado numérico igual a 0 não resultante de arredondamento.
 0; 0,0	- Dado numérico igual a 0 resultante de arredondamento de um dado originalmente positivo.
 """)
-else:
-	print("REAVALIAR FONTE DOS DADOS BRUTOS!")
-
-### Renomeação variáveis pelos arquivos
-municipios = "shapefiles/SC_Municipios_2022.shp"
-# Fonte: TABNET/DATASUS - SINAN/SC
-if _fonte == "DATASUS":
-	casos14 = "sinannet_denguebsc_2014.csv"
-	casos15 = "sinannet_denguebsc_2015.csv"
-	casos16 = "sinannet_denguebsc_2016.csv"
-	casos17 = "sinannet_denguebsc_2017.csv"
-	casos18 = "sinannet_denguebsc_2018.csv"
-	casos19 = "sinannet_denguebsc_2019.csv"
-	casos20 = "sinannet_denguebsc_2020.csv"
-	casos23 = "sinannet_denguebsc_2023.csv"
-# Fonte: TABNET/DATASUS - SINAN/SC
-elif _fonte == "DIVESC":
-	casos14 = "dive_dengue_2014.csv"
-	casos15 = "dive_dengue_2015.csv"
-	casos16 = "dive_dengue_2016.csv"
-	casos17 = "dive_dengue_2017.csv"
-	casos18 = "dive_dengue_2018.csv"
-	casos19 = "dive_dengue_2019.csv"
-	casos20 = "dive_dengue_2020.csv"
-	casos21 = "dive_dengue_2021.csv"
-	casos22 = "dive_dengue_2022.csv"
-	casos23 = "dive_dengue_2023.csv"
-	casos24 = "dive_dengue_2024.csv"
-else:
-	print("Favor, revalidar a fonte dos dados brutos!")
-
-### Abrindo Arquivos
-municipios = gpd.read_file(f"{caminho_dados}{municipios}", low_memory = False)
-if _fonte == "DATASUS":
-	casos14 = pd.read_csv(f"{caminho_dados}{casos14}", skiprows = 6, skipfooter = 26,
-                          sep = ";", encoding = "latin1", engine = "python")
-	casos15 = pd.read_csv(f"{caminho_dados}{casos15}", skiprows = 6, skipfooter = 26,
-                          sep = ";", encoding = "latin1", engine = "python")
-	casos16 = pd.read_csv(f"{caminho_dados}{casos16}", skiprows = 6, skipfooter = 26,
-                          sep = ";", encoding = "latin1", engine = "python")
-	casos17 = pd.read_csv(f"{caminho_dados}{casos17}", skiprows = 6, skipfooter = 26,
-                          sep = ";", encoding = "latin1", engine = "python")
-	casos18 = pd.read_csv(f"{caminho_dados}{casos18}", skiprows = 6, skipfooter = 26,
-                          sep = ";", encoding = "latin1", engine = "python")
-	casos19 = pd.read_csv(f"{caminho_dados}{casos19}", skiprows = 6, skipfooter = 26,
-                          sep = ";", encoding = "latin1", engine = "python")
-	casos20 = pd.read_csv(f"{caminho_dados}{casos20}", skiprows = 6, skipfooter = 26,
-                          sep = ";", encoding = "latin1", engine = "python")
-	casos23 = pd.read_csv(f"{caminho_dados}{casos23}", skiprows = 6, skipfooter = 26,
-                          sep = ";", encoding = "latin1", engine = "python")
-elif _fonte == "DIVESC":
-	casos14 = pd.read_csv(f"{caminho_dados}{casos14}", skiprows = 5,
-                          sep = ";", encoding = "latin1", engine = "python")
-	casos15 = pd.read_csv(f"{caminho_dados}{casos15}", skiprows = 5,
-                          sep = ";", encoding = "latin1", engine = "python")
-	casos16 = pd.read_csv(f"{caminho_dados}{casos16}", skiprows = 5,
-                          sep = ";", encoding = "latin1", engine = "python")
-	casos17 = pd.read_csv(f"{caminho_dados}{casos17}", skiprows = 5,
-                          sep = ";", encoding = "latin1", engine = "python")
-	casos18 = pd.read_csv(f"{caminho_dados}{casos18}", skiprows = 5,
-                          sep = ";", encoding = "latin1", engine = "python")
-	casos19 = pd.read_csv(f"{caminho_dados}{casos19}", skiprows = 5,
-                          sep = ";", encoding = "latin1", engine = "python")
-	casos20 = pd.read_csv(f"{caminho_dados}{casos20}", skiprows = 5,
-                          sep = ";", encoding = "latin1", engine = "python")
-	casos21 = pd.read_csv(f"{caminho_dados}{casos21}", skiprows = 5,
-                          sep = ";", encoding = "latin1", engine = "python")
-	casos22 = pd.read_csv(f"{caminho_dados}{casos22}", skiprows = 5,
-                          sep = ";", encoding = "latin1", engine = "python")
-	casos23 = pd.read_csv(f"{caminho_dados}{casos23}", skiprows = 5,
-                          sep = ";", encoding = "latin1", engine = "python")
-	casos24 = pd.read_csv(f"{caminho_dados}{casos24}", skiprows = 5,
-                          sep = ";", encoding = "latin1", engine = "python")
 
 ### Pré-Processamento
 lista_municipio = {'ABDON BATISTA': 'ABDON BATISTA',
