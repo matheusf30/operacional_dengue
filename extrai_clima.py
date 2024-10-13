@@ -35,50 +35,58 @@ print(diretorio_dados)
 """
 
 ### Encaminhamento aos Diretórios
-caminho_github = "https://raw.githubusercontent.com/matheusf30/dados_dengue/main/" # WEB
+caminho_github = "https://raw.githubusercontent.com/matheusf30/dados_dengue/refs/heads/main/" # WEB
 caminho_dados = "/home/meteoro/scripts/matheus/operacional_dengue/dados_operacao/" # CLUSTER
 caminho_operacional = "/home/meteoro/scripts/matheus/operacional_dengue/"
 caminho_shape = "/media/dados/shapefiles/SC/" #SC_Municipios_2022.shp
 caminho_gfs = "/media/dados/operacao/gfs/0p25/" #202410/20241012/ #prec_daily_gfs_2024101212.nc
 caminho_merge = "/media/dados/operacao/merge/daily/2024/" #MERGE_CPTEC_DAILY_SB_2024.nc
-caminho_merge2 = "/media/dados/operacao/merge/CDO.MERGE/" #MERGE_CPTEC_DAILY_2024.nc@
+caminho_mergeCDO = "/media/dados/operacao/merge/CDO.MERGE/" #MERGE_CPTEC_DAILY_2024.nc@
 caminho_samet = "/media/dados/operacao/samet/daily/" #/TMAX/2024/ #SAMeT_CPTEC_DAILY_SB_TMAX_2024.nc
-caminho_samet2 = "/media/dados/operacao/samet/CDO.SAMET/" #SAMeT_CPTEC_DAILY_SB_TMAX_2024.nc@
+caminho_sametCDO = "/media/dados/operacao/samet/CDO.SAMET/" #SAMeT_CPTEC_DAILY_SB_TMAX_2024.nc@
 
 _ANO_FINAL = str(datetime.today().year)
 _ONTEM = datetime.today() - timedelta(days = 1)
 _ANO_ONTEM = str(_ONTEM.year)
-
 print(_ANO_FINAL, _ONTEM, _ANO_ONTEM)
-sys.exit()
+
 ### Renomeação variáveis pelos arquivos
 merge = f"MERGE_CPTEC_DAILY_SB_{_ANO_FINAL}.nc"
 samet_tmax = f"SAMeT_CPTEC_DAILY_TMAX_{_ANO_FINAL}.nc"
 samet_tmed = f"SAMeT_CPTEC_DAILY_TMED_{_ANO_FINAL}.nc"
 samet_tmin = f"SAMeT_CPTEC_DAILY_TMIN_{_ANO_FINAL}.nc"
+"""
 serie_prec = f"prec_semana_ate_{_ANO_ONTEM}.nc"
 serie_tmax = f"tmax_semana_ate_{_ANO_ONTEM}.nc"
 serie_tmed = f"tmed_semana_ate_{_ANO_ONTEM}.nc"
 serie_tmin = f"tmin_semana_ate_{_ANO_ONTEM}.nc"
+"""
+serie_prec = f"MERGE_CPTEC_DAILY_2000_2023.nc"
+serie_tmax = f"MERGE_CPTEC_DAILY_2000_2023.nc"
+serie_tmed = f"tmed_semana_ate_{_ANO_ONTEM}.nc"
+serie_tmin = f"tmin_semana_ate_{_ANO_ONTEM}.nc"
+
 
 municipios = "SC_Municipios_2022.shp"
 
 ### Abrindo Arquivos
-prec = xr.open_dataset(f"{caminho_merge2}{merge}")
-tmax = xr.open_dataset(f"{caminho_samet2}{samet_tmax}")
-tmed = xr.open_dataset(f"{caminho_samet2}{samet_tmed}")
-tmin = xr.open_dataset(f"{caminho_samet2}{samet_tmin}")
+prec = xr.open_dataset(f"{caminho_mergeCDO}{merge}")
+tmax = xr.open_dataset(f"{caminho_sametCDO}{samet_tmax}")
+tmed = xr.open_dataset(f"{caminho_sametCDO}{samet_tmed}")
+tmin = xr.open_dataset(f"{caminho_sametCDO}{samet_tmin}")
 municipios = gpd.read_file(f"{caminho_shape}{municipios}")
-prec = pd.read_csv(f"{caminho_github}{serie_prec}")
-tmax = pd.read_csv(f"{caminho_github}{serie_tmax}")
-tmed = pd.read_csv(f"{caminho_github}{serie_tmed}")
-tmin = pd.read_csv(f"{caminho_github}{serie_tmin}")
+serie_prec = pd.read_csv(f"{caminho_github}{serie_prec}")
+serie_tmax = pd.read_csv(f"{caminho_github}{serie_tmax}")
+serie_tmed = pd.read_csv(f"{caminho_github}{serie_tmed}")
+serie_tmin = pd.read_csv(f"{caminho_github}{serie_tmin}")
 
 print(f'\n{green}tmin.variables["tmin"][:]\n{reset}{tmin.variables["tmin"][:]}\n')
 print(f'\n{green}tmin.variables["time"][:]\n{reset}{tmin.variables["tmin"][:]}\n')
 print(f'\n{green}tmin.variables["nobs"][:]\n{reset}{tmin.variables["nobs"][:]}\n')
 print(f"{green}tmin\n{reset}{tmin}\n")
+print(f"{green}serie_tmin\n{reset}{serie_tmin}\n")
 
+print(f"{green}municipios\n{reset}{municipios}\n")
 sys.exit()
 ### Pré-processamento e Definição de Função
 
@@ -162,10 +170,12 @@ def extrair_centroides(shapefile, netcdf4, str_var):
 		if isinstance(linha[str_var], xr.DataArray):
 			var_valor = [x.item() if not np.isnan(x.item()) else np.nan for x in linha[str_var]]
 			var_valores.append(var_valor)
-			print(f"\n---{str_var}---\n{bold}{valores_centroides['Municipio'][i]}{bold}: Finalizado!\n{i + 1} de {len(valores_centroides['Municipio'])}.")
+			print(f"\n{green}---{str_var}---\n{cyan}{valores_centroides['Municipio'][i]}: Finalizado!\n")
+			print(f"\n{green}{i + 1} de {len(valores_centroides['Municipio'])}.{reset}\n")
 		else:
 			var_valores.append([np.nan] * len(valores_tempo))
-			print(f"\n{valores_centroides['Municipio'][i]}: NaN... Finalizado!\n{i + 1} de {len(valores_centroides['Municipio'])}.")
+			print(f"\n{red}{valores_centroides['Municipio'][i]}: NaN... {magenta}Finalizado!\n")
+			print(f"\n{red}{i + 1} de {len(valores_centroides['Municipio'])}.\n{reset}")
 	var_valores_df = pd.DataFrame(var_valores, columns = valores_tempo)
 	valores_centroides = pd.concat([valores_centroides, var_valores_df], axis = 1)
 	valores_centroides.drop(columns = [str_var], inplace = True)
