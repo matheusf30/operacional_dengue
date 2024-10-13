@@ -60,12 +60,12 @@ serie_prec = f"prec_semana_ate_{_ANO_ONTEM}.nc"
 serie_tmax = f"tmax_semana_ate_{_ANO_ONTEM}.nc"
 serie_tmed = f"tmed_semana_ate_{_ANO_ONTEM}.nc"
 serie_tmin = f"tmin_semana_ate_{_ANO_ONTEM}.nc"
-"""
+
 serie_prec = f"MERGE_CPTEC_DAILY_2000_2023.nc"
 serie_tmax = f"MERGE_CPTEC_DAILY_2000_2023.nc"
 serie_tmed = f"tmed_semana_ate_{_ANO_ONTEM}.nc"
 serie_tmin = f"tmin_semana_ate_{_ANO_ONTEM}.nc"
-
+"""
 
 municipios = "SC_Municipios_2022.shp"
 
@@ -75,6 +75,7 @@ tmax = xr.open_dataset(f"{caminho_sametCDO}{samet_tmax}")
 tmed = xr.open_dataset(f"{caminho_sametCDO}{samet_tmed}")
 tmin = xr.open_dataset(f"{caminho_sametCDO}{samet_tmin}")
 municipios = gpd.read_file(f"{caminho_shape}{municipios}")
+"""
 serie_prec = pd.read_csv(f"{caminho_github}{serie_prec}")
 serie_tmax = pd.read_csv(f"{caminho_github}{serie_tmax}")
 serie_tmed = pd.read_csv(f"{caminho_github}{serie_tmed}")
@@ -85,9 +86,9 @@ print(f'\n{green}tmin.variables["time"][:]\n{reset}{tmin.variables["tmin"][:]}\n
 print(f'\n{green}tmin.variables["nobs"][:]\n{reset}{tmin.variables["nobs"][:]}\n')
 print(f"{green}tmin\n{reset}{tmin}\n")
 print(f"{green}serie_tmin\n{reset}{serie_tmin}\n")
-
+"""
 print(f"{green}municipios\n{reset}{municipios}\n")
-sys.exit()
+
 ### Pré-processamento e Definição de Função
 
 def verifica_nan(valores_centroides):
@@ -154,6 +155,9 @@ def extrair_centroides(shapefile, netcdf4, str_var):
 	valores_centroides = []
 	for idx, linha in shapefile.iterrows():
 		lon, lat = linha["centroide"].x, linha["centroide"].y
+		if shapefile["NM_MUN"].isin(["Balneário Camboriú", "Bombinhas", "Porto Belo"]).any():
+			if str_var == "tmax" or "tmed" or "tmin":
+				lon -= 0.5
 		valor = netcdf4.sel(lon = lon, lat = lat, method = "nearest")
 		valores_centroides.append(valor)
 	valores_centroides = pd.DataFrame(data = valores_centroides)
@@ -189,7 +193,7 @@ def extrair_centroides(shapefile, netcdf4, str_var):
 	valores_centroides.rename(columns = {"index" : str_var}, inplace = True)
 	valores_centroides.to_csv(f"{caminho_dados}{str_var}_diario_ate_{_ANO_FINAL}.csv", index = False)
 	print("="*80)
-	print(f"\n\n{caminho_shape}{str_dados}_diario_ate_{_ANO_FINAL}.csv\n\n{green}{bold}ARQUIVO SALVO COM SUCESSO!{bold}{reset}\n\n")
+	print(f"\n{green}{caminho_shape}{str_dados}_diario_ate_{_ANO_FINAL}.csv\nARQUIVO SALVO COM SUCESSO!{reset}\n{reset}")
 	print("="*80)
 	print(netcdf4.variables[str_var][:])
 	print(netcdf4.variables["time"][:])
@@ -220,3 +224,5 @@ print(f"\n{green}{bold}FINALIZADA ATUALIZAÇÃO{reset}\n")
 print(f"\n{green}Atualização feita em produtos de reanálise até {red}{_ANO_FINAL}{reset}!\n")
 print(f"{bold}(MERGE e SAMeT - tmin, tmed, tmax){bold}")
 print("!!"*80)
+
+print(tmin[["BALNEÁRIO CAMBORIÚ", "BOMBINHAS", "PORTO BELO"]])
