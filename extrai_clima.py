@@ -1,6 +1,7 @@
 ### Bibliotecas Correlatas
 # Suporte
 import sys, os
+from datetime import datetime
 # Básicas
 import pandas as pd
 import numpy as np
@@ -14,66 +15,7 @@ import  xarray as xr
 import geopandas as gpd
 from shapely.geometry import Point
 
-"""
-diretorio_atual = os.getcwd()
-diretorios = diretorio_atual.split(os.path.sep)
-diretorio_dados = os.path.sep.join(diretorios[:-6])
-print(diretorio_dados)
-"""
-
-### Encaminhamento aos Diretórios
-try:
-    _LOCAL = "IFSC" # OPÇÕES>>> "GH" "CASA" "IFSC"
-    if _LOCAL == "GH": # _ = Variável Privada
-        caminho_shape = "https://raw.githubusercontent.com/matheusf30/dados_dengue/main/"
-    elif _LOCAL == "CASA":
-        caminho_shape = "C:\\Users\\Desktop\\Documents\\GitHub\\dados_dengue\\"
-    elif _LOCAL == "IFSC":
-        caminho_shape = "/home/sifapsc/scripts/matheus/dados_dengue/shapefiles/"
-        caminho_merge = "/dados/operacao/merge/CDO.MERGE/"
-        caminho_samet = "/dados/operacao/samet/clima/"
-    else:
-        print("CAMINHO NÃO RECONHECIDO! VERIFICAR LOCAL!")
-except:
-    print("CAMINHO NÃO RECONHECIDO! VERIFICAR CAMINHO OU LOCAL!")
-
-print(f"\nOS DADOS UTILIZADOS ESTÃO ALOCADOS NOS SEGUINTES CAMINHOS:\n\n{caminho_shape}\n\n{caminho_merge}\n\n{caminho_samet}\n\n")
-
-_ANO_FINAL = "2024" # Até quando os produtos de reanálise foram compilados
-
-### Renomeação variáveis pelos arquivos
-"""
-merge = f"MERGE_CPTEC_DAILY_SB_2000_{_ANO_FINAL}.nc"
-
-samet_tmax = f"TMAX/SAMeT_CPTEC_DAILY_TMAX_SB_2000_2022.nc"
-samet_tmed = f"TMED/SAMeT_CPTEC_DAILY_TMED_SB_2000_2022.nc"
-samet_tmin = f"TMIN/SAMeT_CPTEC_DAILY_TMIN_SB_2000_2022.nc"
-
-samet_tmax = f"TMAX/SAMeT_CPTEC_DAILY_TMAX_SB_2000_{_ANO_FINAL}.nc"
-samet_tmed = f"TMED/SAMeT_CPTEC_DAILY_TMED_SB_2000_{_ANO_FINAL}.nc"
-samet_tmin = f"TMIN/SAMeT_CPTEC_DAILY_TMIN_SB_2000_{_ANO_FINAL}.nc"
-"""
-merge = "MERGE_CPTEC_DAILY_SB_2024_2024.nc"
-samet_tmax = "TMAX/SAMeT_CPTEC_DAILY_TMAX_2024.nc"
-samet_tmed = "TMED/SAMeT_CPTEC_DAILY_TMED_2024.nc"
-samet_tmin = "TMIN/SAMeT_CPTEC_DAILY_TMIN_2024.nc"
-
-municipios = "SC_Municipios_2022.shp"
-
-### Abrindo Arquivos
-prec = xr.open_dataset(f"{caminho_merge}{merge}")
-tmax = xr.open_dataset(f"{caminho_samet}{samet_tmax}")
-tmed = xr.open_dataset(f"{caminho_samet}{samet_tmed}")
-tmin = xr.open_dataset(f"{caminho_samet}{samet_tmin}")
-municipios = gpd.read_file(f"{caminho_shape}{municipios}")
-
-print(tmin.variables["tmin"][:])
-print(tmin.variables["time"][:])
-print(tmin.variables["nobs"][:])
-print(tmin)
-
-
-### Pré-processamento e Definição de Função
+##### Padrão ANSI ###############################################################
 bold = "\033[1m"
 red = "\033[91m"
 green = "\033[92m"
@@ -83,6 +25,50 @@ magenta = "\033[35m"
 cyan = "\033[36m"
 white = "\033[37m"
 reset = "\033[0m"
+#################################################################################
+
+"""
+diretorio_atual = os.getcwd()
+diretorios = diretorio_atual.split(os.path.sep)
+diretorio_dados = os.path.sep.join(diretorios[:-6])
+print(diretorio_dados)
+"""
+
+### Encaminhamento aos Diretórios
+caminho_github = "https://raw.githubusercontent.com/matheusf30/dados_dengue/main/" # WEB
+caminho_dados = "/home/meteoro/scripts/matheus/operacional_dengue/dados_operacao/" # CLUSTER
+caminho_operacional = "/home/meteoro/scripts/matheus/operacional_dengue/"
+caminho_shape = "/media/dados/shapefiles/SC/" #SC_Municipios_2022.shp
+caminho_gfs = "/media/dados/operacao/gfs/0p25/" #202410/20241012/ #prec_daily_gfs_2024101212.nc
+caminho_merge = "/media/dados/operacao/merge/daily/2024/" #MERGE_CPTEC_DAILY_SB_2024.nc
+caminho_merge2 = "/media/dados/operacao/merge/CDO.MERGE/" #MERGE_CPTEC_DAILY_2024.nc@
+caminho_samet = "/media/dados/operacao/samet/daily/" #/TMAX/2024/ #SAMeT_CPTEC_DAILY_SB_TMAX_2024.nc
+caminho_samet2 = "/media/dados/operacao/samet/CDO.SAMET/" #SAMeT_CPTEC_DAILY_SB_TMAX_2024.nc@
+
+_ANO_FINAL = str(datetime.today().year)
+
+### Renomeação variáveis pelos arquivos
+merge = f"MERGE_CPTEC_DAILY_SB_{_ANO_FINAL}.nc"
+samet_tmax = f"SAMeT_CPTEC_DAILY_TMAX_{_ANO_FINAL}.nc"
+samet_tmed = f"SAMeT_CPTEC_DAILY_TMED_{_ANO_FINAL}.nc"
+samet_tmin = f"SAMeT_CPTEC_DAILY_TMIN_{_ANO_FINAL}.nc"
+
+municipios = "SC_Municipios_2022.shp"
+
+### Abrindo Arquivos
+prec = xr.open_dataset(f"{caminho_merge2}{merge}")
+tmax = xr.open_dataset(f"{caminho_samet2}{samet_tmax}")
+tmed = xr.open_dataset(f"{caminho_samet2}{samet_tmed}")
+tmin = xr.open_dataset(f"{caminho_samet2}{samet_tmin}")
+municipios = gpd.read_file(f"{caminho_shape}{municipios}")
+
+print(f'\n{green}tmin.variables["tmin"][:]\n{reset}{tmin.variables["tmin"][:]}\n')
+print(f'\n{green}tmin.variables["time"][:]\n{reset}{tmin.variables["tmin"][:]}\n')
+print(f'\n{green}tmin.variables["nobs"][:]\n{reset}{tmin.variables["nobs"][:]}\n')
+print(f"{green}tmin\n{reset}{tmin}\n")
+
+sys.exit()
+### Pré-processamento e Definição de Função
 
 def verifica_nan(valores_centroides):
 	"""
