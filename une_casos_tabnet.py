@@ -469,7 +469,7 @@ unicos_xy = pd.merge(unicos, xy, on = "Município", how = "left")
 ### Salvando Arquivos
 
 os.makedirs(caminho_dados, exist_ok = True)
-cidades.to_csv(f"{caminho_dados}municipios_coordenadas.csv", index = False)
+#cidades.to_csv(f"{caminho_dados}municipios_coordenadas.csv", index = False)
 unicos_xy.to_csv(f"{caminho_dados}casos_primeiros.csv", index = False)
 casostotal.to_csv(f"{caminho_dados}casos_dive_total.csv", index = False)
 casos_pivot.to_csv(f"{caminho_dados}casos_dive_pivot_total.csv", index = False)
