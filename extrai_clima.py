@@ -1,10 +1,10 @@
 ### Bibliotecas Correlatas
 # Suporte
 import sys, os
-from datetime import datetime
 # Básicas
 import pandas as pd
 import numpy as np
+from datetime import datetime, timedelta
 """
 import matplotlib.pyplot as plt               
 import seaborn as sns
@@ -46,12 +46,20 @@ caminho_samet = "/media/dados/operacao/samet/daily/" #/TMAX/2024/ #SAMeT_CPTEC_D
 caminho_samet2 = "/media/dados/operacao/samet/CDO.SAMET/" #SAMeT_CPTEC_DAILY_SB_TMAX_2024.nc@
 
 _ANO_FINAL = str(datetime.today().year)
+_ONTEM = datetime.today() - timedelta(days = 1)
+_ANO_ONTEM = str(_ONTEM.year)
 
+print(_ANO_FINAL, _ONTEM, _ANO_ONTEM)
+sys.exit()
 ### Renomeação variáveis pelos arquivos
 merge = f"MERGE_CPTEC_DAILY_SB_{_ANO_FINAL}.nc"
 samet_tmax = f"SAMeT_CPTEC_DAILY_TMAX_{_ANO_FINAL}.nc"
 samet_tmed = f"SAMeT_CPTEC_DAILY_TMED_{_ANO_FINAL}.nc"
 samet_tmin = f"SAMeT_CPTEC_DAILY_TMIN_{_ANO_FINAL}.nc"
+serie_prec = f"prec_semana_ate_{_ANO_ONTEM}.nc"
+serie_tmax = f"tmax_semana_ate_{_ANO_ONTEM}.nc"
+serie_tmed = f"tmed_semana_ate_{_ANO_ONTEM}.nc"
+serie_tmin = f"tmin_semana_ate_{_ANO_ONTEM}.nc"
 
 municipios = "SC_Municipios_2022.shp"
 
@@ -61,6 +69,10 @@ tmax = xr.open_dataset(f"{caminho_samet2}{samet_tmax}")
 tmed = xr.open_dataset(f"{caminho_samet2}{samet_tmed}")
 tmin = xr.open_dataset(f"{caminho_samet2}{samet_tmin}")
 municipios = gpd.read_file(f"{caminho_shape}{municipios}")
+prec = pd.read_csv(f"{caminho_github}{serie_prec}")
+tmax = pd.read_csv(f"{caminho_github}{serie_tmax}")
+tmed = pd.read_csv(f"{caminho_github}{serie_tmed}")
+tmin = pd.read_csv(f"{caminho_github}{serie_tmin}")
 
 print(f'\n{green}tmin.variables["tmin"][:]\n{reset}{tmin.variables["tmin"][:]}\n')
 print(f'\n{green}tmin.variables["time"][:]\n{reset}{tmin.variables["tmin"][:]}\n')
@@ -194,6 +206,7 @@ prec = extrair_centroides(municipios, prec, "prec")
 
 
 print("!!"*80)
-print(f"\n{green}{bold}FINALIZADA ATUALIZAÇÃO{bold}{reset}\n\nAtualização feita em produtos de reanálise até {red}{_ANO_FINAL}{reset}!\n")
+print(f"\n{green}{bold}FINALIZADA ATUALIZAÇÃO{reset}\n")
+print(f"\n{green}Atualização feita em produtos de reanálise até {red}{_ANO_FINAL}{reset}!\n")
 print(f"{bold}(MERGE e SAMeT - tmin, tmed, tmax){bold}")
 print("!!"*80)
