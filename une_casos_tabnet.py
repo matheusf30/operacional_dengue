@@ -72,7 +72,7 @@ casos24 = "A173120200_135_184_253.csv"
 serie_casos = "casos_dive_total.csv"
 ### Abrindo Arquivos
 municipios = gpd.read_file(f"{caminho_shape}{municipios}", low_memory = False)
-serie_casos = pd.read_csv(f"{caminho_github}{serie_casos}")
+serie_casos = pd.read_csv(f"{caminho_dados}{serie_casos}")
 casos24 = pd.read_csv(f"{caminho_operacional}{casos24}", skiprows = 5,
                       sep = ";", encoding = "latin1", engine = "python")
                       
