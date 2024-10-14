@@ -451,8 +451,7 @@ print("="*80)
 
 ##$ Concatenando e Extraindo Dados
 casostotal = pd.concat([serie_casos, casos24], ignore_index = True)
-casostotal.set_index("Semana", inplace = True)
-casostotal.reset_index(inplace = True)
+casostotal["Semana"] = pd.to_datetime(casostotal["Semana"]).dt.strftime("%Y-%m-%d")
 casos_pivot = pd.pivot_table(casostotal, index = "Semana", columns = "Município",
 								values = "Casos", fill_value = 0)
 casos_pivot.reset_index(inplace = True)
