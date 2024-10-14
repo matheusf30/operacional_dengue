@@ -27,7 +27,7 @@ Atentar aos dados provenientes do TabNet... http://200.19.223.105/cgi-bin/dh?sin
 ### Bibliotecas Correlatas
 import pandas as pd
 import numpy as np
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 import geopandas as gpd
 import sys, os, warnings
 
@@ -78,6 +78,9 @@ casos24 = pd.read_csv(f"{caminho_operacional}{casos24}", skiprows = 5,
                       
 print(f"\n{green}serie_casos (GitHub):\n{reset}{serie_casos}\n")
 print(f"\n{green}casos24 (TabNetSinanDiveSC):\n{reset}{serie_casos}\n")
+print(datetime.today().strftime("%Y-%m-%d"))
+print(datetime.today())
+print(date.today().isoformat())
 
 ## Dados "Brutos"
 print(f"""{green}
@@ -442,6 +445,8 @@ semanas = pd.DataFrame(lista_semanas, columns=["Semana"])
 casos24["Semana"] = pd.to_datetime(casos24["Semana"])
 casos24 = pd.merge(semanas, casos24, on = "Semana", how = "left").fillna(0)
 casos24[colunas] = casos24[colunas].astype(int)
+hoje = pd.to_datetime(datetime.today().date())
+casos24 = casos24[casos24["Semana"] <= hoje]
 casos24 = pd.melt(casos24, id_vars = "Semana", var_name = "Município", value_name = "Casos", ignore_index = True)
 casos24.sort_values(by = "Semana",  ignore_index = True, inplace = True)
 print("="*80, f"\n{ano}\n\n", casos24)
@@ -455,6 +460,7 @@ casostotal["Semana"] = pd.to_datetime(casostotal["Semana"]).dt.strftime("%Y-%m-%
 casos_pivot = pd.pivot_table(casostotal, index = "Semana", columns = "Município",
 								values = "Casos", fill_value = 0)
 casos_pivot.reset_index(inplace = True)
+casos_pivot = casos_pivot[casos_pivot["Semana"] <= str(hoje)]
 unicos = casostotal[casostotal["Casos"] > 0].drop_duplicates(subset = ["Município"])
 municipios["Município"] = municipios["NM_MUN"].str.upper()
 cidades = municipios[["Município", "geometry"]]
