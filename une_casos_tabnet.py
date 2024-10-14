@@ -76,8 +76,8 @@ serie_casos = pd.read_csv(f"{caminho_dados}{serie_casos}")
 casos24 = pd.read_csv(f"{caminho_operacional}{casos24}", skiprows = 5,
                       sep = ";", encoding = "latin1", engine = "python")
                       
-print(f"\n{green}serie_casos (GitHub):\n{reset}{serie_casos}\n")
-print(f"\n{green}casos24 (TabNetSinanDiveSC):\n{reset}{serie_casos}\n")
+print(f"\n{green}serie_casos:\n{reset}{serie_casos}\n")
+print(f"\n{green}casos_atuais (TabNetSinanDiveSC):\n{reset}{casos24}\n")
 print(datetime.today().strftime("%Y-%m-%d"))
 print(datetime.today())
 print(date.today().isoformat())
