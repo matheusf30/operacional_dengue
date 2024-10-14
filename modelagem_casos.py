@@ -3,7 +3,8 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sns 
+import seaborn as sns
+from datetime import date, datetime, timedelta
 #import datetime
 # Suporte
 import os
@@ -76,6 +77,8 @@ _FIM = "jan2023"
 obs = f"(Treino até {_LIMITE}; Teste após {_FIM})"
 obs_k = f"(Treino até {_LIMITE}; Teste após {_FIM}; k = {_K})"
 
+_ANO_ATUAL = str(datetime.today().year)
+
 ##################################################################################
 
 ### Encaminhamento aos Diretórios
@@ -92,10 +95,10 @@ casos = "casos_dive_pivot_total.csv"  # TabNet/DiveSC
 focos = "focos_pivot.csv"
 
 
-prec = "prec_semana_ate_2024.csv"
-tmin = "tmin_semana_ate_2024.csv"
-tmed = "tmed_semana_ate_2024.csv"
-tmax = "tmax_semana_ate_2024.csv"
+prec = f"prec_semana_ate_{_ANO_ATUAL}.csv"
+tmin = f"tmin_semana_ate_{_ANO_ATUAL}.csv"
+tmed = f"tmed_semana_ate_{_ANO_ATUAL}.csv"
+tmax = f"tmax_semana_ate_{_ANO_ATUAL}.csv"
 unicos = "casos_primeiros.csv"
 """
 prec = "prec_semana_ate_2023.csv"
@@ -120,13 +123,14 @@ casos = casos.iloc[:467] # Pois os casos estão até 2023 e o restante até 2022
 focos = focos.iloc[:573] # Desconsiderando 2023
 unicos = unicos.iloc[:151] # Desconsiderando 2023
 """
+
+### Sanando Erros
 print(f"\n{green}prec:\n{reset}{prec}\n")
 print(f"\n{green}tmin:\n{reset}{tmin}\n")
 print(f"\n{green}tmed:\n{reset}{tmed}\n")
 print(f"\n{green}tmax:\n{reset}{tmax}\n")
 print(f"\n{green}casos:\n{reset}{casos}\n")
 sys.exit()
-### Sanando Erros
 
 _CIDADEs = unicos["Município"].copy()
 #_CIDADE = _CIDADE.upper()
@@ -158,12 +162,14 @@ for erro in key_error:
 print("!"*80)    
 
 ### Pré-Processamento
-focos["Semana"] = pd.to_datetime(focos["Semana"])#, format="%Y%m%d")
-casos["Semana"] = pd.to_datetime(casos["Semana"])
-prec["Semana"] = pd.to_datetime(prec["Semana"])
-tmin["Semana"] = pd.to_datetime(tmin["Semana"])
-tmed["Semana"] = pd.to_datetime(tmed["Semana"])
-tmax["Semana"] = pd.to_datetime(tmax["Semana"])
+focos["Semana"] = pd.to_datetime(focos["Semana"]).dt.strftime("%Y-%m-%d")
+casos["Semana"] = pd.to_datetime(casos["Semana"]).dt.strftime("%Y-%m-%d")
+prec["Semana"] = pd.to_datetime(prec["Semana"]).dt.strftime("%Y-%m-%d")
+tmin["Semana"] = pd.to_datetime(tmin["Semana"]).dt.strftime("%Y-%m-%d")
+tmed["Semana"] = pd.to_datetime(tmed["Semana"]).dt.strftime("%Y-%m-%d")
+tmax["Semana"] = pd.to_datetime(tmax["Semana"]).dt.strftime("%Y-%m-%d")
+
+
 
 ### Montando Dataset
 dataset = tmin[["Semana"]].copy()
