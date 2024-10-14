@@ -94,7 +94,6 @@ os.makedirs(caminho_resultados, exist_ok = True)
 casos = "casos_dive_pivot_total.csv"  # TabNet/DiveSC
 focos = "focos_pivot.csv"
 
-
 prec = f"prec_semana_ate_{_ANO_ATUAL}.csv"
 tmin = f"tmin_semana_ate_{_ANO_ATUAL}.csv"
 tmed = f"tmed_semana_ate_{_ANO_ATUAL}.csv"
@@ -114,7 +113,7 @@ prec = pd.read_csv(f"{caminho_dados}{prec}", low_memory = False)
 tmin = pd.read_csv(f"{caminho_dados}{tmin}", low_memory = False)
 tmed = pd.read_csv(f"{caminho_dados}{tmed}", low_memory = False)
 tmax = pd.read_csv(f"{caminho_dados}{tmax}", low_memory = False)
-#unicos = pd.read_csv(f"{caminho_dados}{unicos}", low_memory = False)
+unicos = pd.read_csv(f"{caminho_dados}{unicos}", low_memory = False)
 
 """
 ### Recortes Temporais
@@ -125,14 +124,8 @@ unicos = unicos.iloc[:151] # Desconsiderando 2023
 """
 
 ### Sanando Erros
-print(f"\n{green}prec:\n{reset}{prec}\n")
-print(f"\n{green}tmin:\n{reset}{tmin}\n")
-print(f"\n{green}tmed:\n{reset}{tmed}\n")
-print(f"\n{green}tmax:\n{reset}{tmax}\n")
-print(f"\n{green}casos:\n{reset}{casos}\n")
-sys.exit()
 
-_CIDADEs = unicos["Município"].copy()
+_CIDADEs = unicos["Município"]
 #_CIDADE = _CIDADE.upper()
 # ValueError: cannot reshape array of size 0 into shape (0,newaxis)
 # ValueError: This RandomForestRegressor estimator requires y to be passed, but the target y is None.
@@ -160,37 +153,45 @@ for erro in key_error:
     else:
         print(f"\nNo sé qué se pasa! {erro} está no conjunto de dados!\n")
 print("!"*80)    
-
+"""
 ### Pré-Processamento
-focos["Semana"] = pd.to_datetime(focos["Semana"]).dt.strftime("%Y-%m-%d")
-casos["Semana"] = pd.to_datetime(casos["Semana"]).dt.strftime("%Y-%m-%d")
-prec["Semana"] = pd.to_datetime(prec["Semana"]).dt.strftime("%Y-%m-%d")
-tmin["Semana"] = pd.to_datetime(tmin["Semana"]).dt.strftime("%Y-%m-%d")
-tmed["Semana"] = pd.to_datetime(tmed["Semana"]).dt.strftime("%Y-%m-%d")
-tmax["Semana"] = pd.to_datetime(tmax["Semana"]).dt.strftime("%Y-%m-%d")
+focos["Semana"] = pd.to_datetime(focos["Semana"])#.dt.strftime("%Y-%m-%d")
+casos["Semana"] = pd.to_datetime(casos["Semana"])#.dt.strftime("%Y-%m-%d")
+prec["Semana"] = pd.to_datetime(prec["Semana"])#.dt.strftime("%Y-%m-%d")
+tmin["Semana"] = pd.to_datetime(tmin["Semana"])#.dt.strftime("%Y-%m-%d")
+tmed["Semana"] = pd.to_datetime(tmed["Semana"])#.dt.strftime("%Y-%m-%d")
+tmax["Semana"] = pd.to_datetime(tmax["Semana"])#.dt.strftime("%Y-%m-%d")
+"""
 
-
+print(f"\n{green}prec:\n{reset}{prec}\n")
+print(f"\n{green}tmin:\n{reset}{tmin}\n")
+print(f"\n{green}tmed:\n{reset}{tmed}\n")
+print(f"\n{green}tmax:\n{reset}{tmax}\n")
+print(f"\n{green}casos:\n{reset}{casos}\n")
+print(f"\n{green}unicos:\n{reset}{unicos}\n")
+#sys.exit()
 
 ### Montando Dataset
 dataset = tmin[["Semana"]].copy()
 dataset["TMIN"] = tmin[_CIDADE].copy()
 dataset["TMED"] = tmed[_CIDADE].copy()
-dataset["TMAX"] = tmax[_CIDADE].copy()
+#dataset["TMAX"] = tmax[_CIDADE].copy()
+print(f"\n{green}dataset:\n{reset}{dataset}\n")
 dataset = dataset.merge(prec[["Semana", _CIDADE]], how = "left", on = "Semana").copy()
-dataset = dataset.merge(focos[["Semana", _CIDADE]], how = "left", on = "Semana").copy()
 dataset.dropna(inplace = True)
-dataset = dataset.iloc[104:, :].copy()
+print(f"\n{green}dataset:\n{reset}{dataset}\n")
+#dataset = dataset.iloc[104:, :].copy()
 dataset = dataset.merge(casos[["Semana", _CIDADE]], how = "left", on = "Semana").copy()
-troca_nome = {f"{_CIDADE}_x" : "PREC", f"{_CIDADE}_y" : "FOCOS", f"{_CIDADE}" : "CASOS"}
+troca_nome = {f"{_CIDADE}_x" : "PREC", f"{_CIDADE}_y" : "CASOS"}
 dataset = dataset.rename(columns = troca_nome)
 dataset.fillna(0, inplace = True)
+print(f"\n{green}dataset:\n{reset}{dataset}\n")
+sys.exit()
 
 #dataset["TMED"] = dataset["TMED"]#.rolling(_JANELA_MM).mean()
 #dataset["PREC"] = dataset["PREC"]#.rolling(_JANELA_MM).mean()
 #dataset["FOCOS"] = dataset["FOCOS"]#.rolling(_JANELA_MM).mean()
 #dataset["CASOS"] = dataset["CASOS"]#.rolling(_JANELA_MM).mean()
-dataset["iCLIMA"] =  np.cbrt((tmin[_CIDADE].rolling(_K).mean() ** _K) * (prec[_CIDADE].rolling(_K).mean() / _K))
-dataset["iEPIDEMIO"] =  np.sqrt((dataset["FOCOS"].rolling(_K).mean() / _K) * dataset["CASOS"].rolling(_K).mean())
 
 #_RETROAGIR = 12
 #_RETROAGIR = 4
