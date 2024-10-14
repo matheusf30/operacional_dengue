@@ -55,14 +55,18 @@ merge = f"MERGE_CPTEC_DAILY_SB_{_ANO_FINAL}.nc"
 samet_tmax = f"SAMeT_CPTEC_DAILY_TMAX_{_ANO_FINAL}.nc"
 samet_tmed = f"SAMeT_CPTEC_DAILY_TMED_{_ANO_FINAL}.nc"
 samet_tmin = f"SAMeT_CPTEC_DAILY_TMIN_{_ANO_FINAL}.nc"
+_ANO_ONTEM2 = 2023
+serie_prec = f"prec_diario_ate_{_ANO_ONTEM2}.csv"
+serie_tmax = f"tmax_diario_ate_{_ANO_ONTEM2}.csv"
+serie_tmed = f"tmed_diario_ate_{_ANO_ONTEM2}.csv"
+serie_tmin = f"tmin_diario_ate_{_ANO_ONTEM2}.csv"
+serie_prec_se = f"prec_semana_ate_{_ANO_ONTEM2}.csv"
+serie_tmax_se = f"tmax_semana_ate_{_ANO_ONTEM2}.csv"
+serie_tmed_se = f"tmed_semana_ate_{_ANO_ONTEM2}.csv"
+serie_tmin_se = f"tmin_semana_ate_{_ANO_ONTEM2}.csv"
 """
 serie_prec = f"prec_semana_ate_{_ANO_ONTEM}.nc"
 serie_tmax = f"tmax_semana_ate_{_ANO_ONTEM}.nc"
-serie_tmed = f"tmed_semana_ate_{_ANO_ONTEM}.nc"
-serie_tmin = f"tmin_semana_ate_{_ANO_ONTEM}.nc"
-
-serie_prec = f"MERGE_CPTEC_DAILY_2000_2023.nc"
-serie_tmax = f"MERGE_CPTEC_DAILY_2000_2023.nc"
 serie_tmed = f"tmed_semana_ate_{_ANO_ONTEM}.nc"
 serie_tmin = f"tmin_semana_ate_{_ANO_ONTEM}.nc"
 """
@@ -75,20 +79,26 @@ tmax = xr.open_dataset(f"{caminho_sametCDO}{samet_tmax}")
 tmed = xr.open_dataset(f"{caminho_sametCDO}{samet_tmed}")
 tmin = xr.open_dataset(f"{caminho_sametCDO}{samet_tmin}")
 municipios = gpd.read_file(f"{caminho_shape}{municipios}")
-"""
-serie_prec = pd.read_csv(f"{caminho_github}{serie_prec}")
-serie_tmax = pd.read_csv(f"{caminho_github}{serie_tmax}")
-serie_tmed = pd.read_csv(f"{caminho_github}{serie_tmed}")
-serie_tmin = pd.read_csv(f"{caminho_github}{serie_tmin}")
+serie_prec = pd.read_csv(f"{caminho_dados}{serie_prec}")
+serie_tmax = pd.read_csv(f"{caminho_dados}{serie_tmax}")
+serie_tmed = pd.read_csv(f"{caminho_dados}{serie_tmed}")
+serie_tmin = pd.read_csv(f"{caminho_dados}{serie_tmin}")
+serie_prec_se = pd.read_csv(f"{caminho_dados}{serie_prec_se}")
+serie_tmax_se = pd.read_csv(f"{caminho_dados}{serie_tmax_se}")
+serie_tmed_se = pd.read_csv(f"{caminho_dados}{serie_tmed_se}")
+serie_tmin_se = pd.read_csv(f"{caminho_dados}{serie_tmin_se}")
 
 print(f'\n{green}tmin.variables["tmin"][:]\n{reset}{tmin.variables["tmin"][:]}\n')
 print(f'\n{green}tmin.variables["time"][:]\n{reset}{tmin.variables["tmin"][:]}\n')
 print(f'\n{green}tmin.variables["nobs"][:]\n{reset}{tmin.variables["nobs"][:]}\n')
-print(f"{green}tmin\n{reset}{tmin}\n")
-print(f"{green}serie_tmin\n{reset}{serie_tmin}\n")
-"""
-print(f"{green}municipios\n{reset}{municipios}\n")
+print(f"\n{green}tmin\n{reset}{tmin}\n")
+print(f"\n{green}tmin\n{reset}{tmin}\n")
+print(f"\n{green}serie_tmin\n{reset}{serie_tmin[['Data', 'BALNEÁRIO CAMBORIÚ', 'BOMBINHAS', 'PORTO BELO']]}\n")
+print(f"\n{green}serie_tmin_se\n{reset}{serie_tmin_se}\n")
+print(f"\n{green}serie_tmin_se\n{reset}{serie_tmin_se[['Semana', 'BALNEÁRIO CAMBORIÚ', 'BOMBINHAS', 'PORTO BELO']]}\n")
 
+print(f"\n{green}municipios\n{reset}{municipios}\n")
+#sys.exit()
 ### Pré-processamento e Definição de Função
 
 def verifica_nan(valores_centroides):
@@ -98,12 +108,12 @@ def verifica_nan(valores_centroides):
 	Retorno: Exibição de mensagens para casos de haver ou não valores NaN.
 	"""
 	print(f"\n{bold}VERIFICAÇÃO DE DADOS FALTANTES{bold}\n")
-	print(f"\nQuantidade de valores {red}{bold}NaN: {valores_centroides['FLORIANÓPOLIS'].isnull().sum()}{bold}{reset}")
-	if valores_centroides["FLORIANÓPOLIS"].isnull().sum() == 0:
-		print(f"\n{green}{bold}NÃO{bold} há valores {bold}NaN{bold}{reset}\n")
+	print(f"\nQuantidade de valores {red}{bold}NaN: {valores_centroides['BOMBINHAS'].isnull().sum()}{bold}{reset}")
+	if valores_centroides["BOMBINHAS"].isnull().sum() == 0:
+		print(f"\n{green}{bold}NÃO há valores {red}NaN{reset}\n")
 	else:
-		print(f"\nOs dias com valores {red}{bold}NaN{bold}{reset} são:")
-		print(f"{valores_centroides[valores_centroides['FLORIANÓPOLIS'].isna()]['Data']}\n")
+		print(f"\nOs dias com valores {red}{bold}NaN{reset} são:")
+		print(f"{valores_centroides[valores_centroides['BOMBINHAS'].isna()]['Data']}\n")
 	print("="*80)
 
 def semana_epidemiologica(csv, str_var):
@@ -129,7 +139,7 @@ def semana_epidemiologica(csv, str_var):
 		csv_se = csv_se.groupby(["Semana"]).mean(numeric_only = True)
 	csv_se.reset_index(inplace = True)
 	csv_se.drop([0], axis = 0, inplace = True)
-	csv_se.to_csv(f"{caminho_dados}{str_var}_semana_ate_{_ANO_FINAL}.csv", index = False)
+	csv_se.to_csv(f"{caminho_dados}{str_var}_semana_{_ANO_FINAL}.csv", index = False)
 	print(f"\n{green}ARQUIVO SALVO COM SUCESSO!\n\nSemana Epidemiológica - {str_var.upper()}{reset}\n\n{csv_se}\n")
 	print(f"\n{red}As variáveis do arquivo ({str_var.upper()}), em semanas epidemiológicas, são:{reset}\n{csv_se.dtypes}\n")
 	return csv_se
@@ -191,9 +201,10 @@ def extrair_centroides(shapefile, netcdf4, str_var):
 	valores_centroides = valores_centroides[["Data"] + colunas_restantes.tolist()]
 	valores_centroides.columns.name = str_var
 	valores_centroides.rename(columns = {"index" : str_var}, inplace = True)
-	valores_centroides.to_csv(f"{caminho_dados}{str_var}_diario_ate_{_ANO_FINAL}.csv", index = False)
+	valores_centroides.to_csv(f"{caminho_dados}{str_var}_diario_{_ANO_FINAL}.csv", index = False)
 	print("="*80)
-	print(f"\n{green}{caminho_shape}{str_var}_diario_ate_{_ANO_FINAL}.csv\nARQUIVO SALVO COM SUCESSO!{reset}\n{reset}")
+	print(f"\n{green}{caminho_shape}{str_var}_diario_{_ANO_FINAL}.csv{reset}\n")
+	print(f"\n{green}ARQUIVO SALVO COM SUCESSO!{reset}\n")
 	print("="*80)
 	print(netcdf4.variables[str_var][:])
 	print(netcdf4.variables["time"][:])
@@ -209,20 +220,56 @@ def extrair_centroides(shapefile, netcdf4, str_var):
 	print(valores_centroides.dtypes)
 	print("="*80)
 	verifica_nan(valores_centroides)
-	semana_epidemiologica(valores_centroides, str_var)
-	return valores_centroides
+	csv_se = semana_epidemiologica(valores_centroides, str_var)
+	return valores_centroides, csv_se
 
+tmin, tmin_se = extrair_centroides(municipios, tmin, "tmin")
+tmintotal = pd.concat([serie_tmin, tmin], ignore_index = True)
+tmintotal["Data"] = pd.to_datetime(tmintotal["Data"]).dt.strftime("%Y-%m-%d")
+tmintotal.to_csv(f"{caminho_dados}tmin_diario_ate_{_ANO_FINAL}.csv", index = False)
+tmintotal_se = pd.concat([serie_tmin_se, tmin_se], ignore_index = True)
+tmintotal_se["Semana"] = pd.to_datetime(tmintotal_se["Semana"]).dt.strftime("%Y-%m-%d")
+tmintotal_se.to_csv(f"{caminho_dados}tmin_semana_ate_{_ANO_FINAL}.csv", index = False)
+print(f"\n{green}tmintotal\n{reset}{tmintotal}\n")
+print(f"\n{green}tmintotal_se\n{reset}{tmintotal_se}\n")
+print(tmintotal_se[["BALNEÁRIO CAMBORIÚ", "BOMBINHAS", "PORTO BELO"]])
 
-tmin = extrair_centroides(municipios, tmin, "tmin")
-tmed = extrair_centroides(municipios, tmed, "tmed")
-tmax = extrair_centroides(municipios, tmax, "tmax")
-prec = extrair_centroides(municipios, prec, "prec")
+tmed, tmed_se = extrair_centroides(municipios, tmed, "tmed")
+tmedtotal = pd.concat([serie_tmed, tmed], ignore_index = True)
+tmedtotal["Data"] = pd.to_datetime(tmedtotal["Data"]).dt.strftime("%Y-%m-%d")
+tmedtotal.to_csv(f"{caminho_dados}tmed_diario_ate_{_ANO_FINAL}.csv", index = False)
+tmedtotal_se = pd.concat([serie_tmed_se, tmed_se], ignore_index = True)
+tmedtotal_se["Semana"] = pd.to_datetime(tmedtotal_se["Semana"]).dt.strftime("%Y-%m-%d")
+tmedtotal_se.to_csv(f"{caminho_dados}tmed_semana_ate_{_ANO_FINAL}.csv", index = False)
+print(f"\n{green}tmedtotal\n{reset}{tmedtotal}\n")
+print(f"\n{green}tmedtotal_se\n{reset}{tmedtotal_se}\n")
+print(tmedtotal_se[["BALNEÁRIO CAMBORIÚ", "BOMBINHAS", "PORTO BELO"]])
 
+tmax, tmax_se = extrair_centroides(municipios, tmax, "tmax")
+tmedtotal = pd.concat([serie_tmed, tmed], ignore_index = True)
+tmedtotal["Data"] = pd.to_datetime(tmedtotal["Data"]).dt.strftime("%Y-%m-%d")
+tmedtotal.to_csv(f"{caminho_dados}tmed_diario_ate_{_ANO_FINAL}.csv", index = False)
+tmedtotal_se = pd.concat([serie_tmed_se, tmed_se], ignore_index = True)
+tmedtotal_se["Semana"] = pd.to_datetime(tmedtotal_se["Semana"]).dt.strftime("%Y-%m-%d")
+tmedtotal_se.to_csv(f"{caminho_dados}tmed_semana_ate_{_ANO_FINAL}.csv", index = False)
+print(f"\n{green}tmedtotal\n{reset}{tmedtotal}\n")
+print(f"\n{green}tmedtotal_se\n{reset}{tmedtotal_se}\n")
+print(tmedtotal_se[["BALNEÁRIO CAMBORIÚ", "BOMBINHAS", "PORTO BELO"]])
+
+prec, prec_se = extrair_centroides(municipios, prec, "prec")
+tmedtotal = pd.concat([serie_tmed, tmed], ignore_index = True)
+tmedtotal["Data"] = pd.to_datetime(tmedtotal["Data"]).dt.strftime("%Y-%m-%d")
+tmedtotal.to_csv(f"{caminho_dados}tmed_diario_ate_{_ANO_FINAL}.csv", index = False)
+tmedtotal_se = pd.concat([serie_tmed_se, tmed_se], ignore_index = True)
+tmedtotal_se["Semana"] = pd.to_datetime(tmedtotal_se["Semana"]).dt.strftime("%Y-%m-%d")
+tmedtotal_se.to_csv(f"{caminho_dados}tmed_semana_ate_{_ANO_FINAL}.csv", index = False)
+print(f"\n{green}tmedtotal\n{reset}{tmedtotal}\n")
+print(f"\n{green}tmedtotal_se\n{reset}{tmedtotal_se}\n")
+print(tmedtotal_se[["BALNEÁRIO CAMBORIÚ", "BOMBINHAS", "PORTO BELO"]])
 
 print("!!"*80)
 print(f"\n{green}{bold}FINALIZADA ATUALIZAÇÃO{reset}\n")
 print(f"\n{green}Atualização feita em produtos de reanálise até {red}{_ANO_FINAL}{reset}!\n")
-print(f"{bold}(MERGE e SAMeT - tmin, tmed, tmax){bold}")
+print(f"{bold}(MERGE e SAMeT - tmin, tmed, tmax){reset}")
 print("!!"*80)
 
-print(tmin[["BALNEÁRIO CAMBORIÚ", "BOMBINHAS", "PORTO BELO"]])
