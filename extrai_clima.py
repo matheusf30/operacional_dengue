@@ -157,7 +157,7 @@ def extrair_centroides(shapefile, netcdf4, str_var):
 		lon, lat = linha["centroide"].x, linha["centroide"].y
 		if shapefile["NM_MUN"].isin(["Balneário Camboriú", "Bombinhas", "Porto Belo"]).any():
 			if str_var == "tmax" or "tmed" or "tmin":
-				lon -= 0.5
+				lon -= 0.25
 		valor = netcdf4.sel(lon = lon, lat = lat, method = "nearest")
 		valores_centroides.append(valor)
 	valores_centroides = pd.DataFrame(data = valores_centroides)
@@ -174,8 +174,8 @@ def extrair_centroides(shapefile, netcdf4, str_var):
 		if isinstance(linha[str_var], xr.DataArray):
 			var_valor = [x.item() if not np.isnan(x.item()) else np.nan for x in linha[str_var]]
 			var_valores.append(var_valor)
-			print(f"\n{green}---{str_var}---\n{cyan}{valores_centroides['Municipio'][i]}: Finalizado!\n")
-			print(f"\n{green}{i + 1} de {len(valores_centroides['Municipio'])}.{reset}\n")
+			print(f"\n{green}---{str_var}---\n\n{reset}{valores_centroides['Municipio'][i]}: Finalizado!\n")
+			print(f"\n{red}{i + 1} de {len(valores_centroides['Municipio'])}.{reset}\n")
 		else:
 			var_valores.append([np.nan] * len(valores_tempo))
 			print(f"\n{red}{valores_centroides['Municipio'][i]}: NaN... {magenta}Finalizado!\n")
