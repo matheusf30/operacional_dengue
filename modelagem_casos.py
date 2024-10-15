@@ -197,14 +197,14 @@ print(f"\n{green}dataset:\n{reset}{dataset}\n")
 #_RETROAGIR = 4
 _RETROAGIR = 10 # Semanas Epidemiológicas
 _HORIZONTE = 8 # Tempo de Previsão
-for r in range(_HORIZONTE + 1, _RETROAGIR + 1):
-#for r in range(1, 3):
+#for r in range(_HORIZONTE + 1, _RETROAGIR + 1):
+for r in range(1, 3):
 	dataset[f"TMIN_r{r}"] = dataset["TMIN"].shift(-r)
 	dataset[f"TMED_r{r}"] = dataset["TMED"].shift(-r)
 	dataset[f"TMAX_r{r}"] = dataset["TMAX"].shift(-r)
 	dataset[f"PREC_r{r}"] = dataset["PREC"].shift(-r)
 	#dataset[f"FOCOS_r{r}"] = dataset["FOCOS"].shift(-r)
-for r in range(2, 5):
+#for r in range(2, 5):
 	dataset[f"CASOS_r{r}"] = dataset["CASOS"].shift(-r)
 """
 #_RETROAGIR = 2
