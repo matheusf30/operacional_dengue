@@ -686,7 +686,10 @@ else:
 
 y_previsto = modeloRF.predict(teste_x)
 previsoes_modelo = modeloRF.predict(x)
-previsoes_modelo = [int(p) for p in previsoes_modelo][1:]
+print(f"\n{green}Shape - y:\n{reset}{y.shape}\n")
+print(f"\n{green}Shape - previsoes_modelo:\n{reset}{previsoes_modelo.shape}\n")
+
+previsoes_modelo = [int(p) for p in previsoes_modelo]#[1:]#ValueError: Found input variables with inconsistent numbers of samples: [561, 560]
 EQM_RF = mean_squared_error(y, previsoes_modelo)
 RQ_EQM_RF = np.sqrt(EQM_RF)
 R_2 = round(r2_score(y, previsoes_modelo), 2) 
