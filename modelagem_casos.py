@@ -248,10 +248,11 @@ treino_x = x_ate__LIMITE.copy()
 teste_x = x_LIMITE.copy()
 treino_y = y_ate__LIMITE.copy()
 teste_y = y_LIMITE.copy()
+"""
 explicativas = x.columns.tolist() # feature_names = explicativas
 treino_x_explicado = pd.DataFrame(treino_x, columns = explicativas)
 treino_x_explicado = treino_x_explicado.to_numpy().astype(int)
-"""
+
 #print(f"""Conjunto de Treino com as Variáveis Explicativas (<{_LIMITE}):\n{treino_x}\n
 #Conjunto de Treino com as Variáveis Explicativas (>{_FIM}):\n{teste_x}\n 
 #Conjunto de Teste com a Variável Dependente (<{_LIMITE}):\n{treino_y}\n 
