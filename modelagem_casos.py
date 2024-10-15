@@ -686,7 +686,7 @@ else:
 
 y_previsto = modeloRF.predict(teste_x)
 previsoes_modelo = modeloRF.predict(x)
-previsoes_modelo = [int(p) for p in previsoes_modelo][1:]
+previsoes_modelo = [int(p) for p in previsoes_modelo]#[1:]
 EQM_RF = mean_squared_error(y, previsoes_modelo)
 RQ_EQM_RF = np.sqrt(EQM_RF)
 R_2 = round(r2_score(y, previsoes_modelo), 2) 
