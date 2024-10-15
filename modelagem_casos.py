@@ -14,11 +14,11 @@ import joblib
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 #from imblearn.over_sampling import SMOTE
-"""
+
 from imblearn.over_sampling import RandomOverSampler
 from imblearn.under_sampling import RandomUnderSampler
 from imblearn.over_sampling import SMOTE
-"""
+
 # Validações
 from sklearn.metrics import mean_squared_error, accuracy_score, r2_score
 from sklearn.metrics import confusion_matrix, classification_report #, RocCurveDisplay
