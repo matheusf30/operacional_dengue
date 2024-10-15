@@ -306,7 +306,7 @@ print(f"Treinando com {len(treino_x)} elementos e testando com {len(teste_x)} el
 print(f"Formato dos dados (X) nas divisões treino: {treino_x.shape} e teste: {teste_x.shape}.")
 print(f"Formato dos dados (Y) nas divisões treino: {treino_y.shape} e teste: {teste_y.shape}.")
 print("="*80)
-sys.exit()
+#sys.exit()
 #########################################################FUNÇÕES###############################################################
 ### Definições
 def monta_dataset(_CIDADE):
@@ -683,7 +683,7 @@ else:
 	modeloRF.fit(treino_x_explicado, treino_y)
 
 ### Testando e Avaliando
-"""
+
 y_previsto = modeloRF.predict(teste_x)
 previsoes_modelo = modeloRF.predict(x)
 previsoes_modelo = [int(p) for p in previsoes_modelo]
@@ -741,7 +741,7 @@ plt.xlabel("Semanas Epidemiológicas na Série de Anos")
 plt.ylabel("Número de Casos de Dengue")
 plt.xticks(rotation = 60)
 plt.show()
-
+"""
 #histograma_erro(y, previsoes_modelo)
 #boxplot_erro(y, previsoes_modelo)
 #joblib.dump(modeloRF, f"{caminho_modelos}RF_casos_r{_RETROAGIR}_{_CIDADE}.h5")
