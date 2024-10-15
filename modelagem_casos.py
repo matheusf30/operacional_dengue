@@ -186,7 +186,7 @@ troca_nome = {f"{_CIDADE}_x" : "PREC", f"{_CIDADE}_y" : "CASOS"}
 dataset = dataset.rename(columns = troca_nome)
 dataset.fillna(0, inplace = True)
 print(f"\n{green}dataset:\n{reset}{dataset}\n")
-#sys.exit()
+sys.exit()
 
 #dataset["TMED"] = dataset["TMED"]#.rolling(_JANELA_MM).mean()
 #dataset["PREC"] = dataset["PREC"]#.rolling(_JANELA_MM).mean()
