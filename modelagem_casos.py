@@ -181,7 +181,7 @@ dataset = dataset.merge(prec[["Semana", _CIDADE]], how = "left", on = "Semana").
 dataset.dropna(inplace = True)
 print(f"\n{green}dataset:\n{reset}{dataset}\n")
 #dataset = dataset.iloc[104:, :].copy()
-dataset = dataset.merge(casos[["Semana", _CIDADE]], how = "left", on = "Semana").copy()
+dataset = dataset.merge(casos[["Semana", _CIDADE]], how = "right", on = "Semana").copy()
 troca_nome = {f"{_CIDADE}_x" : "PREC", f"{_CIDADE}_y" : "CASOS"}
 dataset = dataset.rename(columns = troca_nome)
 dataset.fillna(0, inplace = True)
