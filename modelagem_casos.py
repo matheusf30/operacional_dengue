@@ -44,8 +44,8 @@ reset = "\033[0m"
 
 ### Condições para Variar ####################################
 
-_RETROAGIR = 5 # Semanas Epidemiológicas
-_HORIZONTE = 4 # Tempo de Previsão
+#_RETROAGIR = 6 # Semanas Epidemiológicas
+#_HORIZONTE = 4 # Tempo de Previsão
 
 _JANELA_MM = 25 # Média Móvel
 _K = 3 # constante para fórmulas de índices
@@ -175,7 +175,7 @@ print(f"\n{green}unicos:\n{reset}{unicos}\n")
 dataset = tmin[["Semana"]].copy()
 dataset["TMIN"] = tmin[_CIDADE].copy()
 dataset["TMED"] = tmed[_CIDADE].copy()
-#dataset["TMAX"] = tmax[_CIDADE].copy()
+dataset["TMAX"] = tmax[_CIDADE].copy()
 print(f"\n{green}dataset:\n{reset}{dataset}\n")
 dataset = dataset.merge(prec[["Semana", _CIDADE]], how = "left", on = "Semana").copy()
 dataset.dropna(inplace = True)
@@ -186,7 +186,7 @@ troca_nome = {f"{_CIDADE}_x" : "PREC", f"{_CIDADE}_y" : "CASOS"}
 dataset = dataset.rename(columns = troca_nome)
 dataset.fillna(0, inplace = True)
 print(f"\n{green}dataset:\n{reset}{dataset}\n")
-sys.exit()
+#sys.exit()
 
 #dataset["TMED"] = dataset["TMED"]#.rolling(_JANELA_MM).mean()
 #dataset["PREC"] = dataset["PREC"]#.rolling(_JANELA_MM).mean()
@@ -195,15 +195,17 @@ sys.exit()
 
 #_RETROAGIR = 12
 #_RETROAGIR = 4
+_RETROAGIR = 10 # Semanas Epidemiológicas
+_HORIZONTE = 8 # Tempo de Previsão
 for r in range(_HORIZONTE + 1, _RETROAGIR + 1):
+#for r in range(1, 3):
 	dataset[f"TMIN_r{r}"] = dataset["TMIN"].shift(-r)
 	dataset[f"TMED_r{r}"] = dataset["TMED"].shift(-r)
 	dataset[f"TMAX_r{r}"] = dataset["TMAX"].shift(-r)
 	dataset[f"PREC_r{r}"] = dataset["PREC"].shift(-r)
 	#dataset[f"FOCOS_r{r}"] = dataset["FOCOS"].shift(-r)
-	#dataset[f"CASOS_r{r}"] = dataset["CASOS"].shift(-r)
-	#dataset[f"iCLIMA_r{r}"] = dataset["iCLIMA"].shift(-r)
-	#dataset[f"iEPIDEMIO_r{r}"] = dataset["iEPIDEMIO"].shift(-r)
+for r in range(2, 5):
+	dataset[f"CASOS_r{r}"] = dataset["CASOS"].shift(-r)
 """
 #_RETROAGIR = 2
 #dataset[f"TMED_r{_RETROAGIR}"] = dataset["TMED"].shift(-_RETROAGIR)
@@ -219,12 +221,12 @@ for r in range(_HORIZONTE + 1, _RETROAGIR + 1):
     dataset[f"CASOS_r{r}"] = dataset["CASOS"].shift(-r)
 """
 
-dataset.drop(columns = ["TMIN", "TMED", "TMAX", "PREC", "FOCOS", "iCLIMA", "iEPIDEMIO"], inplace = True)
+dataset.drop(columns = ["TMIN", "TMED", "TMAX", "PREC"], inplace = True)
 dataset.dropna(inplace = True)
 dataset.set_index("Semana", inplace = True)
 dataset.columns.name = f"{_CIDADE}"
-print(dataset)
-
+print(f"\n{green}dataset (após retroação):\n{reset}{dataset}\n")
+sys.exit()
 ### Dividindo Dataset em Treino e Teste
 SEED = np.random.seed(0)
 x = dataset.drop(columns = "CASOS")
