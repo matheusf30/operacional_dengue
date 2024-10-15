@@ -226,7 +226,7 @@ dataset.dropna(inplace = True)
 dataset.set_index("Semana", inplace = True)
 dataset.columns.name = f"{_CIDADE}"
 print(f"\n{green}dataset (após retroação):\n{reset}{dataset}\n")
-sys.exit()
+#sys.exit()
 ### Dividindo Dataset em Treino e Teste
 SEED = np.random.seed(0)
 x = dataset.drop(columns = "CASOS")
@@ -310,7 +310,7 @@ print(f"Treinando com {len(treino_x)} elementos e testando com {len(teste_x)} el
 print(f"Formato dos dados (X) nas divisões treino: {treino_x.shape} e teste: {teste_x.shape}.")
 print(f"Formato dos dados (Y) nas divisões treino: {treino_y.shape} e teste: {teste_y.shape}.")
 print("="*80)
-
+sys.exit()
 #########################################################FUNÇÕES###############################################################
 ### Definições
 def monta_dataset(_CIDADE):
