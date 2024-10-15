@@ -14,7 +14,7 @@ import joblib
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 #from imblearn.over_sampling import SMOTE
-
+# pip install imbalanced-learn
 from imblearn.over_sampling import RandomOverSampler
 from imblearn.under_sampling import RandomUnderSampler
 from imblearn.over_sampling import SMOTE
@@ -235,7 +235,7 @@ x_array = x.to_numpy().astype(int)
 y_array = y.to_numpy().astype(int)
 x_array = x_array.reshape(x_array.shape[0], -1)
 
-"""
+
 treino_x, teste_x, treino_y, teste_y = train_test_split(x_array, y_array,
                                                         random_state = SEED,
                                                         test_size = 0.2)
@@ -251,11 +251,12 @@ teste_y = y_LIMITE.copy()
 explicativas = x.columns.tolist() # feature_names = explicativas
 treino_x_explicado = pd.DataFrame(treino_x, columns = explicativas)
 treino_x_explicado = treino_x_explicado.to_numpy().astype(int)
-print(f"""Conjunto de Treino com as Variáveis Explicativas (<{_LIMITE}):\n{treino_x}\n
-Conjunto de Treino com as Variáveis Explicativas (>{_FIM}):\n{teste_x}\n 
-Conjunto de Teste com a Variável Dependente (<{_LIMITE}):\n{treino_y}\n 
-Conjunto de Teste com a Variável Dependente (>{_FIM}):\n{teste_y}\n
-Conjunto de Treino com as Variáveis Explicativas (Explicitamente Indicadas)(<{_LIMITE}):\n{treino_x_explicado}\n""")
+"""
+#print(f"""Conjunto de Treino com as Variáveis Explicativas (<{_LIMITE}):\n{treino_x}\n
+#Conjunto de Treino com as Variáveis Explicativas (>{_FIM}):\n{teste_x}\n 
+#Conjunto de Teste com a Variável Dependente (<{_LIMITE}):\n{treino_y}\n 
+#Conjunto de Teste com a Variável Dependente (>{_FIM}):\n{teste_y}\n
+#Conjunto de Treino com as Variáveis Explicativas (Explicitamente Indicadas)(<{_LIMITE}):\n{treino_x_explicado}\n""")
 #sys.exit()
 """
 ### Normalizando/Escalonando Dataset_x (Se Necessário)
@@ -263,21 +264,17 @@ escalonador = StandardScaler()
 escalonador.fit(treino_x)
 treino_normal_x = escalonador.transform(treino_x)
 teste_normal_x = escalonador.transform(teste_x)
-"""
-### Ajuste Ponderado
 
-"""
+### Ajuste Ponderado
 # SMOTE
 contagem_classes = treino_y.value_counts()
 classe_minoritaria = contagem_classes.min()
 k_neighbors = 2
 smote = SMOTE()
 smote_treino_x_explicado, smote_treino_y = smote.fit_resample(treino_x_explicado, treino_y)
-
 # Calcular os pesos das amostras
 sample_weights = compute_sample_weight(class_weight='balanced', y = y_train_balanced) 
 """
-
 # Ajuste Sobre/Sub
 sobreajuste = RandomOverSampler(sampling_strategy = "not majority", random_state = SEED)
 subajuste = RandomUnderSampler(sampling_strategy = "not minority", random_state = SEED)
@@ -286,8 +283,6 @@ ajuste1_treino_x, ajusto1_treino_y = sobreajuste.fit_resample(treino_x_explicado
 # Depois undersampling para reduzir a classe majoritária
 ajustado_treino_x_explicado, ajustado_treino_y = subajuste.fit_resample(ajuste1_treino_x, ajusto1_treino_y)
 print("\nTreino X ajustado\n", ajustado_treino_x_explicado, "\nTreino Y ajustado\n", ajustado_treino_y)
-
-
 
 # Instanciar e treinar o modelo Random Forest:
 # model = RandomForestClassifier(n_estimators=100, random_state=42)  
