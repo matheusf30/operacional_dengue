@@ -56,7 +56,8 @@ _DIA_ONTEM = str(_ONTEM.day)
 _ANO_MES_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}"
 _ANO_MES_DIA_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}{_DIA_ONTEM}"
 
-print(_ANO_FINAL, _ONTEM, _ANO_ONTEM)
+print(f"\n{green}HOJE:\n{reset}{_ANO_MES_DIA}\n")
+print(f"\n{green}ONTEM:\n{reset}{_ANO_MES_DIA_ONTEM}\n")
 
 caminho_gfs = f"/media/dados/operacao/gfs/0p25/{_ANO_MES}/{_ANO_MES_DIA}/" #202410/20241012/ #prec_daily_gfs_2024101212.nc
 caminho_gfs_ontem = f"/media/dados/operacao/gfs/0p25/{_ANO_MES_ONTEM}/{_ANO_MES_DIA_ONTEM}/" #202410/20241012/
@@ -91,10 +92,11 @@ except FileNotFoundError:
 	print(f"\n{green}Abrindo arquivos em diretório do dia anterior:\n{bold}{caminho_gfs_ontem}\n{reset}")
 	print(f"\n{green}Arquivos utilizados do dia:\n{bold}{_DIA_ONTEM}/{_MES_ONTEM}/{_ANO_ONTEM}.\n{reset}")
 	data_arquivo_final = _ANO_MES_DIA_ONTEM
+	
 teste = pd.read_csv(f"{caminho_dados}{teste}")
 municipios = gpd.read_file(f"{caminho_shape}{municipios}")
 print(teste)
-sys.exit()
+#sys.exit()
 ###Visualizando arquivos e variáveis
 #ShapeSC (municípios)
 print(f"\n{green}municipios\n{reset}{municipios}\n")
@@ -213,23 +215,23 @@ def extrair_centroides(shapefile, netcdf4, str_var):
 	valores_centroides.columns.name = str_var
 	valores_centroides.rename(columns = {"index" : str_var}, inplace = True)
 	valores_centroides.to_csv(f"{caminho_dados}gfs_{str_var}_diario_{data_arquivo_final}.csv", index = False)
-	print("="*80)
+	print("="*50)
 	print(f"\n{green}{caminho_dados}gfs_{str_var}_diario_{data_arquivo_final}.csv{reset}\n")
 	print(f"\n{green}ARQUIVO SALVO COM SUCESSO!{reset}\n")
-	print("="*80)
+	print("="*50)
 	print(netcdf4.variables[str_var][:])
 	print(netcdf4.variables["time"][:])
-	print("="*80)
+	print("="*50)
 	print(valores_tempo)
 	print(valores_tempo.shape)
-	print("="*80)
+	print("="*50)
 	print(valores_variavel)
 	print(valores_variavel.shape)
-	print("="*80)
+	print("="*50)
 	print(valores_centroides)
 	print(valores_centroides.info())
 	print(valores_centroides.dtypes)
-	print("="*80)
+	print("="*50)
 	verifica_nan(valores_centroides)
 	csv_se = semana_epidemiologica(valores_centroides, str_var)
 	return valores_centroides, csv_se
@@ -282,9 +284,10 @@ print(f"\n{green}tmaxtotal\n{reset}{tmaxtotal}\n")
 print(f"\n{green}tmaxtotal_se\n{reset}{tmaxtotal_se}\n")
 print(tmaxtotal_se[["BALNEÁRIO CAMBORIÚ", "BOMBINHAS", "PORTO BELO"]])
 """
-print("!!"*80)
+print(f"{red}!{reset}!{green}!{reset}!"*30)
 print(f"\n{green}{bold}FINALIZADA ATUALIZAÇÃO{reset}\n")
-print(f"\n{green}Atualização feita em produtos de reanálise até {red}{_ANO_FINAL}{reset}!\n")
-print(f"{bold}(MERGE e SAMeT - tmin, tmed, tmax){reset}")
-print("!!"*80)
+print(f"\n{green}Atualização feita em reanálise preditiva* a partir de: {red}{data_arquivo_final}{reset}!\n")
+print(f"\n{bold}*GFS (Global Forecast System)**{reset}")
+print(f"{bold}**NCEP (National Centers for Environmental Prediction){reset}\n")
+print(f"{red}!{reset}!{green}!{reset}!"*30)
 
