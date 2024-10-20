@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns 
-#import datetime
+from datetime import date, datetime, timedelta
 # Suporte
 import os
 import sys
@@ -78,10 +78,11 @@ elif _LOCAL == "IFSC":
 	caminho_shape = "/media/dados/shapefiles/" #SC/SC_Municipios_2022.shp #BR/BR_UF_2022.shp
 	caminho_modelos = "/home/meteoro/scripts/matheus/operacional_dengue/modelagem/casos/"
 	caminho_resultados = "home/meteoro/scripts/matheus/operacional_dengue/modelagem/resultados/"
-print(f"\n{green}HOJE:\n{reset}{_ANO_MES_DIA}\n")
-print(f"\n{green}ONTEM:\n{reset}{_ANO_MES_DIA_ONTEM}\n")
 else:
 	print("CAMINHO NÃO RECONHECIDO! VERIFICAR LOCAL!")
+print(f"\n{green}HOJE:\n{reset}{_ANO_MES_DIA}\n")
+print(f"\n{green}ONTEM:\n{reset}{_ANO_MES_DIA_ONTEM}\n")
+
 print(f"\nOS DADOS UTILIZADOS ESTÃO ALOCADOS NOS SEGUINTES CAMINHOS:\n\n{caminho_dados}\n\n")
 
 
@@ -148,29 +149,29 @@ def abre_modelo(cidade):
     return modelo
 
 def monta_dataset(cidade):
-    dataset = tmin[["Semana"]].copy()
-    dataset["TMIN"] = tmin[cidade].copy()
-    dataset["TMED"] = tmed[cidade].copy()
-    dataset["TMAX"] = tmax[cidade].copy()
-    dataset = dataset.merge(prec[["Semana", cidade]], how = "right", on = "Semana").copy()
-	dataset = dataset.rename(columns = f"{cidade}" : "PREC"})
-    dataset.dropna(axis = 0, inplace = True)
-    dataset = dataset.merge(casos[["Semana", cidade]], how = "right", on = "Semana").copy()
-	dataset = dataset.rename(columns = f"{cidade}" : "CASOS"})
-    dataset.fillna(0, inplace = True)
-    for r in range(_HORIZONTE + 1, _RETROAGIR + 1):
-        dataset[f"TMIN_r{r}"] = dataset["TMIN"].shift(-r)
-        dataset[f"TMED_r{r}"] = dataset["TMED"].shift(-r)
-        dataset[f"TMAX_r{r}"] = dataset["TMAX"].shift(-r)
-        dataset[f"PREC_r{r}"] = dataset["PREC"].shift(-r)
-        dataset[f"CASOS_r{r}"] = dataset["CASOS"].shift(-r)
-    dataset.drop(columns = ["TMIN", "TMED", "TMAX", "PREC", "FOCOS"], inplace = True)
-    dataset.dropna(inplace = True)
-    dataset.set_index("Semana", inplace = True)
-    dataset.columns.name = f"{cidade}"
-    x = dataset.drop(columns = "CASOS")
-    y = dataset["CASOS"]
-    return dataset, x, y
+	dataset = tmin[["Semana"]].copy()
+	dataset["TMIN"] = tmin[cidade].copy()
+	dataset["TMED"] = tmed[cidade].copy()
+	dataset["TMAX"] = tmax[cidade].copy()
+	dataset = dataset.merge(prec[["Semana", cidade]], how = "right", on = "Semana").copy()
+	dataset = dataset.rename(columns = {f"{cidade}" : "PREC"})
+	dataset.dropna(axis = 0, inplace = True)
+	dataset = dataset.merge(casos[["Semana", cidade]], how = "right", on = "Semana").copy()
+	dataset = dataset.rename(columns = {f"{cidade}" : "CASOS"})
+	dataset.fillna(0, inplace = True)
+	for r in range(_HORIZONTE + 1, _RETROAGIR + 1):
+		dataset[f"TMIN_r{r}"] = dataset["TMIN"].shift(-r)
+		dataset[f"TMED_r{r}"] = dataset["TMED"].shift(-r)
+		dataset[f"TMAX_r{r}"] = dataset["TMAX"].shift(-r)
+		dataset[f"PREC_r{r}"] = dataset["PREC"].shift(-r)
+		dataset[f"CASOS_r{r}"] = dataset["CASOS"].shift(-r)
+	dataset.drop(columns = ["TMIN", "TMED", "TMAX", "PREC", "FOCOS"], inplace = True)
+	dataset.dropna(inplace = True)
+	dataset.set_index("Semana", inplace = True)
+	dataset.columns.name = f"{cidade}"
+	x = dataset.drop(columns = "CASOS")
+	y = dataset["CASOS"]
+	return dataset, x, y
 
 def treino_teste(dataset, cidade):
     SEED = np.random.seed(0)
@@ -348,37 +349,37 @@ previsao_total.drop(1, axis = 0, inplace = True)
 #previsao_total.drop(previsao_total.index[-_RETROAGIR:], axis = 0, inplace = True)
 
 if _AUTOMATIZA == True:
-    for cidade in cidades:
+	for cidade in cidades:
 		try:
 			modelo = abre_modelo(cidade)
-            dataset, x, y = monta_dataset(cidade)
-            treino_x, teste_x, treino_y, teste_y, treino_x_explicado = treino_teste(dataset, cidade)
-            previsoes, y_previsto = preve(modelo, x, treino_x_explicado)
-            EQM, RQ_EQM, R_2 = metricas(dataset, previsoes, 5, y)
-            previsao_total[cidade] = previsoes
+			dataset, x, y = monta_dataset(cidade)
+			treino_x, teste_x, treino_y, teste_y, treino_x_explicado = treino_teste(dataset, cidade)
+			previsoes, y_previsto = preve(modelo, x, treino_x_explicado)
+			EQM, RQ_EQM, R_2 = metricas(dataset, previsoes, 5, y)
+			previsao_total[cidade] = previsoes
 		except ValueError as e:
-            print(f"\n{red}Modelo para {cidade} apresenta ERRO!\n{yellow}{e}\n{cyan}Por favor, entre em contato para resolver o problema!{reset}\n")
+			print(f"\n{red}Modelo para {cidade} apresenta ERRO!\n{yellow}{e}\n{cyan}Por favor, entre em contato para resolver o problema!{reset}\n")
 		except KeyError as e:
-            print(f"\n{red}Modelo para {cidade} apresenta ERRO!\n{yellow}{e}\n{cyan}Por favor, entre em contato para resolver o problema!{reset}\n")
+			print(f"\n{red}Modelo para {cidade} apresenta ERRO!\n{yellow}{e}\n{cyan}Por favor, entre em contato para resolver o problema!{reset}\n")
 		except NotFound as e:
-            print(f"\n{red}Modelo para {cidade} apresenta ERRO!\n{yellow}{e}\n{cyan}Por favor, entre em contato para resolver o problema!{reset}\n")
-			"""
-	        if cidade in value_error:
-	            print(f"\n{red}Modelo para {cidade} não está no diretório!\n{yellow}ValueError\n{cyan}Por favor, entre em contato para resolver o problema!{reset}\n")
-	        elif cidade in key_error:
-	            print(f"\n{red}Modelo para {cidade} não está no diretório!\n{yellow}KeyError\n{cyan}Por favor, entre em contato para resolver o problema!{reset}\n")
-	        elif cidade in not_found:
-	            print(f"\n{red}Modelo para {cidade} não está no diretório!\n{yellow}NotFound\n{cyan}Por favor, entre em contato para resolver o problema!{reset}")
-	            print(f"{magenta}FileNotFoundError: [Errno 2] No such file or directory: '/home/sifapsc/scripts/matheus/dados_dengue/modelos/'{reset}\n")
-			"""            
+			print(f"\n{red}Modelo para {cidade} apresenta ERRO!\n{yellow}{e}\n{cyan}Por favor, entre em contato para resolver o problema!{reset}\n")
+		"""
+		if cidade in value_error:
+			print(f"\n{red}Modelo para {cidade} não está no diretório!\n{yellow}ValueError\n{cyan}Por favor, entre em contato para resolver o problema!{reset}\n")
+		elif cidade in key_error:
+			print(f"\n{red}Modelo para {cidade} não está no diretório!\n{yellow}KeyError\n{cyan}Por favor, entre em contato para resolver o problema!{reset}\n")
+		elif cidade in not_found:
+			print(f"\n{red}Modelo para {cidade} não está no diretório!\n{yellow}NotFound\n{cyan}Por favor, entre em contato para resolver o problema!{reset}")
+			print(f"{magenta}FileNotFoundError: [Errno 2] No such file or directory: '/home/sifapsc/scripts/matheus/dados_dengue/modelos/'{reset}\n")
+		"""            
 else:
-    modelo = abre_modelo(cidade)
-    dataset, x, y = monta_dataset(cidade)
-    treino_x, teste_x, treino_y, teste_y, treino_x_explicado = treino_teste(dataset, cidade)
-    previsoes, y_previsto = preve(modelo, x, treino_x_explicado)
-    EQM, RQ_EQM, R_2 = metricas(dataset, previsoes, 5, y)
-    previsao_total[cidade] = previsoes
-    grafico(previsoes, R_2)
+	modelo = abre_modelo(cidade)
+	dataset, x, y = monta_dataset(cidade)
+	treino_x, teste_x, treino_y, teste_y, treino_x_explicado = treino_teste(dataset, cidade)
+	previsoes, y_previsto = preve(modelo, x, treino_x_explicado)
+	EQM, RQ_EQM, R_2 = metricas(dataset, previsoes, 5, y)
+	previsao_total[cidade] = previsoes
+	grafico(previsoes, R_2)
 
 previsao_melt = pd.melt(previsao_total, id_vars = ["Semana"], 
                         var_name = "Município", value_name = "Casos")
