@@ -23,57 +23,91 @@ from sklearn.ensemble import RandomForestRegressor
 import geopandas as gpd
 from shapely.geometry import Point, Polygon
 import matplotlib.patches as mpatches
-#import tensorflow
-#from tensorflow import keras
-#from keras.models import load_model
+##### Padrão ANSI ###############################################################
+bold = "\033[1m"
+red = "\033[91m"
+green = "\033[92m"
+yellow = "\033[33m"
+blue = "\033[34m"
+magenta = "\033[35m"
+cyan = "\033[36m"
+white = "\033[37m"
+reset = "\033[0m"
+
+#### Condições para Variar ####################################
+
+_AUTOMATIZA = True # Implementar sys.argv[1]
+_VISUALIZAR = True
+_SALVAR = False
+
+SEED = np.random.seed(0)
+
+_CIDADE = "Joinville"#"Joinville"#"Florianópolis"
+_CIDADE = _CIDADE.upper()
+
+_RETROAGIR = 2 # Semanas Epidemiológicas
+_HORIZONTE = 0 # Tempo de Previsão
+#for r in range(_HORIZONTE + 1, _RETROAGIR + 1):
+
+_AUTOMATIZA = True#False
+
+#################################################################################
+
+_ANO_ATUAL = str(datetime.today().year)
+_MES_ATUAL = str(datetime.today().month)
+_DIA_ATUAL = str(datetime.today().day)
+_ANO_MES = f"{_ANO_ATUAL}{_MES_ATUAL}"
+_ANO_MES_DIA = f"{_ANO_ATUAL}{_MES_ATUAL}{_DIA_ATUAL}"
+_ONTEM = datetime.today() - timedelta(days = 1)
+_ANO_ONTEM = str(_ONTEM.year)
+_MES_ONTEM = str(_ONTEM.month)
+_DIA_ONTEM = str(_ONTEM.day)
+_ANO_MES_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}"
+_ANO_MES_DIA_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}{_DIA_ONTEM}"
+
+##################################################################################
 
 ### Encaminhamento aos Diretórios
 _LOCAL = "IFSC" # OPÇÕES>>> "GH" "CASA" "IFSC"
 if _LOCAL == "GH": # _ = Variável Privada
-    caminho_dados = "https://raw.githubusercontent.com/matheusf30/dados_dengue/main/"
-    caminho_modelos = "https://github.com/matheusf30/dados_dengue/tree/main/modelos"
-elif _LOCAL == "CASA":
-    caminho_dados = "C:\\Users\\Desktop\\Documents\\GitHub\\dados_dengue\\"
-    caminho_modelos = "C:\\Users\\Desktop\\Documents\\GitHub\\dados_dengue\\modelos\\"
+	caminho_dados = "https://raw.githubusercontent.com/matheusf30/dados_dengue/main/"
+	caminho_modelos = "https://github.com/matheusf30/dados_dengue/tree/main/modelos"
 elif _LOCAL == "IFSC":
-    caminho_dados = "/home/sifapsc/scripts/matheus/dados_dengue/"
-    caminho_shp = "/home/sifapsc/scripts/matheus/dados_dengue/shapefiles/"
-    caminho_modelos = "/home/sifapsc/scripts/matheus/dados_dengue/modelos/"
-    caminho_resultados = "/home/sifapsc/scripts/matheus/dengue/resultados/cartografia/"
+	caminho_dados = "/home/meteoro/scripts/matheus/operacional_dengue/dados_operacao/" # CLUSTER
+	caminho_operacional = "/home/meteoro/scripts/matheus/operacional_dengue/"
+	caminho_shape = "/media/dados/shapefiles/" #SC/SC_Municipios_2022.shp #BR/BR_UF_2022.shp
+	caminho_modelos = "/home/meteoro/scripts/matheus/operacional_dengue/modelagem/casos/"
+	caminho_resultados = "home/meteoro/scripts/matheus/operacional_dengue/modelagem/resultados/"
+print(f"\n{green}HOJE:\n{reset}{_ANO_MES_DIA}\n")
+print(f"\n{green}ONTEM:\n{reset}{_ANO_MES_DIA_ONTEM}\n")
 else:
-    print("CAMINHO NÃO RECONHECIDO! VERIFICAR LOCAL!")
+	print("CAMINHO NÃO RECONHECIDO! VERIFICAR LOCAL!")
 print(f"\nOS DADOS UTILIZADOS ESTÃO ALOCADOS NOS SEGUINTES CAMINHOS:\n\n{caminho_dados}\n\n")
 
-### Renomeação das Variáveis pelos Arquivos # TENTAR GFS
-casos = "casos_dive_pivot_total.csv"
-focos = "focos_pivot.csv"
-prec = "prec_semana_ate_2023.csv"
-tmin = "tmin_semana_ate_2023.csv"
-tmed = "tmed_semana_ate_2023.csv"
-tmax = "tmax_semana_ate_2023.csv"
+
+######################################################
+
+### Renomeação das Variáveis pelos Arquivos
+casos = "casos_dive_pivot_total.csv"  # TabNet/DiveSC
+#focos = "focos_pivot.csv"
+prec = f"prec_semana_ate_{_ANO_ATUAL}.csv"
+tmin = f"tmin_semana_ate_{_ANO_ATUAL}.csv"
+tmed = f"tmed_semana_ate_{_ANO_ATUAL}.csv"
+tmax = f"tmax_semana_ate_{_ANO_ATUAL}.csv"
 unicos = "casos_primeiros.csv"
-municipios = "SC_Municipios_2022.shp" # Shapefile não está carregando do GH
-br = "BR_UF_2022.shp"
+### Abrindo Arquivo
+casos = pd.read_csv(f"{caminho_dados}{casos}", low_memory = False)
+#focos = pd.read_csv(f"{caminho_dados}{focos}", low_memory = False)
+prec = pd.read_csv(f"{caminho_dados}{prec}", low_memory = False)
+tmin = pd.read_csv(f"{caminho_dados}{tmin}", low_memory = False)
+tmed = pd.read_csv(f"{caminho_dados}{tmed}", low_memory = False)
+tmax = pd.read_csv(f"{caminho_dados}{tmax}", low_memory = False)
+unicos = pd.read_csv(f"{caminho_dados}{unicos}", low_memory = False)
+municipios = "SC/SC_Municipios_2022.shp"
+br = "BR/BR_UF_2022.shp"
 
-#### Condições para Variar ####################################
-
-_AUTOMATIZA = True
-
-_SALVAR = False
-
-_VISUALIZAR = True
-
-_RETROAGIR = 3
-
-if _AUTOMATIZA == False:
-    cidade = "Florianópolis"
-    cidade = cidade.upper()
-
-SEED = np.random.seed(0)
-
-
-value_error = ["BOMBINHAS", "BALNEÁRIO CAMBORIÚ", "PORTO BELO"]
-key_error = ["ABELARDO LUZ", "URUBICI", "RANCHO QUEIMADO"]
+#value_error = ["BOMBINHAS", "BALNEÁRIO CAMBORIÚ", "PORTO BELO"]
+#key_error = ["ABELARDO LUZ", "URUBICI", "RANCHO QUEIMADO"]
 
 ###############################################################
 
@@ -99,96 +133,6 @@ not_found = list(cidades.iloc[151:])  # Desconsiderando 2023, pois ainda não h�
 
 # modelo = joblib.load(f"{caminho_modelos}RF_r{_RETROAGIR}_{cidade}.h5")
 
-"""
-### Pré-Processamento
-_RETROAGIR = 8 # Semanas Epidemiológicas
-cidade = "Florianópolis" #"Itajaí" "Joinville" "Chapecó" "Florianópolis" "Lages"
-cidade = cidade.upper()
-focos["Semana"] = pd.to_datetime(focos["Semana"])#, format="%Y%m%d")
-casos["Semana"] = pd.to_datetime(casos["Semana"])
-tmin["Semana"] = pd.to_datetime(tmin["Semana"])
-prec["Semana"] = pd.to_datetime(prec["Semana"])
-tmed["Semana"] = pd.to_datetime(tmed["Semana"])
-tmax["Semana"] = pd.to_datetime(tmax["Semana"])
-
-prec_cidade_2012 = prec[cidade].iloc[605: ]
-cidades = focos.columns#.drop(columns = "Semana", inplace = True)
-lista_cidades = ["FLORIANÓPOLIS", "CHAPECÓ", "JOINVILLE", "ITAJAÍ"]
-
-xy = unicos.drop(columns = ["Semana", "Focos"])
-
-### Montando Dataset
-dataset = tmin[["Semana"]].copy()
-dataset["TMIN"] = tmin[cidade].copy()
-dataset["TMED"] = tmed[cidade].copy()
-dataset["TMAX"] = tmax[cidade].copy()
-dataset = dataset.merge(prec[["Semana", cidade]], how = "left", on = "Semana").copy()
-dataset = dataset.merge(focos[["Semana", cidade]], how = "left", on = "Semana").copy()
-troca_nome = {f"{cidade}_x" : "PREC", f"{cidade}_y" : "FOCOS"}
-dataset = dataset.rename(columns = troca_nome)
-
-
-for r in range(1, _RETROAGIR + 1):
-    dataset[f"TMIN_r{r}"] = dataset["TMIN"].shift(-r)
-    dataset[f"TMED_r{r}"] = dataset["TMED"].shift(-r)
-    dataset[f"TMAX_r{r}"] = dataset["TMAX"].shift(-r)
-    dataset[f"PREC_r{r}"] = dataset["PREC"].shift(-r)
-    dataset[f"FOCOS_r{r}"] = dataset["FOCOS"].shift(-r)
-
-for r in range(5, _RETROAGIR + 1):
-    dataset[f"TMIN_r{r}"] = dataset["TMIN"].shift(-r)
-    dataset[f"TMED_r{r}"] = dataset["TMED"].shift(-r)
-    dataset[f"TMAX_r{r}"] = dataset["TMAX"].shift(-r)
-    dataset[f"PREC_r{r}"] = dataset["PREC"].shift(-r)
-    dataset[f"FOCOS_r{r}"] = dataset["FOCOS"].shift(-r)
-dataset.drop(columns = ["TMIN", "TMED", "TMAX", "PREC"], inplace = True)
-
-dataset.dropna(inplace = True)
-dataset.set_index("Semana", inplace = True)
-dataset.columns.name = f"{cidade}"
-
-### Separando Dataset em X (explicativas) e Y (Dependentes)
-SEED = np.random.seed(0)
-x = dataset.drop(columns = "FOCOS")
-y = dataset["FOCOS"]
-
-x_array = x.to_numpy().astype(int)
-y_array = y.to_numpy().astype(int)
-x_array = x_array.reshape(x_array.shape[0], -1)
-
-treino_x, teste_x, treino_y, teste_y = train_test_split(x_array, y_array,
-                                                        random_state = SEED,
-                                                        test_size = 0.2)#,
-                                                      #stratify = y)
-num_classes = len(np.unique(y_array))
-print("Number of classes:", num_classes)
-print(len(y_array))
-### Normalizando/Escalonando Dataset_x
-escalonador = StandardScaler()
-escalonador.fit(treino_x)
-treino_normal_x = escalonador.transform(treino_x)
-teste_normal_x = escalonador.transform(teste_x)
-
-### Exibindo Informações
-print("\n \n CONJUNTO DE DADOS DE ENTRADA PARA PREVISÃO \n")
-print(dataset.info())
-print("~"*80)
-#print(dataset.dtypes)
-#print("~"*80)
-print(dataset)
-print("="*80)
-"""
-### Definindo Funções
-bold = "\033[1m"
-red = "\033[91m"
-green = "\033[92m"
-yellow = "\033[33m"
-blue = "\033[34m"
-magenta = "\033[35m"
-cyan = "\033[36m"
-white = "\033[37m"
-reset = "\033[0m"
-
 def abre_modelo(cidade):
     troca = {'Á': 'A', 'Â': 'A', 'À': 'A', 'Ã': 'A', 'Ä': 'A',
          'É': 'E', 'Ê': 'E', 'È': 'E', 'Ẽ': 'E', 'Ë': 'E',
@@ -198,7 +142,7 @@ def abre_modelo(cidade):
          'Ç': 'C', " " : "_", "'" : "_", "-" : "_"}
     for velho, novo in troca.items():
         cidade = cidade.replace(velho, novo)
-    modelo = joblib.load(f"{caminho_modelos}RF_casos_r{_RETROAGIR}_{cidade}.h5")
+    modelo = joblib.load(f"{caminho_modelos}RF_casos_v20241017_h{_HORIZONTE}_r{_RETROAGIR}_{cidade}.h5") #RF_casos_v20241017_h0_r2_URUSSANGA.h5
     print(f"\n{green}MODELO RANDOM FOREST DE {cidade} ABERTO!\n\nCaminho e Nome:\n {caminho_modelos}RF_casos_r{_RETROAGIR}_{cidade}.h5{reset}")
     print("\n" + "="*80 + "\n")
     return modelo
@@ -208,20 +152,17 @@ def monta_dataset(cidade):
     dataset["TMIN"] = tmin[cidade].copy()
     dataset["TMED"] = tmed[cidade].copy()
     dataset["TMAX"] = tmax[cidade].copy()
-    dataset = dataset.merge(prec[["Semana", cidade]], how = "left", on = "Semana").copy()
-    dataset = dataset.merge(focos[["Semana", cidade]], how = "left", on = "Semana").copy()
+    dataset = dataset.merge(prec[["Semana", cidade]], how = "right", on = "Semana").copy()
+	dataset = dataset.rename(columns = f"{cidade}" : "PREC"})
     dataset.dropna(axis = 0, inplace = True)
-    dataset = dataset.iloc[104:, :].copy()
-    dataset = dataset.merge(casos[["Semana", cidade]], how = "left", on = "Semana").copy()
-    troca_nome = {f"{cidade}_x" : "PREC", f"{cidade}_y" : "FOCOS", f"{cidade}" : "CASOS"}
-    dataset = dataset.rename(columns = troca_nome)
+    dataset = dataset.merge(casos[["Semana", cidade]], how = "right", on = "Semana").copy()
+	dataset = dataset.rename(columns = f"{cidade}" : "CASOS"})
     dataset.fillna(0, inplace = True)
-    for r in range(3, _RETROAGIR + 1):
+    for r in range(_HORIZONTE + 1, _RETROAGIR + 1):
         dataset[f"TMIN_r{r}"] = dataset["TMIN"].shift(-r)
         dataset[f"TMED_r{r}"] = dataset["TMED"].shift(-r)
         dataset[f"TMAX_r{r}"] = dataset["TMAX"].shift(-r)
         dataset[f"PREC_r{r}"] = dataset["PREC"].shift(-r)
-        dataset[f"FOCOS_r{r}"] = dataset["FOCOS"].shift(-r)
         dataset[f"CASOS_r{r}"] = dataset["CASOS"].shift(-r)
     dataset.drop(columns = ["TMIN", "TMED", "TMAX", "PREC", "FOCOS"], inplace = True)
     dataset.dropna(inplace = True)
@@ -316,7 +257,7 @@ def grafico(previsoes, R_2):
     final.drop(1, axis=0, inplace = True)
     """
     previsoes = previsao
-    previsoes = previsoes[:len(final)]
+    previsoes = previsoes[:-len(final)]
     """
     final["Previstos"] = previsoes
     final["Semana"] = pd.to_datetime(final["Semana"])
@@ -408,21 +349,28 @@ previsao_total.drop(1, axis = 0, inplace = True)
 
 if _AUTOMATIZA == True:
     for cidade in cidades:
-        if cidade in value_error:
-            print(f"\n{red}Modelo para {cidade} não está no diretório!\n{yellow}ValueError\n{cyan}Por favor, entre em contato para resolver o problema!{reset}\n")
-        elif cidade in key_error:
-            print(f"\n{red}Modelo para {cidade} não está no diretório!\n{yellow}KeyError\n{cyan}Por favor, entre em contato para resolver o problema!{reset}\n")
-        elif cidade in not_found:
-            print(f"\n{red}Modelo para {cidade} não está no diretório!\n{yellow}NotFound\n{cyan}Por favor, entre em contato para resolver o problema!{reset}")
-            print(f"{magenta}FileNotFoundError: [Errno 2] No such file or directory: '/home/sifapsc/scripts/matheus/dados_dengue/modelos/'{reset}\n")
-        else:
-            modelo = abre_modelo(cidade)
+		try:
+			modelo = abre_modelo(cidade)
             dataset, x, y = monta_dataset(cidade)
             treino_x, teste_x, treino_y, teste_y, treino_x_explicado = treino_teste(dataset, cidade)
             previsoes, y_previsto = preve(modelo, x, treino_x_explicado)
             EQM, RQ_EQM, R_2 = metricas(dataset, previsoes, 5, y)
             previsao_total[cidade] = previsoes
-            
+		except ValueError as e:
+            print(f"\n{red}Modelo para {cidade} apresenta ERRO!\n{yellow}{e}\n{cyan}Por favor, entre em contato para resolver o problema!{reset}\n")
+		except KeyError as e:
+            print(f"\n{red}Modelo para {cidade} apresenta ERRO!\n{yellow}{e}\n{cyan}Por favor, entre em contato para resolver o problema!{reset}\n")
+		except NotFound as e:
+            print(f"\n{red}Modelo para {cidade} apresenta ERRO!\n{yellow}{e}\n{cyan}Por favor, entre em contato para resolver o problema!{reset}\n")
+			"""
+	        if cidade in value_error:
+	            print(f"\n{red}Modelo para {cidade} não está no diretório!\n{yellow}ValueError\n{cyan}Por favor, entre em contato para resolver o problema!{reset}\n")
+	        elif cidade in key_error:
+	            print(f"\n{red}Modelo para {cidade} não está no diretório!\n{yellow}KeyError\n{cyan}Por favor, entre em contato para resolver o problema!{reset}\n")
+	        elif cidade in not_found:
+	            print(f"\n{red}Modelo para {cidade} não está no diretório!\n{yellow}NotFound\n{cyan}Por favor, entre em contato para resolver o problema!{reset}")
+	            print(f"{magenta}FileNotFoundError: [Errno 2] No such file or directory: '/home/sifapsc/scripts/matheus/dados_dengue/modelos/'{reset}\n")
+			"""            
 else:
     modelo = abre_modelo(cidade)
     dataset, x, y = monta_dataset(cidade)
