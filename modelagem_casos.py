@@ -149,6 +149,7 @@ print(f"\n{green}_CIDADEs:\n{reset}{_CIDADEs}\n")
 # raise KeyError(key) from err KeyError: '_CIDADE'
 
 # Value_error gerado ao executar modelo.fit()
+"""
 print("!"*80)
 print("\nERROS GERADOS\n")
 value_error = ["BOMBINHAS", "BALNEÁRIO CAMBORIÚ", "PORTO BELO"]
@@ -159,7 +160,7 @@ for erro in value_error:
         print(f"\n{erro} não está no conjunto de dados!\nValueError gerado ao executar modelo.fit()!\n")
     else:
         print(f"\nNo sé qué se pasa! {erro} está no conjunto de dados!\n")
-
+"""
 # Key_error gerado ao montar o dataset automatizado
 
 """
