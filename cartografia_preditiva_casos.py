@@ -453,7 +453,7 @@ previsao_melt_geo["Semana"] = pd.to_datetime(previsao_melt_geo["Semana"])
 print(f"\n{green}Caminho e Nome do arquivo:\n{reset}")
 print(f"\n{green}{caminho_modelos}RF_casos_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_{_CIDADE}.h5\n{reset}")
 
-sys.exit()
+#sys.exit()
 
 ######################################################################################################
 ################################## Cartografia #######################################################
@@ -461,6 +461,9 @@ sys.exit()
 
 # Semana Epidemiológica
 semana_epidemio = "2024-10-20"
+semana_epidemio1 = previsao_total.loc[previsao_total.index[-2], "Semana"]
+semana_epidemio2 = previsao_total.loc[previsao_total.index[-1], "Semana"]
+listas_semanas = [semana_epidemio1, semana_epidemio2]
 # "2020-04-19" "2021-04-18" "2022-04-17" "2023-04-16"
 
 # SC_Pontos
@@ -514,59 +517,6 @@ if _AUTOMATIZA == True and _VISUALIZAR == True:
 	print(f"{cyan}\nVISUALIZANDO:\n{caminho_resultados}\nCASOS_mapa_pontual_{semana_epidemio}.pdf\n{reset}\n\n")
 	plt.show()
 	print(f"{cyan}\nENCERRADO:\n{caminho_resultados}\nCASOS_mapa_pontual_{semana_epidemio}.pdf\n{reset}\n\n")
-
-# SC_MapaCalor
-fig, ax = plt.subplots(figsize = (20, 12), layout = "constrained", frameon = False)
-coord_atlantico = [(-54, -30),(- 48, -30),
-                   (-48, -25),(-54, -25),
-                   (-54, -30)]
-atlantico_poly = Polygon(coord_atlantico)
-atlantico = gpd.GeoDataFrame(geometry = [atlantico_poly])
-atlantico.plot(ax = ax, color = "lightblue") # atlantico ~ base
-ax.set_aspect("auto")
-coord_arg = [(-55, -30),(-52, -30),
-             (-52, -25),(-55, -25),
-             (-55, -30)]
-arg_poly = Polygon(coord_arg)
-argentina = gpd.GeoDataFrame(geometry = [arg_poly])
-argentina.plot(ax = ax, color = "tan")
-br.plot(ax = ax, color = "tan", edgecolor = "black")
-sns.kdeplot(data = previsao_melt_xy[previsao_melt_xy["Semana"] == semana_epidemio],
-            x = "longitude", y = "latitude", legend = True, ax = plt.gca(), weights = "Casos",
-            fill = True, cmap = "YlOrRd", levels = previsao_melt_xy["Casos"].max(), alpha = 0.5)
-municipios.plot(ax = plt.gca(), color = "lightgreen", edgecolor = "black", alpha = 0.3)
-cbar = plt.cm.ScalarMappable(cmap="YlOrRd") #.gca() get current axis
-cbar.set_array(previsao_melt_xy["Casos"])
-plt.xlim(-54, -48)
-plt.ylim(-29.5, -25.75)
-x_tail = -48.5
-y_tail = -29.25
-x_head = -48.5
-y_head = -28.75
-arrow = mpatches.FancyArrowPatch((x_tail, y_tail), (x_head, y_head),
-                                 mutation_scale = 50, color = "darkblue")
-ax.add_patch(arrow)
-mid_x = (x_tail + x_head) / 2
-mid_y = (y_tail + y_head) / 2
-ax.text(mid_x, mid_y, "N", color = "white", ha = "center", va = "center",
-        fontsize = "large", fontweight = "bold")
-ax.text(-52.5, -29, "Sistema de Referência de Coordenadas\nDATUM: SIRGAS 2000/22S.\nBase Cartográfica: IBGE, 2022.",
-        color = "white", backgroundcolor = "darkgray", ha = "center", va = "center", fontsize = 14)
-plt.colorbar(cbar, ax = plt.gca(), label="Casos")
-plt.xlabel("Longitude")
-plt.ylabel("Latitude")
-plt.title(f"""Mapa de Densidade de Kernel dos Casos de Dengue Previstos.
-Santa Catarina, Semana Epidemiológica: {semana_epidemio}.""", fontsize = 18)
-plt.grid(True)
-if  _AUTOMATIZA == True and _SALVAR == True:
-	caminho_resultados = "/home/sifapsc/scripts/matheus/dengue/resultados/cartografia/densidade/"
-	os.makedirs(caminho_resultados, exist_ok = True)
-	plt.savefig(f"{caminho_resultados}CASOS_mapa_densidade_{semana_epidemio}.pdf", format = "pdf", dpi = 1200)
-	print(f"\n\n{green}{caminho_resultados}\nCASOS_mapa_densidade_{semana_epidemio}.pdf\nSALVO COM SUCESSO!{reset}\n\n")
-if _AUTOMATIZA == True and _VISUALIZAR == True:
-	print(f"{cyan}\nVISUALIZANDO:\n{caminho_resultados}\nCASOS_mapa_densidade_{semana_epidemio}.pdf\n{reset}\n\n")
-	plt.show()
-	print(f"{cyan}\nENCERRADO:\n{caminho_resultados}\nCASOS_mapa_densidade_{semana_epidemio}.pdf\n{reset}\n\n")
 
 # SC_Coroplético
 xy = municipios.copy()
