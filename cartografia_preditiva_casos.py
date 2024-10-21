@@ -36,9 +36,14 @@ reset = "\033[0m"
 
 #### Condições para Variar ####################################
 
-_AUTOMATIZA = True # Implementar sys.argv[1]
-_VISUALIZAR = True
-_SALVAR = False
+##################### Valores Booleanos ############ # sys.argv[0] is the script name itself and can be ignored!
+_AUTOMATIZAR = sys.argv[1]   # True|False                    #####
+_AUTOMATIZA = True if _AUTOMATIZAR == "True" else False      #####
+_VISUALIZAR = sys.argv[2]    # True|False                    #####
+_VISUALIZAR = True if _VISUALIZAR == "True" else False       #####
+_SALVAR = sys.argv[3]        # True|False                    #####
+_SALVAR = True if _SALVAR == "True" else False               #####
+##################################################################
 
 SEED = np.random.seed(0)
 
@@ -49,7 +54,7 @@ _RETROAGIR = 2 # Semanas Epidemiológicas
 _HORIZONTE = 0 # Tempo de Previsão
 #for r in range(_HORIZONTE + 1, _RETROAGIR + 1):
 
-_AUTOMATIZA = True#False
+#_AUTOMATIZA = True#False
 
 #################################################################################
 
@@ -146,7 +151,9 @@ print(f"\n{green}tmed_total.info:\n{reset}{tmed_total.info()}")
 tmax_total = pd.concat([tmax, tmax_gfs])
 print(f"\n{green}tmax_total:\n{reset}{tmax_total}")
 print(f"\n{green}tmax_total.info:\n{reset}{tmax_total.info()}")
-
+print(f"\n{green}tmax_total[['Semana', 'BOMBINHAS']]:\n{reset}{tmax_total[['Semana', 'BOMBINHAS']]}")
+print(f"\n{green}tmax[['Semana', 'BOMBINHAS']]:\n{reset}{tmax[['Semana', 'BOMBINHAS']]}")
+print(f"\n{green}cidades:\n{reset}{cidades.unique()}")
 #sys.exit()
 
 ###############################################################################
@@ -398,11 +405,13 @@ def salva_modelo(modelo, cidade):
 ### Exibindo Informações, Gráficos e Métricas
 #previsao_total = []
 previsao_total = pd.DataFrame()
-casos_ultimos = casos.iloc[-12:,:]
-previsao_total["Semana"] = casos_ultimos["Semana"].copy()
+tmin_ultimos = tmin_total.iloc[-12:,:]
+previsao_total["Semana"] = tmin_ultimos["Semana"].copy()
  #pd.date_range(start = "2014-01-05", end = "2022-12-25", freq = "W")
 previsao_total["Semana"] = pd.to_datetime(previsao_total["Semana"])
-#previsao_total.drop(1, axis = 0, inplace = True)
+previsao_total.reset_index(inplace = True)
+previsao_total.drop(1, axis = 0, inplace = True)
+previsao_total.drop(columns = "index", inplace = True)
 #previsao_total.drop([d for d in range(_RETROAGIR)], axis = 0, inplace = True)
 #previsao_total.drop(previsao_total.index[-_RETROAGIR:], axis = 0, inplace = True)
 
@@ -414,9 +423,9 @@ if _AUTOMATIZA == True:
 			treino_x, teste_x, treino_y, teste_y, treino_x_explicado = treino_teste(x, y, _CIDADE)
 			previsoes = preve(modelo, x, treino_x_explicado)
 			EQM, RQ_EQM, R_2 = metricas(dataset, previsoes, 5, y)
-			#dataset2, x2, y2 = monta_dataset2(_CIDADE, previsoes)
-			#previsoes2 = preve(modelo, x2)
-			previsao_total[_CIDADE] = previsoes#2
+			dataset2, x2, y2 = monta_dataset2(_CIDADE, previsoes)
+			previsoes2 = preve(modelo, x2)
+			previsao_total[_CIDADE] = previsoes2
 			#sys.exit()
 		except ValueError as e:
 			print(f"\n{red}Modelo para {_CIDADE} apresenta ERRO!\n{magenta}ValueError: {e}\n{reset}")
@@ -460,124 +469,124 @@ print(f"\n{green}{caminho_modelos}RF_casos_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETR
 ######################################################################################################
 
 # Semana Epidemiológica
-semana_epidemio = "2024-10-20"
+#semana_epidemio = "2024-10-20"
 semana_epidemio1 = previsao_total.loc[previsao_total.index[-2], "Semana"]
 semana_epidemio2 = previsao_total.loc[previsao_total.index[-1], "Semana"]
-listas_semanas = [semana_epidemio1, semana_epidemio2]
+lista_semanas = [semana_epidemio1, semana_epidemio2]
 # "2020-04-19" "2021-04-18" "2022-04-17" "2023-04-16"
-
+for semana_epidemio in lista_semanas:
 # SC_Pontos
 #previsao_melt_geo = gpd.GeoDataFrame(previsao_melt_geo)#, geometry = municipios.geometry)
-fig, ax = plt.subplots(figsize = (20, 12), layout = "constrained", frameon = False)
-coord_atlantico = [(-54, -30),(-48, -30),
-					(-48, -25),(-54, -25),
-					(-54, -30)]
-atlantico_poly = Polygon(coord_atlantico)
-atlantico = gpd.GeoDataFrame(geometry = [atlantico_poly])
-atlantico.plot(ax = ax, color = "lightblue") # atlantico ~ base
-ax.set_aspect("auto")
-coord_arg = [(-55, -30),(-52, -30),
-			(-52, -25),(-55, -25),
-			(-55, -30)]
-arg_poly = Polygon(coord_arg)
-argentina = gpd.GeoDataFrame(geometry = [arg_poly])
-argentina.plot(ax = ax, color = "tan")
-br.plot(ax = ax, color = "tan", edgecolor = "black")
-municipios.plot(ax = ax, color = "lightgreen", edgecolor = "black")
-previsao_melt_geo[previsao_melt_geo["Semana"] == semana_epidemio ].plot(ax = ax, column = "Casos",  legend = True,
-																		label = "Casos", cmap = "YlOrRd", markersize = 50)
-zero = previsao_melt_geo[previsao_melt_geo["Casos"] == 0]
-zero[zero["Semana"] == semana_epidemio].plot(ax = ax, column = "Casos", legend = False,	
-											label = "Casos", cmap = "YlOrBr")
-plt.xlim(-54, -48)
-plt.ylim(-29.5, -25.75)
-x_tail = -48.5
-y_tail = -29.25
-x_head = -48.5
-y_head = -28.75
-arrow = mpatches.FancyArrowPatch((x_tail, y_tail), (x_head, y_head),
-								mutation_scale = 50, color = "darkblue")
-ax.add_patch(arrow)
-mid_x = (x_tail + x_head) / 2
-mid_y = (y_tail + y_head) / 2
-ax.text(mid_x, mid_y, "N", color = "white", ha = "center", va = "center",
-		fontsize = "large", fontweight = "bold")
-ax.text(-52.5, -29, "Sistema de Referência de Coordenadas\nDATUM: SIRGAS 2000/22S.\nBase Cartográfica: IBGE, 2022.",
-		color = "white", backgroundcolor = "darkgray", ha = "center", va = "center", fontsize = 14)
-plt.xlabel("Longitude")
-plt.ylabel("Latitude")
-plt.title(f"Casos de Dengue Previstos em Santa Catarina na Semana Epidemiológica: {semana_epidemio}.", fontsize = 18)
-plt.grid(True)
-if _AUTOMATIZA == True and _SALVAR == True:
-	caminho_resultados = "/home/sifapsc/scripts/matheus/dengue/resultados/cartografia/pontual/"
-	os.makedirs(caminho_resultados, exist_ok = True)
-	plt.savefig(f"{caminho_resultados}CASOS_mapa_pontual_{semana_epidemio}.pdf", format = "pdf", dpi = 1200)
-	print(f"\n\n{green}{caminho_resultados}\nCASOS_mapa_pontual_{semana_epidemio}.pdf\nSALVO COM SUCESSO!{reset}\n\n")
-if _AUTOMATIZA == True and _VISUALIZAR == True:
-	print(f"{cyan}\nVISUALIZANDO:\n{caminho_resultados}\nCASOS_mapa_pontual_{semana_epidemio}.pdf\n{reset}\n\n")
-	plt.show()
-	print(f"{cyan}\nENCERRADO:\n{caminho_resultados}\nCASOS_mapa_pontual_{semana_epidemio}.pdf\n{reset}\n\n")
+	fig, ax = plt.subplots(figsize = (20, 12), layout = "constrained", frameon = False)
+	coord_atlantico = [(-54, -30),(-48, -30),
+						(-48, -25),(-54, -25),
+						(-54, -30)]
+	atlantico_poly = Polygon(coord_atlantico)
+	atlantico = gpd.GeoDataFrame(geometry = [atlantico_poly])
+	atlantico.plot(ax = ax, color = "lightblue") # atlantico ~ base
+	ax.set_aspect("auto")
+	coord_arg = [(-55, -30),(-52, -30),
+				(-52, -25),(-55, -25),
+				(-55, -30)]
+	arg_poly = Polygon(coord_arg)
+	argentina = gpd.GeoDataFrame(geometry = [arg_poly])
+	argentina.plot(ax = ax, color = "tan")
+	br.plot(ax = ax, color = "tan", edgecolor = "black")
+	municipios.plot(ax = ax, color = "lightgreen", edgecolor = "black")
+	previsao_melt_geo[previsao_melt_geo["Semana"] == semana_epidemio ].plot(ax = ax, column = "Casos",  legend = True,
+																			label = "Casos", cmap = "YlOrRd", markersize = 50)
+	zero = previsao_melt_geo[previsao_melt_geo["Casos"] == 0]
+	zero[zero["Semana"] == semana_epidemio].plot(ax = ax, column = "Casos", legend = False,	
+												label = "Casos", cmap = "YlOrBr")
+	plt.xlim(-54, -48)
+	plt.ylim(-29.5, -25.75)
+	x_tail = -48.5
+	y_tail = -29.25
+	x_head = -48.5
+	y_head = -28.75
+	arrow = mpatches.FancyArrowPatch((x_tail, y_tail), (x_head, y_head),
+									mutation_scale = 50, color = "darkblue")
+	ax.add_patch(arrow)
+	mid_x = (x_tail + x_head) / 2
+	mid_y = (y_tail + y_head) / 2
+	ax.text(mid_x, mid_y, "N", color = "white", ha = "center", va = "center",
+			fontsize = "large", fontweight = "bold")
+	ax.text(-52.5, -29, "Sistema de Referência de Coordenadas\nDATUM: SIRGAS 2000/22S.\nBase Cartográfica: IBGE, 2022.",
+			color = "white", backgroundcolor = "darkgray", ha = "center", va = "center", fontsize = 14)
+	plt.xlabel("Longitude")
+	plt.ylabel("Latitude")
+	plt.title(f"Casos de Dengue Previstos em Santa Catarina.\nSemana Epidemiológica: {semana_epidemio}.", fontsize = 18)
+	plt.grid(True)
+	nome_arquivo = f"CASOS_pontual_preditivo_{data_atual}.pdf"
+	if _AUTOMATIZA == True and _SALVAR == True:
+		os.makedirs(caminho_resultados, exist_ok = True)
+		#plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "pdf", dpi = 1200)
+		print(f"\n\n{green}{caminho_resultados}\n{nome_arquivo}\nSALVO COM SUCESSO!{reset}\n\n")
+	if _AUTOMATIZA == True and _VISUALIZAR == True:
+		print(f"{cyan}\nVISUALIZANDO:\n{caminho_resultados}\n{nome_arquivo}\n{reset}\n\n")
+		plt.show()
+		print(f"{cyan}\nENCERRADO:\n{caminho_resultados}\n{nome_arquivo}\n{reset}\n\n")
 
-# SC_Coroplético
-xy = municipios.copy()
-xy.drop(columns = ["CD_MUN", "SIGLA_UF", "AREA_KM2"], inplace = True)
-xy = xy.rename(columns = {"NM_MUN" : "Município"})
-xy["Município"] = xy["Município"].str.upper() 
-previsao_melt_poli = pd.merge(previsao_melt, xy, on = "Município", how = "left")
-previsao_melt_poligeo = gpd.GeoDataFrame(previsao_melt_poli, geometry = "geometry", crs = "EPSG:4674")
-fig, ax = plt.subplots(figsize = (20, 12), layout = "constrained", frameon = False)
-coord_atlantico = [(-54, -30),(-48, -30),
-                   (-48, -25),(-54, -25),
-                   (-54, -30)]
-atlantico_poly = Polygon(coord_atlantico)
-atlantico = gpd.GeoDataFrame(geometry = [atlantico_poly])
-atlantico.plot(ax = ax, color = "lightblue") # atlantico ~ base
-ax.set_aspect("auto")
-coord_arg = [(-55, -30),(-52, -30),
-             (-52, -25),(-55, -25),
-             (-55, -30)]
-arg_poly = Polygon(coord_arg)
-argentina = gpd.GeoDataFrame(geometry = [arg_poly])
-argentina.plot(ax = ax, color = "tan")
-br.plot(ax = ax, color = "tan", edgecolor = "black")
-municipios.plot(ax = ax, color = "lightgray", edgecolor = "lightgray")
-previsao_melt_poligeo[previsao_melt_poligeo["Semana"] == semana_epidemio].plot(ax = ax, column = "Casos",  legend = True,
-                                                                               label = "Casos", cmap = "YlOrRd")
-zero = previsao_melt_poligeo[previsao_melt_poligeo["Casos"] == 0]
-zero[zero["Semana"] == semana_epidemio].plot(ax = ax, column = "Casos", legend = False,
-                                             label = "Casos", cmap = "YlOrBr")
-plt.xlim(-54, -48)
-plt.ylim(-29.5, -25.75)
-x_tail = -48.5
-y_tail = -29.25
-x_head = -48.5
-y_head = -28.75
-arrow = mpatches.FancyArrowPatch((x_tail, y_tail), (x_head, y_head),
-                                 mutation_scale = 50, color = "darkblue")
-ax.add_patch(arrow)
-mid_x = (x_tail + x_head) / 2
-mid_y = (y_tail + y_head) / 2
-ax.text(mid_x, mid_y, "N", color = "white", ha = "center", va = "center",
-        fontsize = "large", fontweight = "bold")
-ax.text(-52.5, -29, "Sistema de Referência de Coordenadas\nDATUM: SIRGAS 2000/22S.\nBase Cartográfica: IBGE, 2022.",
-        color = "white", backgroundcolor = "darkgray", ha = "center", va = "center", fontsize = 14)
-ax.text(-52.5, -28.25, """LEGENDA
+	# SC_Coroplético
+	xy = municipios.copy()
+	xy.drop(columns = ["CD_MUN", "SIGLA_UF", "AREA_KM2"], inplace = True)
+	xy = xy.rename(columns = {"NM_MUN" : "Município"})
+	xy["Município"] = xy["Município"].str.upper() 
+	previsao_melt_poli = pd.merge(previsao_melt, xy, on = "Município", how = "left")
+	previsao_melt_poligeo = gpd.GeoDataFrame(previsao_melt_poli, geometry = "geometry", crs = "EPSG:4674")
+	fig, ax = plt.subplots(figsize = (20, 12), layout = "constrained", frameon = False)
+	coord_atlantico = [(-54, -30),(-48, -30),
+		               (-48, -25),(-54, -25),
+		               (-54, -30)]
+	atlantico_poly = Polygon(coord_atlantico)
+	atlantico = gpd.GeoDataFrame(geometry = [atlantico_poly])
+	atlantico.plot(ax = ax, color = "lightblue") # atlantico ~ base
+	ax.set_aspect("auto")
+	coord_arg = [(-55, -30),(-52, -30),
+		         (-52, -25),(-55, -25),
+		         (-55, -30)]
+	arg_poly = Polygon(coord_arg)
+	argentina = gpd.GeoDataFrame(geometry = [arg_poly])
+	argentina.plot(ax = ax, color = "tan")
+	br.plot(ax = ax, color = "tan", edgecolor = "black")
+	municipios.plot(ax = ax, color = "lightgray", edgecolor = "lightgray")
+	previsao_melt_poligeo[previsao_melt_poligeo["Semana"] == semana_epidemio].plot(ax = ax, column = "Casos",  legend = True,
+		                                                                           label = "Casos", cmap = "YlOrRd")
+	zero = previsao_melt_poligeo[previsao_melt_poligeo["Casos"] == 0]
+	zero[zero["Semana"] == semana_epidemio].plot(ax = ax, column = "Casos", legend = False,
+		                                         label = "Casos", cmap = "YlOrBr")
+	plt.xlim(-54, -48)
+	plt.ylim(-29.5, -25.75)
+	x_tail = -48.5
+	y_tail = -29.25
+	x_head = -48.5
+	y_head = -28.75
+	arrow = mpatches.FancyArrowPatch((x_tail, y_tail), (x_head, y_head),
+		                             mutation_scale = 50, color = "darkblue")
+	ax.add_patch(arrow)
+	mid_x = (x_tail + x_head) / 2
+	mid_y = (y_tail + y_head) / 2
+	ax.text(mid_x, mid_y, "N", color = "white", ha = "center", va = "center",
+		    fontsize = "large", fontweight = "bold")
+	ax.text(-52.5, -29, "Sistema de Referência de Coordenadas\nDATUM: SIRGAS 2000/22S.\nBase Cartográfica: IBGE, 2022.",
+		    color = "white", backgroundcolor = "darkgray", ha = "center", va = "center", fontsize = 14)
+	ax.text(-52.5, -28.25, """LEGENDA
 
 ▢           Sem registro*
 
 *Não há registro oficial ou
 modelagem inexistente.""",
-        color = "black", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 14)
-plt.xlabel("Longitude")
-plt.ylabel("Latitude")
-plt.title(f"Casos de Dengue Previstos em Santa Catarina na Semana Epidemiológica: {semana_epidemio}.", fontsize = 18)
-plt.grid(True)
-if _AUTOMATIZA == True and _SALVAR == True:
-	caminho_resultados = "/home/sifapsc/scripts/matheus/dengue/resultados/cartografia/coropletico/"
-	os.makedirs(caminho_resultados, exist_ok = True)
-	plt.savefig(f"{caminho_resultados}CASOS_mapa_coropletico_{semana_epidemio}.pdf", format = "pdf", dpi = 1200)
-	print(f"\n\n{green}{caminho_resultados}\nCASOS_mapa_coropletico_{semana_epidemio}.pdf\nSALVO COM SUCESSO!{reset}\n\n")
-if _AUTOMATIZA == True and _VISUALIZAR == True:	
-	print(f"{cyan}\nVISUALIZANDO:\n{caminho_resultados}\nCASOS_mapa_coropletico_{semana_epidemio}.pdf\n{reset}\n\n")
-	plt.show()
-	print(f"{cyan}\nENCERRADO:\n{caminho_resultados}\nCASOS_mapa_coropletico_{semana_epidemio}.pdf\n{reset}\n\n")
+		    color = "black", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 14)
+	plt.xlabel("Longitude")
+	plt.ylabel("Latitude")
+	plt.title(f"Casos de Dengue Previstos em Santa Catarina.\nSemana Epidemiológica: {semana_epidemio}.", fontsize = 18)
+	plt.grid(True)
+	nome_arquivo = f"CASOS_mapa_preditivo_{data_atual}.pdf"
+	if _AUTOMATIZA == True and _SALVAR == True:
+		os.makedirs(caminho_resultados, exist_ok = True)
+		plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "pdf", dpi = 1200)
+		print(f"\n\n{green}{caminho_resultados}\n{nome_arquivo}\nSALVO COM SUCESSO!{reset}\n\n")
+	if _AUTOMATIZA == True and _VISUALIZAR == True:	
+		print(f"{cyan}\nVISUALIZANDO:\n{caminho_resultados}\n{nome_arquivo}\n{reset}\n\n")
+		plt.show()
+		print(f"{cyan}\nENCERRADO:\n{caminho_resultados}\n{nome_arquivo}\n{reset}\n\n")
