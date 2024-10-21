@@ -465,8 +465,10 @@ def salva_modeloRF(modelo, _CIDADE):
     _MES_FINAL = str(datetime.today().month)
     _DIA_FINAL = str(datetime.today().day)
     _ANO_MES_DIA = f"{_ANO_FINAL}{_MES_FINAL}{_DIA_FINAL}"
-    joblib.dump(modelo, f"{caminho_modelos}RF_casos_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_{_cidade}.h5")
-    print(f"\nMODELO RANDOM FOREST DE {_cidade} SALVO!\n\nCaminho e Nome:\n {caminho_modelos}RF_casos_r{_RETROAGIR}_{_cidade}.h5")
+    nome_modelo = f"RF_casos_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_{_cidade}.h5"
+    joblib.dump(modelo, f"{caminho_modelos}{nome_modelo}")
+    print(f"\n{green}MODELO RANDOM FOREST DE {bold}{_cidade} SALVO!\n{reset}")
+    print(f"\n{cyan}Caminho e Nome:\n {bold}{caminho_modelos}{nome_modelo}\n{reset}")
     print("\n" + f"{red}={reset}"*80 + "\n")
 
 def lista_previsao(previsao, n, string_modelo):
