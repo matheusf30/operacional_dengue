@@ -82,7 +82,8 @@ elif _LOCAL == "IFSC":
 	caminho_operacional = "/home/meteoro/scripts/matheus/operacional_dengue/"
 	caminho_shape = "/media/dados/shapefiles/" #SC/SC_Municipios_2022.shp #BR/BR_UF_2022.shp
 	caminho_modelos = "/home/meteoro/scripts/matheus/operacional_dengue/modelagem/casos/"
-	caminho_resultados = "home/meteoro/scripts/matheus/operacional_dengue/modelagem/resultados/"
+	caminho_resultados = "modelagem/resultados/"
+#	caminho_resultados = "home/meteoro/scripts/matheus/operacional_dengue/modelagem/resultados/"
 else:
 	print("CAMINHO NÃO RECONHECIDO! VERIFICAR LOCAL!")
 print(f"\n{green}HOJE:\n{reset}{_ANO_MES_DIA}\n")
