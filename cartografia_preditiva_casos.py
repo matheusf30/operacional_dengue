@@ -475,7 +475,7 @@ semana_epidemio1 = previsao_total.loc[previsao_total.index[-2], "Semana"]
 semana_epidemio2 = previsao_total.loc[previsao_total.index[-1], "Semana"]
 lista_semanas = [semana_epidemio1, semana_epidemio2]
 # "2020-04-19" "2021-04-18" "2022-04-17" "2023-04-16"
-for semana_epidemio in lista_semanas:
+for idx, semana_epidemio in enumerate(lista_semanas):
 # SC_Pontos
 #previsao_melt_geo = gpd.GeoDataFrame(previsao_melt_geo)#, geometry = municipios.geometry)
 	fig, ax = plt.subplots(figsize = (20, 12), layout = "constrained", frameon = False)
@@ -518,7 +518,7 @@ for semana_epidemio in lista_semanas:
 	plt.ylabel("Latitude")
 	plt.title(f"Casos de Dengue Previstos em Santa Catarina.\nSemana Epidemiológica: {semana_epidemio}.", fontsize = 18)
 	plt.grid(True)
-	nome_arquivo = f"CASOS_pontual_preditivo_{data_atual}.pdf"
+	nome_arquivo = f"CASOS_pontual_preditivo_{data_atual}_{idx}.pdf"
 	if _AUTOMATIZA == True and _SALVAR == True:
 		os.makedirs(caminho_resultados, exist_ok = True)
 		#plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "pdf", dpi = 1200)
@@ -582,7 +582,7 @@ modelagem inexistente.""",
 	plt.ylabel("Latitude")
 	plt.title(f"Casos de Dengue Previstos em Santa Catarina.\nSemana Epidemiológica: {semana_epidemio}.", fontsize = 18)
 	plt.grid(True)
-	nome_arquivo = f"CASOS_mapa_preditivo_{data_atual}.pdf"
+	nome_arquivo = f"CASOS_mapa_preditivo_{data_atual}_{idx}.pdf"
 	if _AUTOMATIZA == True and _SALVAR == True:
 		os.makedirs(caminho_resultados, exist_ok = True)
 		plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "pdf", dpi = 1200)
