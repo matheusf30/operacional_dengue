@@ -459,13 +459,13 @@ def salva_modeloRF(modelo, _CIDADE):
          'Ç': 'C', " " : "_", "'" : "_", "-" : "_"}
     for velho, novo in troca.items():
         _cidade = _cidade.replace(velho, novo)
-    caminho_modelos = "modelagem/casos/"
-    if not os.path.exists(caminho_modelos):
-        os.makedirs(caminho_modelos)
-    _ANO_FINAL = str(datetime.today().year)
+     _ANO_FINAL = str(datetime.today().year)
     _MES_FINAL = str(datetime.today().month)
     _DIA_FINAL = str(datetime.today().day)
     _ANO_MES_DIA = f"{_ANO_FINAL}{_MES_FINAL}{_DIA_FINAL}"
+    caminho_modelos = f"modelagem/casos/{_ANO_MES_DIA}/"
+    if not os.path.exists(caminho_modelos):
+        os.makedirs(caminho_modelos)
     nome_modelo = f"RF_casos_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_{_cidade}.h5"
     joblib.dump(modelo, f"{caminho_modelos}{nome_modelo}")
     print(f"\n{green}MODELO RANDOM FOREST DE {bold}{_cidade} SALVO!\n{reset}")
