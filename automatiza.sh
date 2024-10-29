@@ -11,19 +11,15 @@ E executar da seguinte forma [./{script}.sh]
 Dados brutos disponibilizados pela Diretoria de Vigilância Epidemiológica de Santa Catarina (DIVE/SC).
 Baixando diretamente da plataforma online TabNet/Sinan.
 """
-. get_dengue.sh
-python une_casos_tabnet.py
+
+conda activate dados_nc
+
+. get_dengue.sh # necessita alterar o nome de saída do arquivo baixado # Roteiro disponibilizado por Elmo Neto
+python une_casos_tabnet.py # sincronizar o nome do arquivo baixado
 python extrai_clima.py
+#python extrai_tempo.py # necessário para não sobrecarregar
 python extrai_gfs.py
-python focos_pivot.py
+python modelagem_casos.py
+python cartografia_preditiva_casos.py True False True
 
-# Pré-Processamento dos Casos de Dengue dos Municípios Catarinenses
-"""
-Dados brutos disponibilizados pela Diretoria de Vigilância Epidemiológica de Santa Catarina (DIVE/SC).
-Inicialmente disponíveis como tabelas dinâmicas, separadas em anos (recentemente em semestres, por conta do volume de dados).
-Ao final da sequência de execução, deve-se obter uma tabela única em formato pivot, onde:
--- Colunas são todos os municípios com registros de Focos de _Aedes_ sp.;
--- Linhas são as semanas epidemiológicas de toda a série histórica de registro (iniciando em 2012).
-"""
-#python une_casos_sinan.py # Pensar no próximo ano."
-
+conda deactivate
