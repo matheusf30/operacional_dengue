@@ -459,7 +459,7 @@ def salva_modeloRF(modelo, _CIDADE):
          'Ç': 'C', " " : "_", "'" : "_", "-" : "_"}
     for velho, novo in troca.items():
         _cidade = _cidade.replace(velho, novo)
-     _ANO_FINAL = str(datetime.today().year)
+    _ANO_FINAL = str(datetime.today().year)
     _MES_FINAL = str(datetime.today().month)
     _DIA_FINAL = str(datetime.today().day)
     _ANO_MES_DIA = f"{_ANO_FINAL}{_MES_FINAL}{_DIA_FINAL}"
