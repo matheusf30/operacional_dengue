@@ -198,7 +198,9 @@ def monta_dataset(cidade):
 	dataset.dropna(inplace = True)
 	dataset.set_index("Semana", inplace = True)
 	dataset.columns.name = f"{_CIDADE}"
-	dataset1 = dataset.iloc[-12:,:]
+	print(f"\n{green}dataset:\n{reset}{dataset}")
+	print(f"\n{green}dataset.info:\n{reset}{dataset.info()}")
+	dataset1 = dataset.iloc[-12:-1,:]
 	print(f"\n{green}dataset1:\n{reset}{dataset1}")
 	print(f"\n{green}dataset1.info:\n{reset}{dataset1.info()}")
 	x1 = dataset1.copy() #dataset.drop(columns = "CASOS")
@@ -207,6 +209,7 @@ def monta_dataset(cidade):
 	y1 = dataset1["CASOS"]
 	print(f"\n{green}y1:\n{reset}{y1}")
 	print(f"\n{green}y1.info:\n{reset}{y1.info()}")
+	#sys.exit()
 	return dataset1, x1, y1
 	
 def monta_dataset2(cidade, previsoes):
@@ -226,6 +229,7 @@ def monta_dataset2(cidade, previsoes):
 	dataset_casos = dataset_casos.rename(columns = {_CIDADE : "CASOS"})
 	print(f"\n{green}dataset_casos:\n{reset}{dataset_casos}")
 	print(f"\n{green}dataset_casos.info:\n{reset}{dataset_casos.info()}")
+	dataset_casos.loc[dataset_casos.index[-3], "CASOS"] = previsoes[-3]
 	dataset_casos.loc[dataset_casos.index[-2], "CASOS"] = previsoes[-2]
 	dataset_casos.loc[dataset_casos.index[-1], "CASOS"] = previsoes[-1]
 	print(f"\n{green}dataset_casos:\n{reset}{dataset_casos}")
@@ -471,9 +475,10 @@ print(f"\n{green}{caminho_modelos}RF_casos_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETR
 
 # Semana Epidemiológica
 #semana_epidemio = "2024-10-20"
-semana_epidemio1 = previsao_total.loc[previsao_total.index[-2], "Semana"]
-semana_epidemio2 = previsao_total.loc[previsao_total.index[-1], "Semana"]
-lista_semanas = [semana_epidemio1, semana_epidemio2]
+semana_epidemio1 = previsao_total.loc[previsao_total.index[-3], "Semana"]
+semana_epidemio2 = previsao_total.loc[previsao_total.index[-2], "Semana"]
+semana_epidemio3 = previsao_total.loc[previsao_total.index[-1], "Semana"]
+lista_semanas = [semana_epidemio1, semana_epidemio2, semana_epidemio3]
 # "2020-04-19" "2021-04-18" "2022-04-17" "2023-04-16"
 for idx, semana_epidemio in enumerate(lista_semanas):
 # SC_Pontos

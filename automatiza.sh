@@ -19,7 +19,10 @@ python une_casos_tabnet.py # sincronizar o nome do arquivo baixado
 python extrai_clima.py
 #python extrai_tempo.py # necessário para não sobrecarregar
 python extrai_gfs.py
-python modelagem_casos.py
+python modelagem_casos.py True
 python cartografia_preditiva_casos.py True False True
+
+python teste_modelagem_casos.py
+python teste_cartografia.py True False True
 
 conda deactivate

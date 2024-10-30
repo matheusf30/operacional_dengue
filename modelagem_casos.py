@@ -83,8 +83,18 @@ _RETROAGIR = 2 # Semanas Epidemiológicas
 _HORIZONTE = 0 # Tempo de Previsão
 #for r in range(_HORIZONTE + 1, _RETROAGIR + 1):
 
-_AUTOMATIZA = True#False
-
+_AUTOMATIZAR = sys.argv[1]   # True|False                    #####
+_AUTOMATIZA = True if _AUTOMATIZAR == "True" else False 
+"""
+##################### Valores Booleanos ############ # sys.argv[0] is the script name itself and can be ignored!
+_AUTOMATIZAR = sys.argv[1]   # True|False                    #####
+_AUTOMATIZA = True if _AUTOMATIZAR == "True" else False      #####
+_VISUALIZAR = sys.argv[2]    # True|False                    #####
+_VISUALIZAR = True if _VISUALIZAR == "True" else False       #####
+_SALVAR = sys.argv[3]        # True|False                    #####
+_SALVAR = True if _SALVAR == "True" else False               #####
+##################################################################
+"""
 ##################################################################################
 
 ### Encaminhamento aos Diretórios
@@ -203,6 +213,7 @@ print(f"\n{green}dataset:\n{reset}{dataset}\n")
 dataset = dataset.merge(casos[["Semana", _CIDADE]], how = "right", on = "Semana").copy()
 troca_nome = {f"{_CIDADE}_x" : "PREC", f"{_CIDADE}_y" : "CASOS"}
 dataset = dataset.rename(columns = troca_nome)
+dataset["CASOS"] = dataset["CASOS"].astype(int)
 dataset.fillna(0, inplace = True)
 print(f"\n{green}dataset:\n{reset}{dataset}\n")
 #sys.exit()
@@ -244,6 +255,7 @@ dataset.drop(columns = ["TMIN", "TMED", "TMAX", "PREC"], inplace = True)
 dataset.dropna(inplace = True)
 dataset.set_index("Semana", inplace = True)
 dataset.columns.name = f"{_CIDADE}"
+dataset = dataset.iloc[:-1,:]
 print(f"\n{green}dataset (após retroação):\n{reset}{dataset}\n")
 #sys.exit()
 ### Dividindo Dataset em Treino e Teste
@@ -329,30 +341,34 @@ print("="*80)
 #########################################################FUNÇÕES###############################################################
 ### Definições
 def monta_dataset(_CIDADE):
-    dataset = tmin[["Semana"]].copy()
-    dataset["TMIN"] = tmin[_CIDADE].copy()
-    dataset["TMED"] = tmed[_CIDADE].copy()
-    dataset["TMAX"] = tmax[_CIDADE].copy()
-    dataset = dataset.merge(prec[["Semana", _CIDADE]], how = "right", on = "Semana").copy()
-    dataset = dataset.rename(columns = {_CIDADE : "PREC"})
-    dataset = dataset.merge(casos[["Semana", _CIDADE]], how = "right", on = "Semana").copy()
-    dataset = dataset.rename(columns = {_CIDADE : "CASOS"})
-    #troca_nome = {f"{_CIDADE}_x" : "PREC", f"{_CIDADE}_y" : "CASOS", f"{_CIDADE}" : "CASOS"}
-    #dataset = dataset.rename(columns = troca_nome)
-    dataset.dropna(axis = 0, inplace = True)
-    dataset.fillna(0, inplace = True)
-    for r in range(_HORIZONTE + 1, _RETROAGIR + 1):
-        dataset[f"TMIN_r{r}"] = dataset["TMIN"].shift(-r)
-        dataset[f"TMED_r{r}"] = dataset["TMED"].shift(-r)
-        dataset[f"TMAX_r{r}"] = dataset["TMAX"].shift(-r)
-        dataset[f"PREC_r{r}"] = dataset["PREC"].shift(-r)
-        dataset[f"CASOS_r{r}"] = dataset["CASOS"].shift(-r)
-    dataset.drop(columns = ["TMIN", "TMED", "TMAX", "PREC"], inplace = True)
-    dataset.dropna(inplace = True)
-    dataset.set_index("Semana", inplace = True)
-    dataset.columns.name = f"{_CIDADE}"
-    print(dataset)
-    return dataset
+	dataset = tmin[["Semana"]].copy()
+	dataset["TMIN"] = tmin[_CIDADE].copy()
+	dataset["TMED"] = tmed[_CIDADE].copy()
+	dataset["TMAX"] = tmax[_CIDADE].copy()
+	dataset = dataset.merge(prec[["Semana", _CIDADE]], how = "right", on = "Semana").copy()
+	dataset = dataset.rename(columns = {_CIDADE : "PREC"})
+	dataset = dataset.merge(casos[["Semana", _CIDADE]], how = "right", on = "Semana").copy()
+	dataset = dataset.rename(columns = {_CIDADE : "CASOS"})
+	#troca_nome = {f"{_CIDADE}_x" : "PREC", f"{_CIDADE}_y" : "CASOS", f"{_CIDADE}" : "CASOS"}
+	#dataset = dataset.rename(columns = troca_nome)
+	dataset["CASOS"] = dataset["CASOS"].astype(int)
+	dataset.dropna(axis = 0, inplace = True)
+	dataset.fillna(0, inplace = True)
+	for r in range(_HORIZONTE + 1, _RETROAGIR + 1):
+		dataset[f"TMIN_r{r}"] = dataset["TMIN"].shift(-r)
+		dataset[f"TMED_r{r}"] = dataset["TMED"].shift(-r)
+		dataset[f"TMAX_r{r}"] = dataset["TMAX"].shift(-r)
+		dataset[f"PREC_r{r}"] = dataset["PREC"].shift(-r)
+		dataset[f"CASOS_r{r}"] = dataset["CASOS"].shift(-r)
+	dataset.drop(columns = ["TMIN", "TMED", "TMAX", "PREC"], inplace = True)
+	dataset.dropna(inplace = True)
+	dataset.set_index("Semana", inplace = True)
+	dataset.columns.name = f"{_CIDADE}"
+	print(f"\n{green}dataset:\n{reset}{dataset}\n")
+	dataset = dataset.iloc[:-1,:]
+	print(f"\n{green}dataset:\n{reset}{dataset}\n")
+	#sys.exit()
+	return dataset
 
 def testa_dataset(_CIDADE):
 	dataset = tmin[["Semana"]].copy()
@@ -747,7 +763,7 @@ dataset2 = dataset2.merge(prec[["Semana", _CIDADE]], how = "left", on = "Semana"
 dataset2 = dataset2.merge(casos[["Semana", _CIDADE]], how = "right", on = "Semana").copy()
 troca_nome = {f"{_CIDADE}_x" : "PREC", f"{_CIDADE}_y" : "CASOS"}
 dataset2 = dataset2.rename(columns = troca_nome)
-
+dataset2["CASOS"] = dataset2["CASOS"].astype(int)
 for r in range(_HORIZONTE + 1, _RETROAGIR):
 	dataset2[f"TMIN_r{r}"] = dataset2["TMIN"].shift(-r)
 	dataset2[f"TMED_r{r}"] = dataset2["TMED"].shift(-r)
@@ -775,7 +791,7 @@ dataset2.reset_index(inplace = True)
 #serie_anos = dataset2["Semana"].dt.year
 print(f"\n{green}dataset2:\n{reset}{dataset2}")
 print(f"\n{green}dataset2.info:\n{reset}{dataset2.info()}")
-
+#sys.exit()
 x2.index = pd.to_datetime(x2.index)
 ultima_semana = x2.index[-12]
 semanas_futuras = pd.date_range(start = ultima_semana + pd.DateOffset(weeks = 1),
