@@ -44,20 +44,24 @@ caminho_mergeCDO = "/media/dados/operacao/merge/CDO.MERGE/" #MERGE_CPTEC_DAILY_2
 caminho_samet = "/media/dados/operacao/samet/daily/" #/TMAX/2024/ #SAMeT_CPTEC_DAILY_SB_TMAX_2024.nc
 caminho_sametCDO = "/media/dados/operacao/samet/CDO.SAMET/" #SAMeT_CPTEC_DAILY_SB_TMAX_2024.nc@
 
+_AGORA = datetime.now()
 _ANO_FINAL = str(datetime.today().year)
-_MES_FINAL = str(datetime.today().month)
-_DIA_FINAL = str(datetime.today().day)
+_MES_FINAL = _AGORA.strftime("%m")
+_DIA_FINAL = _AGORA.strftime("%d")
 _ANO_MES = f"{_ANO_FINAL}{_MES_FINAL}"
 _ANO_MES_DIA = f"{_ANO_FINAL}{_MES_FINAL}{_DIA_FINAL}"
 _ONTEM = datetime.today() - timedelta(days = 1)
 _ANO_ONTEM = str(_ONTEM.year)
-_MES_ONTEM = str(_ONTEM.month)
-_DIA_ONTEM = str(_ONTEM.day)
+_MES_ONTEM = _ONTEM.strftime("%m")
+_DIA_ONTEM = _ONTEM.strftime("%d")
 _ANO_MES_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}"
 _ANO_MES_DIA_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}{_DIA_ONTEM}"
 
+print(f"\n{green}HOJE:\n{reset}{_DIA_FINAL}\n")
 print(f"\n{green}HOJE:\n{reset}{_ANO_MES_DIA}\n")
+print(f"\n{green}HOJE:\n{reset}{_DIA_ONTEM}\n")
 print(f"\n{green}ONTEM:\n{reset}{_ANO_MES_DIA_ONTEM}\n")
+#sys.exit()
 
 caminho_gfs = f"/media/dados/operacao/gfs/0p25/{_ANO_MES}/{_ANO_MES_DIA}/" #202410/20241012/ #prec_daily_gfs_2024101212.nc
 caminho_gfs_ontem = f"/media/dados/operacao/gfs/0p25/{_ANO_MES_ONTEM}/{_ANO_MES_DIA_ONTEM}/" #202410/20241012/
