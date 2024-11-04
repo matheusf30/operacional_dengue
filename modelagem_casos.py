@@ -466,27 +466,28 @@ def RF_previsao_metricas(dataset, previsoes, n, teste_y, y_previsto):
     return EQM, RQ_EQM, R_2
 
 def salva_modeloRF(modelo, _CIDADE):
-    _cidade = _CIDADE
-    troca = {'Á': 'A', 'Â': 'A', 'À': 'A', 'Ã': 'A', 'Ä': 'A',
-         'É': 'E', 'Ê': 'E', 'È': 'E', 'Ẽ': 'E', 'Ë': 'E',
-         'Í': 'I', 'Î': 'I', 'Ì': 'I', 'Ĩ': 'I', 'Ï': 'I',
-         'Ó': 'O', 'Ô': 'O', 'Ò': 'O', 'Õ': 'O', 'Ö': 'O',
-         'Ú': 'U', 'Û': 'U', 'Ù': 'U', 'Ũ': 'U', 'Ü': 'U',
-         'Ç': 'C', " " : "_", "'" : "_", "-" : "_"}
-    for velho, novo in troca.items():
-        _cidade = _cidade.replace(velho, novo)
-    _ANO_FINAL = str(datetime.today().year)
-    _MES_FINAL = str(datetime.today().month)
-    _DIA_FINAL = str(datetime.today().day)
-    _ANO_MES_DIA = f"{_ANO_FINAL}{_MES_FINAL}{_DIA_FINAL}"
-    caminho_modelos = f"modelagem/casos/{_ANO_MES_DIA}/"
-    if not os.path.exists(caminho_modelos):
-        os.makedirs(caminho_modelos)
-    nome_modelo = f"RF_casos_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_{_cidade}.h5"
-    joblib.dump(modelo, f"{caminho_modelos}{nome_modelo}")
-    print(f"\n{green}MODELO RANDOM FOREST DE {bold}{_cidade} SALVO!\n{reset}")
-    print(f"\n{cyan}Caminho e Nome:\n {bold}{caminho_modelos}{nome_modelo}\n{reset}")
-    print("\n" + f"{red}={reset}"*80 + "\n")
+	_cidade = _CIDADE
+	troca = {'Á': 'A', 'Â': 'A', 'À': 'A', 'Ã': 'A', 'Ä': 'A',
+			'É': 'E', 'Ê': 'E', 'È': 'E', 'Ẽ': 'E', 'Ë': 'E',
+			'Í': 'I', 'Î': 'I', 'Ì': 'I', 'Ĩ': 'I', 'Ï': 'I',
+			'Ó': 'O', 'Ô': 'O', 'Ò': 'O', 'Õ': 'O', 'Ö': 'O',
+			'Ú': 'U', 'Û': 'U', 'Ù': 'U', 'Ũ': 'U', 'Ü': 'U',
+			'Ç': 'C', " " : "_", "'" : "_", "-" : "_"}
+	for velho, novo in troca.items():
+		_cidade = _cidade.replace(velho, novo)
+	_AGORA = datetime.now()
+	_ANO_FINAL = str(datetime.today().year)
+	_MES_FINAL = _AGORA.strftime("%m")
+	_DIA_FINAL = _AGORA.strftime("%d")
+	_ANO_MES_DIA = f"{_ANO_FINAL}{_MES_FINAL}{_DIA_FINAL}"
+	caminho_modelos = f"modelagem/casos/{_ANO_MES_DIA}/"
+	if not os.path.exists(caminho_modelos):
+		os.makedirs(caminho_modelos)
+	nome_modelo = f"RF_casos_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_{_cidade}.h5"
+	joblib.dump(modelo, f"{caminho_modelos}{nome_modelo}")
+	print(f"\n{green}MODELO RANDOM FOREST DE {bold}{_cidade} SALVO!\n{reset}")
+	print(f"\n{cyan}Caminho e Nome:\n {bold}{caminho_modelos}{nome_modelo}\n{reset}")
+	print("\n" + f"{red}={reset}"*80 + "\n")
 
 def lista_previsao(previsao, n, string_modelo):
     if string_modelo not in ["RF", "NN"]:
@@ -818,15 +819,16 @@ plt.show()
 ############ Testando 2º Salto de Previsão #####################################################
 ################################################################################################
 
+_AGORA = datetime.now()
 _ANO_FINAL = str(datetime.today().year)
-_MES_FINAL = str(datetime.today().month)
-_DIA_FINAL = str(datetime.today().day)
+_MES_FINAL = _AGORA.strftime("%m")
+_DIA_FINAL = _AGORA.strftime("%d")
 _ANO_MES = f"{_ANO_FINAL}{_MES_FINAL}"
 _ANO_MES_DIA = f"{_ANO_FINAL}{_MES_FINAL}{_DIA_FINAL}"
 _ONTEM = datetime.today() - timedelta(days = 1)
 _ANO_ONTEM = str(_ONTEM.year)
-_MES_ONTEM = str(_ONTEM.month)
-_DIA_ONTEM = str(_ONTEM.day)
+_MES_ONTEM = _ONTEM.strftime("%m")
+_DIA_ONTEM = _ONTEM.strftime("%d")
 _ANO_MES_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}"
 _ANO_MES_DIA_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}{_DIA_ONTEM}"
 try:
