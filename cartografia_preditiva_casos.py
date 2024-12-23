@@ -340,7 +340,7 @@ def grafico(previsoes, R_2):
 	plt.title(f"MODELO RANDOM FOREST (R²: {R_2}): OBSERVAÇÃO E PREVISÃO.\n MUNICÍPIO DE {cidade}, SANTA CATARINA.")
 	plt.xlabel("Semanas Epidemiológicas na Série de Anos")
 	plt.ylabel("Número de Focos de _Aedes_ sp.")
-	plt.show()
+	#plt.show()
 
 def previsao_metricas(dataset, previsoes, n, teste_y, y_previsto):
 	nome_modelo = "Random Forest"
@@ -387,7 +387,7 @@ def grafico_previsao(previsao, teste, string_modelo):
 	plt.title(f"MODELO {nome_modelo.upper()} (R²: {R_2}): OBSERVAÇÃO E PREVISÃO.\n MUNICÍPIO DE {cidade}, SANTA CATARINA.")
 	plt.xlabel("Semanas Epidemiológicas na Série de Anos")
 	plt.ylabel("Número de Casos de Dengue")
-	plt.show()
+	#plt.show()
 
 def salva_modelo(modelo, cidade):
 	troca = {'Á': 'A', 'Â': 'A', 'À': 'A', 'Ã': 'A', 'Ä': 'A',
@@ -531,7 +531,7 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 		print(f"\n\n{green}{caminho_resultados}\n{nome_arquivo}\nSALVO COM SUCESSO!{reset}\n\n")
 	if _AUTOMATIZA == True and _VISUALIZAR == True:
 		print(f"{cyan}\nVISUALIZANDO:\n{caminho_resultados}\n{nome_arquivo}\n{reset}\n\n")
-		plt.show()
+		#plt.show()
 		print(f"{cyan}\nENCERRADO:\n{caminho_resultados}\n{nome_arquivo}\n{reset}\n\n")
 
 	# SC_Coroplético
@@ -595,5 +595,5 @@ modelagem inexistente.""",
 		print(f"\n\n{green}{caminho_resultados}\n{nome_arquivo}\nSALVO COM SUCESSO!{reset}\n\n")
 	if _AUTOMATIZA == True and _VISUALIZAR == True:	
 		print(f"{cyan}\nVISUALIZANDO:\n{caminho_resultados}\n{nome_arquivo}\n{reset}\n\n")
-		plt.show()
+		#plt.show()
 		print(f"{cyan}\nENCERRADO:\n{caminho_resultados}\n{nome_arquivo}\n{reset}\n\n")
