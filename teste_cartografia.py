@@ -57,19 +57,39 @@ _HORIZONTE = 0 # Tempo de Previsão
 #_AUTOMATIZA = True#False
 
 #################################################################################
-
+_AGORA = datetime.now()
 _ANO_ATUAL = str(datetime.today().year)
-_MES_ATUAL = str(datetime.today().month)
+_MES_ATUAL = _AGORA.strftime("%m")
+_DIA_ATUAL = _AGORA.strftime("%d")
+_ANO_MES = f"{_ANO_ATUAL}{_MES_ATUAL}"
+_ANO_MES_DIA = f"{_ANO_ATUAL}{_MES_ATUAL}{_DIA_ATUAL}"
+_ONTEM = datetime.today() - timedelta(days = 1)
+_ANO_ONTEM = str(_ONTEM.year)
+_MES_ONTEM = _ONTEM.strftime("%m")
+_DIA_ONTEM = _ONTEM.strftime("%d")
+_ANO_MES_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}"
+_ANO_MES_DIA_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}{_DIA_ONTEM}"
+
+print(f"\n{green}HOJE:\n{reset}{_DIA_ATUAL}\n")
+print(f"\n{green}HOJE:\n{reset}{_ANO_MES_DIA}\n")
+print(f"\n{green}HOJE:\n{reset}{_DIA_ONTEM}\n")
+print(f"\n{green}ONTEM:\n{reset}{_ANO_MES_DIA_ONTEM}\n")
+###########################################################################
+"""
+_ANO_ATUAL = str(datetime.today().year)
+_MES_ATUAL = str(datetime.today().month.strftime("%m"))
 _DIA_ATUAL = str(datetime.today().day)
 _ANO_MES = f"{_ANO_ATUAL}{_MES_ATUAL}"
 _ANO_MES_DIA = f"{_ANO_ATUAL}{_MES_ATUAL}{_DIA_ATUAL}"
 _ONTEM = datetime.today() - timedelta(days = 1)
 _ANO_ONTEM = str(_ONTEM.year)
-_MES_ONTEM = str(_ONTEM.month)
-_DIA_ONTEM = str(_ONTEM.day)
+_MES_ONTEM = _ONTEM.strftime("%m")
+_DIA_ONTEM = _ONTEM.strftime("%d")
 _ANO_MES_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}"
 _ANO_MES_DIA_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}{_DIA_ONTEM}"
-
+"""
+print(_DIA_ATUAL, _MES_ATUAL, _ANO_ATUAL)
+#sys.exit()
 ##################################################################################
 
 ### Encaminhamento aos Diretórios
