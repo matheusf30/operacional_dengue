@@ -500,6 +500,9 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 	argentina.plot(ax = ax, color = "tan")
 	br.plot(ax = ax, color = "tan", edgecolor = "black")
 	municipios.plot(ax = ax, color = "lightgreen", edgecolor = "black")
+	#
+	print("IS NA...", previsao_melt_geo["Casos"].isna().sum())
+	sys.exit()
 	previsao_melt_geo[previsao_melt_geo["Semana"] == semana_epidemio ].plot(ax = ax, column = "Casos",  legend = True,
 																			label = "Casos", cmap = "YlOrRd", markersize = 50)
 	zero = previsao_melt_geo[previsao_melt_geo["Casos"] == 0]
