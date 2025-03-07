@@ -68,20 +68,20 @@ ANO_ESCOLHIDO = str(datetime.today().year)
 #SAMeT_CPTEC_DAILY_SB_TMAX_2024.nc
 municipios = "SC_Municipios_2022.shp"
 # Fonte: TABNET/DATASUS - SINAN/SC
-casos24 = "dados_atualizados_dengue.csv" #"A100523200_135_184_253.csv" # "A173120200_135_184_253.csv"
+casos = "dados_atualizados_dengue.csv" #"A100523200_135_184_253.csv" # "A173120200_135_184_253.csv"
 serie_casos = "casos_dive_total.csv"
 ### Abrindo Arquivos
 municipios = gpd.read_file(f"{caminho_shape}{municipios}", low_memory = False)
 serie_casos = pd.read_csv(f"{caminho_dados}{serie_casos}")
-casos24 = pd.read_csv(f"{caminho_operacional}{casos24}", skiprows = 5,
+casos = pd.read_csv(f"{caminho_operacional}{casos}", skiprows = 5,
                       sep = ";", encoding = "latin1", engine = "python")
                       
 print(f"\n{green}serie_casos:\n{reset}{serie_casos}\n")
-print(f"\n{green}casos_atuais (TabNetSinanDiveSC):\n{reset}{casos24}\n")
+print(f"\n{green}casos_atuais (TabNetSinanDiveSC):\n{reset}{casos}\n")
 print(datetime.today().strftime("%Y-%m-%d"))
 print(datetime.today())
 print(date.today().isoformat())
-
+sys.exit()
 ## Dados "Brutos"
 print(f"""{green}
  INVESTIGAÇÃO DENGUE A PARTIR DE 2014
@@ -411,7 +411,8 @@ lista_municipio = {'ABDON BATISTA': 'ABDON BATISTA',
   'XAXIM': 'XAXIM',
   'ZORTEA': 'ZORTÉA',
   'BALNEARIO RINCAO': 'BALNEÁRIO RINCÃO'}
-
+#
+"""
 # 2024 (Padronização)
 ano = 2024
 total_semana = 52
@@ -453,9 +454,52 @@ print("="*80, f"\n{ano}\n\n", casos24)
 print(casos24.info())
 print(casos24.columns.drop("Semana"))
 print("="*80)
+"""
+# 2025 (Padronização)
+casos25 = casos.copy()
+ano = 2025
+total_semana = 53
+lista_str_semanas = []
+for i in range(1, total_semana + 1):
+    n_semana = str(i).zfill(2)
+    chave_semana = f"Semana {n_semana}"
+    lista_str_semanas.append(chave_semana)
+inicio = datetime(ano-1, 12, 29)
+fim = datetime(ano, 12, 28)
+lista_semanas = []
+semana_corrente = inicio
+while semana_corrente <= fim:
+    lista_semanas.append(semana_corrente)
+    semana_corrente += timedelta(weeks = 1)
+dict_semanas = dict(zip(lista_str_semanas, [date.strftime("%Y-%m-%d") for date in lista_semanas]))
+casos25.rename(columns = {"Mun infec SC" : "Município"}, inplace = True)
+casos25.rename(columns = {"Município infecção" : "Município"}, inplace = True)
+casos25.rename(columns = dict_semanas, inplace = True)
+casos25["Município"] = casos25["Município"].str.replace("\d+ ", "", regex = True)
+casos25["Município"] = casos25["Município"].str.upper()
+casos25.drop(columns = "Total", inplace = True)
+casos25.drop(casos25.index[-1:], axis = 0, inplace = True)
+casos25.set_index("Município", inplace = True)
+casos25 = casos25.T
+casos25.reset_index(inplace=True)
+casos25 = casos25.rename(columns = {"index" : "Semana"})
+casos25.rename(columns = lista_municipio, inplace = True)
+colunas = casos25.columns.drop("Semana")
+semanas = pd.DataFrame(lista_semanas, columns=["Semana"])
+casos25["Semana"] = pd.to_datetime(casos25["Semana"])
+casos25 = pd.merge(semanas, casos25, on = "Semana", how = "left").fillna(0)
+casos25[colunas] = casos25[colunas].astype(int)
+hoje = pd.to_datetime(datetime.today().date())
+casos25 = casos25[casos25["Semana"] <= hoje]
+casos25 = pd.melt(casos25, id_vars = "Semana", var_name = "Município", value_name = "Casos", ignore_index = True)
+casos25.sort_values(by = "Semana",  ignore_index = True, inplace = True)
+print("="*80, f"\n{ano}\n\n", casos25)
+print(casos25.info())
+print(casos25.columns.drop("Semana"))
+print("="*80)
 
 ##$ Concatenando e Extraindo Dados
-casostotal = pd.concat([serie_casos, casos24], ignore_index = True)
+casostotal = pd.concat([serie_casos, casos25], ignore_index = True)
 casostotal["Semana"] = pd.to_datetime(casostotal["Semana"]).dt.strftime("%Y-%m-%d")
 casos_pivot = pd.pivot_table(casostotal, index = "Semana", columns = "Município",
 								values = "Casos", fill_value = 0)
