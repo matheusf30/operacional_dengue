@@ -81,7 +81,7 @@ print(f"\n{green}casos_atuais (TabNetSinanDiveSC):\n{reset}{casos}\n")
 print(datetime.today().strftime("%Y-%m-%d"))
 print(datetime.today())
 print(date.today().isoformat())
-sys.exit()
+#sys.exit()
 ## Dados "Brutos"
 print(f"""{green}
  INVESTIGAÇÃO DENGUE A PARTIR DE 2014
