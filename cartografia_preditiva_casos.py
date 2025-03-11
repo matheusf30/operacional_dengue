@@ -366,7 +366,7 @@ def grafico_previsao(previsao, teste, string_modelo):
 		print("!!"*80)
 		print("\n   MODELO NÃO RECONHECIDO\n   TENTE 'RF' PARA RANDOM FOREST\n   OU 'NN' PARA REDE NEURAL\n")
 		print("!!"*80)
-		sys.exit()
+		#sys.exit()
 	# Gráfico de Comparação entre Observação e Previsão dos Modelos
 	nome_modelo = "Random Forest" if string_modelo == "RF" else "Rede Neural"
 	final = pd.DataFrame()
@@ -502,7 +502,7 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 	municipios.plot(ax = ax, color = "lightgreen", edgecolor = "black")
 	#
 	print("IS NA...", previsao_melt_geo["Casos"].isna().sum())
-	sys.exit()
+	#sys.exit()
 	previsao_melt_geo[previsao_melt_geo["Semana"] == semana_epidemio ].plot(ax = ax, column = "Casos",  legend = True,
 																			label = "Casos", cmap = "YlOrRd", markersize = 50)
 	zero = previsao_melt_geo[previsao_melt_geo["Casos"] == 0]
@@ -530,11 +530,11 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 	nome_arquivo = f"CASOS_pontual_preditivo_{data_atual}_{idx}.pdf"
 	if _AUTOMATIZA == True and _SALVAR == True:
 		os.makedirs(caminho_resultados, exist_ok = True)
-		#plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "pdf", dpi = 1200)
+		plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "pdf", dpi = 1200)
 		print(f"\n\n{green}{caminho_resultados}\n{nome_arquivo}\nSALVO COM SUCESSO!{reset}\n\n")
 	if _AUTOMATIZA == True and _VISUALIZAR == True:
 		print(f"{cyan}\nVISUALIZANDO:\n{caminho_resultados}\n{nome_arquivo}\n{reset}\n\n")
-		#plt.show()
+		plt.show()
 		print(f"{cyan}\nENCERRADO:\n{caminho_resultados}\n{nome_arquivo}\n{reset}\n\n")
 
 	# SC_Coroplético
@@ -598,5 +598,5 @@ modelagem inexistente.""",
 		print(f"\n\n{green}{caminho_resultados}\n{nome_arquivo}\nSALVO COM SUCESSO!{reset}\n\n")
 	if _AUTOMATIZA == True and _VISUALIZAR == True:	
 		print(f"{cyan}\nVISUALIZANDO:\n{caminho_resultados}\n{nome_arquivo}\n{reset}\n\n")
-		#plt.show()
+		plt.show()
 		print(f"{cyan}\nENCERRADO:\n{caminho_resultados}\n{nome_arquivo}\n{reset}\n\n")
