@@ -3,6 +3,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.colors as cls  
 import seaborn as sns 
 from datetime import date, datetime, timedelta
 # Suporte
@@ -483,6 +484,7 @@ lista_semanas = [semana_epidemio1, semana_epidemio2, semana_epidemio3]
 # "2020-04-19" "2021-04-18" "2022-04-17" "2023-04-16"
 for idx, semana_epidemio in enumerate(lista_semanas):
 # SC_Pontos
+	"""
 #previsao_melt_geo = gpd.GeoDataFrame(previsao_melt_geo)#, geometry = municipios.geometry)
 	fig, ax = plt.subplots(figsize = (20, 12), layout = "constrained", frameon = False)
 	coord_atlantico = [(-54, -30),(-48, -30),
@@ -525,18 +527,18 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 			color = "white", backgroundcolor = "darkgray", ha = "center", va = "center", fontsize = 14)
 	plt.xlabel("Longitude")
 	plt.ylabel("Latitude")
-	plt.title(f"Casos de Dengue Previstos em Santa Catarina.\nSemana Epidemiológica: {semana_epidemio}.", fontsize = 18)
+	plt.title(f"Casos Prováveis de Dengue Previstos em Santa Catarina.\nSemana Epidemiológica: {semana_epidemio}.", fontsize = 18)
 	plt.grid(True)
 	nome_arquivo = f"CASOS_pontual_preditivo_{data_atual}_{idx}.pdf"
 	if _AUTOMATIZA == True and _SALVAR == True:
 		os.makedirs(caminho_resultados, exist_ok = True)
-		plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "pdf", dpi = 1200)
+		plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "pdf", dpi = 300)
 		print(f"\n\n{green}{caminho_resultados}\n{nome_arquivo}\nSALVO COM SUCESSO!{reset}\n\n")
 	if _AUTOMATIZA == True and _VISUALIZAR == True:
 		print(f"{cyan}\nVISUALIZANDO:\n{caminho_resultados}\n{nome_arquivo}\n{reset}\n\n")
 		plt.show()
 		print(f"{cyan}\nENCERRADO:\n{caminho_resultados}\n{nome_arquivo}\n{reset}\n\n")
-
+	"""
 	# SC_Coroplético
 	xy = municipios.copy()
 	xy.drop(columns = ["CD_MUN", "SIGLA_UF", "AREA_KM2"], inplace = True)
@@ -560,9 +562,21 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 	argentina.plot(ax = ax, color = "tan")
 	br.plot(ax = ax, color = "tan", edgecolor = "black")
 	municipios.plot(ax = ax, color = "lightgray", edgecolor = "lightgray")
+	v_max = previsao_melt_poligeo.select_dtypes(include="number").max().max()
+	v_min = previsao_melt_poligeo.select_dtypes(include="number").min().min()
+	intervalo = 250
+	levels = np.arange(v_min, v_max + intervalo, intervalo)
+	print(f"\n{green}v_min\n{reset}{v_min}\n")
+	print(f"\n{green}v_max\n{reset}{v_max}\n")
+	print(f"\n{green}levels\n{reset}{levels}\n")
+	#recorte_temporal.plot(ax = ax, column = f"{str_var}",  legend = True,
+							#label = f"{str_var}", cmap = "YlOrRd")#, add_colorbar = False,
+												#levels = levels, add_labels = False,
+												#norm = cls.Normalize(vmin = v_min, vmax = v_max))
 	previsao_melt_poligeo[previsao_melt_poligeo["Semana"] == semana_epidemio].plot(ax = ax, column = "Casos",  legend = True,
-		                                                                           label = "Casos", cmap = "YlOrRd")
-	zero = previsao_melt_poligeo[previsao_melt_poligeo["Casos"] == 0]
+		                                                                           label = "Casos", cmap = "YlOrRd", #levels = levels, 
+		                                                                           norm = cls.Normalize(vmin = v_min, vmax = v_max, clip = True))
+	zero = previsao_melt_poligeo[previsao_melt_poligeo["Casos"] <= 500]
 	zero[zero["Semana"] == semana_epidemio].plot(ax = ax, column = "Casos", legend = False,
 		                                         label = "Casos", cmap = "YlOrBr")
 	plt.xlim(-54, -48)
@@ -589,12 +603,12 @@ modelagem inexistente.""",
 		    color = "black", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 14)
 	plt.xlabel("Longitude")
 	plt.ylabel("Latitude")
-	plt.title(f"Casos de Dengue Previstos em Santa Catarina.\nSemana Epidemiológica: {semana_epidemio}.", fontsize = 18)
+	plt.title(f"Casos Prováveis de Dengue Previstos em Santa Catarina.\nSemana Epidemiológica: {semana_epidemio}.", fontsize = 18)
 	plt.grid(True)
 	nome_arquivo = f"CASOS_mapa_preditivo_{data_atual}_{idx}.pdf"
 	if _AUTOMATIZA == True and _SALVAR == True:
 		os.makedirs(caminho_resultados, exist_ok = True)
-		plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "pdf", dpi = 1200)
+		plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "pdf", dpi = 300)
 		print(f"\n\n{green}{caminho_resultados}\n{nome_arquivo}\nSALVO COM SUCESSO!{reset}\n\n")
 	if _AUTOMATIZA == True and _VISUALIZAR == True:	
 		print(f"{cyan}\nVISUALIZANDO:\n{caminho_resultados}\n{nome_arquivo}\n{reset}\n\n")
