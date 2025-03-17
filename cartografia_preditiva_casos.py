@@ -575,11 +575,11 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 							#label = f"{str_var}", cmap = "YlOrRd")#, add_colorbar = False,
 												#levels = levels, add_labels = False,
 												#norm = cls.Normalize(vmin = v_min, vmax = v_max))
-	previsao_melt_poligeo[previsao_melt_poligeo["Semana"] == semana_epidemio].plot(ax = ax, column = "Casos",  legend = True,# fontsize = 20,
+	previsao_melt_poligeo[previsao_melt_poligeo["Semana"] == semana_epidemio].plot(ax = ax, column = "Casos",  legend = True, edgecolor = "black", # fontsize = 20,
 		                                                                           label = "Casos", cmap = "YlOrRd", #levels = levels, 
 		                                                                           norm = cls.Normalize(vmin = v_min, vmax = v_max, clip = True))
 	zero = previsao_melt_poligeo[previsao_melt_poligeo["Casos"] <= 0]
-	zero[zero["Semana"] == semana_epidemio].plot(ax = ax, column = "Casos", legend = False,
+	zero[zero["Semana"] == semana_epidemio].plot(ax = ax, column = "Casos", legend = False, edgecolor = "k",
 		                                         label = "Casos", cmap = "YlOrBr")
 	plt.xlim(-54, -48)
 	plt.ylim(-29.5, -25.75)
