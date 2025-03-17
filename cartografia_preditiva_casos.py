@@ -563,7 +563,7 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 	argentina.plot(ax = ax, color = "tan")
 	br.plot(ax = ax, color = "tan", edgecolor = "black")
 	"""
-	municipios.plot(ax = ax, color = "lightgray", edgecolor = "lightgray")
+	municipios.plot(ax = ax, color = "lightgray", edgecolor = "black")
 	v_max = previsao_melt_poligeo.select_dtypes(include="number").max().max()
 	v_min = previsao_melt_poligeo.select_dtypes(include="number").min().min()
 	intervalo = 250
@@ -587,6 +587,7 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 	y_tail = -29.25
 	x_head = -48.5
 	y_head = -28.75
+	"""
 	arrow = mpatches.FancyArrowPatch((x_tail, y_tail), (x_head, y_head),
 		                             mutation_scale = 50, color = "darkblue")
 	ax.add_patch(arrow)
@@ -594,6 +595,7 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 	mid_y = (y_tail + y_head) / 2
 	ax.text(mid_x, mid_y, "N", color = "white", ha = "center", va = "center",
 		    fontsize = "large", fontweight = "bold")
+	"""
 	ax.text(-52.5, -29, "Sistema de Referência de Coordenadas\nDATUM: SIRGAS 2000/22S.\nBase Cartográfica: IBGE, 2022.",
 		    color = "white", backgroundcolor = "darkgray", ha = "center", va = "center", fontsize = 20)
 	ax.text(-52.5, -28.25, """LEGENDA
@@ -603,8 +605,8 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 *Não há registro oficial ou
 modelagem inexistente.""",
 		    color = "black", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 20)
-	#plt.xlabel("Longitude")
-	#plt.ylabel("Latitude")
+	plt.xlabel("Longitude", fontsize = 18)
+	plt.ylabel("Latitude", fontsize = 18)
 	plt.title(f"Casos Prováveis de Dengue Previstos em Santa Catarina.\nSemana Epidemiológica: {semana_epidemio}.", fontsize = 24)
 	#plt.grid(True)
 	nome_arquivo = f"CASOS_mapa_preditivo_{data_atual}_{idx}.pdf"
