@@ -547,6 +547,7 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 	previsao_melt_poli = pd.merge(previsao_melt, xy, on = "Município", how = "left")
 	previsao_melt_poligeo = gpd.GeoDataFrame(previsao_melt_poli, geometry = "geometry", crs = "EPSG:4674")
 	fig, ax = plt.subplots(figsize = (20, 12), layout = "constrained", frameon = False)
+	"""
 	coord_atlantico = [(-54, -30),(-48, -30),
 		               (-48, -25),(-54, -25),
 		               (-54, -30)]
@@ -561,6 +562,7 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 	argentina = gpd.GeoDataFrame(geometry = [arg_poly])
 	argentina.plot(ax = ax, color = "tan")
 	br.plot(ax = ax, color = "tan", edgecolor = "black")
+	"""
 	municipios.plot(ax = ax, color = "lightgray", edgecolor = "lightgray")
 	v_max = previsao_melt_poligeo.select_dtypes(include="number").max().max()
 	v_min = previsao_melt_poligeo.select_dtypes(include="number").min().min()
@@ -573,10 +575,10 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 							#label = f"{str_var}", cmap = "YlOrRd")#, add_colorbar = False,
 												#levels = levels, add_labels = False,
 												#norm = cls.Normalize(vmin = v_min, vmax = v_max))
-	previsao_melt_poligeo[previsao_melt_poligeo["Semana"] == semana_epidemio].plot(ax = ax, column = "Casos",  legend = True,
+	previsao_melt_poligeo[previsao_melt_poligeo["Semana"] == semana_epidemio].plot(ax = ax, column = "Casos",  legend = True,# fontsize = 20,
 		                                                                           label = "Casos", cmap = "YlOrRd", #levels = levels, 
 		                                                                           norm = cls.Normalize(vmin = v_min, vmax = v_max, clip = True))
-	zero = previsao_melt_poligeo[previsao_melt_poligeo["Casos"] <= 500]
+	zero = previsao_melt_poligeo[previsao_melt_poligeo["Casos"] <= 0]
 	zero[zero["Semana"] == semana_epidemio].plot(ax = ax, column = "Casos", legend = False,
 		                                         label = "Casos", cmap = "YlOrBr")
 	plt.xlim(-54, -48)
@@ -593,22 +595,22 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 	ax.text(mid_x, mid_y, "N", color = "white", ha = "center", va = "center",
 		    fontsize = "large", fontweight = "bold")
 	ax.text(-52.5, -29, "Sistema de Referência de Coordenadas\nDATUM: SIRGAS 2000/22S.\nBase Cartográfica: IBGE, 2022.",
-		    color = "white", backgroundcolor = "darkgray", ha = "center", va = "center", fontsize = 14)
+		    color = "white", backgroundcolor = "darkgray", ha = "center", va = "center", fontsize = 20)
 	ax.text(-52.5, -28.25, """LEGENDA
 
 ▢           Sem registro*
 
 *Não há registro oficial ou
 modelagem inexistente.""",
-		    color = "black", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 14)
-	plt.xlabel("Longitude")
-	plt.ylabel("Latitude")
-	plt.title(f"Casos Prováveis de Dengue Previstos em Santa Catarina.\nSemana Epidemiológica: {semana_epidemio}.", fontsize = 18)
-	plt.grid(True)
+		    color = "black", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 20)
+	#plt.xlabel("Longitude")
+	#plt.ylabel("Latitude")
+	plt.title(f"Casos Prováveis de Dengue Previstos em Santa Catarina.\nSemana Epidemiológica: {semana_epidemio}.", fontsize = 24)
+	#plt.grid(True)
 	nome_arquivo = f"CASOS_mapa_preditivo_{data_atual}_{idx}.pdf"
 	if _AUTOMATIZA == True and _SALVAR == True:
 		os.makedirs(caminho_resultados, exist_ok = True)
-		plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "pdf", dpi = 300)
+		plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "pdf", dpi = 150)
 		print(f"\n\n{green}{caminho_resultados}\n{nome_arquivo}\nSALVO COM SUCESSO!{reset}\n\n")
 	if _AUTOMATIZA == True and _VISUALIZAR == True:	
 		print(f"{cyan}\nVISUALIZANDO:\n{caminho_resultados}\n{nome_arquivo}\n{reset}\n\n")
