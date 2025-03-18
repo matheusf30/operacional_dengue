@@ -455,7 +455,6 @@ else:
 	grafico(previsoes2, R_2)
 
 print(f"\n{green}previsao_total:\n{cyan}{previsao_total}{reset}\n")
-
 previsao_melt = pd.melt(previsao_total, id_vars = ["Semana"], 
                         var_name = "Município", value_name = "Casos")
 #value_vars - If not specified, uses all columns that are not set as id_vars.
@@ -468,7 +467,15 @@ previsao_melt_geo = previsao_melt_geo[["Semana", "Município", "Casos", "geometr
 previsao_melt_geo["Semana"] = pd.to_datetime(previsao_melt_geo["Semana"])
 print(f"\n{green}Caminho e Nome do arquivo:\n{reset}")
 print(f"\n{green}{caminho_modelos}RF_casos_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_{_CIDADE}.h5\n{reset}")
-
+if _SALVAR == True:
+	caminho_csv = "modelagem/resultados/dados_previstos/"
+	os.makedirs(caminho_csv, exist_ok = True)
+	previsao_pivot_csv = f"previsao_pivot_total_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
+	previsao_total.to_csv(f"{caminho_csv}{previsao_pivot_csv}", index = False)
+	previsao_melt_csv = f"previsao_melt_total_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
+	previsao_melt.to_csv(f"{caminho_csv}{previsao_melt_csv}", index = False)
+	print(f"\n\n{green}{caminho_csv}\n{previsao_pivot_csv}\nSALVO COM SUCESSO!{reset}\n\n")
+	print(f"\n\n{green}{caminho_csv}\n{previsao_melt_csv}\nSALVO COM SUCESSO!{reset}\n\n")
 #sys.exit()
 
 ######################################################################################################
@@ -563,7 +570,7 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 	argentina.plot(ax = ax, color = "tan")
 	br.plot(ax = ax, color = "tan", edgecolor = "black")
 	"""
-	municipios.plot(ax = ax, color = "lightgray", edgecolor = "black")
+	municipios.plot(ax = ax, color = "lightgray", edgecolor = "black", linewidth = 0.5)
 	v_max = previsao_melt_poligeo.select_dtypes(include="number").max().max()
 	v_min = previsao_melt_poligeo.select_dtypes(include="number").min().min()
 	intervalo = 250
@@ -576,11 +583,11 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 												#levels = levels, add_labels = False,
 												#norm = cls.Normalize(vmin = v_min, vmax = v_max))
 	previsao_melt_poligeo[previsao_melt_poligeo["Semana"] == semana_epidemio].plot(ax = ax, column = "Casos",  legend = True, edgecolor = "black", # fontsize = 20,
-		                                                                           label = "Casos", cmap = "YlOrRd", #levels = levels, 
+		                                                                           label = "Casos", cmap = "YlOrRd", linewidth = 0.5,#levels = levels, 
 		                                                                           norm = cls.Normalize(vmin = v_min, vmax = v_max, clip = True))
 	zero = previsao_melt_poligeo[previsao_melt_poligeo["Casos"] <= 0]
-	zero[zero["Semana"] == semana_epidemio].plot(ax = ax, column = "Casos", legend = False, edgecolor = "k",
-		                                         label = "Casos", cmap = "YlOrBr")
+	zero[zero["Semana"] == semana_epidemio].plot(ax = ax, column = "Casos", legend = False, edgecolor = "black", linewidth = 0.5,
+		                                         label = "Casos", cmap = "YlOrBr")#"YlOrBr")
 	plt.xlim(-54, -48)
 	plt.ylim(-29.5, -25.75)
 	x_tail = -48.5
