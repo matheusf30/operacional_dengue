@@ -554,10 +554,7 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 	previsao_melt_poli = pd.merge(previsao_melt, xy, on = "Município", how = "left")
 	previsao_melt_poligeo = gpd.GeoDataFrame(previsao_melt_poli, geometry = "geometry", crs = "EPSG:4674")
 	fig, ax = plt.subplots(figsize = (20, 12), layout = "constrained", frameon = False)
-	cax = ax.imshow(previsao_melt_poligeo["Casos"], cmap = "YlOrRd")
-	cbar = fig.colorbar(cax)
-	cbar.ax.tick_params(labelsize = 20)
-	cbar.set_label("Casos Prováveis de Dengue", fontsize = 20)
+	#plt.gca().tick_params(labelsize = 20)
 	"""
 	coord_atlantico = [(-54, -30),(-48, -30),
 		               (-48, -25),(-54, -25),
@@ -589,6 +586,8 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 	previsao_melt_poligeo[previsao_melt_poligeo["Semana"] == semana_epidemio].plot(ax = ax, column = "Casos",  legend = True, edgecolor = "black", # fontsize = 20,
 		                                                                           label = "Casos", cmap = "YlOrRd", linewidth = 0.5,#levels = levels, 
 		                                                                           norm = cls.Normalize(vmin = v_min, vmax = v_max, clip = True))
+	cbar_ax = ax.get_figure().get_axes()[-1]
+	cbar_ax.tick_params(labelsize = 20)
 	zero = previsao_melt_poligeo[previsao_melt_poligeo["Casos"] <= 0]
 	zero[zero["Semana"] == semana_epidemio].plot(ax = ax, column = "Casos", legend = False, edgecolor = "black", linewidth = 0.5,
 		                                         label = "Casos", cmap = "YlOrBr")#"YlOrBr")
@@ -618,7 +617,7 @@ modelagem inexistente.""",
 		    color = "black", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 20)
 	plt.xlabel("Longitude", fontsize = 18)
 	plt.ylabel("Latitude", fontsize = 18)
-	plt.title(f"Casos Prováveis de Dengue Previstos em Santa Catarina.\nSemana Epidemiológica: {semana_epidemio}.", fontsize = 24)
+	plt.title(f"Casos Prováveis de Dengue Previstos em Santa Catarina.\nSemana Epidemiológica: {semana_epidemio.strftime('%Y-%m-%d')}.", fontsize = 28)
 	#plt.grid(True)
 	nome_arquivo = f"CASOS_mapa_preditivo_{data_atual}_{idx}.pdf"
 	nome_arquivo_png = f"CASOS_mapa_preditivo_{data_atual}_{idx}.png"
