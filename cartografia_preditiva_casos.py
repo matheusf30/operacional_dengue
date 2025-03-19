@@ -617,10 +617,13 @@ modelagem inexistente.""",
 	plt.title(f"Casos Prováveis de Dengue Previstos em Santa Catarina.\nSemana Epidemiológica: {semana_epidemio}.", fontsize = 24)
 	#plt.grid(True)
 	nome_arquivo = f"CASOS_mapa_preditivo_{data_atual}_{idx}.pdf"
+	nome_arquivo_png = f"CASOS_mapa_preditivo_{data_atual}_{idx}.png"
 	if _AUTOMATIZA == True and _SALVAR == True:
 		os.makedirs(caminho_resultados, exist_ok = True)
 		plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "pdf", dpi = 150)
+		plt.savefig(f"{caminho_resultados}{nome_arquivo_png}", format = "png", dpi = 300)
 		print(f"\n\n{green}{caminho_resultados}\n{nome_arquivo}\nSALVO COM SUCESSO!{reset}\n\n")
+		print(f"\n\n{green}{caminho_resultados}\n{nome_arquivo_png}\nSALVO COM SUCESSO!{reset}\n\n")
 	if _AUTOMATIZA == True and _VISUALIZAR == True:	
 		print(f"{cyan}\nVISUALIZANDO:\n{caminho_resultados}\n{nome_arquivo}\n{reset}\n\n")
 		plt.show()
