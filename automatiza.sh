@@ -21,6 +21,7 @@ python extrai_clima.py
 python extrai_gfs.py
 python modelagem_casos.py True
 python cartografia_preditiva_casos.py True False True
+python verificao_validacao.py False True False
 """
 python teste_modelagem_casos.py
 python teste_cartografia.py True False True
