@@ -634,25 +634,40 @@ modelagem inexistente.""",
 
 ### Salvando Últimas Previsões
 municipios = previsao_total.columns[1:]
-ultimas_previsoes = pd.DataFrame(index = municipios)
-s0 = semana_epidemio1.copy()
-s1 = semana_epidemio2.copy()
-s2 = semana_epidemio3.copy()
+ultimas_previsoes_df = pd.DataFrame(index = municipios)
+ultimas_previsoes = previsao_total.iloc[-3:,:]
+print(f"\n{green}previsao_total\n{reset}{previsao_total}\n")
+print(f"\n{green}ultimas_previsoes_df\n{reset}{ultimas_previsoes_df}\n")
+print(f"\n{green}ultimas_previsoes\n{reset}{ultimas_previsoes}\n")
+#ultimas_previsoes_teste.reset_index(inplace = True)
+ultimas_previsoes = ultimas_previsoes.T
+print(f"\n{green}ultimas_previsoes.T\n{reset}{ultimas_previsoes}\n")
+s0 = ultimas_previsoes.columns[0]
+s0 = ultimas_previsoes[s0]
+s1 = ultimas_previsoes.columns[1]
+s1 = ultimas_previsoes[s1]
+s2 = ultimas_previsoes.columns[2]
+s2 = ultimas_previsoes[s2]
+print(f"\n{green}s0\n{reset}{s0}\n")
+print(f"\n{green}s1\n{reset}{s1}\n")
+print(f"\n{green}s2\n{reset}{s2}\n")
+#sys.exit()
 ultimas_previsoes["S0"] = s0
 ultimas_previsoes["S1"] = s1
-ultimas_previsoes["dif_S1-S0"] s1 - s0
+ultimas_previsoes["dif_S1-S0"] = s1 - s0
 ultimas_previsoes["S2"] = s2
 ultimas_previsoes["dif_S2-S1"] = s2 - s1
+ultimas_previsoes["dif_S2-S0"] = s2 - s0
+ultimas_previsoes_df = ultimas_previsoes[["S0", "S1", "S2", "dif_S1-S0", "dif_S2-S1","dif_S2-S0"]]
+print(f"\n{green}ultimas_previsoes.T_df\n{reset}{ultimas_previsoes_df}\n")
+ultimas_previsoes_vdd = ultimas_previsoes_df.T
+print(f"\n{green}ultimas_previsoes.T_df.T\n{reset}{ultimas_previsoes_vdd}\n")
+#ultimas_previsoes_vdd = ultimas_previsoes_vdd.drop(columns = "Semana")
 if _SALVAR == True:
 	caminho_csv = "modelagem/resultados/dados_previstos/"
 	os.makedirs(caminho_csv, exist_ok = True)
 	ultimas_previsoes_csv = f"ultimas_previsoes_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
-	ultimas_previsoes_csv.to_csv(f"{caminho_csv}{ultimas_previsoes_csv}", index = False)
+	ultimas_previsoes_vdd.to_csv(f"{caminho_csv}{ultimas_previsoes_csv}", index = False)
 	print(f"\n\n{green}{caminho_csv}\n{ultimas_previsoes_csv}\nSALVO COM SUCESSO!{reset}\n\n")
-	print(f"\n\n{green}OS VALORES DAS ÚLTIMAS PREVISÕES SÃO APRSENTADOS ABAIXO:\n{reset}{ultimas_previsoes}\n\n")
-sys.exit()
-semana_epidemio1 = previsao_total.loc[previsao_total.index[-3], "Semana"]
-semana_epidemio2 = previsao_total.loc[previsao_total.index[-2], "Semana"]
-semana_epidemio3 = previsao_total.loc[previsao_total.index[-1], "Semana"]
-lista_semanas = [semana_epidemio1, semana_epidemio2, semana_epidemio3]
-
+	print(f"\n\n{green}OS VALORES DAS ÚLTIMAS PREVISÕES SÃO APRESENTADOS ABAIXO:\n{reset}{ultimas_previsoes_vdd}\n\n")
+	
