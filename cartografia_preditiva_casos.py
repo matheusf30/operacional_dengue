@@ -661,6 +661,7 @@ ultimas_previsoes["dif_S2-S0"] = s2 - s0
 ultimas_previsoes_df = ultimas_previsoes[["S0", "S1", "S2", "dif_S1-S0", "dif_S2-S1","dif_S2-S0"]]
 print(f"\n{green}ultimas_previsoes.T_df\n{reset}{ultimas_previsoes_df}\n")
 ultimas_previsoes_vdd = ultimas_previsoes_df.T
+ultimas_previsoes_vdd.reset_index(inplace = True)
 print(f"\n{green}ultimas_previsoes.T_df.T\n{reset}{ultimas_previsoes_vdd}\n")
 #ultimas_previsoes_vdd = ultimas_previsoes_vdd.drop(columns = "Semana")
 if _SALVAR == True:

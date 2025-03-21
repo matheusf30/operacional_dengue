@@ -48,7 +48,7 @@ _SALVAR = True if _SALVAR == "True" else False               #####
 
 #SEED = np.random.seed(0)
 
-_CIDADE = "Joinville"#"Joinville"#"Florianópolis"
+_CIDADE = "Florianópolis"#"Joinville"#"Florianópolis"
 _CIDADE = _CIDADE.upper()
 
 _RETROAGIR = 2 # Semanas Epidemiológicas (SE)
@@ -82,7 +82,8 @@ elif _LOCAL == "IFSC":
 	caminho_shape = "/media/dados/shapefiles/" #SC/SC_Municipios_2022.shp #BR/BR_UF_2022.shp
 	caminho_modelos = f"/home/meteoro/scripts/matheus/operacional_dengue/modelagem/casos/{_ANO_MES_DIA}/"
 	caminho_resultados = "home/meteoro/scripts/matheus/operacional_dengue/modelagem/resultados/"
-	caminho_previsao = "home/meteoro/scripts/matheus/operacional_dengue/modelagem/resultados/dados_previstos/
+	#caminho_previsao = "home/meteoro/scripts/matheus/operacional_dengue/modelagem/resultados/dados_previstos/"
+	caminho_previsao = "modelagem/resultados/dados_previstos/"
 else:
 	print("CAMINHO NÃO RECONHECIDO! VERIFICAR LOCAL!")
 print(f"\n{green}HOJE:\n{reset}{_ANO_MES_DIA}\n")
@@ -113,9 +114,9 @@ br = "BR/BR_UF_2022.shp"
 
 ### Abrindo Arquivo
 casos = pd.read_csv(f"{caminho_dados}{casos}", low_memory = False)
-ultimas_previsoes = pd.read_csv(f"{caminho_dados}{ultimas_previsoes}", low_memory = False)
-previsao_pivot = pd.read_csv(f"{caminho_dados}{previsao_pivot}", low_memory = False)
-previsao_melt = pd.read_csv(f"{caminho_dados}{previsao_melt}", low_memory = False)
+ultimas_previsoes = pd.read_csv(f"{caminho_previsao}{ultimas_previsoes}", low_memory = False)
+previsao_pivot = pd.read_csv(f"{caminho_previsao}{previsao_pivot}", low_memory = False)
+previsao_melt = pd.read_csv(f"{caminho_previsao}{previsao_melt}", low_memory = False)
 """
 focos = pd.read_csv(f"{caminho_dados}{focos}", low_memory = False)
 prec = pd.read_csv(f"{caminho_dados}{prec}", low_memory = False)
@@ -139,6 +140,71 @@ print(f"\n{green}CASOS:\n{reset}{casos}\n")
 print(f"\n{green}ÚLTIMAS PREVISÕES:\n{reset}{ultimas_previsoes}\n")
 print(f"\n{green}PREVISÃO TOTAL (pivot):\n{reset}{previsao_pivot}\n")
 print(f"\n{green}PREVISÃO TOTAL (melt):\n{reset}{previsao_melt}\n")
+
+print(f"\n{green}CASOS.dtypes:\n{reset}{casos.dtypes}\n")
+print(f"\n{green}ÚLTIMAS PREVISÕES.dtypes:\n{reset}{ultimas_previsoes.dtypes}\n")
+previstos = ultimas_previsoes.iloc[:3, :]
+previstos["Semana"] = pd.to_datetime(previstos["Semana"])
+casos["Semana"] = pd.to_datetime(casos["Semana"])
+casos25 = casos[casos["Semana"].dt.year == 2025]
+print(f"\n{green}CASOS.dtypes:\n{reset}{casos}\n{casos.dtypes}\n")
+print(f"\n{green}PREVISTOS.dtypes:\n{reset}{previstos}\n{previstos.dtypes}\n")
+
+### Visualizações Gráficas
+
+## Série (observado-previsão)
+
+plt.figure(figsize = (15, 8), layout = "constrained", frameon = False)
+plt.plot(previstos["Semana"], previstos[_CIDADE], color = "red", label = "Previsto", linewidth = 2)
+#plt.show()
+#plt.figure(figsize = (15, 8))
+plt.plot(casos25["Semana"], casos25[_CIDADE], color = "blue", label = "Observado")
+plt.xlabel("Semanas Epidemiológicas (Série Histórica)")
+plt.ylabel("Número de Casos de Dengue")
+plt.title(f"COMPARAÇÃO ENTRE CASOS DE DENGUE PREVISTOS E OBSERVADOS, MUNICÍPIO DE {_CIDADE}")
+plt.legend()
+plt.gca().set_facecolor("honeydew")
+plt.show()
+if _SALVAR == True: #_AUTOMATIZA == True and 
+	caminho_pdf = "modelagem/resultados/dados_previstos/graficos/"
+	nome_arquivo = f"CASOS_serie_{_CIDADE}_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}.pdf"
+	os.makedirs(caminho_pdf, exist_ok = True)
+	plt.savefig(f"{caminho_pdf}{nome_arquivo}", format = "pdf", dpi = 300)
+	print(f"\n\n{green}{caminho_pdf}\n{nome_arquivo}\nSALVO COM SUCESSO!{reset}\n\n")
+
+## Regressão Linear (observado x previsão)
+
+
+## Validação Modelo (treino x teste x previsão)
+
+
+"""
+eixo = fig.add_axes([0, 0, 1, 1])            # type: ignore
+eixo2 = fig.add_axes([0.08, 0.6, 0.55, 0.3]) # type: ignore
+
+eixo.plot(focos["Semana"], focos[cidade], color = "r")
+eixo.set_xlim(datetime.datetime(2020,1,1), datetime.datetime(2022,12,4))
+eixo.set_ylim(0, focos[cidade].max() + 50)
+eixo.set_title(f"FOCOS DE _Aedes_ spp. EM {cidade}.", fontsize = 20, pad = 20)
+eixo.set_ylabel("Quantidade de Focos Registrados (n)", fontsize = 16)
+eixo.set_xlabel("Tempo (Semanas Epidemiológicas)", fontsize = 16)
+#eixo.legend([cidade], loc = "upper left", fontsize = 14)
+eixo.grid(True)
+
+azul_esquerda = focos["Semana"] < datetime.datetime(2020,1,1)
+azul_direita = focos["Semana"] > datetime.datetime(2022,12,4)
+
+eixo2.plot(focos["Semana"], focos[cidade], color = "r")
+eixo2.plot(focos[azul_esquerda]["Semana"], focos[azul_esquerda][cidade], color = "b")
+eixo2.plot(focos[azul_direita]["Semana"], focos[azul_direita][cidade], color = "b")
+eixo2.set_xlim(datetime.datetime(2012,1,1), datetime.datetime(2022,12,25))
+eixo2.set_title(f"FOCOS DE _Aedes_ spp. EM {cidade}.", fontsize = 15)
+eixo2.set_ylabel("Quantidade de Focos Registrados (n)", fontsize = 10)
+eixo2.set_xlabel("Tempo (Semanas Epidemiológicas)", fontsize = 10)
+eixo2.legend([cidade], loc = "best", fontsize = 8)
+eixo2.grid(True)
+plt.show()
+"""
 """
 try:
 	prec_gfs = pd.read_csv(f"{caminho_dados}gfs_prec_semana_{_ANO_MES_DIA}.csv", low_memory = False)
