@@ -631,3 +631,28 @@ modelagem inexistente.""",
 		print(f"{cyan}\nVISUALIZANDO:\n{caminho_resultados}\n{nome_arquivo}\n{reset}\n\n")
 		plt.show()
 		print(f"{cyan}\nENCERRADO:\n{caminho_resultados}\n{nome_arquivo}\n{reset}\n\n")
+
+### Salvando Últimas Previsões
+municipios = previsao_total.columns[1:]
+ultimas_previsoes = pd.DataFrame(index = municipios)
+s0 = semana_epidemio1.copy()
+s1 = semana_epidemio2.copy()
+s2 = semana_epidemio3.copy()
+ultimas_previsoes["S0"] = s0
+ultimas_previsoes["S1"] = s1
+ultimas_previsoes["dif_S1-S0"] s1 - s0
+ultimas_previsoes["S2"] = s2
+ultimas_previsoes["dif_S2-S1"] = s2 - s1
+if _SALVAR == True:
+	caminho_csv = "modelagem/resultados/dados_previstos/"
+	os.makedirs(caminho_csv, exist_ok = True)
+	ultimas_previsoes_csv = f"ultimas_previsoes_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
+	ultimas_previsoes_csv.to_csv(f"{caminho_csv}{ultimas_previsoes_csv}", index = False)
+	print(f"\n\n{green}{caminho_csv}\n{ultimas_previsoes_csv}\nSALVO COM SUCESSO!{reset}\n\n")
+	print(f"\n\n{green}OS VALORES DAS ÚLTIMAS PREVISÕES SÃO APRSENTADOS ABAIXO:\n{reset}{ultimas_previsoes}\n\n")
+sys.exit()
+semana_epidemio1 = previsao_total.loc[previsao_total.index[-3], "Semana"]
+semana_epidemio2 = previsao_total.loc[previsao_total.index[-2], "Semana"]
+semana_epidemio3 = previsao_total.loc[previsao_total.index[-1], "Semana"]
+lista_semanas = [semana_epidemio1, semana_epidemio2, semana_epidemio3]
+
