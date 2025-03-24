@@ -223,3 +223,33 @@ Baixando diretamente da plataforma online TabNet/Sinan.
 CondaError: Run 'conda init' before 'conda activate'
 
 ./automatiza.sh: 17: .: get_dengue.sh: not found
+./automatiza.sh: 8: 
+Tentando automatizar tudo para executar de uma única vez.
+Deve-se alterar as permissões deste próprio roteiro, que originalmente são apenas leitura (w) e escrita (r).
+No terminal, fazer um [ls -l] para verificar as permissões dos roteiros.
+Depois executar [chmod +x {script}.sh] para incluir a permissão de executável (x).
+E executar da seguinte forma [./{script}.sh]
+: File name too long
+./automatiza.sh: 13: 
+Dados brutos disponibilizados pela Diretoria de Vigilância Epidemiológica de Santa Catarina (DIVE/SC).
+Baixando diretamente da plataforma online TabNet/Sinan.
+: not found
+
+CondaError: Run 'conda init' before 'conda activate'
+
+./automatiza.sh: 17: .: get_dengue.sh: not found
+./automatiza.sh: 8: 
+Tentando automatizar tudo para executar de uma única vez.
+Deve-se alterar as permissões deste próprio roteiro, que originalmente são apenas leitura (w) e escrita (r).
+No terminal, fazer um [ls -l] para verificar as permissões dos roteiros.
+Depois executar [chmod +x {script}.sh] para incluir a permissão de executável (x).
+E executar da seguinte forma [./{script}.sh]
+: File name too long
+./automatiza.sh: 13: 
+Dados brutos disponibilizados pela Diretoria de Vigilância Epidemiológica de Santa Catarina (DIVE/SC).
+Baixando diretamente da plataforma online TabNet/Sinan.
+: not found
+
+CondaError: Run 'conda init' before 'conda activate'
+
+./automatiza.sh: 17: .: get_dengue.sh: not found
