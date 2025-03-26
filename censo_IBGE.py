@@ -45,7 +45,7 @@ print(f"\n{green}municipios\n{reset}{municipios}\n")
 ### Pré-processamento e Definição de Função
 censo_sc = censo[censo["UF"] == "SC"]
 censo_sc = censo_sc[["NOME DO MUNICÍPIO", "POPULAÇÃO"]]
-censo_sc = censo_sc.rename(columns = {"NOME DO MUNICÍPIO" : "Municipio", "POPULAÇÃO": "População"})
+censo_sc = censo_sc.rename(columns = {"NOME DO MUNICÍPIO" : "Municipio", "POPULAÇÃO": "Populacao"})
 print(f"\n{green}CENSO IBGE 2022\nSANTA CATARINA:\n{reset}{censo_sc}\n")
 municipios = municipios[["NM_MUN", "geometry"]]
 municipios = municipios.rename(columns = {"NM_MUN": "Municipio"})
