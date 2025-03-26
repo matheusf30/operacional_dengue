@@ -14,7 +14,7 @@ Baixando diretamente da plataforma online TabNet/Sinan.
 
 conda activate dados_nc
 
-. get_dengue.sh # necessita alterar o nome de saída do arquivo baixado # Roteiro disponibilizado por Elmo Neto
+#. get_dengue.sh # necessita alterar o nome de saída do arquivo baixado # Roteiro disponibilizado por Elmo Neto
 python une_casos_tabnet.py # sincronizar o nome do arquivo baixado
 python extrai_clima.py
 #python extrai_tempo.py # necessário para não sobrecarregar
