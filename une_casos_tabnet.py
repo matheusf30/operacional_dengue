@@ -73,7 +73,7 @@ serie_casos = "casos_dive_total.csv"
 ### Abrindo Arquivos
 municipios = gpd.read_file(f"{caminho_shape}{municipios}", low_memory = False)
 serie_casos = pd.read_csv(f"{caminho_dados}{serie_casos}")
-casos = pd.read_csv(f"{caminho_operacional}{casos}", skiprows = 5,
+casos = pd.read_csv(f"{caminho_operacional}{casos}", skiprows = 4,
                       sep = ";", encoding = "latin1", engine = "python")
                       
 print(f"\n{green}serie_casos:\n{reset}{serie_casos}\n")
@@ -473,8 +473,9 @@ while semana_corrente <= fim:
     semana_corrente += timedelta(weeks = 1)
 dict_semanas = dict(zip(lista_str_semanas, [date.strftime("%Y-%m-%d") for date in lista_semanas]))
 casos25.rename(columns = {"Mun infec SC" : "Município"}, inplace = True)
-casos25.rename(columns = {"Município infecção" : "Município"}, inplace = True)
+#casos25.rename(columns = {"Município infecção" : "Município"}, inplace = True)
 casos25.rename(columns = dict_semanas, inplace = True)
+print(casos25)
 casos25["Município"] = casos25["Município"].str.replace("\d+ ", "", regex = True)
 casos25["Município"] = casos25["Município"].str.upper()
 casos25.drop(columns = "Total", inplace = True)
