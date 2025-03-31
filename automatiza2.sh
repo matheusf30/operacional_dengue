@@ -13,15 +13,21 @@ Baixando diretamente da plataforma online TabNet/Sinan.
 """
 
 conda activate dados_nc
-
+### EXTRAÇÃO E PRÉ-PROCESSAMENTO DE DADOS EPIDEMIOLÓGICOS
 #. get_dengue.sh # necessita alterar o nome de saída do arquivo baixado # Roteiro disponibilizado por Elmo Neto
 python une_casos_tabnet.py # sincronizar o nome do arquivo baixado
-python extrai_clima.py
-#python extrai_tempo.py # necessário para não sobrecarregar
+#### EXTRAÇÃO E PRÉ-PROCESSAMENTO DE DADOS METEROLÓGICOS
+python extrai_clima.py #SAMeT e MERGE
 python extrai_gfs.py
+### MODELAGENS
 python modelagem_casos.py True
+python modelagem_incidencia.py True
+### CARTOGRAFIAS
+python cartografia_casos_incidencia.py True False True
 python cartografia_preditiva_casos.py True False True
-python verificao_validacao.py False True False
+python cartografia_preditiva_incidencia.py True False True
+### VALIDAÇÕES
+python verificacao_validacao.py False True False
 """
 python teste_modelagem_casos.py
 python teste_cartografia.py True False True
