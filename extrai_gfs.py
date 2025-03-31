@@ -220,7 +220,7 @@ def extrair_centroides(shapefile, netcdf4, str_var):
 	valores_centroides.rename(columns = {"index" : str_var}, inplace = True)
 	valores_centroides.to_csv(f"{caminho_dados}gfs_{str_var}_diario_{data_arquivo_final}.csv", index = False)
 	print("="*50)
-	print(f"\n{green}{caminho_dados}gfs_{str_var}_diario_{data_arquivo_final}.csv{reset}\n")
+	print(f"\n{green}{caminho_dados}{ANO_FINAL}/{MES_FINAL}/gfs_{str_var}_diario_{data_arquivo_final}.csv{reset}\n")
 	print(f"\n{green}ARQUIVO SALVO COM SUCESSO!{reset}\n")
 	print("="*50)
 	print(netcdf4.variables[str_var][:])
