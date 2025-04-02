@@ -83,7 +83,7 @@ elif _LOCAL == "IFSC":
 	caminho_dados = "/home/meteoro/scripts/matheus/operacional_dengue/dados_operacao/" # CLUSTER
 	caminho_operacional = "/home/meteoro/scripts/matheus/operacional_dengue/"
 	caminho_shape = "/media/dados/shapefiles/" #SC/SC_Municipios_2022.shp #BR/BR_UF_2022.shp
-	caminho_modelos = f"/home/meteoro/scripts/matheus/operacional_dengue/modelagem/casos/{_ANO_MES_DIA}/"
+	caminho_modelos = f"/home/meteoro/scripts/matheus/operacional_dengue/modelagem/casos/{_ANO_ATUAL}/{_ANO_MES_DIA}/"
 	caminho_resultados = "modelagem/resultados/"
 #	caminho_resultados = "home/meteoro/scripts/matheus/operacional_dengue/modelagem/resultados/"
 else:
@@ -99,10 +99,10 @@ print(f"\nOS DADOS UTILIZADOS ESTÃO ALOCADOS NOS SEGUINTES CAMINHOS:\n\n{caminh
 ### Renomeação das Variáveis pelos Arquivos
 casos = "casos_dive_pivot_total.csv"  # TabNet/DiveSC
 #focos = "focos_pivot.csv"
-prec = f"prec_semana_ate_{_ANO_ATUAL}.csv"
-tmin = f"tmin_semana_ate_{_ANO_ATUAL}.csv"
-tmed = f"tmed_semana_ate_{_ANO_ATUAL}.csv"
-tmax = f"tmax_semana_ate_{_ANO_ATUAL}.csv"
+prec = f"{_ANO_ATUAL}/prec_semana_ate_{_ANO_ATUAL}.csv"
+tmin = f"{_ANO_ATUAL}/tmin_semana_ate_{_ANO_ATUAL}.csv"
+tmed = f"{_ANO_ATUAL}/tmed_semana_ate_{_ANO_ATUAL}.csv"
+tmax = f"{_ANO_ATUAL}/tmax_semana_ate_{_ANO_ATUAL}.csv"
 unicos = "casos_primeiros.csv"
 municipios = "SC/SC_Municipios_2022.shp"
 br = "BR/BR_UF_2022.shp"
@@ -130,15 +130,15 @@ cidades = unicos["Município"].copy()
 try:
 	prec_gfs = pd.read_csv(f"{caminho_dados}gfs_prec_semana_{_ANO_MES_DIA}.csv", low_memory = False)
 	tmin_gfs = pd.read_csv(f"{caminho_dados}gfs_tmin_semana_{_ANO_MES_DIA}.csv", low_memory = False)
-	tmed_gfs = pd.read_csv(f"{caminho_dados}gfs_tmed_semana_{_ANO_MES_DIA}.csv", low_memory = False)
-	tmax_gfs = pd.read_csv(f"{caminho_dados}gfs_tmax_semana_{_ANO_MES_DIA}.csv", low_memory = False)
+	tmed_gfs = pd.read_csv(f"{caminho_dados}{_ANO_ATUAL}/{_MES_ATUAL}/gfs_tmed_semana_{_ANO_MES_DIA}.csv", low_memory = False)
+	tmax_gfs = pd.read_csv(f"{caminho_dados}{_ANO_ATUAL}/{_MES_ATUAL}/gfs_tmax_semana_{_ANO_MES_DIA}.csv", low_memory = False)
 	print(f"\n{green}Arquivos utilizados do dia:\n{bold}{_DIA_ATUAL}/{_MES_ATUAL}/{_ANO_ATUAL}.\n{reset}")
 	data_atual = _ANO_MES_DIA
 except FileNotFoundError:
-	prec_gfs = pd.read_csv(f"{caminho_dados}gfs_prec_semana_{_ANO_MES_DIA_ONTEM}.csv", low_memory = False)
-	tmin_gfs = pd.read_csv(f"{caminho_dados}gfs_tmin_semana_{_ANO_MES_DIA_ONTEM}.csv", low_memory = False)
-	tmed_gfs = pd.read_csv(f"{caminho_dados}gfs_tmed_semana_{_ANO_MES_DIA_ONTEM}.csv", low_memory = False)
-	tmax_gfs = pd.read_csv(f"{caminho_dados}gfs_tmax_semana_{_ANO_MES_DIA_ONTEM}.csv", low_memory = False)
+	prec_gfs = pd.read_csv(f"{caminho_dados}{_ANO_ONTEM}/{_MES_ONTEM}/gfs_prec_semana_{_ANO_MES_DIA_ONTEM}.csv", low_memory = False)
+	tmin_gfs = pd.read_csv(f"{caminho_dados}{_ANO_ONTEM}/{_MES_ONTEM}/gfs_tmin_semana_{_ANO_MES_DIA_ONTEM}.csv", low_memory = False)
+	tmed_gfs = pd.read_csv(f"{caminho_dados}{_ANO_ONTEM}/{_MES_ONTEM}/gfs_tmed_semana_{_ANO_MES_DIA_ONTEM}.csv", low_memory = False)
+	tmax_gfs = pd.read_csv(f"{caminho_dados}{_ANO_ONTEM}/{_MES_ONTEM}/gfs_tmax_semana_{_ANO_MES_DIA_ONTEM}.csv", low_memory = False)
 	print(f"\n{green}Arquivos utilizados do dia:\n{bold}{_DIA_ONTEM}/{_MES_ONTEM}/{_ANO_ONTEM}.\n{reset}")
 	data_atual = _ANO_MES_DIA_ONTEM
 	
