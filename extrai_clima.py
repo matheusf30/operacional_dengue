@@ -34,9 +34,18 @@ diretorio_dados = os.path.sep.join(diretorios[:-6])
 print(diretorio_dados)
 """
 
+_ANO_FINAL = str(datetime.today().year)
+_ONTEM = datetime.today() - timedelta(days = 1)
+_ANO_ONTEM = str(_ONTEM.year)
+_ANO_ANTERIOR = str(datetime.today().year - 1)
+print(f"\n{green}{_ANO_FINAL}, {_ONTEM}, {_ANO_ONTEM}, {_ANO_ANTERIOR}\n{reset}")
+#sys.exit()
 ### Encaminhamento aos Diretórios
 caminho_github = "https://raw.githubusercontent.com/matheusf30/dados_dengue/refs/heads/main/" # WEB
-caminho_dados = "/home/meteoro/scripts/matheus/operacional_dengue/dados_operacao/" # CLUSTER
+caminho_dados = f"/home/meteoro/scripts/matheus/operacional_dengue/dados_operacao/{_ANO_FINAL}/" # CLUSTER
+os.makedirs(caminho_dados, exist_ok = True)
+caminho_dados_anterior = f"/home/meteoro/scripts/matheus/operacional_dengue/dados_operacao/{_ANO_ANTERIOR}/" # CLUSTER
+os.makedirs(caminho_dados_anterior, exist_ok = True)
 caminho_operacional = "/home/meteoro/scripts/matheus/operacional_dengue/"
 caminho_shape = "/media/dados/shapefiles/SC/" #SC_Municipios_2022.shp
 caminho_gfs = "/media/dados/operacao/gfs/0p25/" #202410/20241012/ #prec_daily_gfs_2024101212.nc
@@ -45,11 +54,6 @@ caminho_mergeCDO = "/media/dados/operacao/merge/CDO.MERGE/" #MERGE_CPTEC_DAILY_2
 caminho_samet = "/media/dados/operacao/samet/daily/" #/TMAX/2024/ #SAMeT_CPTEC_DAILY_SB_TMAX_2024.nc
 caminho_sametCDO = "/media/dados/operacao/samet/CDO.SAMET/" #SAMeT_CPTEC_DAILY_SB_TMAX_2024.nc@
 
-_ANO_FINAL = str(datetime.today().year)
-_ONTEM = datetime.today() - timedelta(days = 1)
-_ANO_ONTEM = str(_ONTEM.year)
-_ANO_ONTEM2 = str(datetime.today().year - 1)
-print(_ANO_FINAL, _ONTEM, _ANO_ONTEM, _ANO_ONTEM2)
 
 ### Renomeação variáveis pelos arquivos
 merge = f"MERGE_CPTEC_DAILY_SB_{_ANO_FINAL}.nc"
@@ -57,14 +61,14 @@ samet_tmax = f"SAMeT_CPTEC_DAILY_TMAX_{_ANO_FINAL}.nc"
 samet_tmed = f"SAMeT_CPTEC_DAILY_TMED_{_ANO_FINAL}.nc"
 samet_tmin = f"SAMeT_CPTEC_DAILY_TMIN_{_ANO_FINAL}.nc"
 
-serie_prec = f"prec_diario_ate_{_ANO_ONTEM2}.csv"
-serie_tmax = f"tmax_diario_ate_{_ANO_ONTEM2}.csv"
-serie_tmed = f"tmed_diario_ate_{_ANO_ONTEM2}.csv"
-serie_tmin = f"tmin_diario_ate_{_ANO_ONTEM2}.csv"
-serie_prec_se = f"prec_semana_ate_{_ANO_ONTEM2}.csv"
-serie_tmax_se = f"tmax_semana_ate_{_ANO_ONTEM2}.csv"
-serie_tmed_se = f"tmed_semana_ate_{_ANO_ONTEM2}.csv"
-serie_tmin_se = f"tmin_semana_ate_{_ANO_ONTEM2}.csv"
+serie_prec = f"prec_diario_ate_{_ANO_ANTERIOR}.csv"
+serie_tmax = f"tmax_diario_ate_{_ANO_ANTERIOR}.csv"
+serie_tmed = f"tmed_diario_ate_{_ANO_ANTERIOR}.csv"
+serie_tmin = f"tmin_diario_ate_{_ANO_ANTERIOR}.csv"
+serie_prec_se = f"prec_semana_ate_{_ANO_ANTERIOR}.csv"
+serie_tmax_se = f"tmax_semana_ate_{_ANO_ANTERIOR}.csv"
+serie_tmed_se = f"tmed_semana_ate_{_ANO_ANTERIOR}.csv"
+serie_tmin_se = f"tmin_semana_ate_{_ANO_ANTERIOR}.csv"
 """
 serie_prec = f"prec_semana_ate_{_ANO_ONTEM}.nc"
 serie_tmax = f"tmax_semana_ate_{_ANO_ONTEM}.nc"
@@ -80,14 +84,14 @@ tmax = xr.open_dataset(f"{caminho_sametCDO}{samet_tmax}")
 tmed = xr.open_dataset(f"{caminho_sametCDO}{samet_tmed}")
 tmin = xr.open_dataset(f"{caminho_sametCDO}{samet_tmin}")
 municipios = gpd.read_file(f"{caminho_shape}{municipios}")
-serie_prec = pd.read_csv(f"{caminho_dados}{_ANO_ONTEM2}/{serie_prec}")
-serie_tmax = pd.read_csv(f"{caminho_dados}{_ANO_ONTEM2}/{serie_tmax}")
-serie_tmed = pd.read_csv(f"{caminho_dados}{_ANO_ONTEM2}/{serie_tmed}")
-serie_tmin = pd.read_csv(f"{caminho_dados}{_ANO_ONTEM2}/{serie_tmin}")
-serie_prec_se = pd.read_csv(f"{caminho_dados}{_ANO_FINAL}/{serie_prec_se}")
-serie_tmax_se = pd.read_csv(f"{caminho_dados}{_ANO_FINAL}/{serie_tmax_se}")
-serie_tmed_se = pd.read_csv(f"{caminho_dados}{_ANO_FINAL}/{serie_tmed_se}")
-serie_tmin_se = pd.read_csv(f"{caminho_dados}{_ANO_FINAL}/{serie_tmin_se}")
+serie_prec = pd.read_csv(f"{caminho_dados_anterior}{serie_prec}")
+serie_tmax = pd.read_csv(f"{caminho_dados_anterior}{serie_tmax}")
+serie_tmed = pd.read_csv(f"{caminho_dados_anterior}{serie_tmed}")
+serie_tmin = pd.read_csv(f"{caminho_dados_anterior}{serie_tmin}")
+serie_prec_se = pd.read_csv(f"{caminho_dados_anterior}/{serie_prec_se}")
+serie_tmax_se = pd.read_csv(f"{caminho_dados_anterior}{serie_tmax_se}")
+serie_tmed_se = pd.read_csv(f"{caminho_dados_anterior}{serie_tmed_se}")
+serie_tmin_se = pd.read_csv(f"{caminho_dados_anterior}{serie_tmin_se}")
 
 print(f'\n{green}tmin.variables["tmin"][:]\n{reset}{tmin.variables["tmin"][:]}\n')
 print(f'\n{green}tmin.variables["time"][:]\n{reset}{tmin.variables["tmin"][:]}\n')
@@ -202,7 +206,7 @@ def extrair_centroides(shapefile, netcdf4, str_var):
 	valores_centroides = valores_centroides[["Data"] + colunas_restantes.tolist()]
 	valores_centroides.columns.name = str_var
 	valores_centroides.rename(columns = {"index" : str_var}, inplace = True)
-	valores_centroides.to_csv(f"{caminho_dados}{ANO_FINAL}/{str_var}_diario_{_ANO_FINAL}.csv", index = False)
+	valores_centroides.to_csv(f"{caminho_dados}{str_var}_diario_{_ANO_FINAL}.csv", index = False)
 	print("="*80)
 	print(f"\n{green}{caminho_shape}{str_var}_diario_{_ANO_FINAL}.csv{reset}\n")
 	print(f"\n{green}ARQUIVO SALVO COM SUCESSO!{reset}\n")
@@ -227,10 +231,10 @@ def extrair_centroides(shapefile, netcdf4, str_var):
 prec, prec_se = extrair_centroides(municipios, prec, "prec")
 prectotal = pd.concat([serie_prec, prec], ignore_index = True)
 prectotal["Data"] = pd.to_datetime(prectotal["Data"]).dt.strftime("%Y-%m-%d")
-prectotal.to_csv(f"{caminho_dados}{_ANO_FINAL}/{prec_diario_ate_{_ANO_FINAL}.csv", index = False)
+prectotal.to_csv(f"{caminho_dados}prec_diario_ate_{_ANO_FINAL}.csv", index = False)
 prectotal_se = pd.concat([serie_prec_se, prec_se], ignore_index = True)
 prectotal_se["Semana"] = pd.to_datetime(prectotal_se["Semana"]).dt.strftime("%Y-%m-%d")
-prectotal_se.to_csv(f"{caminho_dados}{_ANO_FINAL}/prec_semana_ate_{_ANO_FINAL}.csv", index = False)
+prectotal_se.to_csv(f"{caminho_dados}prec_semana_ate_{_ANO_FINAL}.csv", index = False)
 print(f"\n{green}prectotal\n{reset}{prectotal}\n")
 print(f"\n{green}prectotal_se\n{reset}{prectotal_se}\n")
 print(prectotal_se[["BALNEÁRIO CAMBORIÚ", "BOMBINHAS", "PORTO BELO"]])
@@ -238,10 +242,10 @@ print(prectotal_se[["BALNEÁRIO CAMBORIÚ", "BOMBINHAS", "PORTO BELO"]])
 tmin, tmin_se = extrair_centroides(municipios, tmin, "tmin")
 tmintotal = pd.concat([serie_tmin, tmin], ignore_index = True)
 tmintotal["Data"] = pd.to_datetime(tmintotal["Data"]).dt.strftime("%Y-%m-%d")
-tmintotal.to_csv(f"{caminho_dados}{_ANO_FINAL}/tmin_diario_ate_{_ANO_FINAL}.csv", index = False)
+tmintotal.to_csv(f"{caminho_dados}tmin_diario_ate_{_ANO_FINAL}.csv", index = False)
 tmintotal_se = pd.concat([serie_tmin_se, tmin_se], ignore_index = True)
 tmintotal_se["Semana"] = pd.to_datetime(tmintotal_se["Semana"]).dt.strftime("%Y-%m-%d")
-tmintotal_se.to_csv(f"{caminho_dados}{_ANO_FINAL}/tmin_semana_ate_{_ANO_FINAL}.csv", index = False)
+tmintotal_se.to_csv(f"{caminho_dados}tmin_semana_ate_{_ANO_FINAL}.csv", index = False)
 print(f"\n{green}tmintotal\n{reset}{tmintotal}\n")
 print(f"\n{green}tmintotal_se\n{reset}{tmintotal_se}\n")
 print(tmintotal_se[["BALNEÁRIO CAMBORIÚ", "BOMBINHAS", "PORTO BELO"]])
@@ -249,10 +253,10 @@ print(tmintotal_se[["BALNEÁRIO CAMBORIÚ", "BOMBINHAS", "PORTO BELO"]])
 tmed, tmed_se = extrair_centroides(municipios, tmed, "tmed")
 tmedtotal = pd.concat([serie_tmed, tmed], ignore_index = True)
 tmedtotal["Data"] = pd.to_datetime(tmedtotal["Data"]).dt.strftime("%Y-%m-%d")
-tmedtotal.to_csv(f"{caminho_dados}{_ANO_FINAL}/tmed_diario_ate_{_ANO_FINAL}.csv", index = False)
+tmedtotal.to_csv(f"{caminho_dados}tmed_diario_ate_{_ANO_FINAL}.csv", index = False)
 tmedtotal_se = pd.concat([serie_tmed_se, tmed_se], ignore_index = True)
 tmedtotal_se["Semana"] = pd.to_datetime(tmedtotal_se["Semana"]).dt.strftime("%Y-%m-%d")
-tmedtotal_se.to_csv(f"{caminho_dados}{_ANO_FINAL}/tmed_semana_ate_{_ANO_FINAL}.csv", index = False)
+tmedtotal_se.to_csv(f"{caminho_dados}tmed_semana_ate_{_ANO_FINAL}.csv", index = False)
 print(f"\n{green}tmedtotal\n{reset}{tmedtotal}\n")
 print(f"\n{green}tmedtotal_se\n{reset}{tmedtotal_se}\n")
 print(tmedtotal_se[["BALNEÁRIO CAMBORIÚ", "BOMBINHAS", "PORTO BELO"]])
@@ -260,10 +264,10 @@ print(tmedtotal_se[["BALNEÁRIO CAMBORIÚ", "BOMBINHAS", "PORTO BELO"]])
 tmax, tmax_se = extrair_centroides(municipios, tmax, "tmax")
 tmaxtotal = pd.concat([serie_tmax, tmax], ignore_index = True)
 tmaxtotal["Data"] = pd.to_datetime(tmaxtotal["Data"]).dt.strftime("%Y-%m-%d")
-tmaxtotal.to_csv(f"{caminho_dados}{_ANO_FINAL}/tmax_diario_ate_{_ANO_FINAL}.csv", index = False)
+tmaxtotal.to_csv(f"{caminho_dados}tmax_diario_ate_{_ANO_FINAL}.csv", index = False)
 tmaxtotal_se = pd.concat([serie_tmax_se, tmax_se], ignore_index = True)
 tmaxtotal_se["Semana"] = pd.to_datetime(tmaxtotal_se["Semana"]).dt.strftime("%Y-%m-%d")
-tmaxtotal_se.to_csv(f"{caminho_dados}{_ANO_FINAL}/tmax_semana_ate_{_ANO_FINAL}.csv", index = False)
+tmaxtotal_se.to_csv(f"{caminho_dados}tmax_semana_ate_{_ANO_FINAL}.csv", index = False)
 print(f"\n{green}tmaxtotal\n{reset}{tmaxtotal}\n")
 print(f"\n{green}tmaxtotal_se\n{reset}{tmaxtotal_se}\n")
 print(tmaxtotal_se[["BALNEÁRIO CAMBORIÚ", "BOMBINHAS", "PORTO BELO"]])

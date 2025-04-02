@@ -33,17 +33,6 @@ diretorios = diretorio_atual.split(os.path.sep)
 diretorio_dados = os.path.sep.join(diretorios[:-6])
 print(diretorio_dados)
 """
-
-### Encaminhamento aos Diretórios
-caminho_github = "https://raw.githubusercontent.com/matheusf30/dados_dengue/refs/heads/main/" # WEB
-caminho_dados = "/home/meteoro/scripts/matheus/operacional_dengue/dados_operacao/" # CLUSTER
-caminho_operacional = "/home/meteoro/scripts/matheus/operacional_dengue/"
-caminho_shape = "/media/dados/shapefiles/SC/" #SC_Municipios_2022.shp
-caminho_merge = "/media/dados/operacao/merge/daily/2024/" #MERGE_CPTEC_DAILY_SB_2024.nc
-caminho_mergeCDO = "/media/dados/operacao/merge/CDO.MERGE/" #MERGE_CPTEC_DAILY_2024.nc@
-caminho_samet = "/media/dados/operacao/samet/daily/" #/TMAX/2024/ #SAMeT_CPTEC_DAILY_SB_TMAX_2024.nc
-caminho_sametCDO = "/media/dados/operacao/samet/CDO.SAMET/" #SAMeT_CPTEC_DAILY_SB_TMAX_2024.nc@
-
 _AGORA = datetime.now()
 _ANO_FINAL = str(datetime.today().year)
 _MES_FINAL = _AGORA.strftime("%m")
@@ -62,6 +51,19 @@ print(f"\n{green}HOJE:\n{reset}{_ANO_MES_DIA}\n")
 print(f"\n{green}HOJE:\n{reset}{_DIA_ONTEM}\n")
 print(f"\n{green}ONTEM:\n{reset}{_ANO_MES_DIA_ONTEM}\n")
 #sys.exit()
+
+### Encaminhamento aos Diretórios
+caminho_github = "https://raw.githubusercontent.com/matheusf30/dados_dengue/refs/heads/main/" # WEB
+caminho_dados = f"/home/meteoro/scripts/matheus/operacional_dengue/dados_operacao/{_ANO_FINAL}/{_MES_FINAL}/" # GFS.csv/CLUSTER
+os.makedirs(caminho_dados, exist_ok = True)
+caminho_dados_ontem = f"/home/meteoro/scripts/matheus/operacional_dengue/dados_operacao/{_ANO_ONTEM}/{_MES_ONTEM}/" # GFS.csv/CLUSTER
+os.makedirs(caminho_dados_ontem, exist_ok = True)
+caminho_operacional = "/home/meteoro/scripts/matheus/operacional_dengue/"
+caminho_shape = "/media/dados/shapefiles/SC/" #SC_Municipios_2022.shp
+caminho_merge = "/media/dados/operacao/merge/daily/2024/" #MERGE_CPTEC_DAILY_SB_2024.nc
+caminho_mergeCDO = "/media/dados/operacao/merge/CDO.MERGE/" #MERGE_CPTEC_DAILY_2024.nc@
+caminho_samet = "/media/dados/operacao/samet/daily/" #/TMAX/2024/ #SAMeT_CPTEC_DAILY_SB_TMAX_2024.nc
+caminho_sametCDO = "/media/dados/operacao/samet/CDO.SAMET/" #SAMeT_CPTEC_DAILY_SB_TMAX_2024.nc@
 
 caminho_gfs = f"/media/dados/operacao/gfs/0p25/{_ANO_MES}/{_ANO_MES_DIA}/" #202410/20241012/ #prec_daily_gfs_2024101212.nc
 caminho_gfs_ontem = f"/media/dados/operacao/gfs/0p25/{_ANO_MES_ONTEM}/{_ANO_MES_DIA_ONTEM}/" #202410/20241012/
@@ -97,7 +99,7 @@ except FileNotFoundError:
 	print(f"\n{green}Arquivos utilizados do dia:\n{bold}{_DIA_ONTEM}/{_MES_ONTEM}/{_ANO_ONTEM}.\n{reset}")
 	data_arquivo_final = _ANO_MES_DIA_ONTEM
 	
-teste = pd.read_csv(f"{caminho_dados}{teste}")
+#teste = pd.read_csv(f"{caminho_dados}{teste}")
 municipios = gpd.read_file(f"{caminho_shape}{municipios}")
 print(teste)
 #sys.exit()
@@ -220,7 +222,7 @@ def extrair_centroides(shapefile, netcdf4, str_var):
 	valores_centroides.rename(columns = {"index" : str_var}, inplace = True)
 	valores_centroides.to_csv(f"{caminho_dados}gfs_{str_var}_diario_{data_arquivo_final}.csv", index = False)
 	print("="*50)
-	print(f"\n{green}{caminho_dados}{ANO_FINAL}/{MES_FINAL}/gfs_{str_var}_diario_{data_arquivo_final}.csv{reset}\n")
+	print(f"\n{green}{caminho_dados}{_ANO_FINAL}/{_MES_FINAL}/gfs_{str_var}_diario_{data_arquivo_final}.csv{reset}\n")
 	print(f"\n{green}ARQUIVO SALVO COM SUCESSO!{reset}\n")
 	print("="*50)
 	print(netcdf4.variables[str_var][:])
