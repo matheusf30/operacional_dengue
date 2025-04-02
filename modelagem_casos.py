@@ -74,7 +74,18 @@ obs_k = f"(Treino até {_LIMITE}; Teste após {_FIM}; k = {_K})"
 
 ######################################################
 
+_AGORA = datetime.now()
 _ANO_ATUAL = str(datetime.today().year)
+_MES_ATUAL = _AGORA.strftime("%m")
+_DIA_ATUAL = _AGORA.strftime("%d")
+_ANO_MES = f"{_ANO_ATUAL}{_MES_ATUAL}"
+_ANO_MES_DIA = f"{_ANO_ATUAL}{_MES_ATUAL}{_DIA_ATUAL}"
+_ONTEM = datetime.today() - timedelta(days = 1)
+_ANO_ONTEM = str(_ONTEM.year)
+_MES_ONTEM = _ONTEM.strftime("%m")
+_DIA_ONTEM = _ONTEM.strftime("%d")
+_ANO_MES_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}"
+_ANO_MES_DIA_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}{_DIA_ONTEM}"
 
 _CIDADE = "Joinville"#"Joinville"#"Florianópolis"
 _CIDADE = _CIDADE.upper()
@@ -110,10 +121,10 @@ caminho_resultados = "home/meteoro/scripts/matheus/operacional_dengue/modelagem/
 casos = "casos_dive_pivot_total.csv"  # TabNet/DiveSC
 focos = "focos_pivot.csv"
 
-prec = f"prec_semana_ate_{_ANO_ATUAL}.csv"
-tmin = f"tmin_semana_ate_{_ANO_ATUAL}.csv"
-tmed = f"tmed_semana_ate_{_ANO_ATUAL}.csv"
-tmax = f"tmax_semana_ate_{_ANO_ATUAL}.csv"
+prec = f"{_ANO_ATUAL}/prec_semana_ate_{_ANO_ATUAL}.csv"
+tmin = f"{_ANO_ATUAL}/tmin_semana_ate_{_ANO_ATUAL}.csv"
+tmed = f"{_ANO_ATUAL}/tmed_semana_ate_{_ANO_ATUAL}.csv"
+tmax = f"{_ANO_ATUAL}/tmax_semana_ate_{_ANO_ATUAL}.csv"
 unicos = "casos_primeiros.csv"
 """
 prec = "prec_semana_ate_2023.csv"
@@ -480,7 +491,7 @@ def salva_modeloRF(modelo, _CIDADE):
 	_MES_FINAL = _AGORA.strftime("%m")
 	_DIA_FINAL = _AGORA.strftime("%d")
 	_ANO_MES_DIA = f"{_ANO_FINAL}{_MES_FINAL}{_DIA_FINAL}"
-	caminho_modelos = f"modelagem/casos/{_ANO_MES_DIA}/"
+	caminho_modelos = f"modelagem/casos/{_ANO_ATUAL}/{_ANO_MES_DIA}/"
 	if not os.path.exists(caminho_modelos):
 		os.makedirs(caminho_modelos)
 	nome_modelo = f"RF_casos_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_{_cidade}.h5"
@@ -832,6 +843,8 @@ _DIA_ONTEM = _ONTEM.strftime("%d")
 _ANO_MES_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}"
 _ANO_MES_DIA_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}{_DIA_ONTEM}"
 try:
+	caminho_dados = f"/home/meteoro/scripts/matheus/operacional_dengue/dados_operacao/{_ANO_FINAL}/{_MES_FINAL}/"
+	os.makedirs(caminho_dados, exist_ok = True)
 	prec_gfs = pd.read_csv(f"{caminho_dados}gfs_prec_semana_{_ANO_MES_DIA}.csv", low_memory = False)
 	tmin_gfs = pd.read_csv(f"{caminho_dados}gfs_tmin_semana_{_ANO_MES_DIA}.csv", low_memory = False)
 	tmed_gfs = pd.read_csv(f"{caminho_dados}gfs_tmed_semana_{_ANO_MES_DIA}.csv", low_memory = False)
@@ -839,6 +852,8 @@ try:
 	print(f"\n{green}Arquivos utilizados do dia:\n{bold}{_DIA_FINAL}/{_MES_FINAL}/{_ANO_FINAL}.\n{reset}")
 	data_atual = _ANO_MES_DIA
 except FileNotFoundError:
+	caminho_dados = f"/home/meteoro/scripts/matheus/operacional_dengue/dados_operacao/{_ANO_ONTEM}/{_MES_ONTEM}/"
+	os.makedirs(caminho_dados, exist_ok = True)
 	prec_gfs = pd.read_csv(f"{caminho_dados}gfs_prec_semana_{_ANO_MES_DIA_ONTEM}.csv", low_memory = False)
 	tmin_gfs = pd.read_csv(f"{caminho_dados}gfs_tmin_semana_{_ANO_MES_DIA_ONTEM}.csv", low_memory = False)
 	tmed_gfs = pd.read_csv(f"{caminho_dados}gfs_tmed_semana_{_ANO_MES_DIA_ONTEM}.csv", low_memory = False)
