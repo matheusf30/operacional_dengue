@@ -65,6 +65,9 @@ caminho_mergeCDO = "/media/dados/operacao/merge/CDO.MERGE/" #MERGE_CPTEC_DAILY_2
 caminho_samet = "/media/dados/operacao/samet/daily/" #/TMAX/2024/ #SAMeT_CPTEC_DAILY_SB_TMAX_2024.nc
 caminho_sametCDO = "/media/dados/operacao/samet/CDO.SAMET/" #SAMeT_CPTEC_DAILY_SB_TMAX_2024.nc@
 
+_ANO_MES = "202503"
+_ANO_MES_DIA = "20250302"
+
 caminho_gfs = f"/media/dados/operacao/gfs/0p25/{_ANO_MES}/{_ANO_MES_DIA}/" #202410/20241012/ #prec_daily_gfs_2024101212.nc
 caminho_gfs_ontem = f"/media/dados/operacao/gfs/0p25/{_ANO_MES_ONTEM}/{_ANO_MES_DIA_ONTEM}/" #202410/20241012/
 
