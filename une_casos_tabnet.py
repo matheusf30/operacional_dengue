@@ -69,7 +69,7 @@ ANO_ESCOLHIDO = str(datetime.today().year)
 municipios = "SC_Municipios_2022.shp"
 # Fonte: TABNET/DATASUS - SINAN/SC
 casos = "dados_atualizados25_dengue.csv" #"A100523200_135_184_253.csv" # "A173120200_135_184_253.csv"
-serie_casos = "casos_dive_total.csv"
+serie_casos = "casos_dive_pivot_total.csv"
 ### Abrindo Arquivos
 municipios = gpd.read_file(f"{caminho_shape}{municipios}", low_memory = False)
 serie_casos = pd.read_csv(f"{caminho_dados}{serie_casos}")
