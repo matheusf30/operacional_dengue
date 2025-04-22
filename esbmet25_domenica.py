@@ -545,8 +545,7 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 
 ▢           Sem registro*
 
-*Não há registro oficial ou
-modelagem inexistente.""",
+*Não há registro oficial.""",
 		    color = "black", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 20)
 	plt.xlabel("Longitude", fontsize = 18)
 	plt.ylabel("Latitude", fontsize = 18)
