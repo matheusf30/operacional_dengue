@@ -120,6 +120,7 @@ caminho_resultados = "home/meteoro/scripts/matheus/operacional_dengue/modelagem/
 ### Renomeação das Variáveis pelos Arquivos
 casos = "casos_dive_pivot_total.csv"  # TabNet/DiveSC
 focos = "focos_pivot.csv"
+censo = "censo_sc_xy.csv"
 
 prec = f"{_ANO_ATUAL}/prec_semana_ate_{_ANO_ATUAL}.csv"
 tmin = f"{_ANO_ATUAL}/tmin_semana_ate_{_ANO_ATUAL}.csv"
@@ -134,7 +135,7 @@ tmax = "tmax_semana_ate_2023.csv"
 """
 ### Abrindo Arquivo
 casos = pd.read_csv(f"{caminho_dados}{casos}", low_memory = False)
-
+censo = pd.read_csv(f"{caminho_dados}{censo}", low_memory = False)
 #focos = pd.read_csv(f"{caminho_dados}{focos}", low_memory = False)
 prec = pd.read_csv(f"{caminho_dados}{prec}", low_memory = False)
 tmin = pd.read_csv(f"{caminho_dados}{tmin}", low_memory = False)
@@ -142,6 +143,15 @@ tmed = pd.read_csv(f"{caminho_dados}{tmed}", low_memory = False)
 tmax = pd.read_csv(f"{caminho_dados}{tmax}", low_memory = False)
 unicos = pd.read_csv(f"{caminho_dados}{unicos}", low_memory = False)
 
+### Pré-processamento Incidência
+print(f"\n{red}CASOS:\n{reset}{casos}\n")
+censo["Municipio"] = censo["Municipio"].upper()
+print(f"\n{red}CENSO:\n{reset}{censo}\n")
+incidencia = casos.copy()
+
+#incidencia = casos[cidade]/censo[cidade] for cidade in censo if cidade in casos.columns
+print(f"\n{red}INCIDÊNCIA:\n{reset}{incidencia}\n")
+sys.exit()
 """
 ### Recortes Temporais
 _ANO = "2022" # apenas ano de 2022
