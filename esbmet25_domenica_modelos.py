@@ -290,7 +290,7 @@ print("="*80)
 print(f"Treinando com {len(treino_x)} elementos e testando com {len(teste_x)} elementos.") # Tamanho é igual para dados normalizados
 print(f"Formato dos dados (X) nas divisões treino: {treino_x.shape} e teste: {teste_x.shape}.")
 print(f"Formato dos dados (Y) nas divisões treino: {treino_y.shape} e teste: {teste_y.shape}.")
-print("="*80)plt.figure(figsize = (10, 6), layout = "constrained", frameon = False)
+print("="*80)
 ax = plt.gca()
 ax.set_facecolor("honeydew")
 sns.lineplot(x = x3.index, y = previsoes3,
@@ -571,23 +571,7 @@ def boxplot_erro(teste, previsao):
     ax.set_facecolor("honeydew")
     posicao = [1, 2, 3]
     plt.boxplot([final["Casos"], final["Previstos"], final["Erro"]], positions = posicao)
-    plt.xticks(posicao, ["Observado", "Pplt.figure(figsize = (10, 6), layout = "constrained", frameon = False)
-ax = plt.gca()
-ax.set_facecolor("honeydew")
-sns.lineplot(x = x3.index, y = previsoes3,
-             color = "red", alpha = 0.7, linewidth = 3, label = "Previsto")
-sns.lineplot(x = x3.index, y = x3["CASOS"],
-             color = "blue", alpha = 0.9, linewidth = 1, label = "Observado")
-plt.title(f"MODELO RANDOM FOREST: PREVISÃO DE CASOS DE DENGUE.\n MUNICÍPIO DE {_CIDADE}, SANTA CATARINA.\n")
-plt.xlabel("Semanas Epidemiológicas")
-plt.ylabel("Número de Casos de Dengue")
-plt.xticks(rotation = "horizontal")
-print(f"\n{green}list(x3.index):\n{reset}{list(x3.index)}")
-print(f"\n{green}list(x3['CASOS']):\n{reset}{list(x3['CASOS'])}")
-#print(f"\n{green}semanas_futuras:\n{reset}{semanas_futuras}")
-print(f"\n{green}previsoes3:\n{reset}{previsoes3}")
-print(f"\n{green}type(previsoes3):\n{reset}{type(previsoes3)}")
-plt.show()revisto", "Erro"])
+    #plt.xticks(posicao, ["Observado", "P
     plt.title(f"MODELO RANDOM FOREST* (R²: {R_2}): BOXPLOT DO ERRO**.\n MUNICÍPIO DE {_CIDADE}, SANTA CATARINA.\n *{obs} **($\\mu = {media}; \\sigma = {desvp}$)")
     plt.xlabel("Boxplot")
     plt.ylabel("Valor")
