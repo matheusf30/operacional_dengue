@@ -85,7 +85,7 @@ print(f"\n{green}OBS x PREV-GFS ({_CIDADE}):\n{reset}{gfs}\n")
 
 plt.figure(figsize = (10, 6), layout = "constrained", frameon = False)
 ax = plt.gca()
-ax.set_facecolor("honeydew")
+#ax.set_facecolor("honeydew")
 sns.lineplot(x = dataset2["Semana"], y = dataset2["prev"],
              color = "red", alpha = 0.7, linewidth = 3, label = "Previsto")
 sns.lineplot(x = gfs["Semana"], y = gfs["prev"], linestyle = ":",
