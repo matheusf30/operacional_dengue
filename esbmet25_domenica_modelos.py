@@ -286,6 +286,7 @@ print("~"*80)
 print(dataset)
 #print("="*80)
 #print(f"X no formato numpy.ndarray: {x_array}.")
+"""
 print("="*80)
 print(f"Treinando com {len(treino_x)} elementos e testando com {len(teste_x)} elementos.") # Tamanho é igual para dados normalizados
 print(f"Formato dos dados (X) nas divisões treino: {treino_x.shape} e teste: {teste_x.shape}.")
@@ -293,9 +294,9 @@ print(f"Formato dos dados (Y) nas divisões treino: {treino_y.shape} e teste: {t
 print("="*80)
 ax = plt.gca()
 ax.set_facecolor("honeydew")
-sns.lineplot(x = x3.index, y = previsoes3,
+sns.lineplot(x = x.index, y = previsoes,
              color = "red", alpha = 0.7, linewidth = 3, label = "Previsto")
-sns.lineplot(x = x3.index, y = x3["CASOS"],
+sns.lineplot(x = x.index, y = x["CASOS"],
              color = "blue", alpha = 0.9, linewidth = 1, label = "Observado")
 plt.title(f"MODELO RANDOM FOREST: PREVISÃO DE CASOS DE DENGUE.\n MUNICÍPIO DE {_CIDADE}, SANTA CATARINA.\n")
 plt.xlabel("Semanas Epidemiológicas")
@@ -307,6 +308,7 @@ print(f"\n{green}list(x3['CASOS']):\n{reset}{list(x3['CASOS'])}")
 print(f"\n{green}previsoes3:\n{reset}{previsoes3}")
 print(f"\n{green}type(previsoes3):\n{reset}{type(previsoes3)}")
 plt.show()
+"""
 #sys.exit()
 #########################################################FUNÇÕES###############################################################
 ### Definições

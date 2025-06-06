@@ -511,16 +511,17 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 	xy["Município"] = xy["Município"].str.upper() 
 	previsao_melt_poli = pd.merge(previsao_melt, xy, on = "Município", how = "left")
 	previsao_melt_poligeo = gpd.GeoDataFrame(previsao_melt_poli, geometry = "geometry", crs = "EPSG:4674")
+	"""
 	fig, ax = plt.subplots(figsize = (20, 12), layout = "constrained", frameon = False)
 
 	municipios.plot(ax = ax, color = "lightgray", edgecolor = "black", linewidth = 0.5)
 	v_max = previsao_melt_poligeo.select_dtypes(include="number").max().max()
 	v_min = previsao_melt_poligeo.select_dtypes(include="number").min().min()
 	intervalo = 250
-	levels = np.arange(v_min, v_max + intervalo, intervalo)
+	#levels = np.arange(v_min, v_max + intervalo, intervalo)
 	print(f"\n{green}v_min\n{reset}{v_min}\n")
 	print(f"\n{green}v_max\n{reset}{v_max}\n")
-	print(f"\n{green}levels\n{reset}{levels}\n")
+	#print(f"\n{green}levels\n{reset}{levels}\n")
 	#recorte_temporal.plot(ax = ax, column = f"{str_var}",  legend = True,
 							#label = f"{str_var}", cmap = "YlOrRd")#, add_colorbar = False,
 												#levels = levels, add_labels = False,
@@ -541,12 +542,6 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 	y_head = -28.75
 	ax.text(-52.5, -29, "Sistema de Referência de Coordenadas\nDATUM: SIRGAS 2000/22S.\nBase Cartográfica: IBGE, 2022.",
 		    color = "white", backgroundcolor = "darkgray", ha = "center", va = "center", fontsize = 20)
-	ax.text(-52.5, -28.25, """LEGENDA
-
-▢           Sem registro*
-
-*Não há registro oficial.""",
-		    color = "black", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 20)
 	plt.xlabel("Longitude", fontsize = 18)
 	plt.ylabel("Latitude", fontsize = 18)
 	plt.title(f"Casos Prováveis de Dengue Previstos em Santa Catarina.\nSemana Epidemiológica: {semana_epidemio.strftime('%Y-%m-%d')}.", fontsize = 28)
@@ -562,8 +557,9 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 	if _AUTOMATIZA == True and _VISUALIZAR == True:	
 		print(f"{cyan}\nVISUALIZANDO:\n{caminho_resultados}\n{nome_arquivo}\n{reset}\n\n")
 		plt.show()
+		
 		print(f"{cyan}\nENCERRADO:\n{caminho_resultados}\n{nome_arquivo}\n{reset}\n\n")
-
+	"""
 ### Salvando Últimas Previsões
 municipios = previsao_total.columns[1:]
 ultimas_previsoes_df = pd.DataFrame(index = municipios)
