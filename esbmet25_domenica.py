@@ -304,7 +304,7 @@ def preve(modelo, x, treino_x_explicado = None):
 	previsoes = [int(p) for p in previsoes_x]
 	return previsoes
 	
-def preve_ultimos_12(modelo, x, treino_x_explicado):
+def preve_ultimos_12(modelo, x, treino_x_explicado = None):
 	x = x.iloc[-12:,:]
 	#treino_x_explicado = treino_x_explicado.iloc[-12:,:]
 	y_previsto = modelo.predict(treino_x_explicado)
@@ -421,8 +421,7 @@ def salva_modelo(modelo, cidade):
 ### Exibindo Informações, Gráficos e Métricas
 #previsao_total = []
 previsao_total = pd.DataFrame()
-tmin_ultimos = tmin_total#.iloc[-12:,:]
-previsao_total["Semana"] = tmin_ultimos["Semana"].copy()
+previsao_total["Semana"] = tmin["Semana"].copy()#.iloc[-12:,:]
 print(f"\n{green}PREVISÃO TOTAL:\n{reset}{previsao_total}\n")
  #pd.date_range(start = "2014-01-05", end = "2022-12-25", freq = "W")
 previsao_total["Semana"] = pd.to_datetime(previsao_total["Semana"])
@@ -563,12 +562,12 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 ### Salvando Últimas Previsões
 municipios = previsao_total.columns[1:]
 ultimas_previsoes_df = pd.DataFrame(index = municipios)
-ultimas_previsoes = previsao_total.iloc[-3:,:]
+ultimas_previsoes_df = previsao_total.iloc[-3:,:]
 print(f"\n{green}previsao_total\n{reset}{previsao_total}\n")
 print(f"\n{green}ultimas_previsoes_df\n{reset}{ultimas_previsoes_df}\n")
 print(f"\n{green}ultimas_previsoes\n{reset}{ultimas_previsoes}\n")
 #ultimas_previsoes_teste.reset_index(inplace = True)
-ultimas_previsoes = ultimas_previsoes.T
+ultimas_previsoes = ultimas_previsoes_df.T
 print(f"\n{green}ultimas_previsoes.T\n{reset}{ultimas_previsoes}\n")
 s0 = ultimas_previsoes.columns[0]
 s0 = ultimas_previsoes[s0]
