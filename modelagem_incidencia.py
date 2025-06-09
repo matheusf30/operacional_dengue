@@ -144,14 +144,20 @@ tmax = pd.read_csv(f"{caminho_dados}{tmax}", low_memory = False)
 unicos = pd.read_csv(f"{caminho_dados}{unicos}", low_memory = False)
 
 ### Pré-processamento Incidência
-print(f"\n{red}CASOS:\n{reset}{casos}\n")
-censo["Municipio"] = censo["Municipio"].upper()
-print(f"\n{red}CENSO:\n{reset}{censo}\n")
+print(f"\n{green}CASOS:\n{reset}{casos}\n")
+censo["Municipio"] = censo["Municipio"].str.upper()
+print(f"\n{green}CENSO:\n{reset}{censo}\n")
+populacao_dict = censo.set_index("Municipio")["Populacao"].to_dict()
 incidencia = casos.copy()
+for municipio in incidencia.columns[1: ]:
+	if municipio in populacao_dict:
+		incidencia[municipio] = (incidencia[municipio] / populacao_dict[municipio]) * 100000
+		#incidencia[municipio] = incidencia[municipio] * 100000
 
 #incidencia = casos[cidade]/censo[cidade] for cidade in censo if cidade in casos.columns
-print(f"\n{red}INCIDÊNCIA:\n{reset}{incidencia}\n")
-sys.exit()
+print(f"\n{green}INCIDÊNCIA:\n{reset}{incidencia}\n")
+print(f"\n{green}DICIONÁRIO POPULAÇÃO:\n{reset}{populacao_dict}\n")
+#sys.exit()
 """
 ### Recortes Temporais
 _ANO = "2022" # apenas ano de 2022
@@ -166,11 +172,11 @@ _CIDADEs = unicos["Município"]
 teste1 = _CIDADEs[_CIDADEs.isin(["GRÃO PARÁ", "SÃO CRISTOVÃO DO SUL"])]
 teste2 = _CIDADEs[_CIDADEs.isin(["GRÃO-PARÁ", "SÃO CRISTÓVÃO DO SUL"])]
 print(f"\n{green}_CIDADEs:\n{reset}{_CIDADEs}\n")
-print(f"\n{red}teste1:\n{reset}{teste1}\n")
-print(f"\n{red}teste2:\n{reset}{teste2}\n")
+print(f"\n{green}teste1:\n{reset}{teste1}\n")
+print(f"\n{green}teste2:\n{reset}{teste2}\n")
 _CIDADEs = _CIDADEs.replace({"GRÃO PARÁ":"GRÃO-PARÁ", "SÃO CRISTOVÃO DO SUL":"SÃO CRISTÓVÃO DO SUL"})
 teste3 = _CIDADEs[_CIDADEs.isin(["GRÃO-PARÁ", "SÃO CRISTÓVÃO DO SUL"])]
-print(f"\n{red}teste3:\n{reset}{teste3}\n")
+print(f"\n{green}teste3:\n{reset}{teste3}\n")
 print(f"\n{green}_CIDADEs:\n{reset}{_CIDADEs}\n")
 #sys.exit()
 #_CIDADE = _CIDADE.upper()
@@ -231,10 +237,10 @@ dataset = dataset.merge(prec[["Semana", _CIDADE]], how = "right", on = "Semana")
 dataset.dropna(inplace = True)
 print(f"\n{green}dataset:\n{reset}{dataset}\n")
 #dataset = dataset.iloc[104:, :].copy()
-dataset = dataset.merge(casos[["Semana", _CIDADE]], how = "right", on = "Semana").copy()
-troca_nome = {f"{_CIDADE}_x" : "PREC", f"{_CIDADE}_y" : "CASOS"}
+dataset = dataset.merge(incidencia[["Semana", _CIDADE]], how = "right", on = "Semana").copy()
+troca_nome = {f"{_CIDADE}_x" : "PREC", f"{_CIDADE}_y" : "INCIDENCIA"}
 dataset = dataset.rename(columns = troca_nome)
-dataset["CASOS"] = dataset["CASOS"].astype(int)
+#dataset["INCIDENCIA"] = dataset["CASOS"].astype(int)
 dataset.fillna(0, inplace = True)
 print(f"\n{green}dataset:\n{reset}{dataset}\n")
 #sys.exit()
@@ -256,7 +262,9 @@ for r in range(_HORIZONTE + 1, _RETROAGIR + 1):
 	dataset[f"PREC_r{r}"] = dataset["PREC"].shift(-r)
 	#dataset[f"FOCOS_r{r}"] = dataset["FOCOS"].shift(-r)
 #for r in range(2, 5):
-	dataset[f"CASOS_r{r}"] = dataset["CASOS"].shift(-r)
+	dataset[f"INCIDENCIA_r{r}"] = dataset["INCIDENCIA"].shift(-r)
+print(f"\n{green}dataset:\n{reset}{dataset}\n")
+#sys.exit()
 """
 #_RETROAGIR = 2
 #dataset[f"TMED_r{_RETROAGIR}"] = dataset["TMED"].shift(-_RETROAGIR)
@@ -281,8 +289,8 @@ print(f"\n{green}dataset (após retroação):\n{reset}{dataset}\n")
 #sys.exit()
 ### Dividindo Dataset em Treino e Teste
 SEED = np.random.seed(0)
-x = dataset.drop(columns = "CASOS")
-y = dataset["CASOS"]
+x = dataset.drop(columns = "INCIDENCIA")
+y = dataset["INCIDENCIA"]
 x_array = x.to_numpy().astype(int)
 y_array = y.to_numpy().astype(int)
 x_array = x_array.reshape(x_array.shape[0], -1)
@@ -369,10 +377,10 @@ def monta_dataset(_CIDADE):
 	dataset = dataset.merge(prec[["Semana", _CIDADE]], how = "right", on = "Semana").copy()
 	dataset = dataset.rename(columns = {_CIDADE : "PREC"})
 	dataset = dataset.merge(casos[["Semana", _CIDADE]], how = "right", on = "Semana").copy()
-	dataset = dataset.rename(columns = {_CIDADE : "CASOS"})
+	dataset = dataset.rename(columns = {_CIDADE : "INCIDENCIA"})
 	#troca_nome = {f"{_CIDADE}_x" : "PREC", f"{_CIDADE}_y" : "CASOS", f"{_CIDADE}" : "CASOS"}
 	#dataset = dataset.rename(columns = troca_nome)
-	dataset["CASOS"] = dataset["CASOS"].astype(int)
+	#dataset["INCIDENCIA"] = dataset["CASOS"].astype(int)
 	dataset.dropna(axis = 0, inplace = True)
 	dataset.fillna(0, inplace = True)
 	for r in range(_HORIZONTE + 1, _RETROAGIR + 1):
@@ -380,7 +388,7 @@ def monta_dataset(_CIDADE):
 		dataset[f"TMED_r{r}"] = dataset["TMED"].shift(-r)
 		dataset[f"TMAX_r{r}"] = dataset["TMAX"].shift(-r)
 		dataset[f"PREC_r{r}"] = dataset["PREC"].shift(-r)
-		dataset[f"CASOS_r{r}"] = dataset["CASOS"].shift(-r)
+		dataset[f"INCIDENCIA_r{r}"] = dataset["INCIDENCIA"].shift(-r)
 	dataset.drop(columns = ["TMIN", "TMED", "TMAX", "PREC"], inplace = True)
 	dataset.dropna(inplace = True)
 	dataset.set_index("Semana", inplace = True)
@@ -400,7 +408,7 @@ def testa_dataset(_CIDADE):
 	#dataset = dataset.merge(focos[["Semana", _CIDADE]], how = "left", on = "Semana").copy()
 	#dataset = dataset.iloc[104:, :].copy()
 	dataset = dataset.merge(casos[["Semana", _CIDADE]], how = "right", on = "Semana").copy()
-	troca_nome = {f"{_CIDADE}_x" : "PREC", f"{_CIDADE}_y" : "FOCOS", f"{_CIDADE}" : "CASOS"}
+	troca_nome = {f"{_CIDADE}_x" : "PREC", f"{_CIDADE}_y" : "FOCOS", f"{_CIDADE}" : "INCIDENCIA"}
 	dataset = dataset.rename(columns = troca_nome)
 	dataset.dropna(axis = 0, inplace = True)
 	dataset.fillna(0, inplace = True)
@@ -409,7 +417,7 @@ def testa_dataset(_CIDADE):
 		dataset[f"TMED_r{r}"] = dataset["TMED"].shift(-r)
 		dataset[f"TMAX_r{r}"] = dataset["TMAX"].shift(-r)
 		dataset[f"PREC_r{r}"] = dataset["PREC"].shift(-r)
-		dataset[f"CASOS_r{r}"] = dataset["CASOS"].shift(-r)
+		dataset[f"INCIDENCIA_r{r}"] = dataset["INCIDENCIA"].shift(-r)
 	dataset.drop(columns = ["TMIN", "TMED", "TMAX", "PREC"], inplace = True)
 	dataset.dropna(inplace = True)
 	dataset.set_index("Semana", inplace = True)
@@ -419,8 +427,8 @@ def testa_dataset(_CIDADE):
 
 def treino_teste(dataset, _CIDADE):
     SEED = np.random.seed(0)
-    x = dataset.drop(columns = "CASOS").copy()
-    y = dataset["CASOS"]
+    x = dataset.drop(columns = "INCIDENCIA").copy()
+    y = dataset["INCIDENCIA"]
     if x.empty or x.isnull().all().all():
         print(f"'X' está vazio ou contém apenas valores 'NaN! Confira o dataset do município {_CIDADE}!")
         print(f"{_CIDADE} possui um conjunto com erro:\n {x}")
@@ -471,7 +479,7 @@ def RF_previsao_metricas(dataset, previsoes, n, teste_y, y_previsto):
     nome_modelo = "Random Forest"
     print("="*80)
     print(f"\n{nome_modelo.upper()} - {_CIDADE}\n")
-    lista_op = [f"Casos: {dataset['CASOS'][i]}\nPrevisão {nome_modelo}: {previsoes[i]}\n" for i in range(n)]
+    lista_op = [f"Taxa de Incidência (casos/100k habitantes): {dataset['INCIDENCIA'][i]}\nPrevisão {nome_modelo}: {previsoes[i]}\n" for i in range(n)]
     print("\n".join(lista_op))
     print("~"*80)
     EQM = mean_squared_error(teste_y, y_previsto)
@@ -501,10 +509,10 @@ def salva_modeloRF(modelo, _CIDADE):
 	_MES_FINAL = _AGORA.strftime("%m")
 	_DIA_FINAL = _AGORA.strftime("%d")
 	_ANO_MES_DIA = f"{_ANO_FINAL}{_MES_FINAL}{_DIA_FINAL}"
-	caminho_modelos = f"modelagem/casos/{_ANO_ATUAL}/{_ANO_MES_DIA}/"
+	caminho_modelos = f"modelagem/incidencia/{_ANO_ATUAL}/{_ANO_MES_DIA}/"
 	if not os.path.exists(caminho_modelos):
 		os.makedirs(caminho_modelos)
-	nome_modelo = f"RF_casos_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_{_cidade}.h5"
+	nome_modelo = f"RF_incidencia_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_{_cidade}.h5"
 	joblib.dump(modelo, f"{caminho_modelos}{nome_modelo}")
 	print(f"\n{green}MODELO RANDOM FOREST DE {bold}{_cidade} SALVO!\n{reset}")
 	print(f"\n{cyan}Caminho e Nome:\n {bold}{caminho_modelos}{nome_modelo}\n{reset}")
@@ -520,7 +528,7 @@ def lista_previsao(previsao, n, string_modelo):
     previsoes = previsao if string_modelo == "RF" else [np.argmax(p) for p in previsao]
     print("="*80)
     print(f"\n{nome_modelo.upper()} - {_CIDADE}\n")
-    lista_op = [f"CASOS: {dataset['CASOS'][i]}\nPrevisão {nome_modelo}: {previsoes[i]}\n" for i in range(n)]
+    lista_op = [f"Taxa de Incidência (casos/100k habitantes): {dataset['INCIDENCIA'][i]}\nPrevisão {nome_modelo}: {previsoes[i]}\n" for i in range(n)]
     print("\n".join(lista_op))
     print("="*80)
 
@@ -533,8 +541,8 @@ def grafico_previsao(teste, previsao, string_modelo, _CIDADE):
     # Gráfico de Comparação entre Observação e Previsão dos Modelos
     nome_modelo = "Random Forest" if string_modelo == "RF" else "Rede Neural"
     final = pd.DataFrame()
-    final["Semana"] = casos["Semana"]
-    final["Casos"] = casos[_CIDADE]
+    final["Semana"] = incidencia["Semana"]
+    final["Incidencia"] = incidencia[_CIDADE]
     #excluir_linhas = list(range(0,_JANELA_MM))
     #final.drop(excluir_linhas, axis=0, inplace = True)
     #final.drop([0,1, 2, 3], axis=0, inplace = True)
@@ -560,13 +568,13 @@ def grafico_previsao(teste, previsao, string_modelo, _CIDADE):
     plt.figure(figsize = (10, 6), layout = "constrained", frameon = False)
     ax = plt.gca()
     ax.set_facecolor("honeydew")
-    sns.lineplot(x = final["Semana"], y = final["Casos"], # linestyle = "--" linestyle = "-."
+    sns.lineplot(x = final["Semana"], y = final["Incidencia"], # linestyle = "--" linestyle = "-."
                  color = "darkblue", linewidth = 1, label = "Observado")
     sns.lineplot(x = final["Semana"], y = final["Previstos"],
                  color = "red", alpha = 0.7, linewidth = 3, label = "Previsto")
-    plt.title(f"MODELO {nome_modelo.upper()} (R²: {R_2}): OBSERVAÇÃO E PREVISÃO.\n MUNICÍPIO DE {_CIDADE}, SANTA CATARINA.")#\n{obs}")
+    plt.title(f"MODELO {nome_modelo.upper()} (R²: {R_2}): OBSERVAÇÃO* E PREVISÃO.\nMUNICÍPIO DE {_CIDADE}, SANTA CATARINA.\nTAXA DE INCIDÊNCIA (casos/100mil habitantes)")#\n{obs}")
     plt.xlabel("Semanas Epidemiológicas na Série de Anos")
-    plt.ylabel("Número de Casos de Dengue")
+    plt.ylabel("Taxa de Incidência de Dengue (casos/100mil habitantes)")
     troca = {'Á': 'A', 'Â': 'A', 'À': 'A', 'Ã': 'A', 'Ä': 'A',
            'É': 'E', 'Ê': 'E', 'È': 'E', 'Ẽ': 'E', 'Ë': 'E',
          'Í': 'I', 'Î': 'I', 'Ì': 'I', 'Ĩ': 'I', 'Ï': 'I',
@@ -581,15 +589,15 @@ def grafico_previsao(teste, previsao, string_modelo, _CIDADE):
 
 def histograma_erro(teste, previsao):
     final = pd.DataFrame()
-    final["Semana"] = casos["Semana"]
-    final["Casos"] = casos[_CIDADE]
+    final["Semana"] = incidencia["Semana"]
+    final["Incidencia"] = incidencia[_CIDADE]
     final.drop([d for d in range(_RETROAGIR)], axis=0, inplace = True)
     final.drop(final.index[-_RETROAGIR:], axis=0, inplace = True)
     previsoes = previsao.copy()
     previsoes = previsoes[:len(final)]
     final["Previstos"] = previsoes
     final["Semana"] = pd.to_datetime(final["Semana"])
-    final["Erro"] = final["Casos"] - final["Previstos"]
+    final["Erro"] = final["Incidencia"] - final["Previstos"]
     print(final)
     print("="*80)
     media = round(final["Erro"].mean(), 2)
@@ -597,10 +605,10 @@ def histograma_erro(teste, previsao):
     plt.figure(figsize = (10, 6), layout = "constrained", frameon = False)
     ax = plt.gca()
     ax.set_facecolor("honeydew")
-    sns.histplot(final["Casos"], bins = 50, kde = True, color = "blue")
+    sns.histplot(final["Incidencia"], bins = 50, kde = True, color = "blue")
     sns.histplot(final["Previstos"], bins = 20, kde = True, color = "red")
     sns.histplot(final["Erro"], bins = 50, kde = True, color = "black", label = "Erro")
-    plt.legend(title = "Distribuição", loc = "upper right", labels = ["Observado", "Previsto", "Erro"])
+    plt.legend(title = "Distribuição", loc = "upper right", labels = ["Observado (Incidência)", "Previsto", "Erro"])
     plt.title(f"MODELO RANDOM FOREST* (R²: {R_2}): HISTOGRAMA DO ERRO**.\n MUNICÍPIO DE {_CIDADE}, SANTA CATARINA.\n *{obs} **($\\mu = {media}; \\sigma = {desvp}$)")
     plt.xlabel("Valor")
     plt.ylabel("Quantidade")
@@ -608,8 +616,8 @@ def histograma_erro(teste, previsao):
 
 def boxplot_erro(teste, previsao):
     final = pd.DataFrame()
-    final["Semana"] = casos["Semana"]
-    final["Casos"] = casos[_CIDADE]
+    final["Semana"] = incidencia["Semana"]
+    final["Incidencia"] = incidencia[_CIDADE]
     final.drop([d for d in range(_RETROAGIR)], axis=0, inplace = True)
     final.drop(final.index[-_RETROAGIR:], axis=0, inplace = True)
     previsoes = previsao.copy()
@@ -625,8 +633,8 @@ def boxplot_erro(teste, previsao):
     ax = plt.gca()
     ax.set_facecolor("honeydew")
     posicao = [1, 2, 3]
-    plt.boxplot([final["Casos"], final["Previstos"], final["Erro"]], positions = posicao)
-    plt.xticks(posicao, ["Observado", "Previsto", "Erro"])
+    plt.boxplot([final["Incidencia"], final["Previstos"], final["Erro"]], positions = posicao)
+    plt.xticks(posicao, ["Observado (Incidência)", "Previsto", "Erro"])
     plt.title(f"MODELO RANDOM FOREST* (R²: {R_2}): BOXPLOT DO ERRO**.\n MUNICÍPIO DE {_CIDADE}, SANTA CATARINA.\n *{obs} **($\\mu = {media}; \\sigma = {desvp}$)")
     plt.xlabel("Boxplot")
     plt.ylabel("Valor")
@@ -659,8 +667,8 @@ def metricas_importancias(modeloRF, explicativas):
 	importancia_impureza = importancia_impureza.sort_values(ascending = False)
 	importancia_impureza.plot.bar(yerr = std, ax = ax)
 	ax.set_title(f"VARIÁVEIS IMPORTANTES PARA MODELO RANDOM FOREST\nMUNICÍPIO DE {_CIDADE}, SANTA CATARINA.\n{obs}")
-	ax.set_ylabel("Impureza Média")
-	ax.set_xlabel("Variáveis Explicativas para Modelagem de Casos de Dengue")
+	ax.set_ylabel("Perda de Impureza Média")
+	ax.set_xlabel("Variáveis Explicativas para Modelagem de Taxa de Incidência de Dengue")
 	ax.set_facecolor("honeydew")
 	plt.xticks(rotation = 70)#"horizontal")
 	for i, v in enumerate(importancia_impureza.values):
@@ -675,8 +683,8 @@ def metricas_importancias(modeloRF, explicativas):
 	fig, ax = plt.subplots(figsize = (10, 6), layout = "constrained", frameon = False)
 	importancia_permuta.plot.bar(yerr = resultado_permuta.importances_std, ax = ax)
 	ax.set_title(f"VARIÁVEIS IMPORTANTES UTILIZANDO PERMUTAÇÃO ({n_permuta})\nMUNICÍPIO DE {_CIDADE}, SANTA CATARINA.\n{obs}")
-	ax.set_ylabel("Acurácia Média")
-	ax.set_xlabel("Variáveis Explicativas para Modelagem de Casos de Dengue")
+	ax.set_ylabel("Perda de Acurácia Média")
+	ax.set_xlabel("Variáveis Explicativas para Modelagem de Taxa de Incidência de Dengue")
 	ax.set_facecolor("honeydew")
 	plt.xticks(rotation = 70)#"horizontal")
 	for i, v in enumerate(importancia_permuta.values):
@@ -721,10 +729,10 @@ def salva_modelo(string_modelo, modeloNN = None):
             print("!!"*80)
             raise ValueError("'modeloNN' não foi fornecido para a função metricas() do modelo de rede neural!")
         else:
-            modeloNN.save(modeloNN, f"{caminho_modelos}NN_casos_r{_RETROAGIR}_{_CIDADE}.h5")
+            modeloNN.save(modeloNN, f"{caminho_modelos}NN_incidencia_r{_RETROAGIR}_{_CIDADE}.h5")
     else:
-        joblib.dump(modeloRF, f"{caminho_modelos}RF_casos_r{_RETROAGIR}_v2_{_CIDADE}.h5")
-        print(f"\n\n{caminho_modelos}RF_casos_r{_RETROAGIR}_v2_{_CIDADE}.h5\n\n")
+        joblib.dump(modeloRF, f"{caminho_modelos}RF_incidencia_r{_RETROAGIR}_v2_{_CIDADE}.h5")
+        print(f"\n\n{caminho_modelos}RF_incidencia_r{_RETROAGIR}_v2_{_CIDADE}.h5\n\n")
 
 ######################################################RANDOM_FOREST############################################################
 ### Iniciando Dataset
@@ -782,10 +790,10 @@ dataset2["TMED"] = tmed[_CIDADE].copy()
 dataset2["TMAX"] = tmax[_CIDADE].copy()
 dataset2 = dataset2.merge(prec[["Semana", _CIDADE]], how = "left", on = "Semana").copy()
 #dataset2 = dataset2.rename(columns = {_CIDADE : "PREC"})
-dataset2 = dataset2.merge(casos[["Semana", _CIDADE]], how = "right", on = "Semana").copy()
-troca_nome = {f"{_CIDADE}_x" : "PREC", f"{_CIDADE}_y" : "CASOS"}
+dataset2 = dataset2.merge(incidencia[["Semana", _CIDADE]], how = "right", on = "Semana").copy()
+troca_nome = {f"{_CIDADE}_x" : "PREC", f"{_CIDADE}_y" : "INCIDENCIA"}
 dataset2 = dataset2.rename(columns = troca_nome)
-dataset2["CASOS"] = dataset2["CASOS"].astype(int)
+#dataset2["CASOS"] = dataset2["CASOS"].astype(int)
 for r in range(_HORIZONTE + 1, _RETROAGIR):
 	dataset2[f"TMIN_r{r}"] = dataset2["TMIN"].shift(-r)
 	dataset2[f"TMED_r{r}"] = dataset2["TMED"].shift(-r)
@@ -793,7 +801,7 @@ for r in range(_HORIZONTE + 1, _RETROAGIR):
 	dataset2[f"PREC_r{r}"] = dataset2["PREC"].shift(-r)
 	#dataset[f"FOCOS_r{r}"] = dataset["FOCOS"].shift(-r)
 #for r in range(2, 5):
-	dataset2[f"CASOS_r{r}"] = dataset2["CASOS"].shift(-r)
+	dataset2[f"INCIDENCIA_r{r}"] = dataset2["INCIDENCIA"].shift(-r)
 
 dataset2.dropna(inplace = True)
 dataset2.set_index("Semana", inplace = True)
@@ -823,14 +831,14 @@ ax = plt.gca()
 ax.set_facecolor("honeydew")
 sns.lineplot(x = x2.index, y = previsoes2,
              color = "red", alpha = 0.7, linewidth = 3, label = "Previsto")
-sns.lineplot(x = x2.index, y = x2["CASOS"],
-             color = "blue", alpha = 0.9, linewidth = 1, label = "Observado")
+sns.lineplot(x = x2.index, y = x2["INCIDENCIA"],
+             color = "blue", alpha = 0.9, linewidth = 1, label = "Observado (Incidência)")
 plt.title(f"MODELO RANDOM FOREST: PREVISÃO DE CASOS DE DENGUE.\n MUNICÍPIO DE {_CIDADE}, SANTA CATARINA.\n")
 plt.xlabel("Semanas Epidemiológicas")
-plt.ylabel("Número de Casos de Dengue")
+plt.ylabel("Taxa de Incidência de Dengue (casos/100mil habitantes)")
 plt.xticks(rotation = "horizontal")
 print(f"\n{green}list(x2.index):\n{reset}{list(x2.index)}")
-print(f"\n{green}list(x2['CASOS']):\n{reset}{list(x2['CASOS'])}")
+print(f"\n{green}list(x2['INCIDENCIA']):\n{reset}{list(x2['INCIDENCIA'])}")
 print(f"\n{green}semanas_futuras:\n{reset}{semanas_futuras}")
 print(f"\n{green}previsoes2:\n{reset}{previsoes2}")
 print(f"\n{green}type(previsoes2):\n{reset}{type(previsoes2)}")
@@ -881,15 +889,15 @@ print(f"\n{green}dataset2:\n{reset}{dataset2}")
 print(f"\n{green}dataset2.info:\n{reset}{dataset2.info()}")
 
 print(f"\n{green}list(x2.index):\n{reset}{list(x2.index)}")
-print(f"\n{green}list(x2['CASOS']):\n{reset}{list(x2['CASOS'])}")
+print(f"\n{green}list(x2['INCIDENCIA']):\n{reset}{list(x2['INCIDENCIA'])}")
 print(f"\n{green}previsoes2:\n{reset}{previsoes2}")
 print(f"\n{green}type(previsoes2):\n{reset}{type(previsoes2)}")
 
 print(f"\n{red}data_atual: {data_atual}{reset}\n")
 print(f"\n{green}tmin_gfs:\n{reset}{tmin_gfs}")
 print(f"\n{green}tmin_gfs.info:\n{reset}{tmin_gfs.info()}")
-print(f"\n{green}casos:\n{reset}{casos}")
-print(f"\n{green}casos.info:\n{reset}{casos.info()}")
+print(f"\n{green}incidencia:\n{reset}{incidencia}")
+print(f"\n{green}incidencia.info:\n{reset}{incidencia.info()}")
 
 prec = pd.concat([prec, prec_gfs])
 print(f"\n{green}prec:\n{reset}{prec}")
@@ -911,20 +919,20 @@ dataset3 = dataset3.merge(prec[["Semana", _CIDADE]], how = "right", on = "Semana
 dataset3 = dataset3.rename(columns = {_CIDADE : "PREC"})
 print(f"\n{green}dataset3:\n{reset}{dataset3}")
 print(f"\n{green}dataset3.info:\n{reset}{dataset3.info()}")
-dataset_casos = pd.DataFrame()
-dataset_casos["Semana"] = dataset3["Semana"].iloc[-12:]
-print(f"\n{green}dataset_casos:\n{reset}{dataset_casos}")
-print(f"\n{green}dataset_casos.info:\n{reset}{dataset_casos.info()}")
-dataset_casos = dataset_casos.merge(casos[["Semana", _CIDADE]], how = "left", on = "Semana").copy()
-dataset_casos = dataset_casos.rename(columns = {_CIDADE : "CASOS"})
-print(f"\n{green}dataset_casos:\n{reset}{dataset_casos}")
-print(f"\n{green}dataset_casos.info:\n{reset}{dataset_casos.info()}")
-dataset_casos.loc[dataset_casos.index[-2], "CASOS"] = previsoes2[-2]
-dataset_casos.loc[dataset_casos.index[-1], "CASOS"] = previsoes2[-1]
-print(f"\n{green}dataset_casos:\n{reset}{dataset_casos}")
-print(f"\n{green}dataset_casos.info:\n{reset}{dataset_casos.info()}")
+dataset_incidencia = pd.DataFrame()
+dataset_incidencia["Semana"] = dataset3["Semana"].iloc[-12:]
+print(f"\n{green}dataset_incidencia:\n{reset}{dataset_incidencia}")
+print(f"\n{green}dataset_incidencia.info:\n{reset}{dataset_incidencia.info()}")
+dataset_incidencia = dataset_incidencia.merge(incidencia[["Semana", _CIDADE]], how = "left", on = "Semana").copy()
+dataset_incidencia = dataset_incidencia.rename(columns = {_CIDADE : "INCIDENCIA"})
+print(f"\n{green}dataset_incidencia:\n{reset}{dataset_incidencia}")
+print(f"\n{green}dataset_incidencia.info:\n{reset}{dataset_incidencia.info()}")
+dataset_incidencia.loc[dataset_incidencia.index[-2], "CASOS"] = previsoes2[-2]
+dataset_incidencia.loc[dataset_incidencia.index[-1], "CASOS"] = previsoes2[-1]
+print(f"\n{green}dataset_incidencia:\n{reset}{dataset_incidencia}")
+print(f"\n{green}dataset_incidencia.info:\n{reset}{dataset_incidencia.info()}")
 #sys.exit()
-dataset3 = dataset3.merge(dataset_casos[["Semana", "CASOS"]], how = "right", on = "Semana").copy()
+dataset3 = dataset3.merge(dataset_incidencia[["Semana", "INCIDENCIA"]], how = "right", on = "Semana").copy()
 print(f"\n{green}dataset3:\n{reset}{dataset3}")
 print(f"\n{green}dataset3.info:\n{reset}{dataset3.info()}")
 for r in range(_HORIZONTE + 1, _RETROAGIR):
@@ -934,7 +942,7 @@ for r in range(_HORIZONTE + 1, _RETROAGIR):
 	dataset3[f"PREC_r{r}"] = dataset3["PREC"].shift(-r)
 	#dataset[f"FOCOS_r{r}"] = dataset["FOCOS"].shift(-r)
 #for r in range(2, 5):
-	dataset3[f"CASOS_r{r}"] = dataset3["CASOS"].shift(-r)
+	dataset3[f"INCIDENCIA_r{r}"] = dataset3["INCIDENCIA"].shift(-r)
 dataset3.dropna(inplace = True)
 dataset3.set_index("Semana", inplace = True)
 dataset3.columns.name = f"{_CIDADE}"
@@ -966,14 +974,14 @@ ax = plt.gca()
 ax.set_facecolor("honeydew")
 sns.lineplot(x = x3.index, y = previsoes3,
              color = "red", alpha = 0.7, linewidth = 3, label = "Previsto")
-sns.lineplot(x = x3.index, y = x3["CASOS"],
+sns.lineplot(x = x3.index, y = x3["INCIDENCIA"],
              color = "blue", alpha = 0.9, linewidth = 1, label = "Observado")
-plt.title(f"MODELO RANDOM FOREST: PREVISÃO DE CASOS DE DENGUE.\n MUNICÍPIO DE {_CIDADE}, SANTA CATARINA.\n")
+plt.title(f"MODELO RANDOM FOREST: PREVISÃO DE TAXA DE INCIDÊNCIA DE DENGUE.\n MUNICÍPIO DE {_CIDADE}, SANTA CATARINA.\n")
 plt.xlabel("Semanas Epidemiológicas")
-plt.ylabel("Número de Casos de Dengue")
+plt.ylabel("Taxa de Incidência de Dengue (casos/100mil habitantes)")
 plt.xticks(rotation = "horizontal")
 print(f"\n{green}list(x3.index):\n{reset}{list(x3.index)}")
-print(f"\n{green}list(x3['CASOS']):\n{reset}{list(x3['CASOS'])}")
+print(f"\n{green}list(x3['INCIDENCIA']):\n{reset}{list(x3['INCIDENCIA'])}")
 #print(f"\n{green}semanas_futuras:\n{reset}{semanas_futuras}")
 print(f"\n{green}previsoes3:\n{reset}{previsoes3}")
 print(f"\n{green}type(previsoes3):\n{reset}{type(previsoes3)}")
