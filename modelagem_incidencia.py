@@ -318,7 +318,7 @@ treino_x_explicado = treino_x_explicado.to_numpy().astype(int)
 #Conjunto de Teste com a Variável Dependente (<{_LIMITE}):\n{treino_y}\n 
 #Conjunto de Teste com a Variável Dependente (>{_FIM}):\n{teste_y}\n
 #Conjunto de Treino com as Variáveis Explicativas (Explicitamente Indicadas)(<{_LIMITE}):\n{treino_x_explicado}\n""")
-#sys.exit()
+sys.exit()
 """
 ### Normalizando/Escalonando Dataset_x (Se Necessário)
 escalonador = StandardScaler()
