@@ -53,7 +53,8 @@ print(f"\nOS DADOS UTILIZADOS ESTÃO ALOCADOS NOS SEGUINTES CAMINHOS:\n\n{caminh
 ######################################################
 ### Renomeação das Variáveis pelos Arquivos
 obs = "casos_dive_pivot_total.csv" 
-prev = "previsao_pivot_total_v20250216_h0_r2.csv"
+#prev = "previsao_pivot_total_v20250216_h0_r2.csv"
+prev = "previsao_pivot_total_v20250530_h0_r2.csv"
 modelo = f"RF_casos_v20250216_h0_r2_{_CIDADE}.h5"
 
 ###############################################################
@@ -71,6 +72,9 @@ dataset["Semana"] = obs["Semana"]
 dataset["obs"] = obs[_CIDADE].astype(int)
 pred = pd.DataFrame()
 pred["Semana"] = prev["Semana"]
+print(f"\n{green}PRED:\n{reset}{pred}\n")
+print(f"\n{green}PREV:\n{reset}{prev}\n")
+print(f"\n{green}_CIDADE:\n{reset}{_CIDADE}\n")
 pred["prev"] = prev[_CIDADE].astype(int)
 print(f"\n{green}OBS x PREV ({_CIDADE}):\n{reset}{dataset}\n")
 dataset = dataset.merge(pred, on = "Semana", how = "inner")
@@ -92,9 +96,9 @@ sns.lineplot(x = gfs["Semana"], y = gfs["prev"], linestyle = ":",
              color = "red", alpha = 0.7, linewidth = 3, label = "Previsto (GFS)")
 sns.lineplot(x = dataset["Semana"], y = dataset["obs"],
              color = "blue", alpha = 0.9, linewidth = 1, label = "Observado")
-plt.title(f"MODELO RANDOM FOREST: PREVISÃO DE CASOS DE DENGUE.\n MUNICÍPIO DE {_CIDADE}, SANTA CATARINA.\n", fontsize = 18)
+plt.title(f"MODELO RANDOM FOREST: PREVISÃO DE CASOS PROVÁVEIS DE DENGUE.\n MUNICÍPIO DE {_CIDADE}, SANTA CATARINA.\n", fontsize = 18)
 plt.xlabel("Semanas Epidemiológicas", fontsize = 18)
-plt.ylabel("Número de Casos de Dengue", fontsize = 18)
+plt.ylabel("Número de Casos Prováveis de Dengue", fontsize = 18)
 plt.xticks(rotation = "horizontal")
 plt.show()
 
