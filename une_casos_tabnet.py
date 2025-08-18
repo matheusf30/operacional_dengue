@@ -57,7 +57,7 @@ caminho_merge = "/media/dados/operacao/merge/daily/2024/" #MERGE_CPTEC_DAILY_SB_
 caminho_merge2 = "/media/dados/operacao/merge/CDO.MERGE" #MERGE_CPTEC_DAILY_2024.nc@
 caminho_samet = "/media/dados/operacao/samet/daily/" #/TMAX/2024/ #SAMeT_CPTEC_DAILY_SB_TMAX_2024.nc
 caminho_samet2 = "/media/dados/operacao/samet/CDO.SAMET/" #SAMeT_CPTEC_DAILY_SB_TMAX_2024.nc@
-
+url_gh = "https://raw.githubusercontent.com/matheusf30/"
 ### Renomeação variáveis pelos arquivos
 ANO_ESCOLHIDO = str(datetime.today().year)
 #prec_daily_gfs_2024101212.nc
@@ -68,14 +68,19 @@ ANO_ESCOLHIDO = str(datetime.today().year)
 #SAMeT_CPTEC_DAILY_SB_TMAX_2024.nc
 municipios = "SC_Municipios_2022.shp"
 # Fonte: TABNET/DATASUS - SINAN/SC
-casos = "dados_atualizados25_dengue.csv" #"A100523200_135_184_253.csv" # "A173120200_135_184_253.csv"
+casos = f"{url_gh}fapesc_dengue/refs/heads/main/matheus/dados/casos_semanal_pivot.csv"
+focos = f"{url_gh}fapesc_dengue/refs/heads/main/matheus/dados/focos_semanal_pivot.csv"
+#casos = "dados_atualizados25_dengue.csv" #"A100523200_135_184_253.csv" # "A173120200_135_184_253.csv"
 serie_casos = "casos_dive_pivot_total.csv"
+serie_focos = f"{url_gh}dados_dengue/blob/main/focos_pivot.csv"
 ### Abrindo Arquivos
 municipios = gpd.read_file(f"{caminho_shape}{municipios}", low_memory = False)
 serie_casos = pd.read_csv(f"{caminho_dados}{serie_casos}")
+casos = pd.read_csv(casos)
+"""
 casos = pd.read_csv(f"{caminho_operacional}{casos}", skiprows = 4,
                       sep = ";", encoding = "latin1", engine = "python")
-                      
+"""                  
 print(f"\n{green}serie_casos:\n{reset}{serie_casos}\n")
 print(f"\n{green}casos_atuais (TabNetSinanDiveSC):\n{reset}{casos}\n")
 print(datetime.today().strftime("%Y-%m-%d"))
