@@ -116,6 +116,7 @@ caminho_modelos = "home/meteoro/scripts/matheus/operacional_dengue/modelagem/cas
 #os.makedirs(caminho_modelos, exist_ok = True)
 caminho_resultados = "home/meteoro/scripts/matheus/operacional_dengue/modelagem/resultados/"
 #os.makedirs(caminho_resultados, exist_ok = True)
+url_gh = "https://raw.githubusercontent.com/matheusf30/"
 
 ### Renomeação das Variáveis pelos Arquivos
 casos = "casos_dive_pivot_total.csv"  # TabNet/DiveSC
