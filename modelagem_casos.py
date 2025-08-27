@@ -120,7 +120,7 @@ url_gh = "https://raw.githubusercontent.com/matheusf30/"
 
 ### Renomeação das Variáveis pelos Arquivos
 casos = "casos_dive_pivot_total.csv"  # TabNet/DiveSC
-focos = "focos_pivot.csv"
+#focos = "focos_pivot.csv"
 
 prec = f"{_ANO_ATUAL}/prec_semana_ate_{_ANO_ATUAL}.csv"
 tmin = f"{_ANO_ATUAL}/tmin_semana_ate_{_ANO_ATUAL}.csv"
