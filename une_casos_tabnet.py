@@ -69,25 +69,33 @@ ANO_ESCOLHIDO = str(datetime.today().year)
 municipios = "SC_Municipios_2022.shp"
 # Fonte: TABNET/DATASUS - SINAN/SC
 casos = f"{url_gh}fapesc_dengue/refs/heads/main/matheus/dados/casos_semanal_pivot.csv"
-focos = f"{url_gh}fapesc_dengue/refs/heads/main/matheus/dados/focos_semanal_pivot.csv"
+#focos = f"{url_gh}fapesc_dengue/refs/heads/main/matheus/dados/focos_semanal_pivot.csv"
+serie_casos = f"{url_gh}dados_dengue/refs/heads/main/casos_dive_pivot_total.csv"
+#serie_focos = f"{url_gh}dados_dengue/blob/main/focos_pivot.csv"
 #casos = "dados_atualizados25_dengue.csv" #"A100523200_135_184_253.csv" # "A173120200_135_184_253.csv"
-serie_casos = "casos_dive_pivot_total.csv"
-serie_focos = f"{url_gh}dados_dengue/blob/main/focos_pivot.csv"
+#serie_casos = "casos_dive_pivot_total.csv"
+
 ### Abrindo Arquivos
 municipios = gpd.read_file(f"{caminho_shape}{municipios}", low_memory = False)
-serie_casos = pd.read_csv(f"{caminho_dados}{serie_casos}")
+serie_casos = pd.read_csv(serie_casos)
+#serie_focos = pd.read_csv(serie_focos)
 casos = pd.read_csv(casos)
+#focos = pd.read_csv(focos)
 """
 casos = pd.read_csv(f"{caminho_operacional}{casos}", skiprows = 4,
                       sep = ";", encoding = "latin1", engine = "python")
 """                  
 print(f"\n{green}serie_casos:\n{reset}{serie_casos}\n")
+#print(f"\n{green}serie_focos:\n{reset}{serie_focos}\n")
 print(f"\n{green}casos_atuais (TabNetSinanDiveSC):\n{reset}{casos}\n")
+print(f"\n{green}casos_atuais (DiveSC):\n{reset}{casos}\n")
+#print(f"\n{green}focos_atuais (DiveSC):\n{reset}{focos}\n")
 print(datetime.today().strftime("%Y-%m-%d"))
 print(datetime.today())
 print(date.today().isoformat())
 #sys.exit()
 ## Dados "Brutos"
+
 print(f"""{green}
  INVESTIGAÇÃO DENGUE A PARTIR DE 2014
 Frequência por Mun infec SC e Sem.Epid.Sintomas{red}
@@ -459,7 +467,7 @@ print("="*80, f"\n{ano}\n\n", casos24)
 print(casos24.info())
 print(casos24.columns.drop("Semana"))
 print("="*80)
-"""
+
 # 2025 (Padronização)
 casos25 = casos.copy()
 ano = 2025
@@ -503,14 +511,26 @@ print("="*80, f"\n{ano}\n\n", casos25)
 print(casos25.info())
 print(casos25.columns.drop("Semana"))
 print("="*80)
-
+"""
 ##$ Concatenando e Extraindo Dados
+hoje = pd.to_datetime(datetime.today().date())
+casos25 = casos.copy()
 casostotal = pd.concat([serie_casos, casos25], ignore_index = True)
+casostotal.fillna(0, inplace = True)
+colunas = casostotal.drop(columns = "Semana")
+colunas = colunas.columns
+casostotal[colunas] = casostotal[colunas].astype(int)
+casostotal.columns = casostotal.columns.str.strip()
 casostotal["Semana"] = pd.to_datetime(casostotal["Semana"]).dt.strftime("%Y-%m-%d")
-casos_pivot = pd.pivot_table(casostotal, index = "Semana", columns = "Município",
-								values = "Casos", fill_value = 0)
-casos_pivot.reset_index(inplace = True)
+print(f"\n \n {green}SÉRIE TEMPORAL TOTAL{reset}\n{casostotal}\n")
+print(f"\n \n {green}SÉRIE TEMPORAL TOTAL (NULOS){reset}\n{casostotal.isnull().sum()}\n")
+#casos_pivot = pd.pivot_table(casostotal, index = "Semana", columns = "Município",
+#								values = "Casos", fill_value = 0)
+#casos_pivot.reset_index(inplace = True)
+
+casos_pivot = casostotal.copy()
 casos_pivot = casos_pivot[casos_pivot["Semana"] <= str(hoje)]
+casostotal = pd.melt(casos_pivot, id_vars = "Semana", var_name = "Município", value_name = "Casos", ignore_index = True)
 unicos = casostotal[casostotal["Casos"] > 0].drop_duplicates(subset = ["Município"])
 municipios["Município"] = municipios["NM_MUN"].str.upper()
 cidades = municipios[["Município", "geometry"]]
@@ -521,6 +541,7 @@ cidades["longitude"] = cidades["geometry"].centroid.x
 xy = cidades[["Município", "latitude", "longitude"]]
 unicos_xy = pd.merge(unicos, xy, on = "Município", how = "left")
 
+#sys.exit()
 ### Salvando Arquivos
 
 os.makedirs(caminho_dados, exist_ok = True)
@@ -529,7 +550,7 @@ unicos_xy.to_csv(f"{caminho_dados}casos_primeiros.csv", index = False)
 casostotal.to_csv(f"{caminho_dados}casos_dive_total.csv", index = False)
 casos_pivot.to_csv(f"{caminho_dados}casos_dive_pivot_total.csv", index = False)
 
-print(f"\n \n {green}CASOS DE DENGUE EM SANTA CATARINA - SÉRIE HISTÓRICA {reset} \n")
+print(f"\n \n {green}CASOS DE DENGUE EM SANTA CATARINA - TEMPORAL {reset} \n")
 print(casostotal.info())
 print("~"*80)
 print(casostotal.dtypes)
