@@ -481,7 +481,7 @@ for municipio in incidencia.columns[1: ]:
 previsao_melt = pd.melt(incidencia, id_vars = ["Semana"], 
                         var_name = "Município", value_name = "Incidencia")
 previsao_melt = previsao_melt.sort_values(by = "Semana")
-xy = unicos.drop(columns = ["Semana", "Incidencia"])
+xy = unicos.drop(columns = ["Semana", "Casos"])
 previsao_melt_xy = pd.merge(previsao_melt, xy, on = "Município", how = "left")
 geometry = [Point(xy) for xy in zip(previsao_melt_xy["longitude"], previsao_melt_xy["latitude"])]
 previsao_melt_geo = gpd.GeoDataFrame(previsao_melt_xy, geometry = geometry, crs = "EPSG:4674")
