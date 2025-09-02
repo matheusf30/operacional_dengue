@@ -106,12 +106,15 @@ tmax = f"{_ANO_ATUAL}/tmax_semana_ate_{_ANO_ATUAL}.csv"
 unicos = "casos_primeiros.csv"
 municipios = "SC/SC_Municipios_2022.shp"
 br = "BR/BR_UF_2022.shp"
+censo = "censo_sc_xy.csv"
+
 
 ###############################################################
 
 ### Abrindo Arquivo
 casos = pd.read_csv(f"{caminho_dados}{casos}", low_memory = False)
 #focos = pd.read_csv(f"{caminho_dados}{focos}", low_memory = False)
+censo = pd.read_csv(f"{caminho_dados}{censo}", low_memory = False)
 prec = pd.read_csv(f"{caminho_dados}{prec}", low_memory = False)
 tmin = pd.read_csv(f"{caminho_dados}{tmin}", low_memory = False)
 tmed = pd.read_csv(f"{caminho_dados}{tmed}", low_memory = False)
@@ -157,6 +160,22 @@ print(f"\n{green}tmax_total.info:\n{reset}{tmax_total.info()}")
 print(f"\n{green}tmax_total[['Semana', 'BOMBINHAS']]:\n{reset}{tmax_total[['Semana', 'BOMBINHAS']]}")
 print(f"\n{green}tmax[['Semana', 'BOMBINHAS']]:\n{reset}{tmax[['Semana', 'BOMBINHAS']]}")
 print(f"\n{green}cidades:\n{reset}{cidades.unique()}")
+#sys.exit()
+
+### Pré-processamento Incidência
+print(f"\n{green}CASOS:\n{reset}{casos}\n")
+censo["Municipio"] = censo["Municipio"].str.upper()
+print(f"\n{green}CENSO:\n{reset}{censo}\n")
+populacao_dict = censo.set_index("Municipio")["Populacao"].to_dict()
+incidencia = casos.copy()
+for municipio in incidencia.columns[1: ]:
+	if municipio in populacao_dict:
+		incidencia[municipio] = (incidencia[municipio] / populacao_dict[municipio]) * 100000
+		#incidencia[municipio] = incidencia[municipio] * 100000
+
+#incidencia = casos[cidade]/censo[cidade] for cidade in censo if cidade in casos.columns
+print(f"\n{green}INCIDÊNCIA:\n{reset}{incidencia}\n")
+print(f"\n{green}DICIONÁRIO POPULAÇÃO:\n{reset}{populacao_dict}\n")
 #sys.exit()
 
 ###############################################################################
@@ -455,24 +474,27 @@ else:
 	grafico(previsoes2, R_2)
 
 print(f"\n{green}previsao_total:\n{cyan}{previsao_total}{reset}\n")
-previsao_melt = pd.melt(previsao_total, id_vars = ["Semana"], 
-                        var_name = "Município", value_name = "Casos")
-#value_vars - If not specified, uses all columns that are not set as id_vars.
+incidencia = previsao_total.copy()
+for municipio in incidencia.columns[1: ]:
+	if municipio in populacao_dict:
+		incidencia[municipio] = (incidencia[municipio] / populacao_dict[municipio]) * 100000
+previsao_melt = pd.melt(incidencia, id_vars = ["Semana"], 
+                        var_name = "Município", value_name = "Incidencia")
 previsao_melt = previsao_melt.sort_values(by = "Semana")
-xy = unicos.drop(columns = ["Semana", "Casos"])
+xy = unicos.drop(columns = ["Semana", "Incidencia"])
 previsao_melt_xy = pd.merge(previsao_melt, xy, on = "Município", how = "left")
 geometry = [Point(xy) for xy in zip(previsao_melt_xy["longitude"], previsao_melt_xy["latitude"])]
 previsao_melt_geo = gpd.GeoDataFrame(previsao_melt_xy, geometry = geometry, crs = "EPSG:4674")
-previsao_melt_geo = previsao_melt_geo[["Semana", "Município", "Casos", "geometry"]]
+previsao_melt_geo = previsao_melt_geo[["Semana", "Município", "Incidencia", "geometry"]]
 previsao_melt_geo["Semana"] = pd.to_datetime(previsao_melt_geo["Semana"])
 print(f"\n{green}Caminho e Nome do arquivo:\n{reset}")
 print(f"\n{green}{caminho_modelos}RF_casos_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_{_CIDADE}.h5\n{reset}")
 if _SALVAR == True:
 	caminho_csv = "modelagem/resultados/dados_previstos/"
 	os.makedirs(caminho_csv, exist_ok = True)
-	previsao_pivot_csv = f"previsao_pivot_total_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
+	previsao_pivot_csv = f"previsao_pivot_incidencia_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
 	previsao_total.to_csv(f"{caminho_csv}{previsao_pivot_csv}", index = False)
-	previsao_melt_csv = f"previsao_melt_total_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
+	previsao_melt_csv = f"previsao_melt_incidencia_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
 	previsao_melt.to_csv(f"{caminho_csv}{previsao_melt_csv}", index = False)
 	print(f"\n\n{green}{caminho_csv}\n{previsao_pivot_csv}\nSALVO COM SUCESSO!{reset}\n\n")
 	print(f"\n\n{green}{caminho_csv}\n{previsao_melt_csv}\nSALVO COM SUCESSO!{reset}\n\n")
@@ -490,62 +512,6 @@ semana_epidemio3 = previsao_total.loc[previsao_total.index[-1], "Semana"]
 lista_semanas = [semana_epidemio1, semana_epidemio2, semana_epidemio3]
 # "2020-04-19" "2021-04-18" "2022-04-17" "2023-04-16"
 for idx, semana_epidemio in enumerate(lista_semanas):
-# SC_Pontos
-	"""
-#previsao_melt_geo = gpd.GeoDataFrame(previsao_melt_geo)#, geometry = municipios.geometry)
-	fig, ax = plt.subplots(figsize = (20, 12), layout = "constrained", frameon = False)
-	coord_atlantico = [(-54, -30),(-48, -30),
-						(-48, -25),(-54, -25),
-						(-54, -30)]
-	atlantico_poly = Polygon(coord_atlantico)
-	atlantico = gpd.GeoDataFrame(geometry = [atlantico_poly])
-	atlantico.plot(ax = ax, color = "lightblue") # atlantico ~ base
-	ax.set_aspect("auto")
-	coord_arg = [(-55, -30),(-52, -30),
-				(-52, -25),(-55, -25),
-				(-55, -30)]
-	arg_poly = Polygon(coord_arg)
-	argentina = gpd.GeoDataFrame(geometry = [arg_poly])
-	argentina.plot(ax = ax, color = "tan")
-	br.plot(ax = ax, color = "tan", edgecolor = "black")
-	municipios.plot(ax = ax, color = "lightgreen", edgecolor = "black")
-	#
-	print("IS NA...", previsao_melt_geo["Casos"].isna().sum())
-	#sys.exit()
-	previsao_melt_geo[previsao_melt_geo["Semana"] == semana_epidemio ].plot(ax = ax, column = "Casos",  legend = True,
-																			label = "Casos", cmap = "YlOrRd", markersize = 50)
-	zero = previsao_melt_geo[previsao_melt_geo["Casos"] == 0]
-	zero[zero["Semana"] == semana_epidemio].plot(ax = ax, column = "Casos", legend = False,	
-												label = "Casos", cmap = "YlOrBr")
-	plt.xlim(-54, -48)
-	plt.ylim(-29.5, -25.75)
-	x_tail = -48.5
-	y_tail = -29.25
-	x_head = -48.5
-	y_head = -28.75
-	arrow = mpatches.FancyArrowPatch((x_tail, y_tail), (x_head, y_head),
-									mutation_scale = 50, color = "darkblue")
-	ax.add_patch(arrow)
-	mid_x = (x_tail + x_head) / 2
-	mid_y = (y_tail + y_head) / 2
-	ax.text(mid_x, mid_y, "N", color = "white", ha = "center", va = "center",
-			fontsize = "large", fontweight = "bold")
-	ax.text(-52.5, -29, "Sistema de Referência de Coordenadas\nDATUM: SIRGAS 2000/22S.\nBase Cartográfica: IBGE, 2022.",
-			color = "white", backgroundcolor = "darkgray", ha = "center", va = "center", fontsize = 14)
-	plt.xlabel("Longitude")
-	plt.ylabel("Latitude")
-	plt.title(f"Casos Prováveis de Dengue Previstos em Santa Catarina.\nSemana Epidemiológica: {semana_epidemio}.", fontsize = 18)
-	plt.grid(True)
-	nome_arquivo = f"CASOS_pontual_preditivo_{data_atual}_{idx}.pdf"
-	if _AUTOMATIZA == True and _SALVAR == True:
-		os.makedirs(caminho_resultados, exist_ok = True)
-		plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "pdf", dpi = 300)
-		print(f"\n\n{green}{caminho_resultados}\n{nome_arquivo}\nSALVO COM SUCESSO!{reset}\n\n")
-	if _AUTOMATIZA == True and _VISUALIZAR == True:
-		print(f"{cyan}\nVISUALIZANDO:\n{caminho_resultados}\n{nome_arquivo}\n{reset}\n\n")
-		plt.show()
-		print(f"{cyan}\nENCERRADO:\n{caminho_resultados}\n{nome_arquivo}\n{reset}\n\n")
-	"""
 	# SC_Coroplético
 	xy = municipios.copy()
 	xy.drop(columns = ["CD_MUN", "SIGLA_UF", "AREA_KM2"], inplace = True)
@@ -554,23 +520,6 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 	previsao_melt_poli = pd.merge(previsao_melt, xy, on = "Município", how = "left")
 	previsao_melt_poligeo = gpd.GeoDataFrame(previsao_melt_poli, geometry = "geometry", crs = "EPSG:4674")
 	fig, ax = plt.subplots(figsize = (20, 12), layout = "constrained", frameon = False)
-	#plt.gca().tick_params(labelsize = 20)
-	"""
-	coord_atlantico = [(-54, -30),(-48, -30),
-		               (-48, -25),(-54, -25),
-		               (-54, -30)]
-	atlantico_poly = Polygon(coord_atlantico)
-	atlantico = gpd.GeoDataFrame(geometry = [atlantico_poly])
-	atlantico.plot(ax = ax, color = "lightblue") # atlantico ~ base
-	ax.set_aspect("auto")
-	coord_arg = [(-55, -30),(-52, -30),
-		         (-52, -25),(-55, -25),
-		         (-55, -30)]
-	arg_poly = Polygon(coord_arg)
-	argentina = gpd.GeoDataFrame(geometry = [arg_poly])
-	argentina.plot(ax = ax, color = "tan")
-	br.plot(ax = ax, color = "tan", edgecolor = "black")
-	"""
 	municipios.plot(ax = ax, color = "lightgray", edgecolor = "black", linewidth = 0.5)
 	v_max = previsao_melt_poligeo.select_dtypes(include="number").max().max()
 	v_min = previsao_melt_poligeo.select_dtypes(include="number").min().min()
@@ -579,17 +528,13 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 	print(f"\n{green}v_min\n{reset}{v_min}\n")
 	print(f"\n{green}v_max\n{reset}{v_max}\n")
 	print(f"\n{green}levels\n{reset}{levels}\n")
-	#recorte_temporal.plot(ax = ax, column = f"{str_var}",  legend = True,
-							#label = f"{str_var}", cmap = "YlOrRd")#, add_colorbar = False,
-												#levels = levels, add_labels = False,
-												#norm = cls.Normalize(vmin = v_min, vmax = v_max))
-	previsao_melt_poligeo[previsao_melt_poligeo["Semana"] == semana_epidemio].plot(ax = ax, column = "Casos",  legend = True, edgecolor = "black", # fontsize = 20,
+	previsao_melt_poligeo[previsao_melt_poligeo["Semana"] == semana_epidemio].plot(ax = ax, column = "Incidencia",  legend = True, edgecolor = "black", # fontsize = 20,
 		                                                                           label = "Casos", cmap = "YlOrRd", linewidth = 0.5,#levels = levels, 
 		                                                                           norm = cls.Normalize(vmin = v_min, vmax = v_max, clip = True))
 	cbar_ax = ax.get_figure().get_axes()[-1]
 	cbar_ax.tick_params(labelsize = 20)
-	zero = previsao_melt_poligeo[previsao_melt_poligeo["Casos"] <= 0]
-	zero[zero["Semana"] == semana_epidemio].plot(ax = ax, column = "Casos", legend = False, edgecolor = "black", linewidth = 0.5,
+	zero = previsao_melt_poligeo[previsao_melt_poligeo["Incidencia"] <= 0]
+	zero[zero["Semana"] == semana_epidemio].plot(ax = ax, column = "Incidencia", legend = False, edgecolor = "black", linewidth = 0.5,
 		                                         label = "Casos", cmap = "YlOrBr")#"YlOrBr")
 	plt.xlim(-54, -48)
 	plt.ylim(-29.5, -25.75)
@@ -597,15 +542,6 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 	y_tail = -29.25
 	x_head = -48.5
 	y_head = -28.75
-	"""
-	arrow = mpatches.FancyArrowPatch((x_tail, y_tail), (x_head, y_head),
-		                             mutation_scale = 50, color = "darkblue")
-	ax.add_patch(arrow)
-	mid_x = (x_tail + x_head) / 2
-	mid_y = (y_tail + y_head) / 2
-	ax.text(mid_x, mid_y, "N", color = "white", ha = "center", va = "center",
-		    fontsize = "large", fontweight = "bold")
-	"""
 	ax.text(-52.5, -29, "Sistema de Referência de Coordenadas\nDATUM: SIRGAS 2000/22S.\nBase Cartográfica: IBGE, 2022.",
 		    color = "white", backgroundcolor = "darkgray", ha = "center", va = "center", fontsize = 20)
 	ax.text(-52.5, -28.25, """LEGENDA
@@ -617,10 +553,10 @@ modelagem inexistente.""",
 		    color = "black", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 20)
 	plt.xlabel("Longitude", fontsize = 18)
 	plt.ylabel("Latitude", fontsize = 18)
-	plt.title(f"Casos Prováveis de Dengue Previstos em Santa Catarina.\nSemana Epidemiológica: {semana_epidemio.strftime('%Y-%m-%d')}.", fontsize = 28)
+	plt.title(f"Incidência de Dengue Previstos em Santa Catarina.\nSemana Epidemiológica: {semana_epidemio.strftime('%Y-%m-%d')}.", fontsize = 28)
 	#plt.grid(True)
-	nome_arquivo = f"CASOS_mapa_preditivo_{data_atual}_{idx}.pdf"
-	nome_arquivo_png = f"CASOS_mapa_preditivo_{data_atual}_{idx}.png"
+	nome_arquivo = f"INCIDENCIA_mapa_preditivo_{data_atual}_{idx}.pdf"
+	nome_arquivo_png = f"INCIDENCIA_mapa_preditivo_{data_atual}_{idx}.png"
 	if _AUTOMATIZA == True and _SALVAR == True:
 		os.makedirs(caminho_resultados, exist_ok = True)
 		plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "pdf", dpi = 150)
@@ -667,8 +603,8 @@ print(f"\n{green}ultimas_previsoes.T_df.T\n{reset}{ultimas_previsoes_vdd}\n")
 if _SALVAR == True:
 	caminho_csv = "modelagem/resultados/dados_previstos/"
 	os.makedirs(caminho_csv, exist_ok = True)
-	ultimas_previsoes_csv = f"ultimas_previsoes_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
+	ultimas_previsoes_csv = f"ultimas_previsoes_incidencia_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
 	ultimas_previsoes_vdd.to_csv(f"{caminho_csv}{ultimas_previsoes_csv}", index = False)
 	print(f"\n\n{green}{caminho_csv}\n{ultimas_previsoes_csv}\nSALVO COM SUCESSO!{reset}\n\n")
-	print(f"\n\n{green}OS VALORES DAS ÚLTIMAS PREVISÕES SÃO APRESENTADOS ABAIXO:\n{reset}{ultimas_previsoes_vdd}\n\n")
+	print(f"\n\n{green}OS VALORES DAS ÚLTIMAS PREVISÕES DE INCIDÊNCIA SÃO APRESENTADOS ABAIXO:\n{reset}{ultimas_previsoes_vdd}\n\n")
 	
