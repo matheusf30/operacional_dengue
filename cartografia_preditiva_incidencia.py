@@ -553,7 +553,7 @@ modelagem inexistente.""",
 		    color = "black", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 20)
 	plt.xlabel("Longitude", fontsize = 18)
 	plt.ylabel("Latitude", fontsize = 18)
-	plt.title(f"Incidência de Dengue Previstos em Santa Catarina.\nSemana Epidemiológica: {semana_epidemio.strftime('%Y-%m-%d')}.", fontsize = 28)
+	plt.title(f"Incidência de Dengue Prevista em Santa Catarina.\nSemana Epidemiológica: {semana_epidemio.strftime('%Y-%m-%d')}.", fontsize = 28)
 	#plt.grid(True)
 	nome_arquivo = f"INCIDENCIA_mapa_preditivo_{data_atual}_{idx}.pdf"
 	nome_arquivo_png = f"INCIDENCIA_mapa_preditivo_{data_atual}_{idx}.png"
