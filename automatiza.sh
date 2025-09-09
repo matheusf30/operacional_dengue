@@ -11,7 +11,7 @@ E executar da seguinte forma [./{script}.sh]
 Dados brutos disponibilizados pela Diretoria de Vigilância Epidemiológica de Santa Catarina (DIVE/SC).
 Baixando diretamente da plataforma online TabNet/Sinan.
 """
-
+conda init
 conda activate dados_nc
 
 #. get_dengue.sh # necessita alterar o nome de saída do arquivo baixado # Roteiro disponibilizado por Elmo Neto
