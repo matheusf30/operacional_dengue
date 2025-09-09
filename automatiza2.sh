@@ -11,7 +11,7 @@ E executar da seguinte forma [./{script}.sh]
 Dados brutos disponibilizados pela Diretoria de Vigilância Epidemiológica de Santa Catarina (DIVE/SC).
 Baixando diretamente da plataforma online TabNet/Sinan.
 """
-
+conda init
 conda activate dados_nc
 ### EXTRAÇÃO E PRÉ-PROCESSAMENTO DE DADOS EPIDEMIOLÓGICOS
 #. get_dengue.sh # necessita alterar o nome de saída do arquivo baixado # Roteiro disponibilizado por Elmo Neto
@@ -21,9 +21,9 @@ python extrai_clima.py #SAMeT e MERGE
 python extrai_gfs.py
 ### MODELAGENS
 python modelagem_casos.py True
-python modelagem_incidencia.py True
+#python modelagem_incidencia.py True
 ### CARTOGRAFIAS
-python cartografia_casos_incidencia.py True False True
+#python cartografia_casos_incidencia.py True False True
 python cartografia_preditiva_casos.py True False True
 python cartografia_preditiva_incidencia.py True False True
 ### VALIDAÇÕES
