@@ -26,4 +26,5 @@ python verificao_validacao.py False True False
 python teste_modelagem_casos.py
 python teste_cartografia.py True False True
 """
+conda init
 conda deactivate
