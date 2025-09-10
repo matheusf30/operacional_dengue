@@ -97,7 +97,8 @@ _HORIZONTE = 0 # Tempo de Previsão
 _AUTOMATIZAR = sys.argv[1]   # True|False                    #####
 _AUTOMATIZA = True if _AUTOMATIZAR == "True" else False 
 """
-##################### Valores Booleanos ############ # sys.argv[0] is the script name itself and can be ignored!
+##################### Valores Booleanos ############
+# sys.argv[0] is the script name itself and can be ignored!
 _AUTOMATIZAR = sys.argv[1]   # True|False                    #####
 _AUTOMATIZA = True if _AUTOMATIZAR == "True" else False      #####
 _VISUALIZAR = sys.argv[2]    # True|False                    #####
@@ -830,7 +831,6 @@ plt.show()
 ################################################################################################
 ############ Testando 2º Salto de Previsão #####################################################
 ################################################################################################
-
 _AGORA = datetime.now()
 _ANO_FINAL = str(datetime.today().year)
 _MES_FINAL = _AGORA.strftime("%m")
@@ -843,6 +843,7 @@ _MES_ONTEM = _ONTEM.strftime("%m")
 _DIA_ONTEM = _ONTEM.strftime("%d")
 _ANO_MES_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}"
 _ANO_MES_DIA_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}{_DIA_ONTEM}"
+
 try:
 	caminho_dados = f"/home/meteoro/scripts/matheus/operacional_dengue/dados_operacao/{_ANO_FINAL}/{_MES_FINAL}/"
 	os.makedirs(caminho_dados, exist_ok = True)
