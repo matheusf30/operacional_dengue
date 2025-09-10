@@ -61,7 +61,7 @@ _ANO_ATUAL = str(datetime.today().year)
 _MES_ATUAL = _AGORA.strftime("%m")
 _DIA_ATUAL = _AGORA.strftime("%d")
 _ANO_MES = f"{_ANO_ATUAL}{_MES_ATUAL}"
-_ANO_MES_DIA = f"{_ANO_ATUAL}{_MES_ATUAL}{_DIA_ATUAL}"
+_ANO_MES_DIA = 20250909 #f"{_ANO_ATUAL}{_MES_ATUAL}{_DIA_ATUAL}"
 _ONTEM = datetime.today() - timedelta(days = 1)
 _ANO_ONTEM = str(_ONTEM.year)
 _MES_ONTEM = _ONTEM.strftime("%m")
@@ -80,7 +80,7 @@ elif _LOCAL == "IFSC":
 	caminho_dados = "/home/meteoro/scripts/matheus/operacional_dengue/dados_operacao/" # CLUSTER
 	caminho_operacional = "/home/meteoro/scripts/matheus/operacional_dengue/"
 	caminho_shape = "/media/dados/shapefiles/" #SC/SC_Municipios_2022.shp #BR/BR_UF_2022.shp
-	caminho_modelos = f"/home/meteoro/scripts/matheus/operacional_dengue/modelagem/casos/{_ANO_MES_DIA}/"
+	caminho_modelos = f"/home/meteoro/scripts/matheus/operacional_dengue/modelagem/casos/{_ANO_ATUAL}/{_ANO_MES_DIA}/"
 	caminho_resultados = "home/meteoro/scripts/matheus/operacional_dengue/modelagem/resultados/"
 	#caminho_previsao = "home/meteoro/scripts/matheus/operacional_dengue/modelagem/resultados/dados_previstos/"
 	caminho_previsao = "modelagem/resultados/dados_previstos/"
@@ -99,13 +99,11 @@ casos = "casos_dive_pivot_total.csv"  # TabNet/DiveSC
 ultimas_previsoes = f"ultimas_previsoes_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
 previsao_pivot = f"previsao_pivot_total_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
 previsao_melt = f"previsao_melt_total_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
-"""
-focos = "focos_pivot.csv"
-prec = f"prec_semana_ate_{_ANO_ATUAL}.csv"
-tmin = f"tmin_semana_ate_{_ANO_ATUAL}.csv"
-tmed = f"tmed_semana_ate_{_ANO_ATUAL}.csv"
-tmax = f"tmax_semana_ate_{_ANO_ATUAL}.csv"
-"""
+#focos = "focos_pivot.csv"
+prec = f"{_ANO_ATUAL}/prec_semana_ate_{_ANO_ATUAL}.csv"
+tmin = f"{_ANO_ATUAL}/tmin_semana_ate_{_ANO_ATUAL}.csv"
+tmed = f"{_ANO_ATUAL}/tmed_semana_ate_{_ANO_ATUAL}.csv"
+tmax = f"{_ANO_ATUAL}/tmax_semana_ate_{_ANO_ATUAL}.csv"
 unicos = "casos_primeiros.csv"
 municipios = "SC/SC_Municipios_2022.shp"
 br = "BR/BR_UF_2022.shp"
@@ -117,13 +115,11 @@ casos = pd.read_csv(f"{caminho_dados}{casos}", low_memory = False)
 ultimas_previsoes = pd.read_csv(f"{caminho_previsao}{ultimas_previsoes}", low_memory = False)
 previsao_pivot = pd.read_csv(f"{caminho_previsao}{previsao_pivot}", low_memory = False)
 previsao_melt = pd.read_csv(f"{caminho_previsao}{previsao_melt}", low_memory = False)
-"""
-focos = pd.read_csv(f"{caminho_dados}{focos}", low_memory = False)
+#focos = pd.read_csv(f"{caminho_dados}{focos}", low_memory = False)
 prec = pd.read_csv(f"{caminho_dados}{prec}", low_memory = False)
 tmin = pd.read_csv(f"{caminho_dados}{tmin}", low_memory = False)
 tmed = pd.read_csv(f"{caminho_dados}{tmed}", low_memory = False)
 tmax = pd.read_csv(f"{caminho_dados}{tmax}", low_memory = False)
-"""
 unicos = pd.read_csv(f"{caminho_dados}{unicos}")
 municipios = gpd.read_file(f"{caminho_shape}{municipios}")
 br = gpd.read_file(f"{caminho_shape}{br}")
@@ -135,8 +131,108 @@ troca = {'Á': 'A', 'Â': 'A', 'À': 'A', 'Ã': 'A',
          'Ç': 'C', " " : "_", "'" : "_", "-" : "_"}
 cidades = unicos["Município"].copy()
 
+####################################################################
+
+### Funções Modelagem-Previsão
+
+def abre_modelo(cidade):
+	troca = {'Á': 'A', 'Â': 'A', 'À': 'A', 'Ã': 'A', 'Ä': 'A',
+		 'É': 'E', 'Ê': 'E', 'È': 'E', 'Ẽ': 'E', 'Ë': 'E',
+		 'Í': 'I', 'Î': 'I', 'Ì': 'I', 'Ĩ': 'I', 'Ï': 'I',
+		 'Ó': 'O', 'Ô': 'O', 'Ò': 'O', 'Õ': 'O', 'Ö': 'O',
+		 'Ú': 'U', 'Û': 'U', 'Ù': 'U', 'Ũ': 'U', 'Ü': 'U',
+		 'Ç': 'C', " " : "_", "'" : "_", "-" : "_"}
+	for velho, novo in troca.items():
+		cidade = cidade.replace(velho, novo)
+	nome_modelo = f"RF_casos_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_{cidade}.h5"
+	modelo = joblib.load(f"{caminho_modelos}{nome_modelo}") #RF_casos_v20241017_h0_r2_URUSSANGA.h5
+	print("\n" + f"{red}={cyan}={reset}"*40 + "\n")
+	print(f"\n{green}MODELO RANDOM FOREST DE {bold}{cidade} ABERTO!\n{reset}")
+	print(f"\n{green}Caminho e Nome:\n {bold}{caminho_modelos}{nome_modelo}\n{reset}")
+	print("\n" + f"{red}~{cyan}~{reset}"*40 + "\n")
+	return modelo
+	
+def monta_dataset(cidade):
+	dataset = tmin[["Semana"]].copy()
+	dataset["TMIN"] = tmin[cidade].copy()
+	dataset["TMED"] = tmed[cidade].copy()
+	dataset["TMAX"] = tmax[cidade].copy()
+	dataset = dataset.merge(prec[["Semana", cidade]], how = "right", on = "Semana").copy()
+	dataset = dataset.rename(columns = {f"{cidade}" : "PREC"})
+	dataset.dropna(axis = 0, inplace = True)
+	dataset["Semana"] = pd.to_datetime(dataset["Semana"])
+	dataset = dataset.merge(casos[["Semana", cidade]], how = "right", on = "Semana").copy()
+	dataset = dataset.rename(columns = {f"{cidade}" : "CASOS"})
+	dataset.fillna(0, inplace = True)
+	for r in range(_HORIZONTE + 1, _RETROAGIR + 1):
+		dataset[f"TMIN_r{r}"] = dataset["TMIN"].shift(-r)
+		dataset[f"TMED_r{r}"] = dataset["TMED"].shift(-r)
+		dataset[f"TMAX_r{r}"] = dataset["TMAX"].shift(-r)
+		dataset[f"PREC_r{r}"] = dataset["PREC"].shift(-r)
+		dataset[f"CASOS_r{r}"] = dataset["CASOS"].shift(-r)
+	dataset.drop(columns = ["TMIN", "TMED", "TMAX", "PREC"], inplace = True)
+	dataset.dropna(inplace = True)
+	dataset = dataset[dataset["Semana"].dt.year == 2025]
+	dataset.set_index("Semana", inplace = True)
+	dataset.columns.name = f"{_CIDADE}"
+	print(f"\n{green}dataset:\n{reset}{dataset}")
+	print(f"\n{green}dataset.info:\n{reset}{dataset.info()}")
+	x = dataset.drop(columns = "CASOS")
+	print(f"\n{green}x:\n{reset}{x}")
+	print(f"\n{green}x.info:\n{reset}{x.info()}")
+	y = dataset["CASOS"]
+	print(f"\n{green}y:\n{reset}{y}")
+	print(f"\n{green}y.info:\n{reset}{y.info()}")
+	#sys.exit()
+	return dataset, x, y
+	
+def treino_teste(x, y, cidade):
+	SEED = np.random.seed(0)
+	x_array = x.to_numpy()
+	x_array = x_array.reshape(x_array.shape[0], -1)
+	x_array = x.to_numpy().astype(int)
+	y_array = y.to_numpy().astype(int)
+	x_array = x_array.reshape(x_array.shape[0], -1)
+	treino_x, teste_x, treino_y, teste_y = train_test_split(x_array, y_array,
+															random_state = SEED,
+															test_size = 0.2)
+	explicativas = x.columns.tolist()
+	treino_x_explicado = pd.DataFrame(treino_x, columns = explicativas)
+	treino_x_explicado = treino_x_explicado.to_numpy().astype(int)
+	return treino_x, teste_x, treino_y, teste_y, treino_x_explicado
+
+def preve(modelo, x, treino_x_explicado = None):
+	previsoes_x = modelo.predict(x)
+	previsoes = [int(p) for p in previsoes_x]
+	return previsoes
+	
+def metricas(dataset, previsoes, n, y):
+	print(f"{red}={cyan}={reset}"*40)
+	print(f"\n{green}RANDOM FOREST - {bold}{_CIDADE}\n{reset}")
+	lista_op = [f"Observado: {dataset['CASOS'][i]}\nPrevisão (RF): {previsoes[i]}\n" for i in range(n)]
+	print("\n".join(lista_op))
+	print(f"{red}~{cyan}{reset}"*40)
+	EQM = mean_squared_error(y, previsoes)
+	RQ_EQM = np.sqrt(EQM)
+	R_2 = round(r2_score(y, previsoes), 2)
+	print(f"""
+	\n MÉTRICAS - RANDOM FOREST - {_CIDADE}
+	\n Erro Quadrático Médio: {EQM}
+	\n Coeficiente de Determinação (R²): {R_2}
+	\n Raiz Quadrada do Erro Quadrático Médio: {RQ_EQM}
+	""")
+	print("="*80)
+	return EQM, RQ_EQM, R_2
+	
+##########################################################################################
+
 ### Visualizando arquivos
 print(f"\n{green}CASOS:\n{reset}{casos}\n")
+print(f"\n{green}PRECIPITAÇÃO:\n{reset}{prec}\n")
+print(f"\n{green}TEMPERATURA MÍNIMA:\n{reset}{tmin}\n")
+print(f"\n{green}TEMPERATURA MÉDIA:\n{reset}{tmed}\n")
+print(f"\n{green}TEMPERATURA MÁXIMA:\n{reset}{tmax}\n")
+
 print(f"\n{green}ÚLTIMAS PREVISÕES:\n{reset}{ultimas_previsoes}\n")
 print(f"\n{green}PREVISÃO TOTAL (pivot):\n{reset}{previsao_pivot}\n")
 print(f"\n{green}PREVISÃO TOTAL (melt):\n{reset}{previsao_melt}\n")
@@ -144,27 +240,85 @@ print(f"\n{green}PREVISÃO TOTAL (melt):\n{reset}{previsao_melt}\n")
 print(f"\n{green}CASOS.dtypes:\n{reset}{casos.dtypes}\n")
 print(f"\n{green}ÚLTIMAS PREVISÕES.dtypes:\n{reset}{ultimas_previsoes.dtypes}\n")
 previstos = ultimas_previsoes.iloc[:3, :]
+previsao_pivot["Semana"] = pd.to_datetime(previsao_pivot["Semana"])
+previsao12 = previsao_pivot.iloc[:-2, :]
 previstos["Semana"] = pd.to_datetime(previstos["Semana"])
 casos["Semana"] = pd.to_datetime(casos["Semana"])
-casos25 = casos[casos["Semana"].dt.year == 2025]
+casos_atual = casos[casos["Semana"].dt.year == 2025]
+casos_atual = casos_atual.iloc[:-1,:]
 print(f"\n{green}CASOS.dtypes:\n{reset}{casos}\n{casos.dtypes}\n")
+print(f"\n{green}CASOS_ATUAL.dtypes:\n{reset}{casos_atual.dtypes}\n")
 print(f"\n{green}PREVISTOS.dtypes:\n{reset}{previstos}\n{previstos.dtypes}\n")
+
+###
 
 ### Visualizações Gráficas
 
 ## Série (observado-previsão)
+modelo = abre_modelo(_CIDADE)
+dataset, x, y = monta_dataset(_CIDADE)
+treino_x, teste_x, treino_y, teste_y, treino_x_explicado = treino_teste(x, y, _CIDADE)
+previsoes = preve(modelo, x, treino_x_explicado)
+print(f"\n\n{green}PREVISÕES:\n{reset}{previsoes}\n")
+EQM, RQ_EQM, R_2 = metricas(dataset, previsoes, 5, y)
+
+previstos2 = pd.DataFrame()
+previstos2.index = y.index
+previstos2[_CIDADE] = previsoes
+previstos2.reset_index(inplace = True)
+previstos2["Semana"] = pd.to_datetime(previstos2["Semana"])
+previstos2[_CIDADE] = previstos2[_CIDADE].shift(1)
+print(f"\n\n{green}PREVISÕES2:\n{reset}{previstos2}\n")
+print(f"\n\n{green}CASOS_ATUAL:\n{reset}{casos_atual}\n")
+
+
 
 plt.figure(figsize = (15, 8), layout = "constrained", frameon = False)
-plt.plot(previstos["Semana"], previstos[_CIDADE], color = "red", label = "Previsto", linewidth = 2)
-#plt.show()
-#plt.figure(figsize = (15, 8))
-plt.plot(casos25["Semana"], casos25[_CIDADE], color = "blue", label = "Observado")
+plt.plot(previstos["Semana"], previstos[_CIDADE],
+			label = "Previsto (GFS)", color = "red", linewidth = 3, linestyle = ":")
+plt.plot(previstos2["Semana"], previstos2[_CIDADE],
+			label = "Previsto", color = "red", linewidth = 3)
+plt.plot(casos_atual["Semana"], casos_atual[_CIDADE],
+				label = "Observado", color = "blue")
+plt.plot(previsao12["Semana"], previsao12[_CIDADE], alpha = .4,
+			label = "Previsto (.csv)", color = "black", linewidth = 6)
+plt.xlabel("Semanas Epidemiológicas (Série Histórica)")
+plt.ylabel("Número de Casos de Dengue")
+plt.title(f"COMPARAÇÃO ENTRE CASOS DE DENGUE PREVISTOS E OBSERVADOS, MUNICÍPIO DE {_CIDADE} (R² = {R_2})")
+plt.legend()
+plt.gca().set_facecolor("honeydew")
+plt.show()
+
+
+
+plt.figure(figsize = (15, 8), layout = "constrained", frameon = False)
+plt.plot(previstos["Semana"], previstos[_CIDADE],
+			label = "Previsto (GFS)", color = "red", linewidth = 3, linestyle = ":")
+plt.plot(previsao12["Semana"], previsao12[_CIDADE],
+			label = "Previsto", color = "red", linewidth = 3)
+plt.plot(casos_atual["Semana"], casos_atual[_CIDADE],
+				label = "Observado", color = "blue")
 plt.xlabel("Semanas Epidemiológicas (Série Histórica)")
 plt.ylabel("Número de Casos de Dengue")
 plt.title(f"COMPARAÇÃO ENTRE CASOS DE DENGUE PREVISTOS E OBSERVADOS, MUNICÍPIO DE {_CIDADE}")
 plt.legend()
 plt.gca().set_facecolor("honeydew")
 plt.show()
+
+"""
+sns.lineplot(x = previstos["Semana"], y = previstos[_CIDADE],
+             color = "red", alpha = 0.7, linewidth = 3, label = "Previsto")
+sns.lineplot(x = previsao_pivot["Semana"], y = previsao_pivot[_CIDADE], linestyle = ":",
+             color = "red", alpha = 0.7, linewidth = 3, label = "Previsto (GFS)")
+sns.lineplot(x = casos_atual["Semana"], y = casos_atual[_CIDADE],
+             color = "blue", alpha = 0.9, linewidth = 1, label = "Observado")
+plt.title(f"MODELO RANDOM FOREST: PREVISÃO DE CASOS PROVÁVEIS DE DENGUE.\n MUNICÍPIO DE {_CIDADE}, SANTA CATARINA.\n", fontsize = 18)
+plt.xlabel("Série Temporal (Semanas Epidemiológicas)", fontsize = 18)
+plt.ylabel("Número de Casos de Dengue", fontsize = 18)
+plt.xticks(rotation = "horizontal")
+"""
+
+
 if _SALVAR == True: #_AUTOMATIZA == True and 
 	caminho_pdf = "modelagem/resultados/dados_previstos/graficos/"
 	nome_arquivo = f"CASOS_serie_{_CIDADE}_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}.pdf"
@@ -176,7 +330,6 @@ if _SALVAR == True: #_AUTOMATIZA == True and
 
 
 ## Validação Modelo (treino x teste x previsão)
-
 
 """
 eixo = fig.add_axes([0, 0, 1, 1])            # type: ignore
