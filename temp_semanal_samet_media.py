@@ -12,26 +12,23 @@
 ###                  Atualizado: Everton Weber Galliani    - 2025/09/02
 ###                              Matheus Ferreira de Souza - 2025/09/15
 #################################################################################
-#
-###-------------------------------------------------------------
-### IMPORTANDO BIBLIOTECAS ##
-###-------------------------------------------------------------
-#
+
+#################################################################################
+# IMPORTANDO BIBLIOTECAS
 import xarray as xr
-from netCDF4 import Dataset                     # Read / Write NetCDF4 files
+from netCDF4 import Dataset
 import matplotlib
-import matplotlib.pyplot as plt                 #Figure
-from matplotlib import cm                       # Colormap handling utilities
+import matplotlib.pyplot as plt
+from matplotlib import cm
 import matplotlib.colors as cls
 import pandas as pd
 import numpy as np
-import cartopy, cartopy.crs as ccrs        # Plot maps
-import cartopy.io.shapereader as shpreader # Import shapefiles
+import cartopy, cartopy.crs as ccrs
+import cartopy.io.shapereader as shpreader
 import cartopy.crs as crs
 from cartopy.feature import ShapelyFeature
 import cartopy.feature as cfeature
 import cmocean
-#
 import sys
 import os
 from datetime import date, datetime, timedelta
@@ -66,12 +63,12 @@ _ANO_MES_DIA_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}{_DIA_ONTEM}"
 # CAMINHOS E ARQUIVOS
 caminho_samet = "/media/dados/operacao/samet/daily/"
 caminho_shapefile = "/media/dados/shapefiles/BR/"
-caminho_resultado = "/home/meteoro/scripts/matheus/operacional_dengue/"
+caminho_resultado = f"/home/meteoro/scripts/matheus/operacional_dengue/meteorologia/{_ANO_ATUAL}/"
+os.makedirs(f"{caminho_resultado}", mode = 0o777, exist_ok = True) 
 try:
 	arquivo_tmin = f"SAMeT_CPTEC_DAILY_SB_TMIN_{_ANO_ATUAL}.nc"
 	arquivo_tmed = f"SAMeT_CPTEC_DAILY_SB_TMED_{_ANO_ATUAL}.nc" 
 	arquivo_tmax = f"SAMeT_CPTEC_DAILY_SB_TMAX_{_ANO_ATUAL}.nc" 
-	os.makedirs(f"{caminho_resultado}/{_ANO_ATUAL}", mode = 0o777, exist_ok = True) 
 	ds_tmin = xr.open_dataset(f"{caminho_samet}/TMIN/{_ANO_ATUAL}/{arquivo_tmin}")
 	ds_tmed = xr.open_dataset(f"{caminho_samet}/TMED/{_ANO_ATUAL}/{arquivo_tmed}")
 	ds_tmax = xr.open_dataset(f"{caminho_samet}/TMAX/{_ANO_ATUAL}/{arquivo_tmax}")
@@ -79,7 +76,6 @@ except FileNotFoundError:
 	arquivo_tmin = f"SAMeT_CPTEC_DAILY_SB_TMIN_{_ANO_ONTEM}.nc"
 	arquivo_tmed = f"SAMeT_CPTEC_DAILY_SB_TMED_{_ANO_ONTEM}.nc" 
 	arquivo_tmax = f"SAMeT_CPTEC_DAILY_SB_TMAX_{_ANO_ONTEM}.nc" 
-	os.makedirs(f"{caminho_resultado}/{_ANO_ONTEM}", mode = 0o777, exist_ok = True) 
 	ds_tmin = xr.open_dataset(f"{caminho_samet}/TMIN/{_ANO_ONTEM}/{arquivo_tmin}")
 	ds_tmed = xr.open_dataset(f"{caminho_samet}/TMED/{_ANO_ONTEM}/{arquivo_tmed}")
 	ds_tmax = xr.open_dataset(f"{caminho_samet}/TMAX/{_ANO_ONTEM}/{arquivo_tmax}")
@@ -90,10 +86,10 @@ except FileNotFoundError:
 def selecionar_tempo_espaco(dataset, tempo, str_var):
 	"""
 	"""
-	lat_min = -34.00
-	lat_max = -21.75
-	lon_min = -58.25
-	lon_max = -47.50
+	lat_min = -29.5 # -34.00 # -29.5
+	lat_max = -25.75 # -21.75 # -25.75
+	lon_min = -54 # -58.25 # -54
+	lon_max = -48 # -47.50 # -48
 	match str_var:
 		case "tmin":
 			dataset_espaco = dataset.sel(time = tempo,
@@ -127,7 +123,7 @@ def info_dataset(dataset):
 	print(f"\n{green}ARQUIVO:\n{reset}{dataset}\n")
 	print(f"{green}*{reset}*"*30)
 	
-def limite_minmax(dataset):	
+def limite_minmax_anomalia(dataset):	
 	abs_value = int(max(abs(dataset.min()), abs(dataset.max())) + 1)
 	if (abs_value <= 3):
 		levels = np.linspace(-abs_value, abs_value, 4*abs_value + 1)
@@ -139,17 +135,16 @@ def limite_minmax(dataset):
 	
 def limite_colobar(regiao_tmin, regiao_tmax):
 	max_tmax = regiao_tmax.max().item()
-	int_max = int(max_tmax) + 1
+	int_max = int(max_tmax) - 2
 	min_tmin = regiao_tmin.min().item()
-	int_min = int(min_tmin)
+	int_min = int(min_tmin) + 2
 	if ((int_max - int_min)//2 != (int_max-int_min)/2):
 		int_max += 1
 	levels = range(int_min, int_max + 2, 2)
 	norm = cls.Normalize(vmin = int_min, vmax = int_max)
-	cmap = plt.get_cmap("RdYlBu_r")
 	print(f"\n{green}Valor máximo da temperatura máxima: {reset}{round(max_tmax, 2)} °C\n")
 	print(f"\n{green}Valor mínimo da temperatura mínima: {reset}{round(min_tmin, 2)} °C\n")
-	return levels, norm, cmap
+	return levels, norm
 	
 def gerar_mapa(dataset, str_var):
 	"""
@@ -163,41 +158,41 @@ def gerar_mapa(dataset, str_var):
 	plt.figure(figsize=(8, 6))#, layout = "tight", frameon = False)
 	ax = plt.axes(projection=ccrs.PlateCarree())
 	shp = list(shpreader.Reader(f"{caminho_shapefile}/BR_UF_2019.shp").geometries())
-	figure = regiao_tmin.plot.pcolormesh(levels = levels, cmap = cmap, norm = norm,
+	cmap = plt.get_cmap("coolwarm")#jet_r RdYlBu_r
+	figure = dataset.plot.contourf( ax = ax, levels = levels, cmap = cmap, norm = norm,
 										add_colorbar = False,  add_labels = False,
-										robust = True, extend = "both") 
+										robust = True, extend = "both",
+										transform = ccrs.PlateCarree())
+	plt.colorbar(figure, pad = 0.05, fraction = 0.05, label = "Temperatura Semanal (°C)",
+				ticks = levels, orientation = "vertical")
 	_d7 = datetime.today() - timedelta(days = 7)
 	_d7 = _d7 - timedelta(days = _d7.weekday() + 1)
 	_d7 = _d7.strftime("%Y-%m-%d")
-	print(f"\n{green}DOMINGO: {reset}{_d7} °C\n")
+	print(f"\n{green}{str_var} - DOMINGO: {reset}{_d7}\n")
 	match str_var:
 		case "tmin":
-			#figure = regiao_tmin.plot.pcolormesh(robust=True, cmap=cmap, add_colorbar=False, levels=levels, add_labels=False, extend='both', norm = norm)
-			plt.title(f"Temperatura Mínima Média Semanal (°C)\nPeríodo observado: {_d7}",
-						fontsize =14, ha = "center")
+			plt.title(f"Temperatura Mínima Média Semanal\nPeríodo observado: {_d7}",
+						fontsize = 14, ha = "center")
 		case "tmed":
-			figure = regiao_tmed.plot.pcolormesh(robust=True, norm=norm, cmap=cmap, add_colorbar=False, levels=levels, add_labels=False, extend='both')
-			plt.title(f'Temperatura Média Mensal (°C)\nSul do Brasil, Período observado: {regiao_tmed.time}', fontsize=14, ha='center')
+			plt.title(f"Temperatura Média Semanal\nPeríodo observado: {_d7}",
+						fontsize = 14, ha = "center")
 		case "tmax":
-			figure = regiao_tmax.plot.pcolormesh(robust=True, norm=norm, cmap=cmap, add_colorbar=False, levels=levels, add_labels=False, extend='both')
-			plt.title(f'Temperatura Máxima Média Mensal (°C)\nSul do Brasil, Período observado: {regiao_tmax.time}', fontsize=14, ha='center')
+			plt.title(f"Temperatura Máxima Média Semanal\nPeríodo observado: {_d7}",
+						fontsize = 14, ha = "center")
 		case _:
-			print(f"\nVariável não encontrada!\n{str_var}\nVariável não encontrada!\n")
-			
-	ax.add_geometries(shp, ccrs.PlateCarree(), edgecolor='gray', facecolor='none', linewidth=0.3)
-	ax.coastlines(resolution='10m', color='black', linewidth=0.8)
-	ax.add_feature(cartopy.feature.BORDERS, edgecolor='black', linewidth=0.5)
-	gl = ax.gridlines(crs=ccrs.PlateCarree(), color='white', alpha=1.0, linestyle='--',
-			linewidth=0.25, xlocs=np.arange(-180, 180, 5), ylocs=np.arange(-90, 90, 5), draw_labels=True)
+			print(f"\nVariável não encontrada!\n{str_var}\nVariável não encontrada!\n")		
+	ax.add_geometries(shp, ccrs.PlateCarree(), edgecolor = "black", facecolor = "none", linewidth = 0.5)
+	ax.coastlines(resolution = "10m", color = "black", linewidth = 0.8)
+	ax.add_feature(cartopy.feature.BORDERS, edgecolor = "black", linewidth = 0.5)
+	gl = ax.gridlines(crs = ccrs.PlateCarree(), color = "white", alpha = 1.0,
+					linestyle = "--", linewidth = 0.25, xlocs = np.arange(-180, 180, 1),
+					ylocs = np.arange(-90, 90, 1), draw_labels = True)
 	gl.top_labels = False
 	gl.right_labels = False
-	plt.colorbar(figure, pad=0.05, fraction=0.05, label='Temperatura Semanal (°C)',ticks=levels, orientation='vertical')
-	#ticks=np.arange(int_min, int_max+1, (int_max-int_min)/10), orientation='vertical')	
-	# Adicionar a fonte no rodapé
-	plt.figtext(0.55, 0.05, 'Fonte: SAMeT - CPTEC', ha='center', fontsize=10)
-	# Salvar a figura no formato ".jpg" com dpi=300.
-	#plt.savefig(f"{caminho_resultado}/{ano}/{str_var}_mensal_samet_media_{ano}{mes}.png", transparent=False, dpi=300, bbox_inches="tight", pad_inches=0.02)
-	plt.show()
+	plt.figtext(0.55, 0.045, "Fonte: SAMeT - CPTEC/INPE", ha = "center", fontsize = 10)
+	plt.savefig(f"{caminho_resultado}{str_var}_semanal_samet_media_{_d7}.png",
+				transparent = False, dpi = 300, bbox_inches = "tight", pad_inches = 0.02)
+	#plt.show()
 	
 #################################################################################
 # EXECUTANDO FUNÇÕES
@@ -211,39 +206,11 @@ except FileNotFoundError:
 	regiao_tmed = selecionar_tempo_espaco(ds_tmed, _ANO_ONTEM, "tmed")
 	regiao_tmax = selecionar_tempo_espaco(ds_tmax, _ANO_ONTEM, "tmax")
 
-levels, norm, cmap = limite_colobar(regiao_tmin, regiao_tmax)
+levels, norm = limite_colobar(regiao_tmin, regiao_tmax)
 info_dataset(regiao_tmin)
+info_dataset(regiao_tmed)
+info_dataset(regiao_tmax)
 gerar_mapa(regiao_tmin, "tmin")
-
-sys.exit()
-
-# Encontrar o valor máximo da temperatura máxima e mínimo da temperatura mínima na região selecionada
-max_tmax = regiao_tmax.max().item()
-int_max = int(max_tmax) + 1
-min_tmin = regiao_tmin.min().item()
-int_min = int(min_tmin)
-
-#Variáveis para o plot do mapa e da colorbar
-if ((int_max - int_min)//2 != (int_max-int_min)/2):
-	int_max += 1
-levels = range(int_min, int_max + 2, 2)
-#levels = np.linspace(int_min, int_max, 10)
-#print(levels)
-#levels = levels.astype(int)
-#print(levels)
-norm = cls.Normalize(vmin = int_min, vmax = int_max)
-cmap = plt.get_cmap("RdYlBu_r")
-#cmap.set_over('#800026')
-#cmap.set_under('#040273')
-print(f"Valor máximo da temperatura na região selecionada: {round(max_tmax, 2)} °C")
-print(f"Valor mínimo da temperatura na região selecionada: {round(min_tmin, 2)} °C")
-# Plotar temperatura de um dia específico
-
-
-
-gerar_mapa("tmin")
-gerar_mapa("tmed")
-gerar_mapa("tmax")
-print(f"Figuras de médias de {ano}-{mes} completas")
-print("=="*50)
+gerar_mapa(regiao_tmed, "tmed")
+gerar_mapa(regiao_tmax, "tmax")
 	
