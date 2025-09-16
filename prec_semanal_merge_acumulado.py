@@ -1,159 +1,182 @@
 #!/usr/bin/env python
 # coding: utf-8
 #
-##########################################################################
+#################################################################################
 ###
-### IFSC DADOS Precipitaçao MERGE
+### IFSC DADOS Temperatura SAMET - MAPAS
 ### COMO RODAR: executar o arquivo python e em seguida inserir ano-mês
 ###  Ex.:
-###  python prec_mensal_merge.py 2024-05
-###                  AUTORA: Roseli de Oliveira - 2024/07/11
-###                  Adaptado: Mario Quadro     - 2024/09/05
-###
+###  python tmed_mensal_samet.py 2024-05
+###                  AUTORA: Roseli de Oliveira            - 2024/07/11
+###                  Adaptado: Mario Quadro                - 2024/09/05
+###                  Atualizado: Matheus Ferreira de Souza  - 2025/09/15
+###                              Everton Weber Galliani     - 2025/09/16
+###                              Murilo Ferreira dos Santos - 2025/09/16
 ##########################################################################
-#
-###-------------------------------------------------------------
-### IMPORTANDO BIBLIOTECAS ##
-###-------------------------------------------------------------
-#
+
+#################################################################################
+# IMPORTANDO BIBLIOTECAS
 import xarray as xr
-from netCDF4 import Dataset                     # Read / Write NetCDF4 files
+from netCDF4 import Dataset
 import matplotlib
-import matplotlib.pyplot as plt                 #Figure
-from matplotlib import cm                       # Colormap handling utilities
+import matplotlib.pyplot as plt
+from matplotlib import cm
 import matplotlib.colors as cls
 import pandas as pd
 import numpy as np
-import cartopy, cartopy.crs as ccrs        # Plot maps
-import cartopy.io.shapereader as shpreader # Import shapefiles
+import cartopy, cartopy.crs as ccrs
+import cartopy.io.shapereader as shpreader
 import cartopy.crs as crs
 from cartopy.feature import ShapelyFeature
 import cartopy.feature as cfeature
 import cmocean
-#
 import sys
 import os
-#
-###-------------------------------------------------------------
-### Import System Variables (argv)
-###-------------------------------------------------------------
-#
-#print 'Argument 1 -> ', argv[1:]
-print(sys.argv[1])
-data=sys.argv[1] 
-print('Data:', data, '\n')
-#
-# Explodir a variável em ano e mês
-ano, mes = data.split('-')
-#
-print(f'Ano: {ano}')
-print(f'Mês: {mes}')
+from datetime import date, datetime, timedelta
 
-#
-###-------------------------------------------------------------
-### Define paths and variables
-###-------------------------------------------------------------
-#
-#path_mer = "/media/dados/operacao/merge/CDO.MERGE"
-path_mer = "/media/dados/operacao/merge/daily"
-path_shp = "/media/dados/shapefiles/BR"
-path_pro = "/media/produtos/merge/monthly"
-file_name = f"MERGE_CPTEC_MONTHLY_{ano}.nc" 
-os.makedirs(f"{path_pro}/{ano}", mode = 0o777, exist_ok = True) 
-#
-###-------------------------------------------------------------
-### ABRE ARQUIVO NETCDF DATASET (ds)sss
-###-------------------------------------------------------------
-#
-# 
-#ds = xr.open_dataset('/media/dados/operacao/merge/CDO.MERGE/MERGE_CPTEC_MONTHLY_2024.nc')
-#ds = xr.open_dataset(f"/media/dados/operacao/merge/CDO.MERGE/MERGE_CPTEC_MONTHLY_{ano}.nc")
-ds = xr.open_dataset(f"{path_mer}/{ano}/{file_name}")
+##### Padrão ANSI ###############################################################
+bold = "\033[1m"
+red = "\033[91m"
+green = "\033[92m"
+yellow = "\033[33m"
+blue = "\033[34m"
+magenta = "\033[35m"
+cyan = "\033[36m"
+white = "\033[37m"
+reset = "\033[0m"
 
-print('Arquivo original:', ds, '\n')
-print('***************************************\n')
+#################################################################################
+# DATA DO SISTEMA (POSSIBILIDADE DE ACESSAR ARQUIVO DE 1 DIA)
+_AGORA = datetime.now()
+_ANO_ATUAL = str(datetime.today().year)
+_MES_ATUAL = _AGORA.strftime("%m")
+_DIA_ATUAL = _AGORA.strftime("%d")
+_ANO_MES = f"{_ANO_ATUAL}{_MES_ATUAL}"
+_ANO_MES_DIA = f"{_ANO_ATUAL}{_MES_ATUAL}{_DIA_ATUAL}"
+_ONTEM = datetime.today() - timedelta(days = 1)
+_ANO_ONTEM = str(_ONTEM.year)
+_MES_ONTEM = _ONTEM.strftime("%m")
+_DIA_ONTEM = _ONTEM.strftime("%d")
+_ANO_MES_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}"
+_ANO_MES_DIA_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}{_DIA_ONTEM}"
 
-#sys.exit()
+#################################################################################
+# CAMINHOS E ARQUIVOS
+caminho_shapefile = "/media/dados/shapefiles/BR/"
+caminho_resultado = f"/home/meteoro/scripts/matheus/operacional_dengue/meteorologia/{_ANO_ATUAL}/"
+os.makedirs(f"{caminho_resultado}", mode = 0o777, exist_ok = True) 
+try:
+	caminho_merge = f"/media/dados/operacao/merge/daily/{_ANO_ATUAL}/"
+	arquivo_merge = f"MERGE_CPTEC_DAILY_SB_{_ANO_ATUAL}.nc"
+	ds_prec = xr.open_dataset(f"{caminho_merge}{arquivo_merge}")
+except FileNotFoundError:
+	caminho_merge = f"/media/dados/operacao/merge/daily/{_ANO_ONTEM}/"
+	arquivo_merge = f"MERGE_CPTEC_DAILY_SB_{_ANO_ONTEM}.nc"
+	ds_prec = xr.open_dataset(f"{caminho_merge}{arquivo_merge}")
+	
+#################################################################################
+# DEFININDO FUNÇÕES
 
-# VISUALIZAR dimensões do aquivo (Latitude, Longitude e Time)
-print('Coordenadas em Latitude:', ds.lat, '\n')
-print('***************************************\n')
-print('Coordenadas em Longitude:', ds.lon, '\n')
-print('***************************************\n')
-print('Datas:', ds.time, '\n')
-print('***************************************\n')
+def selecionar_tempo_espaco(dataset, tempo):
+	"""
+	"""
+	lat_min = -29.5 # -34.00 # -29.5
+	lat_max = -25.75 # -21.75 # -25.75
+	lon_min = -54 # -58.25 # -54
+	lon_max = -48 # -47.50 # -48
+	dataset_espaco = dataset.sel(time = tempo,
+						lat = slice(lat_min, lat_max),
+						lon = slice(lon_min, lon_max)).prec.squeeze()
+	dataset_espaco = dataset_espaco.resample(time = "W-SUN").sum()
+	dataset_tempo_espaco = dataset_espaco.isel(time = -2)
+	return dataset_tempo_espaco
+	
+def info_dataset(dataset):
+	"""
+	"""
+	print(f"\n{green}ARQUIVO:\n{reset}{dataset}\n")
+	print(f"{green}*{reset}*"*30)
+	print(f"\n{green}LATITUDES:\n{reset}{dataset.lat}\n")
+	print(f"{green}*{reset}*"*30)
+	print(f"\n{green}LONGITUDES:\n{reset}{dataset.lon}\n")
+	print(f"{green}*{reset}*"*30)
+	print(f"\n{green}TEMPO:\n{reset}{dataset.time}\n")
+	print(f"{green}*{reset}*"*30)
+	print(f"\n{green}VARIÁVEIS:\n{reset}{dataset.values}\n")
+	print(f"{green}*{reset}*"*30)
+	print(f"\n{green}ARQUIVO:\n{reset}{dataset}\n")
+	print(f"{green}*{reset}*"*30)
+	
+def limite_minmax_anomalia(dataset):	
+	abs_value = int(max(abs(dataset.min()), abs(dataset.max())) + 1)
+	if (abs_value <= 3):
+		levels = np.linspace(-abs_value, abs_value, 4*abs_value + 1)
+		levels = np.arange(-abs_value, abs_value + 0.5, 0.5)
+	else:
+		levels = np.linspace(-abs_value, abs_value, 2*abs_value + 1)
+		norm = cls.Normalize(-abs_value, abs_value)
+	return levels, norm
+	
+def limite_colobar(regiao_prec):
+	max_tmax = regiao_prec.max().item()
+	int_max = int(max_tmax) - 5
+	min_tmin = regiao_prec.min().item()
+	int_min = int(min_tmin) + 5
+	if ((int_max - int_min)//2 != (int_max-int_min)/2):
+		int_max += 1
+	levels = range(int_min, int_max + 1, 5)
+	norm = cls.Normalize(vmin = int_min, vmax = int_max)
+	print(f"\n{green}Valor máximo da precipitação: {reset}{round(max_tmax, 2)} mm\n")
+	print(f"\n{green}Valor mínimo da precipitação: {reset}{round(min_tmin, 2)} mm\n")
+	return levels, norm
+	
+def gerar_mapa(dataset):
+	"""
+	Função relativa à síntese de mapas temáticos de precipitação utilizando MERGE.
+	entrada:
+	- arquivo = regiao_prec;
+	retorno:
+	- mapa temático com a variável de interesse.
+	"""
+	plt.figure(figsize=(8, 6))#, layout = "tight", frameon = False)
+	ax = plt.axes(projection=ccrs.PlateCarree())
+	shp = list(shpreader.Reader(f"{caminho_shapefile}/BR_UF_2019.shp").geometries())
+	cmap = plt.get_cmap("jet_r")
+	#RdYlBu gist_earth_r terrain_r winter_r summer_r viridis_r cividis_r Blues turbo_r jet_r gnuplot2_r gist_ncar_r
+	figure = dataset.plot.contourf(cmap = cmap, norm = norm, robust = True,
+									add_colorbar = False,  add_labels = False,
+									transform = ccrs.PlateCarree(),  levels = levels)
+	plt.colorbar(figure, pad = 0.05, fraction = 0.05, label = "Precipitação (mm)",
+				ticks = levels, orientation = "vertical", extend = "max")
+	_d7 = datetime.today() - timedelta(days = 7)
+	_d7 = _d7 - timedelta(days = _d7.weekday() + 1)
+	_d7 = _d7.strftime("%Y-%m-%d")
+	print(f"\n{green}prec - DOMINGO: {reset}{_d7}\n")
+	plt.title(f"Precipitação Acumulada Semanal\nPeríodo observado: {_d7}",
+				fontsize = 14, ha = "center")
+	ax.add_geometries(shp, ccrs.PlateCarree(), edgecolor = "black", facecolor = "none", linewidth = 0.5)
+	ax.coastlines(resolution = "10m", color = "black", linewidth = 0.8)
+	ax.add_feature(cartopy.feature.BORDERS, edgecolor = "black", linewidth = 0.5)
+	gl = ax.gridlines(crs = ccrs.PlateCarree(), color = "white", alpha = 1.0,
+					linestyle = "--", linewidth = 0.25, xlocs = np.arange(-180, 180, 1),
+					ylocs = np.arange(-90, 90, 1), draw_labels = True)
+	gl.top_labels = False
+	gl.right_labels = False
+	plt.figtext(0.55, 0.045, "Fonte: SAMeT - CPTEC/INPE", ha = "center", fontsize = 10)
+	plt.savefig(f"{caminho_resultado}prec_semanal_merge_acumulada_{_d7}.png",
+				transparent = False, dpi = 300, bbox_inches = "tight", pad_inches = 0.02)
+	#plt.show()
+	
+#################################################################################
+# EXECUTANDO FUNÇÕES
+	
+try:
+	regiao_prec = selecionar_tempo_espaco(ds_prec, _ANO_ATUAL)
+except FileNotFoundError:
+	regiao_prec = selecionar_tempo_espaco(ds_prec, _ANO_ONTEM)
 
-# Variável de interesse
-print('Data variable:', ds.prec, '\n')
-print('***************************************\n')
+levels, norm = limite_colobar(regiao_prec)
+info_dataset(regiao_prec)
+gerar_mapa(regiao_prec)
 
-# Definir a extensão da região que você deseja plotar
-#lat_min = -36.95
-#lat_max = -19.05
-#lon_min = -62.95
-#lon_max = -45.05
-lat_min = -34.00
-lat_max = -21.75
-lon_min = -58.25
-lon_max = -47.50
-# Definir data (ano-mês)
-#data = "2024-06"
-#data=sys.argv[1] 
-
-# Selecionar os dados de precipitação para a região e o dia específico
-
-data_region = ds.sel(time = f'{data}', lat=slice(lat_min, lat_max), lon=slice(lon_min, lon_max)).prec.squeeze()
-
-# Encontrar o valor máximo da precipitacao na região selecionada
-max_prec = data_region.max().item()
-int_max = int(max_prec) + 10
-print(f'Valor máximo da precipitação na região selecionada: {int_max} mm')
-int_min = 0
-
-# Plotar Precipitação de um dia específico
-plt.figure(figsize=(8, 6))
-ax = plt.axes(projection=ccrs.PlateCarree())
-shp = list(shpreader.Reader(f"{path_shp}/BR_UF_2019.shp").geometries())
-
-# Criar uma paleta de cores personalizada
-colors = ["#b4f0f0", "#96d2fa", "#78b9fa", "#3c95f5", "#1e6deb", "#1463d2", 
-          "#0fa00f", "#28be28", "#50f050", "#72f06e", "#b3faaa", "#fff9aa", 
-          "#ffe978", "#ffc13c", "#ffa200", "#ff6200", "#ff3300", "#ff1500", 
-          "#c00100", "#a50200", "#870000", "#653b32"]
-cmap = matplotlib.colors.ListedColormap(colors)
-cmap.set_over('#000000')
-cmap.set_under('#ffffff')
-
-# Definir o intervalo de contorno
-#data_min = int_min
-#data_max = int_max
-data_min = int_min
-data_max = int_max
-interval = 1
-levels = np.linspace(data_min, data_max, num=256)
-#levels = np.arange(data_min, data_max, (int_max-int_min)/10)
-
-# Plotar o dado 2D da região selecionada
-figure = data_region.plot.pcolormesh(robust=True, norm=cls.Normalize(vmin=int_min, vmax=int_max),
-                                     cmap=cmap, add_colorbar=False, levels=levels, add_labels=False)
-
-
-ax.add_geometries(shp, ccrs.PlateCarree(), edgecolor='gray', facecolor='none', linewidth=0.3)
-ax.coastlines(resolution='10m', color='black', linewidth=0.8)
-ax.add_feature(cartopy.feature.BORDERS, edgecolor='black', linewidth=0.5)
-gl = ax.gridlines(crs=ccrs.PlateCarree(), color='white', alpha=1.0, linestyle='--', linewidth=0.25, xlocs=np.arange(-180, 180, 5), ylocs=np.arange(-90, 90, 5), draw_labels=True)
-gl.top_labels = False
-gl.right_labels = False
-        
-plt.colorbar(figure, pad=0.05, fraction=0.05, extend='max', ticks=np.arange(int_min, int_max+1, (int_max-int_min)/10), orientation='vertical', label='Precipitação Mensal (mm)')
-
-plt.title(f'Precipitação Média Mensal (mm) - Sul do Brasil\nPeríodo observado: {mes}/{ano} ', fontsize=14, ha='center')
-
-# Adicionar a fonte no rodapé
-plt.figtext(0.55, 0.05, 'Fonte: MERGE - CPTEC', ha='center', fontsize=10)
-
-# Salvar a figura no formato ".jpg" com dpi=300.
-plt.savefig(f"{path_pro}/{ano}/prec_acum_mensal_merge_{ano}{mes}.png", transparent=True, dpi=300, bbox_inches="tight", pad_inches=0.02)
-print(f'Figura gerada: {path_pro}/{ano}/prec_acum_mensal_merge_{ano}{mes}.png')
-
-#plt.show()
+	
