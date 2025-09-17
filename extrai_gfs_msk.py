@@ -14,6 +14,7 @@ import statsmodels as sm
 import  xarray as xr
 import geopandas as gpd
 from shapely.geometry import Point
+import regionmask
 
 ##### Padrão ANSI ###############################################################
 bold = "\033[1m"
@@ -172,6 +173,13 @@ def semana_epidemiologica(csv, str_var):
 	print(f"\n{green}ARQUIVO SALVO COM SUCESSO!\n\nSemana Epidemiológica - {str_var.upper()}{reset}\n\n{csv_se}\n")
 	print(f"\n{red}As variáveis do arquivo ({str_var.upper()}), em semanas epidemiológicas, são:{reset}\n{csv_se.dtypes}\n")
 	return csv_se
+	
+def mascara(shapefile, shp_polig):
+	mask = regionmask.mask_geopandas(shapefile, shp_polig.lon, shp_polig.lat)
+	dados_mascarados = shp_polig.where(mask >= 0)
+	media = dados_mascarados.mean().values
+	media = media.round(2)
+	return media
 
 def extrair_centroides(shapefile, netcdf4, str_var):
 	"""
