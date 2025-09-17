@@ -84,7 +84,7 @@ elif _LOCAL == "IFSC":
 	caminho_operacional = "/home/meteoro/scripts/matheus/operacional_dengue/"
 	caminho_shape = "/media/dados/shapefiles/" #SC/SC_Municipios_2022.shp #BR/BR_UF_2022.shp
 	caminho_modelos = f"/home/meteoro/scripts/matheus/operacional_dengue/modelagem/casos/{_ANO_ATUAL}/{_ANO_MES_DIA}/"
-	caminho_resultados = "modelagem/resultados/"
+	caminho_resultados = f"modelagem/resultados/{_ANO_ATUAL}/{_ANO_MES}/"
 #	caminho_resultados = "home/meteoro/scripts/matheus/operacional_dengue/modelagem/resultados/"
 else:
 	print("CAMINHO NÃO RECONHECIDO! VERIFICAR LOCAL!")
@@ -490,14 +490,13 @@ previsao_melt_geo["Semana"] = pd.to_datetime(previsao_melt_geo["Semana"])
 print(f"\n{green}Caminho e Nome do arquivo:\n{reset}")
 print(f"\n{green}{caminho_modelos}RF_casos_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_{_CIDADE}.h5\n{reset}")
 if _SALVAR == True:
-	caminho_csv = "modelagem/resultados/dados_previstos/"
-	os.makedirs(caminho_csv, exist_ok = True)
+	os.makedirs(caminho_resultados, exist_ok = True)
 	previsao_pivot_csv = f"previsao_pivot_incidencia_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
-	previsao_total.to_csv(f"{caminho_csv}{previsao_pivot_csv}", index = False)
+	previsao_total.to_csv(f"{caminho_resultados}{previsao_pivot_csv}", index = False)
 	previsao_melt_csv = f"previsao_melt_incidencia_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
-	previsao_melt.to_csv(f"{caminho_csv}{previsao_melt_csv}", index = False)
-	print(f"\n\n{green}{caminho_csv}\n{previsao_pivot_csv}\nSALVO COM SUCESSO!{reset}\n\n")
-	print(f"\n\n{green}{caminho_csv}\n{previsao_melt_csv}\nSALVO COM SUCESSO!{reset}\n\n")
+	previsao_melt.to_csv(f"{caminho_resultados}{previsao_melt_csv}", index = False)
+	print(f"\n\n{green}{caminho_resultados}\n{previsao_pivot_csv}\nSALVO COM SUCESSO!{reset}\n\n")
+	print(f"\n\n{green}{caminho_resultados}\n{previsao_melt_csv}\nSALVO COM SUCESSO!{reset}\n\n")
 #sys.exit()
 
 ######################################################################################################
@@ -601,10 +600,9 @@ ultimas_previsoes_vdd.reset_index(inplace = True)
 print(f"\n{green}ultimas_previsoes.T_df.T\n{reset}{ultimas_previsoes_vdd}\n")
 #ultimas_previsoes_vdd = ultimas_previsoes_vdd.drop(columns = "Semana")
 if _SALVAR == True:
-	caminho_csv = "modelagem/resultados/dados_previstos/"
-	os.makedirs(caminho_csv, exist_ok = True)
+	os.makedirs(caminho_resultados, exist_ok = True)
 	ultimas_previsoes_csv = f"ultimas_previsoes_incidencia_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
-	ultimas_previsoes_vdd.to_csv(f"{caminho_csv}{ultimas_previsoes_csv}", index = False)
-	print(f"\n\n{green}{caminho_csv}\n{ultimas_previsoes_csv}\nSALVO COM SUCESSO!{reset}\n\n")
+	ultimas_previsoes_vdd.to_csv(f"{caminho_resultados}{ultimas_previsoes_csv}", index = False)
+	print(f"\n\n{green}{caminho_resultados}\n{ultimas_previsoes_csv}\nSALVO COM SUCESSO!{reset}\n\n")
 	print(f"\n\n{green}OS VALORES DAS ÚLTIMAS PREVISÕES DE INCIDÊNCIA SÃO APRESENTADOS ABAIXO:\n{reset}{ultimas_previsoes_vdd}\n\n")
 	
