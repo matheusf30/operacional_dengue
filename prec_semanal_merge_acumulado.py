@@ -7,12 +7,12 @@
 ### COMO RODAR: executar o arquivo python e em seguida inserir ano-mês
 ###  Ex.:
 ###  python tmed_mensal_samet.py 2024-05
-###                  AUTORA: Roseli de Oliveira            - 2024/07/11
-###                  Adaptado: Mario Quadro                - 2024/09/05
+###                  AUTORA: Roseli de Oliveira             - 2024/07/11
+###                  Adaptado: Mario Quadro                 - 2024/09/05
 ###                  Atualizado: Matheus Ferreira de Souza  - 2025/09/15
 ###                              Everton Weber Galliani     - 2025/09/16
 ###                              Murilo Ferreira dos Santos - 2025/09/16
-##########################################################################
+#################################################################################
 
 #################################################################################
 # IMPORTANDO BIBLIOTECAS
