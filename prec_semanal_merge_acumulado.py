@@ -119,16 +119,17 @@ def limite_minmax_anomalia(dataset):
 	
 def limite_colobar(regiao_prec):
 	max_tmax = regiao_prec.max().item()
-	int_max = int(max_tmax) - 5
+	int_max = int(max_tmax) - 10
 	min_tmin = regiao_prec.min().item()
-	int_min = int(min_tmin) + 5
+	int_min = int(min_tmin) + 10
 	if ((int_max - int_min)//2 != (int_max-int_min)/2):
 		int_max += 1
 	levels = range(int_min, int_max + 1, 5)
+	levels2 = range(int_min, int_max + 1, 10)
 	norm = cls.Normalize(vmin = int_min, vmax = int_max)
 	print(f"\n{green}Valor máximo da precipitação: {reset}{round(max_tmax, 2)} mm\n")
 	print(f"\n{green}Valor mínimo da precipitação: {reset}{round(min_tmin, 2)} mm\n")
-	return levels, norm
+	return levels, levels2, norm
 	
 def gerar_mapa(dataset):
 	"""
@@ -141,11 +142,17 @@ def gerar_mapa(dataset):
 	plt.figure(figsize=(8, 6))#, layout = "tight", frameon = False)
 	ax = plt.axes(projection=ccrs.PlateCarree())
 	shp = list(shpreader.Reader(f"{caminho_shapefile}/BR_UF_2019.shp").geometries())
-	cmap = plt.get_cmap("jet_r")
-	#RdYlBu gist_earth_r terrain_r winter_r summer_r viridis_r cividis_r Blues turbo_r jet_r gnuplot2_r gist_ncar_r
+	cmap = plt.get_cmap("YlGnBu")
+	#RdYlBu gist_earth_r terrain_r winter_r summer_r YlGnBu
+	#viridis_r cividis_r Blues turbo_r jet_r gnuplot2_r gist_ncar_r
 	figure = dataset.plot.contourf(cmap = cmap, norm = norm, robust = True,
 									add_colorbar = False,  add_labels = False,
 									transform = ccrs.PlateCarree(),  levels = levels)
+	linhas = dataset.plot.contour(ax = ax, levels = levels2,
+								colors = "black", linewidths = 0.5,	transform = ccrs.PlateCarree())
+	rotulos = ax.clabel(linhas, inline = True, fmt = "%1.0f", fontsize = 8, colors = "black")
+	for rotulo in rotulos:
+		rotulo.set_rotation(0)
 	plt.colorbar(figure, pad = 0.05, fraction = 0.05, label = "Precipitação (mm)",
 				ticks = levels, orientation = "vertical", extend = "max")
 	_d7 = datetime.today() - timedelta(days = 7)
@@ -162,7 +169,7 @@ def gerar_mapa(dataset):
 					ylocs = np.arange(-90, 90, 1), draw_labels = True)
 	gl.top_labels = False
 	gl.right_labels = False
-	plt.figtext(0.55, 0.045, "Fonte: SAMeT - CPTEC/INPE", ha = "center", fontsize = 10)
+	plt.figtext(0.55, 0.045, "Fonte: MERGE - CPTEC/INPE", ha = "center", fontsize = 10)
 	plt.savefig(f"{caminho_resultado}prec_semanal_merge_acumulada_{_d7}.png",
 				transparent = False, dpi = 300, bbox_inches = "tight", pad_inches = 0.02)
 	#plt.show()
@@ -175,7 +182,7 @@ try:
 except FileNotFoundError:
 	regiao_prec = selecionar_tempo_espaco(ds_prec, _ANO_ONTEM)
 
-levels, norm = limite_colobar(regiao_prec)
+levels, levels2, norm = limite_colobar(regiao_prec)
 info_dataset(regiao_prec)
 gerar_mapa(regiao_prec)
 
