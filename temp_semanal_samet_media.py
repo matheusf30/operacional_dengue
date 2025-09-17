@@ -155,7 +155,7 @@ def gerar_mapa(dataset, str_var):
 	retorno:
 	- mapa temático com a variável de interesse.
 	"""
-	plt.figure(figsize=(8, 6))#, layout = "tight", frameon = False)
+	plt.figure(figsize=(8, 6), layout = "constrained", frameon = True)
 	ax = plt.axes(projection=ccrs.PlateCarree())
 	shp = list(shpreader.Reader(f"{caminho_shapefile}/BR_UF_2019.shp").geometries())
 	cmap = plt.get_cmap("coolwarm")#jet_r RdYlBu_r
@@ -168,8 +168,8 @@ def gerar_mapa(dataset, str_var):
 	rotulos = ax.clabel(linhas, inline = True, fmt = "%1.0f", fontsize = 8, colors = "black")
 	for rotulo in rotulos:
 		rotulo.set_rotation(0)
-	plt.colorbar(figure, pad = 0.05, fraction = 0.05, label = "Temperatura Semanal (°C)",
-				ticks = levels, orientation = "vertical")
+	plt.colorbar(figure, fraction = 0.031, pad = 0.03, ticks = levels,
+				label = "Temperatura Semanal (°C)", orientation = "vertical", extend = "max")
 	_d7 = datetime.today() - timedelta(days = 7)
 	_d7 = _d7 - timedelta(days = _d7.weekday() + 1)
 	_d7 = _d7.strftime("%Y-%m-%d")

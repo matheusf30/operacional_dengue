@@ -120,8 +120,8 @@ def limite_minmax_anomalia(dataset):
 def limite_colobar(regiao_prec):
 	max_tmax = regiao_prec.max().item()
 	int_max = int(max_tmax) - 10
-	min_tmin = regiao_prec.min().item()
-	int_min = int(min_tmin) + 10
+	min_tmin = 0#regiao_prec.min().item()
+	int_min = int(min_tmin)# + 10
 	if ((int_max - int_min)//2 != (int_max-int_min)/2):
 		int_max += 1
 	levels = range(int_min, int_max + 1, 5)
@@ -139,7 +139,7 @@ def gerar_mapa(dataset):
 	retorno:
 	- mapa temático com a variável de interesse.
 	"""
-	plt.figure(figsize=(8, 6))#, layout = "tight", frameon = False)
+	plt.figure(figsize=(8, 6), layout = "constrained", frameon = True)
 	ax = plt.axes(projection=ccrs.PlateCarree())
 	shp = list(shpreader.Reader(f"{caminho_shapefile}/BR_UF_2019.shp").geometries())
 	cmap = plt.get_cmap("YlGnBu")
@@ -153,8 +153,8 @@ def gerar_mapa(dataset):
 	rotulos = ax.clabel(linhas, inline = True, fmt = "%1.0f", fontsize = 8, colors = "black")
 	for rotulo in rotulos:
 		rotulo.set_rotation(0)
-	plt.colorbar(figure, pad = 0.05, fraction = 0.05, label = "Precipitação (mm)",
-				ticks = levels, orientation = "vertical", extend = "max")
+	plt.colorbar(figure, fraction = 0.031, pad = 0.03, ticks = levels,
+				label = "Precipitação (mm)", orientation = "vertical", extend = "max")
 	_d7 = datetime.today() - timedelta(days = 7)
 	_d7 = _d7 - timedelta(days = _d7.weekday() + 1)
 	_d7 = _d7.strftime("%Y-%m-%d")
