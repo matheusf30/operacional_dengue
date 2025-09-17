@@ -144,7 +144,7 @@ def limite_colobar(regiao_tmin, regiao_tmax):
 	norm = cls.Normalize(vmin = int_min, vmax = int_max)
 	print(f"\n{green}Valor máximo da temperatura máxima: {reset}{round(max_tmax, 2)} °C\n")
 	print(f"\n{green}Valor mínimo da temperatura mínima: {reset}{round(min_tmin, 2)} °C\n")
-	return levels, norm
+	return levels, norm, int_min, int_max
 	
 def gerar_mapa(dataset, str_var):
 	"""
@@ -163,6 +163,11 @@ def gerar_mapa(dataset, str_var):
 										add_colorbar = False,  add_labels = False,
 										robust = True, extend = "both",
 										transform = ccrs.PlateCarree())
+	linhas = dataset.plot.contour(ax = ax, levels = levels,
+								colors = "black", linewidths = 0.5,	transform = ccrs.PlateCarree())
+	rotulos = ax.clabel(linhas, inline = True, fmt = "%1.0f", fontsize = 8, colors = "black")
+	for rotulo in rotulos:
+		rotulo.set_rotation(0)
 	plt.colorbar(figure, pad = 0.05, fraction = 0.05, label = "Temperatura Semanal (°C)",
 				ticks = levels, orientation = "vertical")
 	_d7 = datetime.today() - timedelta(days = 7)
@@ -206,7 +211,7 @@ except FileNotFoundError:
 	regiao_tmed = selecionar_tempo_espaco(ds_tmed, _ANO_ONTEM, "tmed")
 	regiao_tmax = selecionar_tempo_espaco(ds_tmax, _ANO_ONTEM, "tmax")
 
-levels, norm = limite_colobar(regiao_tmin, regiao_tmax)
+levels, norm, int_min, int_max = limite_colobar(regiao_tmin, regiao_tmax)
 info_dataset(regiao_tmin)
 info_dataset(regiao_tmed)
 info_dataset(regiao_tmax)
