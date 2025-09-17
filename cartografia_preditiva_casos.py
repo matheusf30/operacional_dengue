@@ -552,7 +552,7 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 	xy["Município"] = xy["Município"].str.upper() 
 	previsao_melt_poli = pd.merge(previsao_melt, xy, on = "Município", how = "left")
 	previsao_melt_poligeo = gpd.GeoDataFrame(previsao_melt_poli, geometry = "geometry", crs = "EPSG:4674")
-	fig, ax = plt.subplots(figsize = (20, 12), layout = "constrained", frameon = False)
+	fig, ax = plt.subplots(figsize = (20, 12), layout = "constrained", frameon = True)
 	#plt.gca().tick_params(labelsize = 20)
 	"""
 	coord_atlantico = [(-54, -30),(-48, -30),
