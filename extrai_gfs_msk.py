@@ -169,21 +169,21 @@ def semana_epidemiologica(csv, str_var):
 		csv_se = csv_se.groupby(["Semana"]).mean(numeric_only = True)
 	csv_se.reset_index(inplace = True)
 	csv_se.drop([0], axis = 0, inplace = True)
-	csv_se.to_csv(f"{caminho_dados}gfs_{str_var}_semana_{data_arquivo_final}.csv", index = False)
+	#csv_se.to_csv(f"{caminho_dados}gfs_{str_var}_semana_{data_arquivo_final}.csv", index = False)
 	print(f"\n{green}ARQUIVO SALVO COM SUCESSO!\n\nSemana Epidemiológica - {str_var.upper()}{reset}\n\n{csv_se}\n")
 	print(f"\n{red}As variáveis do arquivo ({str_var.upper()}), em semanas epidemiológicas, são:{reset}\n{csv_se.dtypes}\n")
 	return csv_se
 	
-def mascara(shapefile, shp_polig):
-	mask = regionmask.mask_geopandas(shapefile, shp_polig.lon, shp_polig.lat)
+def mascara(netcdf4, shp_polig):
+	mask = regionmask.mask_geopandas(netcdf4, shp_polig["geometry"].lon, shp_polig["geometry"].lat)
 	dados_mascarados = shp_polig.where(mask >= 0)
 	media = dados_mascarados.mean().values
 	media = media.round(2)
 	return media
-
-def extrair_centroides(shapefile, netcdf4, str_var):
+	
+def extrair_mascaras(shapefile, netcdf4, str_var):
 	"""
-	Função relativa a extração de valores dos arquivos NetCDF4 utilizando os centróides de arquivos shapefile como filtro.
+	Função relativa a extração de valores dos arquivos NetCDF4 utilizando as máscaras de arquivos shapefile como filtro.
 	Os arquivos NetCDF4 são provenientes de Rozante et.al. e apresentam 2 variáveis: 1 climática + 1 nest ou 1 Nobs (estações de observação).
 	Os arquivos Shapefile são provenientes do IBGE (2022) e apresentam CRS = (epsg = 4674)
 	Estes Arquivos estão alocados no SifapSC, dois diretórios antes do /home.
@@ -197,41 +197,39 @@ def extrair_centroides(shapefile, netcdf4, str_var):
 	- Retorno próprio de DataFrame com Municípios (centróides) em Colunas e Tempo (semanas epidemiológicas) em Linhas, preenchidos com valores climáticos.
 	- Salvando Arquivo.csv (dados semanais)
 	"""
-	shapefile["centroide"] = shapefile["geometry"].centroid
-	shapefile["centroide"] = shapefile["centroide"].to_crs(epsg = 4674)
-	valores_centroides = []
+	valores_mascaras = []
 	for idx, linha in shapefile.iterrows():
-		lon, lat = linha["centroide"].x, linha["centroide"].y
-		valor = netcdf4.sel(longitude = lon, latitude = lat, method = "nearest")
-		valores_centroides.append(valor)
-	valores_centroides = pd.DataFrame(data = valores_centroides)
-	valores_centroides["Municipio"] = shapefile["NM_MUN"].str.upper().copy()
-	valores_centroides = valores_centroides[["Municipio", str_var]]
+		print(f"\n{green}LINHA:{reset}\n{linha}\n")
+		media = mascara(netcdf4, linha)
+		valores_mascaras.append(media)
+	valores_mascaras = pd.DataFrame(data = valores_mascaras)
+	valores_mascaras["Municipio"] = shapefile["NM_MUN"].str.upper().copy()
+	valores_mascaras = valores_mascaras[["Municipio", str_var]]
 	valores_tempo = netcdf4[str_var].time.values
 	valores_variavel = netcdf4[str_var].values
 	var_valores = []
-	for i, linha in valores_centroides.iterrows():
+	for i, linha in valores_mascaras.iterrows():
 		if isinstance(linha[str_var], xr.DataArray):
 			var_valor = [x.item() if not np.isnan(x.item()) else np.nan for x in linha[str_var]]
 			var_valores.append(var_valor)
-			print(f"\n{green}---{str_var}---\n\n{reset}{valores_centroides['Municipio'][i]}: Finalizado!\n")
-			print(f"\n{red}{i + 1} de {len(valores_centroides['Municipio'])}.{reset}\n")
+			print(f"\n{green}---{str_var}---\n\n{reset}{valores_mascaras['Municipio'][i]}: Finalizado!\n")
+			print(f"\n{red}{i + 1} de {len(valores_mascaras['Municipio'])}.{reset}\n")
 		else:
 			var_valores.append([np.nan] * len(valores_tempo))
-			print(f"\n{red}{valores_centroides['Municipio'][i]}: NaN... {magenta}Finalizado!\n")
-			print(f"\n{red}{i + 1} de {len(valores_centroides['Municipio'])}.\n{reset}")
+			print(f"\n{red}{valores_mascaras['Municipio'][i]}: NaN... {magenta}Finalizado!\n")
+			print(f"\n{red}{i + 1} de {len(valores_mascaras['Municipio'])}.\n{reset}")
 	var_valores_df = pd.DataFrame(var_valores, columns = valores_tempo)
-	valores_centroides = pd.concat([valores_centroides, var_valores_df], axis = 1)
-	valores_centroides.drop(columns = [str_var], inplace = True)
-	valores_centroides.set_index("Municipio", inplace = True)
-	valores_centroides = valores_centroides.T
-	valores_centroides["Data"] = valores_centroides.index
-	valores_centroides.reset_index(inplace = True)
-	colunas_restantes = valores_centroides.columns.drop("Data")
-	valores_centroides = valores_centroides[["Data"] + colunas_restantes.tolist()]
-	valores_centroides.columns.name = str_var
-	valores_centroides.rename(columns = {"index" : str_var}, inplace = True)
-	valores_centroides.to_csv(f"{caminho_dados}gfs_{str_var}_diario_{data_arquivo_final}.csv", index = False)
+	valores_mascaras = pd.concat([valores_mascaras, var_valores_df], axis = 1)
+	valores_mascaras.drop(columns = [str_var], inplace = True)
+	valores_mascaras.set_index("Municipio", inplace = True)
+	valores_mascaras = valores_mascaras.T
+	valores_mascaras["Data"] = valores_mascaras.index
+	valores_mascaras.reset_index(inplace = True)
+	colunas_restantes = valores_mascaras.columns.drop("Data")
+	valores_mascaras = valores_mascaras[["Data"] + colunas_restantes.tolist()]
+	valores_mascaras.columns.name = str_var
+	valores_mascaras.rename(columns = {"index" : str_var}, inplace = True)
+	#valores_mascaras.to_csv(f"{caminho_dados}gfs_{str_var}_diario_{data_arquivo_final}.csv", index = False)
 	print("="*50)
 	print(f"\n{green}{caminho_dados}{_ANO_FINAL}/{_MES_FINAL}/gfs_{str_var}_diario_{data_arquivo_final}.csv{reset}\n")
 	print(f"\n{green}ARQUIVO SALVO COM SUCESSO!{reset}\n")
@@ -245,15 +243,15 @@ def extrair_centroides(shapefile, netcdf4, str_var):
 	print(valores_variavel)
 	print(valores_variavel.shape)
 	print("="*50)
-	print(valores_centroides)
-	print(valores_centroides.info())
-	print(valores_centroides.dtypes)
+	print(valores_mascaras)
+	print(valores_mascaras.info())
+	print(valores_mascaras.dtypes)
 	print("="*50)
-	verifica_nan(valores_centroides)
-	csv_se = semana_epidemiologica(valores_centroides, str_var)
-	return valores_centroides, csv_se
+	verifica_nan(valores_mascaras)
+	csv_se = semana_epidemiologica(valores_mascaras, str_var)
+	return valores_mascaras, csv_se
 
-prec, prec_se = extrair_centroides(municipios, prec, "prec")
+prec, prec_se = extrair_mascaras(municipios, prec, "prec")
 """
 prectotal = pd.concat([serie_prec, prec], ignore_index = True)
 prectotal["Data"] = pd.to_datetime(prectotal["Data"]).dt.strftime("%Y-%m-%d")
@@ -265,7 +263,7 @@ print(f"\n{green}prectotal\n{reset}{prectotal}\n")
 print(f"\n{green}prectotal_se\n{reset}{prectotal_se}\n")
 print(prectotal_se[["BALNEÁRIO CAMBORIÚ", "BOMBINHAS", "PORTO BELO"]])
 """
-tmin, tmin_se = extrair_centroides(municipios, tmin, "tmin")
+tmin, tmin_se = extrair_mascaras(municipios, tmin, "tmin")
 """
 tmintotal = pd.concat([serie_tmin, tmin], ignore_index = True)
 tmintotal["Data"] = pd.to_datetime(tmintotal["Data"]).dt.strftime("%Y-%m-%d")
@@ -277,7 +275,7 @@ print(f"\n{green}tmintotal\n{reset}{tmintotal}\n")
 print(f"\n{green}tmintotal_se\n{reset}{tmintotal_se}\n")
 print(tmintotal_se[["BALNEÁRIO CAMBORIÚ", "BOMBINHAS", "PORTO BELO"]])
 """
-tmed, tmed_se = extrair_centroides(municipios, tmed, "tmed")
+tmed, tmed_se = extrair_mascaras(municipios, tmed, "tmed")
 """
 tmedtotal = pd.concat([serie_tmed, tmed], ignore_index = True)
 tmedtotal["Data"] = pd.to_datetime(tmedtotal["Data"]).dt.strftime("%Y-%m-%d")
@@ -289,7 +287,7 @@ print(f"\n{green}tmedtotal\n{reset}{tmedtotal}\n")
 print(f"\n{green}tmedtotal_se\n{reset}{tmedtotal_se}\n")
 print(tmedtotal_se[["BALNEÁRIO CAMBORIÚ", "BOMBINHAS", "PORTO BELO"]])
 """
-tmax, tmax_se = extrair_centroides(municipios, tmax, "tmax")
+tmax, tmax_se = extrair_mascaras(municipios, tmax, "tmax")
 """
 tmaxtotal = pd.concat([serie_tmax, tmax], ignore_index = True)
 tmaxtotal["Data"] = pd.to_datetime(tmaxtotal["Data"]).dt.strftime("%Y-%m-%d")
