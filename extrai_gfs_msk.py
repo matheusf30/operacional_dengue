@@ -5,8 +5,9 @@ import sys, os
 import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
-"""
-import matplotlib.pyplot as plt               
+
+import matplotlib.pyplot as plt  
+"""             
 import seaborn as sns
 import statsmodels as sm
 """
@@ -145,17 +146,18 @@ def verifica_nan(valores_centroides):
 		print(f"\nOs dias com valores {red}{bold}NaN{reset} são:")
 		print(f"{valores_centroides[valores_centroides['BOMBINHAS'].isna()]['Data']}\n")
 	print("="*80)
-	
-	
+
 def mascara(netcdf4, shapefile, str_var):
 	shapefile = shapefile.geometry
 	mascara = regionmask.mask_geopandas(shapefile, netcdf4["longitude"], netcdf4["latitude"]) #["geometry"]
+	mascara.plot()
+	plt.show()
 	dados_mascarados = netcdf4.where(mascara >= 0)
 	if str_var == prec:
 		media = dados_mascarados.sum().values
 	else:
 		media = dados_mascarados.mean().values
-	media = np.round(media, 2)
+	#media = np.round(media, 2)
 	print(f"\n{green}MÉDIA(temp)/ACUMULADO(prec):\n{reset}{media}\n")
 	return media
 	
