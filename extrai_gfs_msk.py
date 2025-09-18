@@ -105,31 +105,31 @@ except FileNotFoundError:
 	
 #teste = pd.read_csv(f"{caminho_dados}{teste}")
 municipios = gpd.read_file(f"{caminho_shape}{municipios}")
-print(teste)
+print(f"\n{green}MUNICÍPIOS\n{reset}{municipios}\n")
+floripa = municipios[municipios["NM_MUN"] == "Florianópolis"]
+print(f"\n{green}FLORIANÓPOLIS\n{reset}{floripa}\n")
+print(f"\n{green}FLORIANÓPOLIS (.geometry)\n{reset}{floripa.geometry}\n")
+
+shapefile = floripa.geometry
+mascara = regionmask.mask_geopandas(shapefile, prec["longitude"], prec["latitude"]) #["geometry"]
+print(f"\n{green}Forma de shapefile:\n{reset}{shapefile.shape}\n")
+print(f"\n{green}Forma de mask:\n{reset}{mascara.shape}\n")
+
 #sys.exit()
 ###Visualizando arquivos e variáveis
 #ShapeSC (municípios)
-print(f"\n{green}municipios\n{reset}{municipios}\n")
-#prec
-print(f'\n{green}prec.variables["prec"][:]\n{reset}{prec.variables["prec"][:]}\n')
-print(f'\n{green}prec.variables["time"][:]\n{reset}{prec.variables["time"][:]}\n')
-print(f"\n{green}prec\n{reset}{prec}\n")
-#tmin
-print(f'\n{green}tmin.variables["tmin"][:]\n{reset}{tmin.variables["tmin"][:]}\n')
-print(f'\n{green}tmin.variables["time"][:]\n{reset}{tmin.variables["time"][:]}\n')
-print(f"\n{green}tmin\n{reset}{tmin}\n")
-#tmed
-print(f'\n{green}tmed.variables["tmean"][:]\n{reset}{tmed.variables["tmean"][:]}\n')
-tmed = tmed.rename({"tmean" : "tmed"})
-print(f'\n{green}tmed.variables["tmed"][:]\n{reset}{tmed.variables["tmed"][:]}\n')
-print(f'\n{green}tmed.variables["time"][:]\n{reset}{tmed.variables["time"][:]}\n')
-print(f"\n{green}tmed\n{reset}{tmed}\n")
-#tmax
-print(f'\n{green}tmax.variables["tmax"][:]\n{reset}{tmax.variables["tmax"][:]}\n')
-print(f'\n{green}tmax.variables["time"][:]\n{reset}{tmax.variables["time"][:]}\n')
-print(f"\n{green}tmax\n{reset}{tmax}\n")
+
+
+
 #sys.exit()
 ### Pré-processamento e Definição de Função
+
+def info_netcdf4(netcdf4, str_var):
+	print(f'\n{green}netcdf4.variables["str_var"][:]\n{reset}{netcdf4.variables[str_var][:]}\n')
+	print(f'\n{green}netcdf4.variables["time"][:]\n{reset}{netcdf4.variables["time"][:]}\n')
+	print(f'\n{green}netcdf4.variables["longitude"][:]\n{reset}{netcdf4.variables["longitude"][:]}\n')
+	print(f'\n{green}netcdf4.variables["latitude"][:]\n{reset}{netcdf4.variables["latitude"][:]}\n')
+	print(f"\n{green}netcdf4\n{reset}{netcdf4}\n")
 
 def verifica_nan(valores_centroides):
 	"""
@@ -145,40 +145,18 @@ def verifica_nan(valores_centroides):
 		print(f"\nOs dias com valores {red}{bold}NaN{reset} são:")
 		print(f"{valores_centroides[valores_centroides['BOMBINHAS'].isna()]['Data']}\n")
 	print("="*80)
-
-def semana_epidemiologica(csv, str_var):
-	"""
-	Função relativa ao agrupamento de dados em semanas epidemiológicas.
-	Os arquivos.csv são provenientes deo roteiro 'extrai_clima.py': colunas com datas e municípios + todas as linhas são dados diários.
-	Estes Arquivos estão alocados no SifapSC ou GitHub.
-	Argumento:
-	- Variável com arquivo.csv;
-	- String da variável referente ao arquivo.csv.
-	Retorno:
-	- Retorno próprio de DataFrame com Municípios (centróides) em Colunas e Tempo (semanas epidemiológicas) em Linhas, preenchidos com valores climáticos.
-	- Salvando Arquivo.csv
-	"""
-	csv.drop(columns = str_var, inplace = True)
-	csv["Data"] = pd.to_datetime(csv["Data"])
-	csv = csv.sort_values(by = ["Data"])
-	csv_se = csv.copy()
-	csv_se["Semana"] = csv_se["Data"].dt.to_period("W-SAT").dt.to_timestamp()
-	if str_var == "prec":
-		csv_se = csv_se.groupby(["Semana"]).sum(numeric_only = True)
-	else:
-		csv_se = csv_se.groupby(["Semana"]).mean(numeric_only = True)
-	csv_se.reset_index(inplace = True)
-	csv_se.drop([0], axis = 0, inplace = True)
-	#csv_se.to_csv(f"{caminho_dados}gfs_{str_var}_semana_{data_arquivo_final}.csv", index = False)
-	print(f"\n{green}ARQUIVO SALVO COM SUCESSO!\n\nSemana Epidemiológica - {str_var.upper()}{reset}\n\n{csv_se}\n")
-	print(f"\n{red}As variáveis do arquivo ({str_var.upper()}), em semanas epidemiológicas, são:{reset}\n{csv_se.dtypes}\n")
-	return csv_se
 	
-def mascara(netcdf4, shp_polig):
-	mask = regionmask.mask_geopandas(netcdf4, shp_polig["geometry"].lon, shp_polig["geometry"].lat)
-	dados_mascarados = shp_polig.where(mask >= 0)
-	media = dados_mascarados.mean().values
-	media = media.round(2)
+	
+def mascara(netcdf4, shapefile, str_var):
+	shapefile = shapefile.geometry
+	mascara = regionmask.mask_geopandas(shapefile, netcdf4["longitude"], netcdf4["latitude"]) #["geometry"]
+	dados_mascarados = netcdf4.where(mascara >= 0)
+	if str_var == prec:
+		media = dados_mascarados.sum().values
+	else:
+		media = dados_mascarados.mean().values
+	#media = np.round(media, 2)
+	print(f"\n{green}MÉDIA(temp)/ACUMULADO(prec):\n{reset}{media}\n")
 	return media
 	
 def extrair_mascaras(shapefile, netcdf4, str_var):
@@ -197,13 +175,20 @@ def extrair_mascaras(shapefile, netcdf4, str_var):
 	- Retorno próprio de DataFrame com Municípios (centróides) em Colunas e Tempo (semanas epidemiológicas) em Linhas, preenchidos com valores climáticos.
 	- Salvando Arquivo.csv (dados semanais)
 	"""
+	info_netcdf4(netcdf4, str_var)
 	valores_mascaras = []
-	for idx, linha in shapefile.iterrows():
-		print(f"\n{green}LINHA:{reset}\n{linha}\n")
-		media = mascara(netcdf4, linha)
+	for idx, shp_municipio in shapefile.iterrows():
+		print(f"{red}=={reset}=="*10)
+		print(f"\n{green}MUNICÍPIO:{reset}\n{shp_municipio['NM_MUN']}\n")
+		shp_municipio = gpd.GeoSeries([shp_municipio.geometry])
+		print(f"\n{green}LINHA.geometry:{reset}\n{shp_municipio}\n")
+		print(f"\n{green}type(LINHA):{reset}\n{type(shp_municipio)}\n")
+		media = mascara(netcdf4, shp_municipio, str_var)
 		valores_mascaras.append(media)
+		print(f"{red}=={reset}=="*10)
 	valores_mascaras = pd.DataFrame(data = valores_mascaras)
 	valores_mascaras["Municipio"] = shapefile["NM_MUN"].str.upper().copy()
+	valores_mascaras.columns = valores_mascaras.columns.str.strip()
 	valores_mascaras = valores_mascaras[["Municipio", str_var]]
 	valores_tempo = netcdf4[str_var].time.values
 	valores_variavel = netcdf4[str_var].values
@@ -250,6 +235,37 @@ def extrair_mascaras(shapefile, netcdf4, str_var):
 	verifica_nan(valores_mascaras)
 	csv_se = semana_epidemiologica(valores_mascaras, str_var)
 	return valores_mascaras, csv_se
+	
+def semana_epidemiologica(csv, str_var):
+	"""
+	Função relativa ao agrupamento de dados em semanas epidemiológicas.
+	Os arquivos.csv são provenientes deo roteiro 'extrai_clima.py': colunas com datas e municípios + todas as linhas são dados diários.
+	Estes Arquivos estão alocados no SifapSC ou GitHub.
+	Argumento:
+	- Variável com arquivo.csv;
+	- String da variável referente ao arquivo.csv.
+	Retorno:
+	- Retorno próprio de DataFrame com Municípios (centróides) em Colunas e Tempo (semanas epidemiológicas) em Linhas, preenchidos com valores climáticos.
+	- Salvando Arquivo.csv
+	"""
+	csv.drop(columns = str_var, inplace = True)
+	csv["Data"] = pd.to_datetime(csv["Data"])
+	csv = csv.sort_values(by = ["Data"])
+	csv_se = csv.copy()
+	csv_se["Semana"] = csv_se["Data"].dt.to_period("W-SAT").dt.to_timestamp()
+	if str_var == "prec":
+		csv_se = csv_se.groupby(["Semana"]).sum(numeric_only = True)
+	else:
+		csv_se = csv_se.groupby(["Semana"]).mean(numeric_only = True)
+	csv_se.reset_index(inplace = True)
+	csv_se.drop([0], axis = 0, inplace = True)
+	#csv_se.to_csv(f"{caminho_dados}gfs_{str_var}_semana_{data_arquivo_final}.csv", index = False)
+	print(f"\n{green}ARQUIVO SALVO COM SUCESSO!\n\nSemana Epidemiológica - {str_var.upper()}{reset}\n\n{csv_se}\n")
+	print(f"\n{red}As variáveis do arquivo ({str_var.upper()}), em semanas epidemiológicas, são:{reset}\n{csv_se.dtypes}\n")
+	return csv_se
+	
+
+mascara(prec, floripa, "prec")
 
 prec, prec_se = extrair_mascaras(municipios, prec, "prec")
 """
@@ -305,4 +321,24 @@ print(f"\n{green}Atualização feita em reanálise preditiva* a partir de: {red}
 print(f"\n{bold}*GFS (Global Forecast System)**{reset}")
 print(f"{bold}**NCEP (National Centers for Environmental Prediction){reset}\n")
 print(f"{red}!{reset}!{green}!{reset}!"*30)
+
+##################################### FIM ###########################################
+
+print(f'\n{green}prec.variables["prec"][:]\n{reset}{prec.variables["prec"][:]}\n')
+print(f'\n{green}prec.variables["time"][:]\n{reset}{prec.variables["time"][:]}\n')
+print(f"\n{green}prec\n{reset}{prec}\n")
+#tmin
+print(f'\n{green}tmin.variables["tmin"][:]\n{reset}{tmin.variables["tmin"][:]}\n')
+print(f'\n{green}tmin.variables["time"][:]\n{reset}{tmin.variables["time"][:]}\n')
+print(f"\n{green}tmin\n{reset}{tmin}\n")
+#tmed
+print(f'\n{green}tmed.variables["tmean"][:]\n{reset}{tmed.variables["tmean"][:]}\n')
+tmed = tmed.rename({"tmean" : "tmed"})
+print(f'\n{green}tmed.variables["tmed"][:]\n{reset}{tmed.variables["tmed"][:]}\n')
+print(f'\n{green}tmed.variables["time"][:]\n{reset}{tmed.variables["time"][:]}\n')
+print(f"\n{green}tmed\n{reset}{tmed}\n")
+#tmax
+print(f'\n{green}tmax.variables["tmax"][:]\n{reset}{tmax.variables["tmax"][:]}\n')
+print(f'\n{green}tmax.variables["time"][:]\n{reset}{tmax.variables["time"][:]}\n')
+print(f"\n{green}tmax\n{reset}{tmax}\n")
 
