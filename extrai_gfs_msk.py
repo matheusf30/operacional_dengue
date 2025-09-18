@@ -155,7 +155,7 @@ def mascara(netcdf4, shapefile, str_var):
 		media = dados_mascarados.sum().values
 	else:
 		media = dados_mascarados.mean().values
-	#media = np.round(media, 2)
+	media = np.round(media, 2)
 	print(f"\n{green}MÉDIA(temp)/ACUMULADO(prec):\n{reset}{media}\n")
 	return media
 	
