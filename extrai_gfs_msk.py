@@ -150,15 +150,15 @@ def verifica_nan(valores_centroides):
 def mascara(netcdf4, shapefile, str_var):
 	shapefile = shapefile.geometry
 	mascara = regionmask.mask_geopandas(shapefile, netcdf4["longitude"], netcdf4["latitude"]) #["geometry"]
-	mascara.plot()
-	plt.show()
 	dados_mascarados = netcdf4.where(mascara >= 0)
-	if str_var == prec:
-		media = dados_mascarados.sum().values
+	if str_var == "prec":
+		media = dados_mascarados[str_var].sum().item()
 	else:
-		media = dados_mascarados.mean().values
-	#media = np.round(media, 2)
+		media = dados_mascarados[str_var].mean().item()
+	media = np.round(media, 2)
 	print(f"\n{green}MÉDIA(temp)/ACUMULADO(prec):\n{reset}{media}\n")
+	#mascara.plot()
+	#plt.show()
 	return media
 	
 def extrair_mascaras(shapefile, netcdf4, str_var):
@@ -189,9 +189,10 @@ def extrair_mascaras(shapefile, netcdf4, str_var):
 		valores_mascaras.append(media)
 		print(f"{red}=={reset}=="*10)
 	valores_mascaras = pd.DataFrame(data = valores_mascaras)
-	valores_mascaras["Municipio"] = shapefile["NM_MUN"].str.upper().copy()
-	valores_mascaras.columns = valores_mascaras.columns.str.strip()
-	valores_mascaras = valores_mascaras[["Municipio", str_var]]
+	valores_mascaras["Municipio"] = shapefile["NM_MUN"].str.upper().copy()	
+	valores_mascaras = valores_mascaras.rename(columns = {0 : str_var})
+	valores_mascaras = valores_mascaras[["Municipio", str_var]]	
+	print(f"{green}\nVALORES MÁSCARA:\n{reset}{valores_mascaras}\n")					
 	valores_tempo = netcdf4[str_var].time.values
 	valores_variavel = netcdf4[str_var].values
 	var_valores = []
