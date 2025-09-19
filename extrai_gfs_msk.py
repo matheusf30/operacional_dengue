@@ -83,8 +83,7 @@ tmax_ontem = f"temp_max_daily_gfs_{_ANO_MES_DIA_ONTEM}00.nc"
 tmed_ontem = f"temp_mean_daily_gfs_{_ANO_MES_DIA_ONTEM}00.nc"
 tmin_ontem = f"temp_min_daily_gfs_{_ANO_MES_DIA_ONTEM}00.nc"
 teste = "gfs_prec_semana_20241014.csv"
-
-municipios = "SC_Municipios_2022.shp"
+municipios = "SC_Municipios_2024.shp"
 
 ### Abrindo Arquivos
 try:
@@ -106,6 +105,7 @@ except FileNotFoundError:
 	
 #teste = pd.read_csv(f"{caminho_dados}{teste}")
 municipios = gpd.read_file(f"{caminho_shape}{municipios}")
+municipios = municipios.to_crs("EPSG:4326")
 print(f"\n{green}MUNICÍPIOS\n{reset}{municipios}\n")
 floripa = municipios[municipios["NM_MUN"] == "Florianópolis"]
 print(f"\n{green}FLORIANÓPOLIS\n{reset}{floripa}\n")
@@ -139,12 +139,12 @@ def verifica_nan(valores_centroides):
 	Retorno: Exibição de mensagens para casos de haver ou não valores NaN.
 	"""
 	print(f"\n{bold}VERIFICAÇÃO DE DADOS FALTANTES{bold}\n")
-	print(f"\nQuantidade de valores {red}{bold}NaN: {valores_centroides['BOMBINHAS'].isnull().sum()}{bold}{reset}")
-	if valores_centroides["BOMBINHAS"].isnull().sum() == 0:
+	print(f"\nQuantidade de valores {red}{bold}NaN: {valores_centroides.isnull().sum().sum()}{bold}{reset}")
+	if valores_centroides.isnull().sum().sum() == 0:
 		print(f"\n{green}{bold}NÃO há valores {red}NaN{reset}\n")
 	else:
 		print(f"\nOs dias com valores {red}{bold}NaN{reset} são:")
-		print(f"{valores_centroides[valores_centroides['BOMBINHAS'].isna()]['Data']}\n")
+		print(f"{valores_centroides[valores_centroides.isna().sum()]['Data']}\n")
 	print("="*80)
 
 def mascara(netcdf4, shapefile, str_var):
@@ -152,9 +152,9 @@ def mascara(netcdf4, shapefile, str_var):
 	mascara = regionmask.mask_geopandas(shapefile, netcdf4["longitude"], netcdf4["latitude"]) #["geometry"]
 	dados_mascarados = netcdf4.where(mascara >= 0)
 	if str_var == "prec":
-		media = dados_mascarados[str_var].sum().item()
+		media = dados_mascarados[str_var].sum().values#.item()
 	else:
-		media = dados_mascarados[str_var].mean().item()
+		media = dados_mascarados[str_var].mean().values#.item()
 	media = np.round(media, 2)
 	print(f"\n{green}MÉDIA(temp)/ACUMULADO(prec):\n{reset}{media}\n")
 	#mascara.plot()
@@ -239,6 +239,60 @@ def extrair_mascaras(shapefile, netcdf4, str_var):
 	csv_se = semana_epidemiologica(valores_mascaras, str_var)
 	return valores_mascaras, csv_se
 	
+# CORRECTED mascara function
+# It should ONLY perform the masking, not the calculation.
+def mascara_gemini(netcdf4, shapefile_geom, str_var):
+    """
+    Applies a shapefile mask to a NetCDF data array and returns the masked time series.
+    """
+    # Create the mask
+    mask = regionmask.mask_geopandas(shapefile_geom, netcdf4.longitude, netcdf4.latitude, method = "rasterize")
+    
+    # Apply the mask to the specific variable
+    dados_mascarados = netcdf4[str_var].where(mask >= 0)
+    
+    # Return the entire masked DataArray (with time dimension intact)
+    return dados_mascarados
+
+
+# CORRECTED extrair_mascaras function
+def extrair_mascaras_gemini(shapefile, netcdf4, str_var):
+    """
+    Extracts time series data for each municipality by masking a NetCDF file.
+    """
+    # Get the time values to use as the index later
+    time_index = netcdf4.time.values
+    all_mun_data = {}
+
+    for idx, municipio_row in shapefile.iterrows():
+        mun_name = municipio_row['NM_MUN'].upper()
+        print(f"\n{green}Processing: {reset}{mun_name}")
+
+        municipio_geoseries = gpd.GeoSeries([municipio_row.geometry], crs=shapefile.crs)
+        
+        # Pass the correctly-typed GeoSeries to the masking function
+        dados_mascarados = mascara_gemini(netcdf4, municipio_geoseries, str_var)
+
+        # 2. Calculate the spatial mean for each time step
+        # This reduces the lat/lon dimensions and leaves the time dimension
+        if str_var == "prec":
+            # For precipitation, you want the SUM over the area
+            time_series = dados_mascarados.mean()#dim=["latitude", "longitude"])
+        else:
+            # For temperature, you want the MEAN over the area
+            time_series = dados_mascarados.mean(dim=["latitude", "longitude"])
+
+        # Store the resulting time series (which is now 1-dimensional)
+        all_mun_data[mun_name] = time_series.values
+
+    # 3. Create the final DataFrame
+    final_df = pd.DataFrame(all_mun_data, index=time_index)
+    final_df.index.name = "Data"
+    final_df = final_df.reset_index()
+    print(f"\n{green}FINAL: {reset}{final_df}")
+    verifica_nan(final_df)
+    return final_df, None # Adjust second return value as needed		
+	
 def semana_epidemiologica(csv, str_var):
 	"""
 	Função relativa ao agrupamento de dados em semanas epidemiológicas.
@@ -269,8 +323,10 @@ def semana_epidemiologica(csv, str_var):
 	
 
 mascara(prec, floripa, "prec")
-
-prec, prec_se = extrair_mascaras(municipios, prec, "prec")
+mascara_gemini(prec, floripa, "prec")
+prec, prec_se = extrair_mascaras_gemini(municipios, prec, "prec")
+sys.exit()
+#prec, prec_se = extrair_mascaras(municipios, prec, "prec")
 """
 prectotal = pd.concat([serie_prec, prec], ignore_index = True)
 prectotal["Data"] = pd.to_datetime(prectotal["Data"]).dt.strftime("%Y-%m-%d")
