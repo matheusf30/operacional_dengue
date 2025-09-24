@@ -622,7 +622,7 @@ modelagem inexistente.""",
 	nome_arquivo_png = f"CASOS_mapa_preditivo_{data_atual}_{idx}.png"
 	if _AUTOMATIZA == True and _SALVAR == True:
 		os.makedirs(caminho_resultados, exist_ok = True)
-		plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "pdf", dpi = 150)
+		#plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "pdf", dpi = 150)
 		plt.savefig(f"{caminho_resultados}{nome_arquivo_png}", format = "png", dpi = 300)
 		print(f"\n\n{green}{caminho_resultados}\n{nome_arquivo}\nSALVO COM SUCESSO!{reset}\n\n")
 		print(f"\n\n{green}{caminho_resultados}\n{nome_arquivo_png}\nSALVO COM SUCESSO!{reset}\n\n")
