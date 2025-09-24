@@ -1,3 +1,12 @@
+#################################################################################
+###
+### DIVE/SC DADOS Epidemiologia e Índices Epidemiológicos
+### COMO RODAR: executar o arquivo python e em seguida inserir 3 argumentos booleanos:
+### (Automatiza) (Visualiza) (Salva)
+###  Ex.:
+###  cartografia_monitoramento_epidemio.py True False True 
+###                  Atualizado: Matheus Ferreira de Souza  - 2025/09/15
+#################################################################################
 ### Bibliotecas Correlatas
 # Básicas e Gráficas
 import pandas as pd
