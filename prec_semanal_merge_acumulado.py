@@ -87,7 +87,7 @@ def selecionar_tempo_espaco(dataset, tempo):
 	dataset_espaco = dataset.sel(time = tempo,
 						lat = slice(lat_min, lat_max),
 						lon = slice(lon_min, lon_max)).prec.squeeze()
-	dataset_espaco = dataset_espaco.resample(time = "W-SUN").sum()
+	dataset_espaco = dataset_espaco.resample(time = "W-SAT").sum()
 	dataset_tempo_espaco = dataset_espaco.isel(time = -2)
 	return dataset_tempo_espaco
 	
