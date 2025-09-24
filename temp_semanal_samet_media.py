@@ -159,6 +159,7 @@ def gerar_mapa(dataset, str_var):
 	ax = plt.axes(projection=ccrs.PlateCarree())
 	shp = list(shpreader.Reader(f"{caminho_shapefile}/BR_UF_2019.shp").geometries())
 	cmap = plt.get_cmap("coolwarm")#jet_r RdYlBu_r
+	#cmap = plt.get_cmap("RdYlBu_r")
 	figure = dataset.plot.contourf( ax = ax, levels = levels, cmap = cmap, norm = norm,
 										add_colorbar = False,  add_labels = False,
 										robust = True, extend = "both",
