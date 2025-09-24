@@ -3,7 +3,7 @@
 #
 #################################################################################
 ###
-### IFSC DADOS Temperatura SAMET - MAPAS
+### IFSC DADOS Temperatura MERGE - MAPAS
 ### COMO RODAR: executar o arquivo python e em seguida inserir ano-mês
 ###  Ex.:
 ###  python tmed_mensal_samet.py 2024-05
