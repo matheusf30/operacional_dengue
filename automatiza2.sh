@@ -26,6 +26,7 @@ python modelagem_casos.py True
 #python cartografia_casos_incidencia.py True False True
 python temp_semanal_samet_media.py
 python prec_semanal_merge_acumulado.py
+python cartografia_monitoramento_epidemio.py True False True
 python cartografia_preditiva_casos.py True False True
 python cartografia_preditiva_incidencia.py True False True
 ### VALIDAÇÕES
