@@ -141,7 +141,7 @@ def gerar_mapa(dataset):
 	"""
 	plt.figure(figsize=(8, 6), layout = "constrained", frameon = True)
 	ax = plt.axes(projection=ccrs.PlateCarree())
-	shp = list(shpreader.Reader(f"{caminho_shapefile}/BR_UF_2019.shp").geometries())
+	shp = list(shpreader.Reader(f"{caminho_shapefile}/BR_UF_2022.shp").geometries())
 	cmap = plt.get_cmap("YlGnBu")
 	#RdYlBu gist_earth_r terrain_r winter_r summer_r YlGnBu
 	#viridis_r cividis_r Blues turbo_r jet_r gnuplot2_r gist_ncar_r
@@ -161,7 +161,8 @@ def gerar_mapa(dataset):
 	print(f"\n{green}prec - DOMINGO: {reset}{_d7}\n")
 	plt.title(f"Precipitação Acumulada Semanal\nPeríodo observado: {_d7}",
 				fontsize = 14, ha = "center")
-	ax.add_geometries(shp, ccrs.PlateCarree(), edgecolor = "black", facecolor = "none", linewidth = 0.5)
+	ax.add_geometries(shp, ccrs.PlateCarree(), edgecolor = "black",
+					facecolor = "none", linewidth = 0.5)
 	ax.coastlines(resolution = "10m", color = "black", linewidth = 0.8)
 	ax.add_feature(cartopy.feature.BORDERS, edgecolor = "black", linewidth = 0.5)
 	gl = ax.gridlines(crs = ccrs.PlateCarree(), color = "white", alpha = 1.0,
