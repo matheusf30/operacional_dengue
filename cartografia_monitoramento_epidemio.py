@@ -151,7 +151,7 @@ x_tail = -48.5
 y_tail = -29.25
 x_head = -48.5
 y_head = -28.75
-ax.text(-52.5, -29, "Sistema de Referência de Coordenadas\nDATUM: SIRGAS 2000/22S.\nBase Cartográfica: IBGE, 2022.",
+ax.text(-52.5, -29, "Sistema de Referência de Coordenadas\nDATUM: SIRGAS 2000/22S.\nBase Cartográfica: IBGE, 2024.",
 	    color = "white", backgroundcolor = "darkgray", ha = "center", va = "center", fontsize = 14)
 plt.xlabel("Longitude", fontsize = 18)
 plt.ylabel("Latitude", fontsize = 18)
@@ -189,7 +189,7 @@ x_tail = -48.5
 y_tail = -29.25
 x_head = -48.5
 y_head = -28.75
-ax.text(-52.5, -29, "Sistema de Referência de Coordenadas\nDATUM: SIRGAS 2000/22S.\nBase Cartográfica: IBGE, 2022.",
+ax.text(-52.5, -29, "Sistema de Referência de Coordenadas\nDATUM: SIRGAS 2000/22S.\nBase Cartográfica: IBGE, 2024.",
 	    color = "white", backgroundcolor = "darkgray", ha = "center", va = "center", fontsize = 14)
 plt.xlabel("Longitude", fontsize = 18)
 plt.ylabel("Latitude", fontsize = 18)
