@@ -61,7 +61,7 @@ _ANO_ATUAL = str(datetime.today().year)
 _MES_ATUAL = _AGORA.strftime("%m")
 _DIA_ATUAL = _AGORA.strftime("%d")
 _ANO_MES = f"{_ANO_ATUAL}{_MES_ATUAL}"
-_ANO_MES_DIA = 20250909 #f"{_ANO_ATUAL}{_MES_ATUAL}{_DIA_ATUAL}"
+_ANO_MES_DIA = 20250916 #f"{_ANO_ATUAL}{_MES_ATUAL}{_DIA_ATUAL}"
 _ONTEM = datetime.today() - timedelta(days = 1)
 _ANO_ONTEM = str(_ONTEM.year)
 _MES_ONTEM = _ONTEM.strftime("%m")
@@ -72,23 +72,14 @@ _ANO_MES_DIA_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}{_DIA_ONTEM}"
 ##################################################################################
 
 ### Encaminhamento aos Diretórios
-_LOCAL = "IFSC" # OPÇÕES>>> "GH" "CASA" "IFSC"
-if _LOCAL == "GH": # _ = Variável Privada
-	caminho_dados = "https://raw.githubusercontent.com/matheusf30/dados_dengue/main/"
-	caminho_modelos = "https://github.com/matheusf30/dados_dengue/tree/main/modelos"
-elif _LOCAL == "IFSC":
-	caminho_dados = "/home/meteoro/scripts/matheus/operacional_dengue/dados_operacao/" # CLUSTER
-	caminho_operacional = "/home/meteoro/scripts/matheus/operacional_dengue/"
-	caminho_shape = "/media/dados/shapefiles/" #SC/SC_Municipios_2022.shp #BR/BR_UF_2022.shp
-	caminho_modelos = f"/home/meteoro/scripts/matheus/operacional_dengue/modelagem/casos/{_ANO_ATUAL}/{_ANO_MES_DIA}/"
-	caminho_resultados = "home/meteoro/scripts/matheus/operacional_dengue/modelagem/resultados/"
-	#caminho_previsao = "home/meteoro/scripts/matheus/operacional_dengue/modelagem/resultados/dados_previstos/"
-	caminho_previsao = "modelagem/resultados/dados_previstos/"
-else:
-	print("CAMINHO NÃO RECONHECIDO! VERIFICAR LOCAL!")
+caminho_dados = "/home/meteoro/scripts/matheus/operacional_dengue/dados_operacao/" # CLUSTER
+caminho_operacional = "/home/meteoro/scripts/matheus/operacional_dengue/"
+caminho_shape = "/media/dados/shapefiles/" #SC/SC_Municipios_2022.shp #BR/BR_UF_2022.shp
+caminho_modelos = f"/home/meteoro/scripts/matheus/operacional_dengue/modelagem/casos/{_ANO_ATUAL}/{_ANO_MES_DIA}/"
+caminho_resultados = f"home/meteoro/scripts/matheus/operacional_dengue/modelagem/resultados/{_ANO_ATUAL}/{_ANO_MES}/"
+caminho_previsao = f"modelagem/resultados/{_ANO_ATUAL}/dados_previstos/"
 print(f"\n{green}HOJE:\n{reset}{_ANO_MES_DIA}\n")
 print(f"\n{green}ONTEM:\n{reset}{_ANO_MES_DIA_ONTEM}\n")
-
 print(f"\n{green}OS DADOS UTILIZADOS ESTÃO ALOCADOS NOS SEGUINTES CAMINHOS:\n\n{caminho_dados}{reset}\n\n")
 
 
@@ -105,7 +96,7 @@ tmin = f"{_ANO_ATUAL}/tmin_semana_ate_{_ANO_ATUAL}.csv"
 tmed = f"{_ANO_ATUAL}/tmed_semana_ate_{_ANO_ATUAL}.csv"
 tmax = f"{_ANO_ATUAL}/tmax_semana_ate_{_ANO_ATUAL}.csv"
 unicos = "casos_primeiros.csv"
-municipios = "SC/SC_Municipios_2022.shp"
+municipios = "SC/SC_Municipios_2024.shp"
 br = "BR/BR_UF_2022.shp"
 
 ###############################################################
@@ -300,7 +291,7 @@ plt.plot(casos_atual["Semana"], casos_atual[_CIDADE],
 				label = "Observado", color = "blue")
 plt.xlabel("Semanas Epidemiológicas (Série Histórica)")
 plt.ylabel("Número de Casos de Dengue")
-plt.title(f"COMPARAÇÃO ENTRE CASOS DE DENGUE PREVISTOS E OBSERVADOS, MUNICÍPIO DE {_CIDADE}")
+plt.title(f"COMPARAÇÃO ENTRE CASOS DE DENGUE PREVISTOS E OBSERVADOS, MUNICÍPIO DE {_CIDADE} (R² = {R_2})")
 plt.legend()
 plt.gca().set_facecolor("honeydew")
 plt.show()
