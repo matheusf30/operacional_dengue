@@ -125,6 +125,10 @@ def limite_colobar(regiao_prec):
 	if ((int_max - int_min)//2 != (int_max-int_min)/2):
 		int_max += 1
 	levels = range(int_min, int_max + 1, 5)
+	levels_log = np.log(np.array(levels))
+	levels_log[0] = 0
+	print(levels, levels_log)
+	sys.exit()
 	levels2 = range(int_min, int_max + 1, 10)
 	norm = cls.Normalize(vmin = int_min, vmax = int_max)
 	print(f"\n{green}Valor máximo da precipitação: {reset}{round(max_tmax, 2)} mm\n")
