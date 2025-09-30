@@ -571,8 +571,10 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 	br.plot(ax = ax, color = "tan", edgecolor = "black")
 	"""
 	municipios.plot(ax = ax, color = "lightgray", edgecolor = "black", linewidth = 0.5)
-	v_max = previsao_melt_poligeo.select_dtypes(include="number").max().max()
-	v_min = previsao_melt_poligeo.select_dtypes(include="number").min().min()
+	v_max = previsao_melt_poligeo.select_dtypes(include = ["number"]).max().max()
+	v_min = previsao_melt_poligeo.select_dtypes(include = ["number"]).min().min()
+	v_max = int(v_max)
+	v_min = int(v_min)
 	intervalo = 250
 	levels = np.arange(v_min, v_max + intervalo, intervalo)
 	print(f"\n{green}v_min\n{reset}{v_min}\n")
