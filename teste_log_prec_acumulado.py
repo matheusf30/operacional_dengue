@@ -125,12 +125,9 @@ def limite_colobar(regiao_prec):
 	if ((int_max - int_min)//2 != (int_max-int_min)/2):
 		int_max += 1
 	levels = np.array(range(int_min, int_max + 1, 5))
-	levels_log = np.log(levels)
-	levels_log[0] = 0
-	print(levels, levels_log)
-	sys.exit()
 	levels2 = range(int_min, int_max + 1, 10)
-	norm = cls.Normalize(vmin = int_min, vmax = int_max)
+	#norm = cls.Normalize(vmin = int_min, vmax = int_max)
+	norm = cls.LogNorm(vmin = int_min + 0.01, vmax = int_max)
 	print(f"\n{green}Valor máximo da precipitação: {reset}{round(max_tmax, 2)} mm\n")
 	print(f"\n{green}Valor mínimo da precipitação: {reset}{round(min_tmin, 2)} mm\n")
 	return levels, levels2, norm
@@ -175,9 +172,9 @@ def gerar_mapa(dataset):
 	gl.top_labels = False
 	gl.right_labels = False
 	plt.figtext(0.55, 0.045, "Fonte: MERGE - CPTEC/INPE", ha = "center", fontsize = 10)
-	plt.savefig(f"{caminho_resultado}prec_semanal_merge_acumulada_{_d7}.png",
-				transparent = False, dpi = 300, bbox_inches = "tight", pad_inches = 0.02)
-	#plt.show()
+	#plt.savefig(f"{caminho_resultado}prec_semanal_merge_acumulada_{_d7}.png",
+	#			transparent = False, dpi = 300, bbox_inches = "tight", pad_inches = 0.02)
+	plt.show()
 	
 #################################################################################
 # EXECUTANDO FUNÇÕES
