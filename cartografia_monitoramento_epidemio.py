@@ -104,6 +104,8 @@ print(f"\n{green}CASOS:\n{reset}{casos}\n")
 casos["Semana"] = pd.to_datetime(casos["Semana"], format = "%Y-%m-%d")
 print(f"\n{green}CASOS.info():\n{reset}{casos.info()}\n")
 casos = casos[casos["Semana"].dt.year == datetime.today().year]
+semana_epidemio = casos.loc[casos.index[-1], "Semana"]
+print(f"\n{green}SEMANA EPIDEMIOLÓGICA:\n{reset}{semana_epidemio}\n")
 casos.set_index("Semana", inplace = True)
 print(f"\n{green}CASOS.columns:\n{reset}{casos.columns}\n")
 print(f"\n{green}CASOS:\n{reset}{casos}\n")
@@ -124,6 +126,8 @@ base_carto["geometry"] = base_carto["Municipio"].map(geom_dict)
 base_carto = gpd.GeoDataFrame(base_carto, geometry = "geometry", crs = "EPSG:4674")
 print(f"\n{green}DICIONÁRIO geometry:\n{reset}{geom_dict}\n")
 print(f"\n{green}BASE CARTOGRÁFICA:\n{reset}{base_carto}\n")
+
+
 
 #sys.exit()
 
@@ -155,7 +159,7 @@ ax.text(-52.5, -29, "Sistema de Referência de Coordenadas\nDATUM: SIRGAS 2000/2
 	    color = "white", backgroundcolor = "darkgray", ha = "center", va = "center", fontsize = 14)
 plt.xlabel("Longitude", fontsize = 18)
 plt.ylabel("Latitude", fontsize = 18)
-plt.title(f"Soma de Casos de Dengue em Santa Catarina. {_ANO_ATUAL}", fontsize = 28)
+plt.title(f"Soma de Casos de Dengue em Santa Catarina\nSemana Epidemiológica: {semana_epidemio.strftime('%Y-%m-%d')}.", fontsize = 28)
 
 nome_arquivo = f"CASOS_mapa_monitoramento_{_ANO_MES_DIA}.png"
 if _AUTOMATIZA == True and _SALVAR == True:
@@ -193,7 +197,7 @@ ax.text(-52.5, -29, "Sistema de Referência de Coordenadas\nDATUM: SIRGAS 2000/2
 	    color = "white", backgroundcolor = "darkgray", ha = "center", va = "center", fontsize = 14)
 plt.xlabel("Longitude", fontsize = 18)
 plt.ylabel("Latitude", fontsize = 18)
-plt.title(f"Incidência da Soma de Casos de Dengue em Santa Catarina. {_ANO_ATUAL}", fontsize = 28)
+plt.title(f"Incidência da Soma de Casos de Dengue em Santa Catarina.\nSemana Epidemiológica: {semana_epidemio.strftime('%Y-%m-%d')}.", fontsize = 28)
 
 nome_arquivo = f"INCIDENCIA_mapa_monitoramento_{_ANO_MES_DIA}.png"
 if _AUTOMATIZA == True and _SALVAR == True:
