@@ -528,13 +528,12 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 	print(f"\n{green}v_max\n{reset}{v_max}\n")
 	print(f"\n{green}levels\n{reset}{levels}\n")
 	previsao_melt_poligeo[previsao_melt_poligeo["Semana"] == semana_epidemio].plot(ax = ax, column = "Incidencia",  legend = True, edgecolor = "black", # fontsize = 20,
-		                                                                           label = "Casos", cmap = "YlOrRd", linewidth = 0.5,#levels = levels, 
+		                                                                           label = "Incidência (Casos Prováveis de Dengue)", cmap = "YlOrRd", linewidth = 0.5,#levels = levels, 
 		                                                                           norm = cls.Normalize(vmin = v_min, vmax = v_max, clip = True))
 	cbar_ax = ax.get_figure().get_axes()[-1]
 	cbar_ax.tick_params(labelsize = 20)
 	zero = previsao_melt_poligeo[previsao_melt_poligeo["Incidencia"] <= 0]
-	zero[zero["Semana"] == semana_epidemio].plot(ax = ax, column = "Incidencia", legend = False, edgecolor = "black", linewidth = 0.5,
-		                                         label = "Casos", cmap = "YlOrBr")#"YlOrBr")
+	zero[zero["Semana"] == semana_epidemio].plot(ax = ax, column = "Incidencia", legend = False, edgecolor = "black", linewidth = 0.5, label = "Incidência (Casos Prováveis de Dengue)", cmap = "YlOrBr")#"YlOrBr")
 	plt.xlim(-54, -48)
 	plt.ylim(-29.5, -25.75)
 	x_tail = -48.5
