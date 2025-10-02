@@ -159,7 +159,7 @@ ax.text(-52.5, -29, "Sistema de Referência de Coordenadas\nDATUM: SIRGAS 2000/2
 	    color = "white", backgroundcolor = "darkgray", ha = "center", va = "center", fontsize = 14)
 plt.xlabel("Longitude", fontsize = 18)
 plt.ylabel("Latitude", fontsize = 18)
-plt.title(f"Soma de Casos de Dengue em Santa Catarina\nSemana Epidemiológica: {semana_epidemio.strftime('%Y-%m-%d')}.", fontsize = 28)
+plt.title(f"Soma de Casos Prováveis de Dengue em Santa Catarina\nSemana Epidemiológica: {semana_epidemio.strftime('%Y-%m-%d')}.", fontsize = 28)
 
 nome_arquivo = f"CASOS_mapa_monitoramento_{_ANO_MES_DIA}.png"
 if _AUTOMATIZA == True and _SALVAR == True:
@@ -197,7 +197,7 @@ ax.text(-52.5, -29, "Sistema de Referência de Coordenadas\nDATUM: SIRGAS 2000/2
 	    color = "white", backgroundcolor = "darkgray", ha = "center", va = "center", fontsize = 14)
 plt.xlabel("Longitude", fontsize = 18)
 plt.ylabel("Latitude", fontsize = 18)
-plt.title(f"Incidência da Soma de Casos de Dengue em Santa Catarina.\nSemana Epidemiológica: {semana_epidemio.strftime('%Y-%m-%d')}.", fontsize = 28)
+plt.title(f"Incidência da Soma de Casos Prováveis de Dengue em Santa Catarina.\nSemana Epidemiológica: {semana_epidemio.strftime('%Y-%m-%d')}.", fontsize = 28)
 
 nome_arquivo = f"INCIDENCIA_mapa_monitoramento_{_ANO_MES_DIA}.png"
 if _AUTOMATIZA == True and _SALVAR == True:
