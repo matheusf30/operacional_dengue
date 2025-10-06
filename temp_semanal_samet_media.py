@@ -220,7 +220,7 @@ def gerar_mapa(dataset, str_var):
 	gl.right_labels = False
 	plt.figtext(0.55, 0.045, "Fonte: SAMeT - CPTEC/INPE", ha = "center", fontsize = 10)
 	#plt.savefig(f"{caminho_resultado}{str_var}_semanal_samet_media_{_d7}.png",
-				transparent = False, dpi = 300, bbox_inches = "tight", pad_inches = 0.02)
+	#			transparent = False, dpi = 300, bbox_inches = "tight", pad_inches = 0.02)
 	plt.show()
 	
 #################################################################################
