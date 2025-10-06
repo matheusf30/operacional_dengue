@@ -191,8 +191,8 @@ def gerar_mapa(dataset, str_var):
 	plt.colorbar(figure, fraction = 0.031, pad = 0.03, ticks = levels,
 				label = "Temperatura Semanal (°C)", orientation = "vertical", extend = "max")
 	ax = plt.gca()
-	regionais.plot(ax = ax, facecolor = "none",
-				edgecolor = "black", linewidth = 2)
+	regionais.plot(ax = ax, facecolor = "none", linestyle = "--",
+				edgecolor = "black", linewidth = 1)
 	_d7 = datetime.today() - timedelta(days = 7)
 	_d7 = _d7 - timedelta(days = _d7.weekday() + 1)
 	_d7 = _d7.strftime("%Y-%m-%d")
