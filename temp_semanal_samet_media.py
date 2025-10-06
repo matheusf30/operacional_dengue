@@ -71,7 +71,7 @@ caminho_climatologia = "/home/meteoro/scripts/scripts_everton/climatologia_dengu
 arquivo_climatologia = "/temperatura_climatologia_epidemiologia.nc"
 tmed_climatologia = xr.open_dataset(f"{caminho_climatologia}{arquivo_climatologia}")
 
-os.makedirs(f"{caminho_resultado}", mode = 0o777, exist_ok = True) Update temp_semanal_samet_media.py
+os.makedirs(f"{caminho_resultado}", mode = 0o777, exist_ok = True)
 #=======
 os.makedirs(f"{caminho_resultado}", mode = 0o777, exist_ok = True)
 municipios = "/media/dados/shapefiles/SC/SC_Municipios_2024.shp"
@@ -120,7 +120,7 @@ def selecionar_tempo_espaco(dataset, tempo, str_var):
 							lon = slice(lon_min, lon_max)).tmed.squeeze()
 		case "tmax":
 			dataset_espaco = dataset.sel(time = tempo,
-								lat = slice(lat_min, lat_max),
+								lat = slice(lat_min, laUpdate temp_semanal_samet_media.pyt_max),
 								lon = slice(lon_min, lon_max)).tmax.squeeze()
 	dataset_espaco = dataset_espaco.resample(time = "W-SAT").mean()
 	dataset_tempo_espaco = dataset_espaco.isel(time = -2)
