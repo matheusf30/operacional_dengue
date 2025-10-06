@@ -64,6 +64,11 @@ _ANO_MES_DIA_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}{_DIA_ONTEM}"
 caminho_samet = "/media/dados/operacao/samet/daily/"
 caminho_shapefile = "/media/dados/shapefiles/BR/"
 caminho_resultado = f"/home/meteoro/scripts/matheus/operacional_dengue/meteorologia/{_ANO_ATUAL}/"
+# CLimatologia de semanas epidemiológicas (by Everton)
+caminho_climatologia = "/home/meteoro/scripts/scripts_everton/climatologia_dengue"
+arquivo_climatologia = "/temperatura_climatologia_epidemiologia.nc"
+tmed_climatologia = xr.open_dataset(f"{caminho_climatologia}{arquivo_climatologia}")
+
 os.makedirs(f"{caminho_resultado}", mode = 0o777, exist_ok = True) 
 try:
 	arquivo_tmin = f"SAMeT_CPTEC_DAILY_SB_TMIN_{_ANO_ATUAL}.nc"
@@ -214,6 +219,7 @@ except FileNotFoundError:
 	regiao_tmax = selecionar_tempo_espaco(ds_tmax, _ANO_ONTEM, "tmax")
 
 levels, norm, int_min, int_max = limite_colobar(regiao_tmin, regiao_tmax)
+
 info_dataset(regiao_tmin)
 info_dataset(regiao_tmed)
 info_dataset(regiao_tmax)
