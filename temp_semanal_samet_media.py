@@ -22,6 +22,7 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 import matplotlib.colors as cls
 import pandas as pd
+import geopandas as gpd
 import numpy as np
 import cartopy, cartopy.crs as ccrs
 import cartopy.io.shapereader as shpreader
@@ -64,12 +65,20 @@ _ANO_MES_DIA_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}{_DIA_ONTEM}"
 caminho_samet = "/media/dados/operacao/samet/daily/"
 caminho_shapefile = "/media/dados/shapefiles/BR/"
 caminho_resultado = f"/home/meteoro/scripts/matheus/operacional_dengue/meteorologia/{_ANO_ATUAL}/"
+<<<<<<< HEAD
 # CLimatologia de semanas epidemiológicas (by Everton)
 caminho_climatologia = "/home/meteoro/scripts/scripts_everton/climatologia_dengue"
 arquivo_climatologia = "/temperatura_climatologia_epidemiologia.nc"
 tmed_climatologia = xr.open_dataset(f"{caminho_climatologia}{arquivo_climatologia}")
 
 os.makedirs(f"{caminho_resultado}", mode = 0o777, exist_ok = True) 
+=======
+os.makedirs(f"{caminho_resultado}", mode = 0o777, exist_ok = True)
+municipios = "/media/dados/shapefiles/SC/SC_Municipios_2024.shp"
+regionais = "/home/meteoro/scripts/matheus/operacional_dengue/dados_operacao/censo_sc_regional.csv"
+municipios = gpd.read_file(municipios, low_memory = False)
+regionais = pd.read_csv(regionais, low_memory = False)
+>>>>>>> refs/remotes/origin/main
 try:
 	arquivo_tmin = f"SAMeT_CPTEC_DAILY_SB_TMIN_{_ANO_ATUAL}.nc"
 	arquivo_tmed = f"SAMeT_CPTEC_DAILY_SB_TMED_{_ANO_ATUAL}.nc" 
@@ -86,6 +95,11 @@ except FileNotFoundError:
 	ds_tmax = xr.open_dataset(f"{caminho_samet}/TMAX/{_ANO_ONTEM}/{arquivo_tmax}")
 
 #################################################################################
+municipios["NM_MUN"] = municipios["NM_MUN"].str.upper()
+municipios = municipios.merge(regionais[["Municipio", "regional"]],
+								left_on = "NM_MUN", right_on = "Municipio",
+								how = "left")
+regionais = municipios.dissolve(by = "regional")
 # DEFININDO FUNÇÕES
 
 def selecionar_tempo_espaco(dataset, tempo, str_var):
@@ -176,6 +190,9 @@ def gerar_mapa(dataset, str_var):
 		rotulo.set_rotation(0)
 	plt.colorbar(figure, fraction = 0.031, pad = 0.03, ticks = levels,
 				label = "Temperatura Semanal (°C)", orientation = "vertical", extend = "max")
+	ax = plt.gca()
+	regionais.plot(ax = ax, facecolor = "none",
+				edgecolor = "black", linewidth = 2)
 	_d7 = datetime.today() - timedelta(days = 7)
 	_d7 = _d7 - timedelta(days = _d7.weekday() + 1)
 	_d7 = _d7.strftime("%Y-%m-%d")
