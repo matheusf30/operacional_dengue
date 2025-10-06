@@ -71,7 +71,7 @@ caminho_climatologia = "/home/meteoro/scripts/scripts_everton/climatologia_dengu
 arquivo_climatologia = "/temperatura_climatologia_epidemiologia.nc"
 tmed_climatologia = xr.open_dataset(f"{caminho_climatologia}{arquivo_climatologia}")
 
-os.makedirs(f"{caminho_resultado}", mode = 0o777, exist_ok = True) 
+os.makedirs(f"{caminho_resultado}", mode = 0o777, exist_ok = True) Update temp_semanal_samet_media.py
 #=======
 os.makedirs(f"{caminho_resultado}", mode = 0o777, exist_ok = True)
 municipios = "/media/dados/shapefiles/SC/SC_Municipios_2024.shp"
@@ -191,8 +191,8 @@ def gerar_mapa(dataset, str_var):
 	plt.colorbar(figure, fraction = 0.031, pad = 0.03, ticks = levels,
 				label = "Temperatura Semanal (°C)", orientation = "vertical", extend = "max")
 	ax = plt.gca()
-	regionais.plot(ax = ax, facecolor = "none", linestyle = "--",
-				edgecolor = "black", linewidth = 0.7)
+	regionais.plot(ax = ax, facecolor = "none",# linestyle = "--",
+				edgecolor = "darkgray", linewidth = 0.7)
 	_d7 = datetime.today() - timedelta(days = 7)
 	_d7 = _d7 - timedelta(days = _d7.weekday() + 1)
 	_d7 = _d7.strftime("%Y-%m-%d")
