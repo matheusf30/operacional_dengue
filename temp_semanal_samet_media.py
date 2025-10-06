@@ -192,7 +192,7 @@ def gerar_mapa(dataset, str_var):
 				label = "Temperatura Semanal (°C)", orientation = "vertical", extend = "max")
 	ax = plt.gca()
 	regionais.plot(ax = ax, facecolor = "none", linestyle = "--",
-				edgecolor = "black", linewidth = 1)
+				edgecolor = "black", linewidth = 0.7)
 	_d7 = datetime.today() - timedelta(days = 7)
 	_d7 = _d7 - timedelta(days = _d7.weekday() + 1)
 	_d7 = _d7.strftime("%Y-%m-%d")
