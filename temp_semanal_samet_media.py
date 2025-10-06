@@ -177,7 +177,7 @@ def gerar_mapa(dataset, str_var):
 	plt.figure(figsize=(8, 6), layout = "constrained", frameon = True)
 	ax = plt.axes(projection=ccrs.PlateCarree())
 	shp = list(shpreader.Reader(f"{caminho_shapefile}/BR_UF_2022.shp").geometries())
-	cmap = plt.get_cmap("coolwarm")#jet_r RdYlBu_r
+	cmap = plt.get_cmap("RdYlBu_r")#jet_r RdYlBu_r coolwarm
 	#cmap = plt.get_cmap("RdYlBu_r")
 	figure = dataset.plot.contourf( ax = ax, levels = levels, cmap = cmap, norm = norm,
 										add_colorbar = False,  add_labels = False,
@@ -192,7 +192,7 @@ def gerar_mapa(dataset, str_var):
 				label = "Temperatura Semanal (°C)", orientation = "vertical", extend = "max")
 	ax = plt.gca()
 	regionais.plot(ax = ax, facecolor = "none",# linestyle = "--",
-				edgecolor = "darkgray", linewidth = 0.7)
+				edgecolor = "dimgray", linewidth = 0.7)
 	_d7 = datetime.today() - timedelta(days = 7)
 	_d7 = _d7 - timedelta(days = _d7.weekday() + 1)
 	_d7 = _d7.strftime("%Y-%m-%d")
