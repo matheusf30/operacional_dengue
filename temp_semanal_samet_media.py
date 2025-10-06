@@ -120,7 +120,7 @@ def selecionar_tempo_espaco(dataset, tempo, str_var):
 							lon = slice(lon_min, lon_max)).tmed.squeeze()
 		case "tmax":
 			dataset_espaco = dataset.sel(time = tempo,
-								lat = slice(lat_min, laUpdate temp_semanal_samet_media.pyt_max),
+								lat = slice(lat_min, lat_max),
 								lon = slice(lon_min, lon_max)).tmax.squeeze()
 	dataset_espaco = dataset_espaco.resample(time = "W-SAT").mean()
 	dataset_tempo_espaco = dataset_espaco.isel(time = -2)
