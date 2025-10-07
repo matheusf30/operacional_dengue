@@ -72,7 +72,6 @@ caminho_modelos = f"/home/meteoro/scripts/matheus/operacional_dengue/modelagem/c
 caminho_resultados = f"modelagem/resultados/{_ANO_ATUAL}/{_ANO_MES}/"
 print(f"\nOS DADOS UTILIZADOS ESTÃO ALOCADOS NOS SEGUINTES CAMINHOS:\n\n{caminho_dados}\n\n")
 
-
 ##################################################################################
 ### Renomeação das Variáveis pelos Arquivos
 casos = "casos_dive_pivot_total.csv"  # TabNet/DiveSC
@@ -91,7 +90,7 @@ casos = pd.read_csv(f"{caminho_dados}{casos}", low_memory = False)
 #focos = pd.read_csv(f"{caminho_dados}{focos}", low_memory = False)
 censo = pd.read_csv(f"{caminho_dados}{censo}", low_memory = False)
 unicos = pd.read_csv(f"{caminho_dados}{unicos}")
-municipios = gpd.read_file(f"{caminho_shape}{municipios}")
+#municipios = gpd.read_file(f"{caminho_shape}{municipios}")
 br = gpd.read_file(f"{caminho_shape}{br}")
 troca = {'Á': 'A', 'Â': 'A', 'À': 'A', 'Ã': 'A',
          'É': 'E', 'Ê': 'E', 'È': 'E', 'Ẽ': 'E',
