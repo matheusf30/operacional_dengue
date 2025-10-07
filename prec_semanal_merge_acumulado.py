@@ -184,9 +184,9 @@ def gerar_mapa(dataset):
 	gl.top_labels = False
 	gl.right_labels = False
 	plt.figtext(0.55, 0.045, "Fonte: MERGE - CPTEC/INPE", ha = "center", fontsize = 10)
-	#plt.savefig(f"{caminho_resultado}prec_semanal_merge_acumulada_{_d7}.png",
-	#			transparent = False, dpi = 300, bbox_inches = "tight", pad_inches = 0.02)
-	plt.show()
+	plt.savefig(f"{caminho_resultado}prec_semanal_merge_acumulada_{_d7}.png",
+				transparent = False, dpi = 300, bbox_inches = "tight", pad_inches = 0.02)
+	#plt.show()
 	
 #################################################################################
 # EXECUTANDO FUNÇÕES
