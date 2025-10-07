@@ -151,10 +151,10 @@ print(f"\n{green}v_max\n{reset}{v_max}\n")
 print(f"\n{green}levels\n{reset}{levels}\n")
 base_carto.plot(ax = ax, column = "total",  legend = True,
 				edgecolor = "black", label = "Casos",
-				cmap = "YlOrRd", linewidth = 0.5,
+				cmap = "YlOrRd", linewidth = 0.3,
 				norm = cls.Normalize(vmin = v_min, vmax = v_max, clip = True))
 regionais.plot(ax = ax, facecolor = "none",
-			   edgecolor = "dimgray", linewidth = 0.7)
+			   edgecolor = "dimgray", linewidth = 0.9)
 cbar_ax = ax.get_figure().get_axes()[-1]
 cbar_ax.tick_params(labelsize = 20)
 plt.xlim(-54, -48)
@@ -191,10 +191,10 @@ print(f"\n{green}v_max\n{reset}{v_max}\n")
 print(f"\n{green}levels\n{reset}{levels}\n")
 base_carto.plot(ax = ax, column = "incidencia",  legend = True,
 				edgecolor = "black", label = "Incidência",
-				cmap = "YlOrRd", linewidth = 0.5,
+				cmap = "YlOrRd", linewidth = 0.3,
 				norm = cls.Normalize(vmin = v_min, vmax = v_max, clip = True))
 regionais.plot(ax = ax, facecolor = "none",
-			   edgecolor = "dimgray", linewidth = 0.7)
+			   edgecolor = "dimgray", linewidth = 0.9)
 cbar_ax = ax.get_figure().get_axes()[-1]
 cbar_ax.tick_params(labelsize = 20)
 plt.xlim(-54, -48)
