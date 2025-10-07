@@ -171,6 +171,9 @@ def gerar_mapa(dataset):
 		rotulo.set_rotation(0)
 	plt.colorbar(figure, fraction = 0.031, pad = 0.03, ticks = levels,
 				label = "Precipitação (mm)", orientation = "vertical", extend = "max")
+	ax = plt.gca()
+	regionais.plot(ax = ax, facecolor = "none",# linestyle = "--",
+				edgecolor = "dimgray", linewidth = 0.7)
 	_d7 = datetime.today() - timedelta(days = 7)
 	_d7 = _d7 - timedelta(days = _d7.weekday() + 1)
 	_d7 = _d7.strftime("%Y-%m-%d")
@@ -187,9 +190,9 @@ def gerar_mapa(dataset):
 	gl.top_labels = False
 	gl.right_labels = False
 	plt.figtext(0.55, 0.045, "Fonte: MERGE - CPTEC/INPE", ha = "center", fontsize = 10)
-	plt.savefig(f"{caminho_resultado}prec_semanal_merge_acumulada_{_d7}.png",
-				transparent = False, dpi = 300, bbox_inches = "tight", pad_inches = 0.02)
-	#plt.show()
+	#plt.savefig(f"{caminho_resultado}prec_semanal_merge_acumulada_{_d7}.png",
+	#			transparent = False, dpi = 300, bbox_inches = "tight", pad_inches = 0.02)
+	plt.show()
 	
 #################################################################################
 # EXECUTANDO FUNÇÕES
