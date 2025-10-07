@@ -86,6 +86,11 @@ except FileNotFoundError:
 	ds_prec = xr.open_dataset(f"{caminho_merge}{arquivo_merge}")
 	
 #################################################################################
+municipios["NM_MUN"] = municipios["NM_MUN"].str.upper()
+municipios = municipios.merge(regionais[["Municipio", "regional"]],
+								left_on = "NM_MUN", right_on = "Municipio",
+								how = "left")
+regionais = municipios.dissolve(by = "regional")
 # DEFININDO FUNÇÕES
 
 def selecionar_tempo_espaco(dataset, tempo):
