@@ -81,8 +81,11 @@ unicos = "casos_primeiros.csv"
 municipios = "SC/SC_Municipios_2024.shp"
 br = "BR/BR_UF_2022.shp"
 censo = "censo_sc_xy.csv"
-
+regionais = "/home/meteoro/scripts/matheus/operacional_dengue/dados_operacao/censo_sc_regional.csv"
+municipios = "/media/dados/shapefiles/SC/SC_Municipios_2024.shp"
 ##################################################################################
+municipios = gpd.read_file(municipios, low_memory = False)
+regionais = pd.read_csv(regionais, low_memory = False)
 ### Abrindo Arquivo
 casos = pd.read_csv(f"{caminho_dados}{casos}", low_memory = False)
 #focos = pd.read_csv(f"{caminho_dados}{focos}", low_memory = False)
@@ -122,12 +125,17 @@ base_carto["total"] = base_carto["Municipio"].map(total_dict)
 base_carto["incidencia"] = (base_carto["total"] / base_carto["Populacao"]) * 100000
 base_carto["incidencia"] = base_carto["incidencia"].round(2)
 geom_dict = municipios.set_index("NM_MUN")["geometry"].to_dict()
-base_carto["geometry"] = base_carto["Municipio"].map(geom_dict)
+base_carto["geometry"] = base_carto["Municipio"].map(ge	regionais.plot(ax = ax, facecolor = "none",# linestyle = "--",
+				edgecolor = "dimgray", linewidth = 0.7)om_dict)
 base_carto = gpd.GeoDataFrame(base_carto, geometry = "geometry", crs = "EPSG:4674")
 print(f"\n{green}DICIONÁRIO geometry:\n{reset}{geom_dict}\n")
 print(f"\n{green}BASE CARTOGRÁFICA:\n{reset}{base_carto}\n")
 
-
+municipios["NM_MUN"] = municipios["NM_MUN"].str.upper()
+municipios = municipios.merge(regionais[["Municipio", "regional"]],
+								left_on = "NM_MUN", right_on = "Municipio",
+								how = "left")
+regionais = municipios.dissolve(by = "regional")
 
 #sys.exit()
 
@@ -185,6 +193,8 @@ base_carto.plot(ax = ax, column = "incidencia",  legend = True,
 				edgecolor = "black", label = "Incidência",
 				cmap = "YlOrRd", linewidth = 0.5,
 				norm = cls.Normalize(vmin = v_min, vmax = v_max, clip = True))
+regionais.plot(ax = ax, facecolor = "none",
+			edgecolor = "dimgray", linewidth = 0.7)
 cbar_ax = ax.get_figure().get_axes()[-1]
 cbar_ax.tick_params(labelsize = 20)
 plt.xlim(-54, -48)
