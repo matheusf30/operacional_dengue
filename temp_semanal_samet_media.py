@@ -65,20 +65,11 @@ _ANO_MES_DIA_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}{_DIA_ONTEM}"
 caminho_samet = "/media/dados/operacao/samet/daily/"
 caminho_shapefile = "/media/dados/shapefiles/BR/"
 caminho_resultado = f"/home/meteoro/scripts/matheus/operacional_dengue/meteorologia/{_ANO_ATUAL}/"
-#<<<<<<< HEAD
-# CLimatologia de semanas epidemiológicas (by Everton)
-caminho_climatologia = "/home/meteoro/scripts/scripts_everton/climatologia_dengue"
-arquivo_climatologia = "/temperatura_climatologia_epidemiologia.nc"
-tmed_climatologia = xr.open_dataset(f"{caminho_climatologia}{arquivo_climatologia}")
-
-os.makedirs(f"{caminho_resultado}", mode = 0o777, exist_ok = True)
-#=======
 os.makedirs(f"{caminho_resultado}", mode = 0o777, exist_ok = True)
 municipios = "/media/dados/shapefiles/SC/SC_Municipios_2024.shp"
 regionais = "/home/meteoro/scripts/matheus/operacional_dengue/dados_operacao/censo_sc_regional.csv"
 municipios = gpd.read_file(municipios, low_memory = False)
 regionais = pd.read_csv(regionais, low_memory = False)
-#>>>>>>> refs/remotes/origin/main
 try:
 	arquivo_tmin = f"SAMeT_CPTEC_DAILY_SB_TMIN_{_ANO_ATUAL}.nc"
 	arquivo_tmed = f"SAMeT_CPTEC_DAILY_SB_TMED_{_ANO_ATUAL}.nc" 
