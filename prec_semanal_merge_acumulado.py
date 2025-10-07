@@ -135,7 +135,7 @@ def limite_colobar(regiao_prec):
 	if ((int_max - int_min)//2 != (int_max-int_min)/2):
 		int_max += 1
 	levels = range(int_min, int_max + 1, 5)
-	levels2 = range(int_min, int_max + 1, 10)
+	levels2 = range(int_min, int_max + 1, 20)
 	norm = cls.Normalize(vmin = int_min, vmax = int_max)
 	print(f"\n{green}Valor máximo da precipitação: {reset}{round(max_tmax, 2)} mm\n")
 	print(f"\n{green}Valor mínimo da precipitação: {reset}{round(min_tmin, 2)} mm\n")
@@ -159,7 +159,7 @@ def gerar_mapa(dataset):
 									add_colorbar = False,  add_labels = False,
 									transform = ccrs.PlateCarree(),  levels = levels)
 	linhas = dataset.plot.contour(ax = ax, levels = levels2,
-								colors = "black", linewidths = 0.5,	transform = ccrs.PlateCarree())
+								colors = "black", linewidths = 0.3,	transform = ccrs.PlateCarree())
 	rotulos = ax.clabel(linhas, inline = True, fmt = "%1.0f", fontsize = 8, colors = "black")
 	for rotulo in rotulos:
 		rotulo.set_rotation(0)
