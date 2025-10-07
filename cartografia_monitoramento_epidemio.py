@@ -125,8 +125,7 @@ base_carto["total"] = base_carto["Municipio"].map(total_dict)
 base_carto["incidencia"] = (base_carto["total"] / base_carto["Populacao"]) * 100000
 base_carto["incidencia"] = base_carto["incidencia"].round(2)
 geom_dict = municipios.set_index("NM_MUN")["geometry"].to_dict()
-base_carto["geometry"] = base_carto["Municipio"].map(ge	regionais.plot(ax = ax, facecolor = "none",# linestyle = "--",
-				edgecolor = "dimgray", linewidth = 0.7)om_dict)
+base_carto["geometry"] = base_carto["Municipio"].map(geom_dict)
 base_carto = gpd.GeoDataFrame(base_carto, geometry = "geometry", crs = "EPSG:4674")
 print(f"\n{green}DICIONÁRIO geometry:\n{reset}{geom_dict}\n")
 print(f"\n{green}BASE CARTOGRÁFICA:\n{reset}{base_carto}\n")
