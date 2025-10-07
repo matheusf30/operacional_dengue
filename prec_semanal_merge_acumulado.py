@@ -23,6 +23,7 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 import matplotlib.colors as cls
 import pandas as pd
+import geopandas as gpd
 import numpy as np
 import cartopy, cartopy.crs as ccrs
 import cartopy.io.shapereader as shpreader
