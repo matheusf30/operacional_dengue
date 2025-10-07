@@ -163,7 +163,7 @@ def gerar_mapa(dataset):
 	rotulos = ax.clabel(linhas, inline = True, fmt = "%1.0f", fontsize = 8, colors = "black")
 	for rotulo in rotulos:
 		rotulo.set_rotation(0)
-	plt.colorbar(figure, fraction = 0.031, pad = 0.03, ticks = levels,
+	plt.colorbar(figure, fraction = 0.035, pad = 0.03, ticks = levels,
 				label = "Precipitação (mm)", orientation = "vertical", extend = "max")
 	ax = plt.gca()
 	regionais.plot(ax = ax, facecolor = "none",# linestyle = "--",
@@ -186,7 +186,7 @@ def gerar_mapa(dataset):
 	plt.figtext(0.55, 0.045, "Fonte: MERGE - CPTEC/INPE", ha = "center", fontsize = 10)
 	plt.savefig(f"{caminho_resultado}prec_semanal_merge_acumulada_{_d7}.png",
 				transparent = False, dpi = 300, bbox_inches = "tight", pad_inches = 0.02)
-	#plt.show()
+	plt.show()
 	
 #################################################################################
 # EXECUTANDO FUNÇÕES

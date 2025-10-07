@@ -179,7 +179,7 @@ def gerar_mapa(dataset, str_var):
 	rotulos = ax.clabel(linhas, inline = True, fmt = "%1.0f", fontsize = 8, colors = "black")
 	for rotulo in rotulos:
 		rotulo.set_rotation(0)
-	plt.colorbar(figure, fraction = 0.031, pad = 0.03, ticks = levels,
+	plt.colorbar(figure, fraction = 0.035, pad = 0.03, ticks = levels,
 				label = "Temperatura Semanal (°C)", orientation = "vertical", extend = "max")
 	ax = plt.gca()
 	regionais.plot(ax = ax, facecolor = "none",# linestyle = "--",
