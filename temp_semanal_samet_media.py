@@ -175,7 +175,7 @@ def gerar_mapa(dataset, str_var):
 										robust = True, extend = "both",
 										transform = ccrs.PlateCarree())
 	linhas = dataset.plot.contour(ax = ax, levels = levels,
-								colors = "black", linewidths = 0.5,	transform = ccrs.PlateCarree())
+								colors = "black", linewidths = 0.3,	transform = ccrs.PlateCarree())
 	rotulos = ax.clabel(linhas, inline = True, fmt = "%1.0f", fontsize = 8, colors = "black")
 	for rotulo in rotulos:
 		rotulo.set_rotation(0)
@@ -210,9 +210,9 @@ def gerar_mapa(dataset, str_var):
 	gl.top_labels = False
 	gl.right_labels = False
 	plt.figtext(0.55, 0.045, "Fonte: SAMeT - CPTEC/INPE", ha = "center", fontsize = 10)
-	#plt.savefig(f"{caminho_resultado}{str_var}_semanal_samet_media_{_d7}.png",
-	#			transparent = False, dpi = 300, bbox_inches = "tight", pad_inches = 0.02)
-	plt.show()
+	plt.savefig(f"{caminho_resultado}{str_var}_semanal_samet_media_{_d7}.png",
+				transparent = False, dpi = 300, bbox_inches = "tight", pad_inches = 0.02)
+	#plt.show()
 	
 #################################################################################
 # EXECUTANDO FUNÇÕES
