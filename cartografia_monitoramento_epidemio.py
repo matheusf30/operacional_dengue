@@ -141,7 +141,7 @@ regionais = municipios.dissolve(by = "regional")
 ### Cartografia
 ### Casos
 fig, ax = plt.subplots(figsize = (20, 12), layout = "constrained", frameon = True)
-municipios.plot(ax = ax, color = "lightgray", edgecolor = "black", linewidth = 0.5)
+municipios.plot(ax = ax, color = "lightgray", edgecolor = "white", linewidth = 0.05)
 v_max = base_carto["total"].max()
 v_min = base_carto["total"].min()
 intervalo = 250
@@ -181,7 +181,7 @@ if _AUTOMATIZA == True and _VISUALIZAR == True:
 
 ### Incidência	
 fig, ax = plt.subplots(figsize = (20, 12), layout = "constrained", frameon = True)
-municipios.plot(ax = ax, color = "lightgray", edgecolor = "black", linewidth = 0.5)
+municipios.plot(ax = ax, color = "lightgray", edgecolor = "white", linewidth = 0.05)
 v_max = base_carto["incidencia"].max()
 v_min = base_carto["incidencia"].min()
 intervalo = 250
