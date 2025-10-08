@@ -135,6 +135,10 @@ municipios = municipios.merge(regionais[["Municipio", "regional"]],
 								how = "left")
 regionais = municipios.dissolve(by = "regional")
 
+_d7 = datetime.today() - timedelta(days = 7)
+_d7 = _d7 - timedelta(days = _d7.weekday() + 1)
+_d7 = _d7.strftime("%Y-%m-%d")
+
 #sys.exit()
 
 ##################################################################################
@@ -167,9 +171,9 @@ ax.text(-52.5, -29, "Sistema de Referência de Coordenadas\nDATUM: SIRGAS 2000/2
 	    color = "white", backgroundcolor = "darkgray", ha = "center", va = "center", fontsize = 14)
 plt.xlabel("Longitude", fontsize = 18)
 plt.ylabel("Latitude", fontsize = 18)
-plt.title(f"Soma de Casos Prováveis de Dengue em Santa Catarina\nSemana Epidemiológica: {semana_epidemio.strftime('%Y-%m-%d')}.", fontsize = 28)
+plt.title(f"Soma de Casos Prováveis de Dengue em Santa Catarina\nSemana Epidemiológica: {_d7}.", fontsize = 28)
 
-nome_arquivo = f"CASOS_mapa_monitoramento_{_ANO_MES_DIA}.png"
+nome_arquivo = f"CASOS_mapa_monitoramento_{_d7}.png"
 if _AUTOMATIZA == True and _SALVAR == True:
 	os.makedirs(caminho_resultados, exist_ok = True)
 	plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "png", dpi = 300)
@@ -207,9 +211,9 @@ ax.text(-52.5, -29, "Sistema de Referência de Coordenadas\nDATUM: SIRGAS 2000/2
 	    color = "white", backgroundcolor = "darkgray", ha = "center", va = "center", fontsize = 14)
 plt.xlabel("Longitude", fontsize = 18)
 plt.ylabel("Latitude", fontsize = 18)
-plt.title(f"Incidência da Soma de Casos Prováveis de Dengue em Santa Catarina.\nSemana Epidemiológica: {semana_epidemio.strftime('%Y-%m-%d')}.", fontsize = 28)
+plt.title(f"Incidência da Soma de Casos Prováveis de Dengue em Santa Catarina.\nSemana Epidemiológica: {_d7}.", fontsize = 28)
 
-nome_arquivo = f"INCIDENCIA_mapa_monitoramento_{_ANO_MES_DIA}.png"
+nome_arquivo = f"INCIDENCIA_mapa_monitoramento_{_d7}.png"
 if _AUTOMATIZA == True and _SALVAR == True:
 	os.makedirs(caminho_resultados, exist_ok = True)
 	plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "png", dpi = 300)
