@@ -150,8 +150,8 @@ print(f"\n{green}v_min\n{reset}{v_min}\n")
 print(f"\n{green}v_max\n{reset}{v_max}\n")
 print(f"\n{green}levels\n{reset}{levels}\n")
 base_carto.plot(ax = ax, column = "total",  legend = True,
-				edgecolor = "black", label = "Casos",
-				cmap = "YlOrRd", linewidth = "none",
+				edgecolor = "white", label = "Casos",
+				cmap = "YlOrRd", linewidth = 0.05, linestyle = ":",
 				norm = cls.Normalize(vmin = v_min, vmax = v_max, clip = True))
 regionais.plot(ax = ax, facecolor = "none",
 			   edgecolor = "dimgray", linewidth = 0.9)
@@ -190,8 +190,8 @@ print(f"\n{green}v_min\n{reset}{v_min}\n")
 print(f"\n{green}v_max\n{reset}{v_max}\n")
 print(f"\n{green}levels\n{reset}{levels}\n")
 base_carto.plot(ax = ax, column = "incidencia",  legend = True,
-				edgecolor = "black", label = "Incidência",
-				cmap = "YlOrRd", linewidth = "none",
+				edgecolor = "white", label = "Incidência",
+				cmap = "YlOrRd", linewidth = 0.05, linestyle = ":",
 				norm = cls.Normalize(vmin = v_min, vmax = v_max, clip = True))
 regionais.plot(ax = ax, facecolor = "none",
 			   edgecolor = "dimgray", linewidth = 0.9)
