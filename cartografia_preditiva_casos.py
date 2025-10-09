@@ -107,7 +107,11 @@ unicos = "casos_primeiros.csv"
 municipios = "SC/SC_Municipios_2022.shp"
 br = "BR/BR_UF_2022.shp"
 
-###############################################################
+regionais = "/home/meteoro/scripts/matheus/operacional_dengue/dados_operacao/censo_sc_regional.csv"
+municipios = "/media/dados/shapefiles/SC/SC_Municipios_2024.shp"
+##################################################################################
+municipios = gpd.read_file(municipios, low_memory = False)
+regionais = pd.read_csv(regionais, low_memory = False)
 
 ### Abrindo Arquivo
 casos = pd.read_csv(f"{caminho_dados}{casos}", low_memory = False)
@@ -117,7 +121,7 @@ tmin = pd.read_csv(f"{caminho_dados}{tmin}", low_memory = False)
 tmed = pd.read_csv(f"{caminho_dados}{tmed}", low_memory = False)
 tmax = pd.read_csv(f"{caminho_dados}{tmax}", low_memory = False)
 unicos = pd.read_csv(f"{caminho_dados}{unicos}")
-municipios = gpd.read_file(f"{caminho_shape}{municipios}")
+#municipios = gpd.read_file(f"{caminho_shape}{municipios}")
 br = gpd.read_file(f"{caminho_shape}{br}")
 troca = {'Á': 'A', 'Â': 'A', 'À': 'A', 'Ã': 'A',
          'É': 'E', 'Ê': 'E', 'È': 'E', 'Ẽ': 'E',
@@ -408,7 +412,15 @@ def salva_modelo(modelo, cidade):
 	print("\n" + "="*80 + "\n")
 
 ######################################################MODELAGEM############################################################
+municipios["NM_MUN"] = municipios["NM_MUN"].str.upper()
+municipios = municipios.merge(regionais[["Municipio", "regional"]],
+								left_on = "NM_MUN", right_on = "Municipio",
+								how = "left")
+regionais = municipios.dissolve(by = "regional")
 
+_d7 = datetime.today() - timedelta(days = 7)
+_d7 = _d7 - timedelta(days = _d7.weekday() + 1)
+_d7 = _d7.strftime("%Y-%m-%d")
 ### Exibindo Informações, Gráficos e Métricas
 #previsao_total = []
 previsao_total = pd.DataFrame()
@@ -570,7 +582,7 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 	argentina.plot(ax = ax, color = "tan")
 	br.plot(ax = ax, color = "tan", edgecolor = "black")
 	"""
-	municipios.plot(ax = ax, color = "lightgray", edgecolor = "black", linewidth = 0.5)
+	municipios.plot(ax = ax, color = "lightgray", edgecolor = "white", linewidth = 0.05)
 	v_max = previsao_melt_poligeo.select_dtypes(include = ["number"]).max().max()
 	v_min = previsao_melt_poligeo.select_dtypes(include = ["number"]).min().min()
 	v_max = int(v_max)
@@ -584,14 +596,16 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 							#label = f"{str_var}", cmap = "YlOrRd")#, add_colorbar = False,
 												#levels = levels, add_labels = False,
 												#norm = cls.Normalize(vmin = v_min, vmax = v_max))
-	previsao_melt_poligeo[previsao_melt_poligeo["Semana"] == semana_epidemio].plot(ax = ax, column = "Casos",  legend = True, edgecolor = "black",
-		                                                                           label = "Casos", cmap = "YlOrRd", linewidth = 0.5,#levels = levels, 
+	previsao_melt_poligeo[previsao_melt_poligeo["Semana"] == semana_epidemio].plot(ax = ax, column = "Casos",  legend = True, edgecolor = "white",
+		                                                                           label = "Casos", cmap = "YlOrRd", linewidth = 0.05,  legend_kwds = {"extend": "max"}, #levels = levels, 
 		                                                                           norm = cls.Normalize(vmin = v_min, vmax = v_max, clip = True))
 	cbar_ax = ax.get_figure().get_axes()[-1]
 	cbar_ax.tick_params(labelsize = 20)
 	zero = previsao_melt_poligeo[previsao_melt_poligeo["Casos"] <= 0]
-	zero[zero["Semana"] == semana_epidemio].plot(ax = ax, column = "Casos", legend = False, edgecolor = "black", linewidth = 0.5,
+	zero[zero["Semana"] == semana_epidemio].plot(ax = ax, column = "Casos", legend = False, edgecolor = "white", linewidth = 0.05,
 		                                         label = "Casos", cmap = "YlOrBr")#"YlOrBr")
+	regionais.plot(ax = ax, facecolor = "none",
+					edgecolor = "dimgray", linewidth = 0.6)	
 	plt.xlim(-54, -48)
 	plt.ylim(-29.5, -25.75)
 	x_tail = -48.5
