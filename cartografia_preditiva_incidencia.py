@@ -94,7 +94,11 @@ print(f"\n{green}ONTEM:\n{reset}{_ANO_MES_DIA_ONTEM}\n")
 print(f"\nOS DADOS UTILIZADOS ESTÃO ALOCADOS NOS SEGUINTES CAMINHOS:\n\n{caminho_dados}\n\n")
 
 
-######################################################
+regionais = "/home/meteoro/scripts/matheus/operacional_dengue/dados_operacao/censo_sc_regional.csv"
+municipios = "/media/dados/shapefiles/SC/SC_Municipios_2024.shp"
+##################################################################################
+municipios = gpd.read_file(municipios, low_memory = False)
+regionais = pd.read_csv(regionais, low_memory = False)
 
 ### Renomeação das Variáveis pelos Arquivos
 casos = "casos_dive_pivot_total.csv"  # TabNet/DiveSC
@@ -104,7 +108,7 @@ tmin = f"{_ANO_ATUAL}/tmin_semana_ate_{_ANO_ATUAL}.csv"
 tmed = f"{_ANO_ATUAL}/tmed_semana_ate_{_ANO_ATUAL}.csv"
 tmax = f"{_ANO_ATUAL}/tmax_semana_ate_{_ANO_ATUAL}.csv"
 unicos = "casos_primeiros.csv"
-municipios = "SC/SC_Municipios_2022.shp"
+#municipios = "SC/SC_Municipios_2022.shp"
 br = "BR/BR_UF_2022.shp"
 censo = "censo_sc_xy.csv"
 
@@ -120,7 +124,7 @@ tmin = pd.read_csv(f"{caminho_dados}{tmin}", low_memory = False)
 tmed = pd.read_csv(f"{caminho_dados}{tmed}", low_memory = False)
 tmax = pd.read_csv(f"{caminho_dados}{tmax}", low_memory = False)
 unicos = pd.read_csv(f"{caminho_dados}{unicos}")
-municipios = gpd.read_file(f"{caminho_shape}{municipios}")
+#municipios = gpd.read_file(f"{caminho_shape}{municipios}")
 br = gpd.read_file(f"{caminho_shape}{br}")
 troca = {'Á': 'A', 'Â': 'A', 'À': 'A', 'Ã': 'A',
          'É': 'E', 'Ê': 'E', 'È': 'E', 'Ẽ': 'E',
@@ -427,7 +431,15 @@ def salva_modelo(modelo, cidade):
 	print("\n" + "="*80 + "\n")
 
 ######################################################MODELAGEM############################################################
+municipios["NM_MUN"] = municipios["NM_MUN"].str.upper()
+municipios = municipios.merge(regionais[["Municipio", "regional"]],
+								left_on = "NM_MUN", right_on = "Municipio",
+								how = "left")
+regionais = municipios.dissolve(by = "regional")
 
+_d7 = datetime.today() - timedelta(days = 7)
+_d7 = _d7 - timedelta(days = _d7.weekday() + 1)
+_d7 = _d7.strftime("%Y-%m-%d")
 ### Exibindo Informações, Gráficos e Métricas
 #previsao_total = []
 previsao_total = pd.DataFrame()
@@ -519,7 +531,7 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 	previsao_melt_poli = pd.merge(previsao_melt, xy, on = "Município", how = "left")
 	previsao_melt_poligeo = gpd.GeoDataFrame(previsao_melt_poli, geometry = "geometry", crs = "EPSG:4674")
 	fig, ax = plt.subplots(figsize = (20, 12), layout = "constrained", frameon = True)
-	municipios.plot(ax = ax, color = "lightgray", edgecolor = "black", linewidth = 0.5)
+	municipios.plot(ax = ax, color = "lightgray", edgecolor = "white", linewidth = 0.05)
 	v_max = previsao_melt_poligeo.select_dtypes(include="number").max().max()
 	v_min = previsao_melt_poligeo.select_dtypes(include="number").min().min()
 	intervalo = 250
@@ -527,13 +539,15 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 	print(f"\n{green}v_min\n{reset}{v_min}\n")
 	print(f"\n{green}v_max\n{reset}{v_max}\n")
 	print(f"\n{green}levels\n{reset}{levels}\n")
-	previsao_melt_poligeo[previsao_melt_poligeo["Semana"] == semana_epidemio].plot(ax = ax, column = "Incidencia",  legend = True, edgecolor = "black", # fontsize = 20,
-		                                                                           label = "Incidência (Casos Prováveis de Dengue)", cmap = "YlOrRd", linewidth = 0.5,#levels = levels, 
+	previsao_melt_poligeo[previsao_melt_poligeo["Semana"] == semana_epidemio].plot(ax = ax, column = "Incidencia",  legend = True, edgecolor = "white", # fontsize = 20,
+		                                                                           label = "Incidência (Casos Prováveis de Dengue)", cmap = "YlOrRd", linewidth = 0.05,   legend_kwds = {"extend": "max"},#levels = levels, 
 		                                                                           norm = cls.Normalize(vmin = v_min, vmax = v_max, clip = True))
 	cbar_ax = ax.get_figure().get_axes()[-1]
 	cbar_ax.tick_params(labelsize = 20)
 	zero = previsao_melt_poligeo[previsao_melt_poligeo["Incidencia"] <= 0]
-	zero[zero["Semana"] == semana_epidemio].plot(ax = ax, column = "Incidencia", legend = False, edgecolor = "black", linewidth = 0.5, label = "Incidência (Casos Prováveis de Dengue)", cmap = "YlOrBr")#"YlOrBr")
+	zero[zero["Semana"] == semana_epidemio].plot(ax = ax, column = "Incidencia", legend = False, edgecolor = "white", linewidth = 0.05, label = "Incidência (Casos Prováveis de Dengue)", cmap = "YlOrBr")#"YlOrBr")
+	regionais.plot(ax = ax, facecolor = "none",
+				edgecolor = "dimgray", linewidth = 0.6)	
 	plt.xlim(-54, -48)
 	plt.ylim(-29.5, -25.75)
 	x_tail = -48.5
