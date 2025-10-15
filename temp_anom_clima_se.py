@@ -29,6 +29,7 @@ import cartopy.crs as crs
 from cartopy.feature import ShapelyFeature
 import cartopy.feature as cfeature
 import cmocean
+import regionmask
 import sys
 import os
 from datetime import date, datetime, timedelta
@@ -63,6 +64,7 @@ _ANO_MES_DIA_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}{_DIA_ONTEM}"
 # CAMINHOS E ARQUIVOS
 caminho_samet = "/media/dados/operacao/samet/daily/"
 caminho_shapefile = "/media/dados/shapefiles/BR/"
+shp = shpreader.Reader(f"{caminho_shapefile}/BR_UF_2022.shp").geometries()
 caminho_resultado = f"/home/meteoro/scripts/matheus/operacional_dengue/meteorologia/{_ANO_ATUAL}/"
 # CLimatologia de semanas epidemiológicas (by Everton)
 SE = 41
@@ -161,7 +163,7 @@ def gerar_mapa(dataset, str_var):
 	"""
 	plt.figure(figsize=(8, 6), layout = "constrained", frameon = True)
 	ax = plt.axes(projection=ccrs.PlateCarree())
-	shp = list(shpreader.Reader(f"{caminho_shapefile}/BR_UF_2022.shp").geometries())
+	#shp = list(shpreader.Reader(f"{caminho_shapefile}/BR_UF_2022.shp").geometries())
 	cmap = plt.get_cmap("coolwarm")#jet_r RdYlBu_r
 	cmap = plt.get_cmap("RdBu_r")
 	#cmap = plt.get_cmap("RdYlBu_r")
@@ -185,8 +187,10 @@ def gerar_mapa(dataset, str_var):
 			plt.title(f"Temperatura Mínima Média Semanal\nPeríodo observado: {_d7}",
 						fontsize = 14, ha = "center")
 		case "tmed":
-			plt.title(f"Anomalia de Temperatura Média Para a Semana {SE}\nPeríodo observado: {_d7}",
+			plt.title(f"Anomalia de Temperatura Média Para a Semana {SE}\nInício do período observado: {_d7}",
 						fontsize = 14, ha = "center")
+			media = mascara(dataset)
+			plt.text(-49, -32.5, f"Media das anomalias: {media}.")
 		case "tmax":
 			plt.title(f"Temperatura Máxima Média Semanal\nPeríodo observado: {_d7}",
 						fontsize = 14, ha = "center")
@@ -202,9 +206,23 @@ def gerar_mapa(dataset, str_var):
 	gl.top_labels = False
 	gl.right_labels = False
 	plt.figtext(0.55, 0.045, "Fonte: SAMeT - CPTEC/INPE", ha = "center", fontsize = 10)
-	plt.savefig(f"{caminho_resultado}{str_var}_semanal_samet_anomalia_{_d7}.png",
-				transparent = False, dpi = 300, bbox_inches = "tight", pad_inches = 0.02)
-	#plt.show()
+	#plt.savefig(f"{caminho_resultado}{str_var}_semanal_samet_anomalia_{_d7}.png",
+	#			transparent = False, dpi = 300, bbox_inches = "tight", pad_inches = 0.02)
+	plt.show()
+
+def mascara(data_region):
+	shape_estado = shp
+	var = data_region
+	mask = regionmask.mask_geopandas(shape_estado, var.lon, var.lat)
+	# Aplicar a máscara aos dados
+	dados_mascarados = var.where(mask >= 0)  # Valores dentro do polígono
+	media = dados_mascarados.mean().values
+	media = media.round(2)
+	return media
+def quadradinho_do_mario(media):
+	plt.text(-49, -32.5, f"Média Estado\n\nPR: {media_pr} ºC\nSC: {media_sc} ºC\nRS: {media_rs} ºC",
+			color = "black", backgroundcolor = "lightgray",
+			ha = "center", va = "center", fontsize = 12)
 	
 #################################################################################
 # EXECUTANDO FUNÇÕES
@@ -219,7 +237,6 @@ except FileNotFoundError:
 	regiao_tmax = selecionar_tempo_espaco(ds_tmax, _ANO_ONTEM, "tmax")
 
 levels, norm, int_min, int_max = limite_colobar(regiao_tmin, regiao_tmax)
-
 
 regiao_tmed = regiao_tmed - tmed_climatologia
 abs_value = int(max(abs(regiao_tmed.min()), abs(regiao_tmed.max())) + 1)
@@ -241,15 +258,8 @@ else:
     # Round to nearest 0.5 for cleanliness
     levels = np.round(levels * 2) / 2
 
-norm = cls.Normalize(vmin=-abs_value, vmax=abs_value)
+norm = cls.Normalize(vmin = -abs_value, vmax = abs_value)
 levels = np.arange(-abs_value, abs_value + 1, 1)
 
-#norm = cls.Normalize(vmin=min(levels), vmax=max(levels))
-
-#info_dataset(regiao_tmin)
 info_dataset(regiao_tmed)
-#info_dataset(regiao_tmax)
-#gerar_mapa(regiao_tmin, "tmin")
 gerar_mapa(regiao_tmed, "tmed")
-#gerar_mapa(regiao_tmax, "tmax")
-	
