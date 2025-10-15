@@ -65,11 +65,10 @@ _ANO_MES_DIA_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}{_DIA_ONTEM}"
 caminho_shapefile = "/media/dados/shapefiles/BR/"
 caminho_resultado = f"/home/meteoro/scripts/matheus/operacional_dengue/meteorologia/{_ANO_ATUAL}/"
 os.makedirs(f"{caminho_resultado}", mode = 0o777, exist_ok = True)
+
 # CLimatologia de semanas epidemiológicas (by Everton)
-caminho_climatologia = "/home/meteoro/scripts/scripts_everton/climatologia_dengue"
-arquivo_climatologia = "/precipitacao_climatologia_epidemiologia.nc"
-SE = 40 #Número da Semana Epidemiológica
-prec_climatologia = xr.open_dataset(f"{caminho_climatologia}{arquivo_climatologia}").sel(week = SE)['prec'] 
+SE = 41
+prec_climatologia = xr.open_dataset("/home/meteoro/scripts/matheus/operacional_dengue/meteorologia/climatologia/prec_climatologia_epidemiosemanal.nc").sel(week = SE)['prec']
 
 try:
 	caminho_merge = f"/media/dados/operacao/merge/daily/{_ANO_ATUAL}/"

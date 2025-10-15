@@ -65,10 +65,8 @@ caminho_samet = "/media/dados/operacao/samet/daily/"
 caminho_shapefile = "/media/dados/shapefiles/BR/"
 caminho_resultado = f"/home/meteoro/scripts/matheus/operacional_dengue/meteorologia/{_ANO_ATUAL}/"
 # CLimatologia de semanas epidemiológicas (by Everton)
-caminho_climatologia = "/home/meteoro/scripts/scripts_everton/climatologia_dengue"
-arquivo_climatologia = "/temperatura_climatologia_epidemiologia.nc"
-SE = 40
-tmed_climatologia = xr.open_dataset(f"{caminho_climatologia}{arquivo_climatologia}").sel(week = SE)['tmed']
+SE = 41
+tmed_climatologia = xr.open_dataset("/home/meteoro/scripts/matheus/operacional_dengue/meteorologia/climatologia/tmed_climatologia_epidemiosemanal.nc").sel(week = SE)['tmed']
 
 os.makedirs(f"{caminho_resultado}", mode = 0o777, exist_ok = True) 
 try:
@@ -244,6 +242,7 @@ else:
     levels = np.round(levels * 2) / 2
 
 norm = cls.Normalize(vmin=-abs_value, vmax=abs_value)
+levels = np.arange(-abs_value, abs_value + 1, 1)
 
 #norm = cls.Normalize(vmin=min(levels), vmax=max(levels))
 
