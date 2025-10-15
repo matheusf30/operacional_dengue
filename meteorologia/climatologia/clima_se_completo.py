@@ -172,10 +172,11 @@ def gera_climatologia_se(dataset, str_var):
 	if recorte_list:
 		new_dataset = xr.concat(recorte_list, dim='week')
 		new_dataset['week'] = valid_weeks
-		if str_var == "tmed":
-			new_dataset = new_dataset.groupby('week').mean()
-		elif(str_var == "prec"):
-			new_dataset = new_dataset.groupby('week').sum()
+		new_dataset = new_dataset.groupby('week').mean()
+		#if str_var == "tmed":
+		#	new_dataset = new_dataset.groupby('week').mean()
+		#elif(str_var == "prec"):
+		#	new_dataset = new_dataset.groupby('week').mean()
 	new_dataset.to_netcdf(f'{str_var}_climatologia_epidemiosemanal.nc')
 	t1_function = datetime.now() - t0_function
 	print(f"Tempo de execução da função 'gera_climatologia_se({str_var})': {t1_function}")
