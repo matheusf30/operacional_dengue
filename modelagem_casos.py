@@ -121,6 +121,7 @@ url_gh = "https://raw.githubusercontent.com/matheusf30/"
 
 ### Renomeação das Variáveis pelos Arquivos
 casos = "casos_dive_pivot_total.csv"  # TabNet/DiveSC
+#casos = "casos_semanal_pivot.csv"
 #focos = "focos_pivot.csv"
 
 prec = f"{_ANO_ATUAL}/prec_semana_ate_{_ANO_ATUAL}.csv"
@@ -136,6 +137,7 @@ tmax = "tmax_semana_ate_2023.csv"
 """
 ### Abrindo Arquivo
 casos = pd.read_csv(f"{caminho_dados}{casos}", low_memory = False)
+#casos = pd.read_csv(f"{url_gh}fapesc_dengue/refs/heads/main/matheus/dados/{casos}"
 
 #focos = pd.read_csv(f"{caminho_dados}{focos}", low_memory = False)
 prec = pd.read_csv(f"{caminho_dados}{prec}", low_memory = False)
