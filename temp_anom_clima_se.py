@@ -22,6 +22,7 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 import matplotlib.colors as cls
 import pandas as pd
+import geopandas as gpd
 import numpy as np
 import cartopy, cartopy.crs as ccrs
 import cartopy.io.shapereader as shpreader
@@ -64,7 +65,8 @@ _ANO_MES_DIA_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}{_DIA_ONTEM}"
 # CAMINHOS E ARQUIVOS
 caminho_samet = "/media/dados/operacao/samet/daily/"
 caminho_shapefile = "/media/dados/shapefiles/BR/"
-shp = shpreader.Reader(f"{caminho_shapefile}/BR_UF_2022.shp").geometries()
+path_shp = "/media/dados/shapefiles/"
+shp = gpd.read_file(f"{path_shp}/SC/SC_UF_2024.shp")
 caminho_resultado = f"/home/meteoro/scripts/matheus/operacional_dengue/meteorologia/{_ANO_ATUAL}/"
 # CLimatologia de semanas epidemiológicas (by Everton)
 SE = 41
@@ -189,8 +191,8 @@ def gerar_mapa(dataset, str_var):
 		case "tmed":
 			plt.title(f"Anomalia de Temperatura Média Para a Semana {SE}\nInício do período observado: {_d7}",
 						fontsize = 14, ha = "center")
-			media = mascara(dataset)
-			plt.text(-49, -32.5, f"Media das anomalias: {media}.")
+			#media = mascara(dataset)
+			#plt.text(-49, -32.5, f"Media das anomalias: {media}.")
 		case "tmax":
 			plt.title(f"Temperatura Máxima Média Semanal\nPeríodo observado: {_d7}",
 						fontsize = 14, ha = "center")

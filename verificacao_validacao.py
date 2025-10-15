@@ -61,7 +61,8 @@ _ANO_ATUAL = str(datetime.today().year)
 _MES_ATUAL = _AGORA.strftime("%m")
 _DIA_ATUAL = _AGORA.strftime("%d")
 _ANO_MES = f"{_ANO_ATUAL}{_MES_ATUAL}"
-_ANO_MES_DIA = 20250916 #f"{_ANO_ATUAL}{_MES_ATUAL}{_DIA_ATUAL}"
+_ANO_MES_DIA = f"{_ANO_ATUAL}{_MES_ATUAL}{_DIA_ATUAL}"
+#_ANO_MES_DIA = 20251014 #f"{_ANO_ATUAL}{_MES_ATUAL}{_DIA_ATUAL}"
 _ONTEM = datetime.today() - timedelta(days = 1)
 _ANO_ONTEM = str(_ONTEM.year)
 _MES_ONTEM = _ONTEM.strftime("%m")
@@ -77,7 +78,7 @@ caminho_operacional = "/home/meteoro/scripts/matheus/operacional_dengue/"
 caminho_shape = "/media/dados/shapefiles/" #SC/SC_Municipios_2022.shp #BR/BR_UF_2022.shp
 caminho_modelos = f"/home/meteoro/scripts/matheus/operacional_dengue/modelagem/casos/{_ANO_ATUAL}/{_ANO_MES_DIA}/"
 caminho_resultados = f"home/meteoro/scripts/matheus/operacional_dengue/modelagem/resultados/{_ANO_ATUAL}/{_ANO_MES}/"
-caminho_previsao = f"modelagem/resultados/{_ANO_ATUAL}/dados_previstos/"
+caminho_previsao = f"modelagem/resultados/{_ANO_ATUAL}/{_ANO_MES}/"#dados_previstos/"
 print(f"\n{green}HOJE:\n{reset}{_ANO_MES_DIA}\n")
 print(f"\n{green}ONTEM:\n{reset}{_ANO_MES_DIA_ONTEM}\n")
 print(f"\n{green}OS DADOS UTILIZADOS ESTÃO ALOCADOS NOS SEGUINTES CAMINHOS:\n\n{caminho_dados}{reset}\n\n")
