@@ -65,8 +65,6 @@ caminho_mergeCDO = "/media/dados/operacao/merge/CDO.MERGE/" #MERGE_CPTEC_DAILY_2
 caminho_samet = "/media/dados/operacao/samet/daily/" #/TMAX/2024/ #SAMeT_CPTEC_DAILY_SB_TMAX_2024.nc
 caminho_sametCDO = "/media/dados/operacao/samet/CDO.SAMET/" #SAMeT_CPTEC_DAILY_SB_TMAX_2024.nc@
 
-_ANO_MES = "202503"
-_ANO_MES_DIA = "20250309"
 
 caminho_gfs = f"/media/dados/operacao/gfs/0p25/{_ANO_MES}/{_ANO_MES_DIA}/" #202410/20241012/ #prec_daily_gfs_2024101212.nc
 caminho_gfs_ontem = f"/media/dados/operacao/gfs/0p25/{_ANO_MES_ONTEM}/{_ANO_MES_DIA_ONTEM}/" #202410/20241012/
@@ -83,7 +81,15 @@ tmin_ontem = f"temp_min_daily_gfs_{_ANO_MES_DIA_ONTEM}00.nc"
 teste = "gfs_prec_semana_20241014.csv"
 
 municipios = "SC_Municipios_2022.shp"
-
+"""
+_ANO_MES = "202510"
+_ANO_MES_DIA = "20251014"
+caminho_gfs = "/media/dados/operacao/gfs/0p25/202510/20251013/"
+prec = "prec_daily_gfs_2025101312.nc"
+tmin = "temp_min_daily_gfs_2025101300.nc"
+tmed = "temp_mean_daily_gfs_2025101300.nc"
+tmax = "temp_max_daily_gfs_2025101300.nc"
+"""
 ### Abrindo Arquivos
 try:
 	prec = xr.open_dataset(f"{caminho_gfs}{prec}")
