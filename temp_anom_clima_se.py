@@ -44,6 +44,20 @@ blue = "\033[34m"
 magenta = "\033[35m"
 cyan = "\033[36m"
 white = "\033[37m"
+
+def mascara(dataset):
+	shape_estado = sc_shape
+	var = dataset
+	mask = regionmask.mask_geopandas(shape_estado, var.lon, var.lat)
+	dados_mascarados = var.where(mask >= 0)  # Valores dentro do polígono
+	media = dados_mascarados.mean().values
+	media = media.round(2)
+	return media
+
+def quadradinho_do_mario(media_sc):
+	plt.text(-48.75, -29.25, f"Média de SC\n {media_sc} °C",
+			color = "black", backgroundcolor = "lightgray",
+			ha = "center", va = "center", fontsize = 12)	
 reset = "\033[0m"
 
 #################################################################################
@@ -66,10 +80,10 @@ _ANO_MES_DIA_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}{_DIA_ONTEM}"
 caminho_samet = "/media/dados/operacao/samet/daily/"
 caminho_shapefile = "/media/dados/shapefiles/BR/"
 path_shp = "/media/dados/shapefiles/"
-shp = gpd.read_file(f"{path_shp}/SC/SC_UF_2024.shp")
+sc_shape = gpd.read_file(f"{path_shp}/SC/SC_UF_2024.shp")
 caminho_resultado = f"/home/meteoro/scripts/matheus/operacional_dengue/meteorologia/{_ANO_ATUAL}/"
-# CLimatologia de semanas epidemiológicas (by Everton)
-SE = 41
+# Climatologia de semanas epidemiológicas (by Everton)
+SE = 42
 tmed_climatologia = xr.open_dataset("/home/meteoro/scripts/matheus/operacional_dengue/meteorologia/climatologia/tmed_climatologia_epidemiosemanal.nc").sel(week = SE)['tmed']
 
 os.makedirs(f"{caminho_resultado}", mode = 0o777, exist_ok = True) 
@@ -92,12 +106,10 @@ except FileNotFoundError:
 # DEFININDO FUNÇÕES
 
 def selecionar_tempo_espaco(dataset, tempo, str_var):
-	"""
-	"""
-	lat_min = -29.5 # -34.00 # -29.5
-	lat_max = -25.75 # -21.75 # -25.75
-	lon_min = -54 # -58.25 # -54
-	lon_max = -48 # -47.50 # -48
+	lat_min = -29.45#-29.5 # -34.00 # -29.5
+	lat_max = -25.65#-25.75 # -21.75 # -25.75
+	lon_min = -54.15#-54 # -58.25 # -54
+	lon_max = -47.85#-48 # -47.50 # -48
 	match str_var:
 		case "tmin":
 			dataset_espaco = dataset.sel(time = tempo,
@@ -165,7 +177,7 @@ def gerar_mapa(dataset, str_var):
 	"""
 	plt.figure(figsize=(8, 6), layout = "constrained", frameon = True)
 	ax = plt.axes(projection=ccrs.PlateCarree())
-	#shp = list(shpreader.Reader(f"{caminho_shapefile}/BR_UF_2022.shp").geometries())
+	shp = list(shpreader.Reader(f"{caminho_shapefile}/BR_UF_2022.shp").geometries())
 	cmap = plt.get_cmap("coolwarm")#jet_r RdYlBu_r
 	cmap = plt.get_cmap("RdBu_r")
 	#cmap = plt.get_cmap("RdYlBu_r")
@@ -183,6 +195,20 @@ def gerar_mapa(dataset, str_var):
 	_d7 = datetime.today() - timedelta(days = 7)
 	_d7 = _d7 - timedelta(days = _d7.weekday() + 1)
 	_d7 = _d7.strftime("%Y-%m-%d")
+	"""
+	SE = 1
+	#contando a semana epidemiologica
+	while _d7 > pd.to_datetime("2025-01-01"):
+		SE += 1
+		_d7 -= timedelta(days = 7)
+	if (pd.to_datetime("2025-01-01") - _d7).days >= 4:
+		SE += 1
+	print(SE)
+	print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+	print("=======================================================")
+	sys.exit()
+	_d7 = _d7.strftime("%Y-%m-%d")
+	"""	
 	print(f"\n{green}{str_var} - DOMINGO: {reset}{_d7}\n")
 	match str_var:
 		case "tmin":
@@ -191,8 +217,8 @@ def gerar_mapa(dataset, str_var):
 		case "tmed":
 			plt.title(f"Anomalia de Temperatura Média Para a Semana {SE}\nInício do período observado: {_d7}",
 						fontsize = 14, ha = "center")
-			#media = mascara(dataset)
-			#plt.text(-49, -32.5, f"Media das anomalias: {media}.")
+			media = mascara(dataset)
+			quadradinho_do_mario(media)
 		case "tmax":
 			plt.title(f"Temperatura Máxima Média Semanal\nPeríodo observado: {_d7}",
 						fontsize = 14, ha = "center")
@@ -212,20 +238,21 @@ def gerar_mapa(dataset, str_var):
 	#			transparent = False, dpi = 300, bbox_inches = "tight", pad_inches = 0.02)
 	plt.show()
 
-def mascara(data_region):
-	shape_estado = shp
-	var = data_region
+
+
+def mascara(dataset):
+	shape_estado = sc_shape
+	var = dataset
 	mask = regionmask.mask_geopandas(shape_estado, var.lon, var.lat)
-	# Aplicar a máscara aos dados
 	dados_mascarados = var.where(mask >= 0)  # Valores dentro do polígono
 	media = dados_mascarados.mean().values
 	media = media.round(2)
 	return media
-def quadradinho_do_mario(media):
-	plt.text(-49, -32.5, f"Média Estado\n\nPR: {media_pr} ºC\nSC: {media_sc} ºC\nRS: {media_rs} ºC",
+
+def quadradinho_do_mario(media_sc):
+	plt.text(-48.75, -29.15, f"Média de SC\n {media_sc} °C",
 			color = "black", backgroundcolor = "lightgray",
-			ha = "center", va = "center", fontsize = 12)
-	
+			ha = "center", va = "center", fontsize = 12)	
 #################################################################################
 # EXECUTANDO FUNÇÕES
 	
@@ -239,6 +266,7 @@ except FileNotFoundError:
 	regiao_tmax = selecionar_tempo_espaco(ds_tmax, _ANO_ONTEM, "tmax")
 
 levels, norm, int_min, int_max = limite_colobar(regiao_tmin, regiao_tmax)
+
 
 regiao_tmed = regiao_tmed - tmed_climatologia
 abs_value = int(max(abs(regiao_tmed.min()), abs(regiao_tmed.max())) + 1)
@@ -260,8 +288,15 @@ else:
     # Round to nearest 0.5 for cleanliness
     levels = np.round(levels * 2) / 2
 
-norm = cls.Normalize(vmin = -abs_value, vmax = abs_value)
+norm = cls.Normalize(vmin=-abs_value, vmax=abs_value)
 levels = np.arange(-abs_value, abs_value + 1, 1)
 
+#norm = cls.Normalize(vmin=min(levels), vmax=max(levels))
+
+#info_dataset(regiao_tmin)
 info_dataset(regiao_tmed)
+#info_dataset(regiao_tmax)
+#gerar_mapa(regiao_tmin, "tmin")
 gerar_mapa(regiao_tmed, "tmed")
+#gerar_mapa(regiao_tmax, "tmax")
+	
