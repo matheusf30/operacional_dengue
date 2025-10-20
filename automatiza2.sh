@@ -1,16 +1,16 @@
-###################################################
-## Roteiro adaptado para automatizar execução    ##
-## Dados: Focos de _Aedes_ sp. e                 ##
-##        Casos Prováveis de Dengue (DIVE/SC)    ##
-## Demanda: FAPESC edital nº 37/2024             ##
-## Adaptado por: Matheus Ferreira de Souza,      ##
-##               Caroline Bresciani,             ##
-##               Beatriz Campanharo Garcia C.,   ##
-##               Domênica Tcacenco,              ##
-##               Everton Weber Galliani,         ##
-##               Murilo Ferreira dos Santos.     ##
-## Data: 31/07/2025                              ##
-###################################################
+#################################################################################
+## Roteiro adaptado para automatizar execução    ## PALAVRAS-CHAVE:
+## Dados: Focos de _Aedes_ sp. e                 ## > Modelagem Computacional;
+##        Casos Prováveis de Dengue (DIVE/SC)    ## > Modelo Preditivo;
+## Demanda: FAPESC edital nº 37/2024             ## > Transferência de Tecnologia;
+## Adaptado por: Matheus Ferreira de Souza,      ## > Santa Catarina;
+##               Caroline Bresciani,             ## > Secretaria de Saúde;
+##               Beatriz Campanharo Garcia C.,   ## > Produto Técnico-Tecnológico;
+##               Domênica Tcacenco,              ## > IFSC;
+##               Everton Weber Galliani,         ## > Gerência de Zoonoses;
+##               Murilo Ferreira dos Santos.     ## > Monitoramento Meteorológico;
+## Data: 31/07/2025                              ## > Boletim Epidemiológico.
+#################################################################################
 """
 Tentando automatizar tudo para executar de uma única vez.
 Deve-se alterar as permissões deste próprio roteiro,
@@ -24,7 +24,8 @@ conda init
 conda activate dados_nc
 ### EXTRAÇÃO E PRÉ-PROCESSAMENTO DE DADOS EPIDEMIOLÓGICOS
 #. get_dengue.sh # necessita alterar o nome de saída do arquivo baixado # Roteiro disponibilizado por Elmo Neto
-python une_casos_tabnet.py # sincronizar o nome do arquivo baixado
+python preprocess_saude.py # sincronizar o nome do arquivo baixado
+python une_casos_tabnet.py 
 #### EXTRAÇÃO E PRÉ-PROCESSAMENTO DE DADOS METEROLÓGICOS
 python extrai_clima.py #SAMeT e MERGE
 python extrai_gfs.py
