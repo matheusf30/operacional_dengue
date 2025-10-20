@@ -1,16 +1,16 @@
-#################################################################################
-## Roteiro adaptado para automatizar execução    ## PALAVRAS-CHAVE:
-## Dados: Focos de _Aedes_ sp. e                 ## > Modelagem Computacional;
-##        Casos Prováveis de Dengue (DIVE/SC)    ## > Modelo Preditivo;
-## Demanda: FAPESC edital nº 37/2024             ## > Transferência de Tecnologia;
-## Adaptado por: Matheus Ferreira de Souza,      ## > Santa Catarina;
-##               Caroline Bresciani,             ## > Secretaria de Saúde;
-##               Beatriz Campanharo Garcia C.,   ## > Produto Técnico-Tecnológico;
-##               Domênica Tcacenco,              ## > IFSC;
-##               Everton Weber Galliani,         ## > Gerência de Zoonoses;
-##               Murilo Ferreira dos Santos.     ## > Monitoramento Meteorológico;
-## Data: 31/07/2025                              ## > Boletim Epidemiológico.
-#################################################################################
+####################################################################################
+## Roteiro adaptado para automatizar execução    ## PALAVRAS-CHAVE:               ##
+## Dados: Focos de _Aedes_ sp. e                 ## > Modelagem Computacional;    ##
+##        Casos Prováveis de Dengue (DIVE/SC)    ## > Modelo Preditivo;           ##
+## Demanda: FAPESC edital nº 37/2024             ## > Transferência de Tecnologia;##
+## Adaptado por: Matheus Ferreira de Souza,      ## > Santa Catarina;             ##
+##               Caroline Bresciani,             ## > Secretaria de Saúde;        ##
+##               Beatriz Campanharo Garcia C.,   ## > Produto Técnico-Tecnológico;##
+##               Domênica Tcacenco,              ## > IFSC;                       ##
+##               Everton Weber Galliani,         ## > Gerência de Zoonoses;       ##
+##               Murilo Ferreira dos Santos.     ## > Monitoramento Meteorológico;##
+## Data: 31/07/2025                              ## > Boletim Epidemiológico.     ##
+####################################################################################
 """
 Tentando automatizar tudo para executar de uma única vez.
 Deve-se alterar as permissões deste próprio roteiro,
