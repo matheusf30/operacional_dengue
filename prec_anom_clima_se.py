@@ -140,7 +140,7 @@ def limite_colobar(regiao_prec):
 	print(f"\n{green}Valor mínimo da precipitação: {reset}{round(min_tmin, 2)} mm\n")
 	return levels, levels2, norm
 	
-def gerar_mapa(dataset):
+def gerar_mapa(dataset, str_var):
 	"""
 	Função relativa à síntese de mapas temáticos de precipitação utilizando MERGE.
 	entrada:
@@ -183,9 +183,9 @@ def gerar_mapa(dataset):
 	plt.figtext(0.55, 0.045, "Fonte: MERGE - CPTEC/INPE", ha = "center", fontsize = 10)
 	media = mascara(dataset)
 	quadradinho_do_mario(media)
-	#plt.savefig(f"{caminho_resultado}prec_semanal_merge_anomalia_{_d7}.png",
-	#			transparent = False, dpi = 300, bbox_inches = "tight", pad_inches = 0.02)
-	plt.show()
+	plt.savefig(f"{caminho_resultado}prec_semanal_merge_anomalia_{_d7}.png",
+				transparent = False, dpi = 300, bbox_inches = "tight", pad_inches = 0.02)
+	#plt.show()
 	
 def mascara(dataset):
 	shape_estado = sc_shape
@@ -208,8 +208,8 @@ try:
 except FileNotFoundError:
 	regiao_prec = selecionar_tempo_espaco(ds_prec, _ANO_ONTEM)
 
-regiao_prec = regiao_prec - prec_climatologia
-print(regiao_prec)
+#regiao_prec = regiao_prec - prec_climatologia
+#print(regiao_prec)
 
 abs_value = max(abs(int(regiao_prec.min())), abs(int(regiao_prec.max() + 1)))
 
@@ -247,6 +247,10 @@ norm = cls.Normalize(vmin=-abs_value, vmax=abs_value)
 
 #levels, levels2, norm = limite_colobar(regiao_prec)
 #info_dataset(regiao_prec)
+gerar_mapa(regiao_prec)
+
+regiao_prec -= prec_climatologia
+
 gerar_mapa(regiao_prec)
 
 	

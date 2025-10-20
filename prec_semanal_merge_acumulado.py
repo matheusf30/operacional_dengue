@@ -135,7 +135,7 @@ def limite_colobar(regiao_prec):
 	int_min = int(min_tmin)# + 10
 	if ((int_max - int_min)//2 != (int_max-int_min)/2):
 		int_max += 1
-	levels = range(int_min, int_max + 1, 5)
+	levels = range(int_min, int_max + 1, 20)
 	levels2 = range(int_min, int_max + 1, 20)
 	norm = cls.Normalize(vmin = int_min, vmax = int_max)
 	print(f"\n{green}Valor máximo da precipitação: {reset}{round(max_tmax, 2)} mm\n")
@@ -147,12 +147,13 @@ def mascara(dataset):
 	var = dataset
 	mask = regionmask.mask_geopandas(shape_estado, var.lon, var.lat)
 	dados_mascarados = var.where(mask >= 0)  # Valores dentro do polígono
+	maximo = np.ceil(dados_mascarados.max().values)
 	media = dados_mascarados.mean().values
 	media = media.round(2)
-	return media
+	return media, maximo
 	
 def quadradinho_do_mario(media_sc):
-	plt.text(-48.75, -29.15, f"Média de SC\n {media_sc} °C",
+	plt.text(-48.75, -29.15, f"Média de SC\n {media_sc} mm",
 			color = "black", backgroundcolor = "lightgray",
 			ha = "center", va = "center", fontsize = 12)
 	
@@ -189,7 +190,7 @@ def gerar_mapa(dataset):
 	print(f"\n{green}prec - DOMINGO: {reset}{_d7}\n")
 	plt.title(f"Precipitação Acumulada Semanal\nPeríodo observado: {_d7}",
 				fontsize = 14, ha = "center")
-	media = mascara(dataset)
+	media = mascara(dataset)[0]
 	quadradinho_do_mario(media)
 	ax.add_geometries(shp, ccrs.PlateCarree(), edgecolor = "black",
 					facecolor = "none", linewidth = 0.5)
@@ -201,9 +202,9 @@ def gerar_mapa(dataset):
 	gl.top_labels = False
 	gl.right_labels = False
 	plt.figtext(0.55, 0.045, "Fonte: MERGE - CPTEC/INPE", ha = "center", fontsize = 10)
-	#plt.savefig(f"{caminho_resultado}prec_semanal_merge_acumulada_{_d7}.png",
-	#			transparent = False, dpi = 300, bbox_inches = "tight", pad_inches = 0.02)
-	plt.show()
+	plt.savefig(f"{caminho_resultado}prec_semanal_merge_acumulada_{_d7}.png",
+				transparent = False, dpi = 300, bbox_inches = "tight", pad_inches = 0.02)
+	#plt.show()
 	
 #################################################################################
 # EXECUTANDO FUNÇÕES
