@@ -23,6 +23,7 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 import matplotlib.colors as cls
 import pandas as pd
+import geopandas as gpd
 import numpy as np
 import cartopy, cartopy.crs as ccrs
 import cartopy.io.shapereader as shpreader
@@ -30,6 +31,7 @@ import cartopy.crs as crs
 from cartopy.feature import ShapelyFeature
 import cartopy.feature as cfeature
 import cmocean
+import regionmask
 import sys
 import os
 from datetime import date, datetime, timedelta
@@ -63,11 +65,13 @@ _ANO_MES_DIA_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}{_DIA_ONTEM}"
 #################################################################################
 # CAMINHOS E ARQUIVOS
 caminho_shapefile = "/media/dados/shapefiles/BR/"
+path_shp = "/media/dados/shapefiles/"
+sc_shape = gpd.read_file(f"{path_shp}/SC/SC_UF_2024.shp")
 caminho_resultado = f"/home/meteoro/scripts/matheus/operacional_dengue/meteorologia/{_ANO_ATUAL}/"
 os.makedirs(f"{caminho_resultado}", mode = 0o777, exist_ok = True)
 
 # CLimatologia de semanas epidemiológicas (by Everton)
-SE = 41
+SE = 42
 prec_climatologia = xr.open_dataset("/home/meteoro/scripts/matheus/operacional_dengue/meteorologia/climatologia/prec_climatologia_epidemiosemanal.nc").sel(week = SE)['prec']
 
 try:
@@ -85,10 +89,10 @@ except FileNotFoundError:
 def selecionar_tempo_espaco(dataset, tempo):
 	"""
 	"""
-	lat_min = -29.5 # -34.00 # -29.5
-	lat_max = -25.75 # -21.75 # -25.75
-	lon_min = -54 # -58.25 # -54
-	lon_max = -48 # -47.50 # -48
+	lat_min = -29.45#-29.5 # -34.00 # -29.5
+	lat_max = -25.65#-25.75 # -21.75 # -25.75
+	lon_min = -54.15#-54 # -58.25 # -54
+	lon_max = -47.85#-48 # -47.50 # -48
 	dataset_espaco = dataset.sel(time = tempo,
 						lat = slice(lat_min, lat_max),
 						lon = slice(lon_min, lon_max)).prec.squeeze()
@@ -177,10 +181,25 @@ def gerar_mapa(dataset):
 	gl.top_labels = False
 	gl.right_labels = False
 	plt.figtext(0.55, 0.045, "Fonte: MERGE - CPTEC/INPE", ha = "center", fontsize = 10)
-	plt.savefig(f"{caminho_resultado}prec_semanal_merge_anomalia_{_d7}.png",
-				transparent = False, dpi = 300, bbox_inches = "tight", pad_inches = 0.02)
-	#plt.show()
+	media = mascara(dataset)
+	quadradinho_do_mario(media)
+	#plt.savefig(f"{caminho_resultado}prec_semanal_merge_anomalia_{_d7}.png",
+	#			transparent = False, dpi = 300, bbox_inches = "tight", pad_inches = 0.02)
+	plt.show()
 	
+def mascara(dataset):
+	shape_estado = sc_shape
+	var = dataset
+	mask = regionmask.mask_geopandas(shape_estado, var.lon, var.lat)
+	dados_mascarados = var.where(mask >= 0)  # Valores dentro do polígono
+	media = dados_mascarados.mean().values
+	media = media.round(2)
+	return media
+
+def quadradinho_do_mario(media_sc):
+	plt.text(-48.75, -29.15, f"Média de SC\n {media_sc} mm",
+			color = "black", backgroundcolor = "lightgray",
+			ha = "center", va = "center", fontsize = 12, zorder = 100)		
 #################################################################################
 # EXECUTANDO FUNÇÕES
 	
