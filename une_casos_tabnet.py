@@ -68,9 +68,9 @@ ANO_ESCOLHIDO = str(datetime.today().year)
 #SAMeT_CPTEC_DAILY_SB_TMAX_2024.nc
 municipios = "SC_Municipios_2022.shp"
 # Fonte: TABNET/DATASUS - SINAN/SC
-casos = f"{url_gh}fapesc_dengue/refs/heads/main/matheus/dados/casos_semanal_pivot.csv"
+casos = f"{caminho_dados}casos_semanal_pivot.csv"
 #focos = f"{url_gh}fapesc_dengue/refs/heads/main/matheus/dados/focos_semanal_pivot.csv"
-serie_casos = f"{url_gh}dados_dengue/refs/heads/main/casos_dive_pivot_total.csv"
+serie_casos = f"{caminho_dados}casos_dive_pivot_total.csv"
 #serie_focos = f"{url_gh}dados_dengue/blob/main/focos_pivot.csv"
 #casos = "dados_atualizados25_dengue.csv" #"A100523200_135_184_253.csv" # "A173120200_135_184_253.csv"
 #serie_casos = "casos_dive_pivot_total.csv"
