@@ -95,10 +95,10 @@ se_infos = gera_semanas_climatologia(2000, 2025)
 print(se_infos)
 #sys.exit()
 
-lat_min = -29.5 # -34.00 # -29.5
-lat_max = -25.75 # -21.75 # -25.75
-lon_min = -54 # -58.25 # -54
-lon_max = -48 # -47.50 # -48
+lat_min = -29.45#-29.5 # -34.00 # -29.5
+lat_max = -25.65#-25.75 # -21.75 # -25.75
+lon_min = -54.15#-54 # -58.25 # -54
+lon_max = -47.85#-48 # -47.50 # -48
 
 def concatena_netcdf(variavel):
 	print("=="*50)
