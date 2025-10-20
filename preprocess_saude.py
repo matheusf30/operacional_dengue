@@ -27,16 +27,10 @@ white = "\033[37m"
 reset = "\033[0m"
 
 ##### CAMINHOS E ARQUIVOS ########################################################
-caminho_dados = "/home/sifapsc/scripts/matheus/fapesc_dengue/matheus/dados/"
-caminho_shape = "/home/sifapsc/scripts/matheus/dados_dengue/shapefiles/"
-casos = "casos_2025_se42.xlsx"
-#casos = "dengue_2025_se37.xlsx" casos_2025_se38.xslx casos_2025_se39.xslx
-#casos = "dengue_se36_2025.xls"
-#casos = "casos_se32_25.xlsx"
-#focos = "focos 2025.xlsx"
-#focos = "focos_se36_2025.xlsx"
-#focos = "focos_2025_se37.xlsx" focos_2025_se38.xlsx
-focos = "focos_2025_se40.xlsx"
+caminho_dados = "/home/meteoro/scripts/matheus/operacional_dengue/dados_operacao/"
+caminho_shape = "/media/dados/shapefiles/SC/"
+casos = "casos_2025.xlsx" # Sincronizar nomes
+focos = "focos_2025.xlsx"
 municipios = "SC_Municipios_2022.shp"
 
 ##### ABRINDO ARQUIVOS ###########################################################
