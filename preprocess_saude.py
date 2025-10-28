@@ -29,7 +29,7 @@ reset = "\033[0m"
 ##### CAMINHOS E ARQUIVOS ########################################################
 caminho_dados = "/home/meteoro/scripts/matheus/operacional_dengue/dados_operacao/"
 caminho_shape = "/media/dados/shapefiles/SC/"
-casos = "casos_2025.xlsx" # Sincronizar nomes
+casos = "dengue-2025.xlsx" #"casos_2025.xlsx" # Sincronizar nomes
 focos = "focos_2025.xlsx"
 municipios = "SC_Municipios_2022.shp"
 
