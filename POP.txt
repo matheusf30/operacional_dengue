@@ -1,0 +1,28 @@
+﻿PROCEDIMENTO OPERACIONAL PADRÃO
+
+
+
+
+* Baixar os dados da pasta Dados_IFSC (apenas se estiver atualizado):
+   * Pasta compartilhada (Drive) por dengue@saude.sc.gov.br;
+   * link simbólico com a pasta: 2024_Edital_37_FAPESC_Aedes;
+   * Pode manter o mesmo nome de arquivo: dengue-2025.xlsx
+* Incluir arquivo baixado no diretório de dados do cluster:
+   * /home/meteoro/scripts/matheus/operacional_dengue/dados_operacao
+* Executar o script >> automatiza2.sh:
+   * /home/meteoro/scripts/matheus/operacional_dengue/
+   * Talvez seja necessário ativar o Python (conda activate dados_nc);
+   * No terminal >> ./automatiza2.sh
+   * Se for remoto >> nohup ./automatiza2.sh
+* Mobilizar os resultados para o Boletim:
+   * Monitoramento (meteorológico) >> /meteorologia/:
+      * Temperatura Média;
+      * Precipitação.
+   * Monitoramento (epidemiológico) >> /modelagem/resultados/ANO/ANOMES/:
+      * Casos;
+      * Incidência;
+   * Previsão >> /modelagem/resultados/ANO/ANOMES/:
+      * Casos;
+      * Incidência.
+* Ao finalizar o Boletim, encaminhar ao João e aos demais:
+   * fuckjab@saude.sc.gov.br; tharinedc@gmail.com; matheus.f30@aluno.ifsc.edu.br; mquadro95@gmail.com; mquadro@ifsc.edu.br; dherdies@gmail.com;  carolinefrbresciani@gmail.com; domenica.t@aluno.ifsc.edu.br; evertongalliani@gmail.com; murilo.20100771@gmail.com; beatrizcampanharo06@hotmail.com
