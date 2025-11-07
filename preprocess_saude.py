@@ -27,7 +27,7 @@ white = "\033[37m"
 reset = "\033[0m"
 
 ##### CAMINHOS E ARQUIVOS ########################################################
-caminho_dados = "/home/meteoro/scripts/matheus/operacional_dengue/dados_operacao/"
+caminho_dados = "/home/meteoro/scripts/matheus/teste/operacional_dengue/dados_operacao/"
 caminho_shape = "/media/dados/shapefiles/SC/"
 casos = "dengue-2025.xlsx" #"casos_2025.xlsx" # Sincronizar nomes
 focos = "focos_2025.xlsx"
