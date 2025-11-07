@@ -110,12 +110,12 @@ _SALVAR = True if _SALVAR == "True" else False               #####
 ##################################################################################
 
 ### Encaminhamento aos Diretórios
-#/home/meteoro/scripts/matheus/operacional_dengue/#CLUSTER
-caminho_dados = "/home/meteoro/scripts/matheus/operacional_dengue/dados_operacao/"
+#/home/meteoro/scripts/matheus/teste/operacional_dengue/#CLUSTER
+caminho_dados = "/home/meteoro/scripts/matheus/teste/operacional_dengue/dados_operacao/"
 #os.makedirs(caminho_dados, exist_ok = True)
-caminho_modelos = "home/meteoro/scripts/matheus/operacional_dengue/modelagem/casos/"
+caminho_modelos = "home/meteoro/scripts/matheus/teste/operacional_dengue/modelagem/casos/"
 #os.makedirs(caminho_modelos, exist_ok = True)
-caminho_resultados = "home/meteoro/scripts/matheus/operacional_dengue/modelagem/resultados/"
+caminho_resultados = "home/meteoro/scripts/matheus/teste/operacional_dengue/modelagem/resultados/"
 #os.makedirs(caminho_resultados, exist_ok = True)
 url_gh = "https://raw.githubusercontent.com/matheusf30/"
 
@@ -847,7 +847,7 @@ _ANO_MES_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}"
 _ANO_MES_DIA_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}{_DIA_ONTEM}"
 
 try:
-	caminho_dados = f"/home/meteoro/scripts/matheus/operacional_dengue/dados_operacao/{_ANO_FINAL}/{_MES_FINAL}/"
+	caminho_dados = f"/home/meteoro/scripts/matheus/teste/operacional_dengue/dados_operacao/{_ANO_FINAL}/{_MES_FINAL}/"
 	os.makedirs(caminho_dados, exist_ok = True)
 	prec_gfs = pd.read_csv(f"{caminho_dados}gfs_prec_semana_{_ANO_MES_DIA}.csv", low_memory = False)
 	tmin_gfs = pd.read_csv(f"{caminho_dados}gfs_tmin_semana_{_ANO_MES_DIA}.csv", low_memory = False)
@@ -856,7 +856,7 @@ try:
 	print(f"\n{green}Arquivos utilizados do dia:\n{bold}{_DIA_FINAL}/{_MES_FINAL}/{_ANO_FINAL}.\n{reset}")
 	data_atual = _ANO_MES_DIA
 except FileNotFoundError:
-	caminho_dados = f"/home/meteoro/scripts/matheus/operacional_dengue/dados_operacao/{_ANO_ONTEM}/{_MES_ONTEM}/"
+	caminho_dados = f"/home/meteoro/scripts/matheus/teste/operacional_dengue/dados_operacao/{_ANO_ONTEM}/{_MES_ONTEM}/"
 	os.makedirs(caminho_dados, exist_ok = True)
 	prec_gfs = pd.read_csv(f"{caminho_dados}gfs_prec_semana_{_ANO_MES_DIA_ONTEM}.csv", low_memory = False)
 	tmin_gfs = pd.read_csv(f"{caminho_dados}gfs_tmin_semana_{_ANO_MES_DIA_ONTEM}.csv", low_memory = False)
