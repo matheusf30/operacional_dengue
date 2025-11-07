@@ -49,8 +49,8 @@ reset = "\033[0m"
 
 ### Encaminhamento aos Diretórios
 caminho_github = "https://raw.githubusercontent.com/matheusf30/dados_dengue/main/" # WEB
-caminho_dados = "/home/meteoro/scripts/matheus/operacional_dengue/dados_operacao/" # CLUSTER
-caminho_operacional = "/home/meteoro/scripts/matheus/operacional_dengue/"
+caminho_dados = "/home/meteoro/scripts/matheus/teste/operacional_dengue/dados_operacao/" # CLUSTER
+caminho_operacional = "/home/meteoro/scripts/matheus/teste/operacional_dengue/"
 caminho_shape = "/media/dados/shapefiles/SC/" #SC_Municipios_2022.shp
 caminho_gfs = "/media/dados/operacao/gfs/0p25/" #202410/20241012/ #prec_daily_gfs_2024101212.nc
 caminho_merge = "/media/dados/operacao/merge/daily/2024/" #MERGE_CPTEC_DAILY_SB_2024.nc
@@ -515,6 +515,9 @@ print("="*80)
 """
 ##$ Concatenando e Extraindo Dados
 hoje = pd.to_datetime(datetime.today().date())
+ano_atual = hoje.year
+serie_casos["Semana"] = pd.to_datetime(serie_casos["Semana"])
+serie_casos = serie_casos[serie_casos["Semana"].dt.year < ano_atual]
 casos25 = casos.copy()
 casostotal = pd.concat([serie_casos, casos25], ignore_index = True)
 casostotal.fillna(0, inplace = True)
