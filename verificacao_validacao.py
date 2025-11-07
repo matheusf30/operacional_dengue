@@ -62,7 +62,8 @@ _MES_ATUAL = _AGORA.strftime("%m")
 _DIA_ATUAL = _AGORA.strftime("%d")
 _ANO_MES = f"{_ANO_ATUAL}{_MES_ATUAL}"
 _ANO_MES_DIA = f"{_ANO_ATUAL}{_MES_ATUAL}{_DIA_ATUAL}"
-#_ANO_MES_DIA = 20251014 #f"{_ANO_ATUAL}{_MES_ATUAL}{_DIA_ATUAL}"
+#_ANO_MES = 202510
+#_ANO_MES_DIA = 20251028 #f"{_ANO_ATUAL}{_MES_ATUAL}{_DIA_ATUAL}"
 _ONTEM = datetime.today() - timedelta(days = 1)
 _ANO_ONTEM = str(_ONTEM.year)
 _MES_ONTEM = _ONTEM.strftime("%m")
@@ -73,11 +74,11 @@ _ANO_MES_DIA_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}{_DIA_ONTEM}"
 ##################################################################################
 
 ### Encaminhamento aos Diretórios
-caminho_dados = "/home/meteoro/scripts/matheus/operacional_dengue/dados_operacao/" # CLUSTER
-caminho_operacional = "/home/meteoro/scripts/matheus/operacional_dengue/"
+caminho_dados = "/home/meteoro/scripts/matheus/teste/operacional_dengue/dados_operacao/" # CLUSTER
+caminho_operacional = "/home/meteoro/scripts/matheus/teste/operacional_dengue/"
 caminho_shape = "/media/dados/shapefiles/" #SC/SC_Municipios_2022.shp #BR/BR_UF_2022.shp
-caminho_modelos = f"/home/meteoro/scripts/matheus/operacional_dengue/modelagem/casos/{_ANO_ATUAL}/{_ANO_MES_DIA}/"
-caminho_resultados = f"home/meteoro/scripts/matheus/operacional_dengue/modelagem/resultados/{_ANO_ATUAL}/{_ANO_MES}/"
+caminho_modelos = f"/home/meteoro/scripts/matheus/teste/operacional_dengue/modelagem/casos/{_ANO_ATUAL}/{_ANO_MES_DIA}/"
+caminho_resultados = f"home/meteoro/scripts/matheus/teste/operacional_dengue/modelagem/resultados/{_ANO_ATUAL}/{_ANO_MES}/"
 caminho_previsao = f"modelagem/resultados/{_ANO_ATUAL}/{_ANO_MES}/"#dados_previstos/"
 print(f"\n{green}HOJE:\n{reset}{_ANO_MES_DIA}\n")
 print(f"\n{green}ONTEM:\n{reset}{_ANO_MES_DIA_ONTEM}\n")
@@ -91,6 +92,9 @@ casos = "casos_dive_pivot_total.csv"  # TabNet/DiveSC
 ultimas_previsoes = f"ultimas_previsoes_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
 previsao_pivot = f"previsao_pivot_total_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
 previsao_melt = f"previsao_melt_total_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
+ultimas_previsoes_ontem = f"ultimas_previsoes_v{_ANO_MES_DIA_ONTEM}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
+previsao_pivot_ontem = f"previsao_pivot_total_v{_ANO_MES_DIA_ONTEM}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
+previsao_melt_ontem = f"previsao_melt_total_v{_ANO_MES_DIA_ONTEM}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
 #focos = "focos_pivot.csv"
 prec = f"{_ANO_ATUAL}/prec_semana_ate_{_ANO_ATUAL}.csv"
 tmin = f"{_ANO_ATUAL}/tmin_semana_ate_{_ANO_ATUAL}.csv"
@@ -98,15 +102,21 @@ tmed = f"{_ANO_ATUAL}/tmed_semana_ate_{_ANO_ATUAL}.csv"
 tmax = f"{_ANO_ATUAL}/tmax_semana_ate_{_ANO_ATUAL}.csv"
 unicos = "casos_primeiros.csv"
 municipios = "SC/SC_Municipios_2024.shp"
+regionais = regionais = "censo_sc_regional.csv"
 br = "BR/BR_UF_2022.shp"
 
 ###############################################################
 
 ### Abrindo Arquivo
 casos = pd.read_csv(f"{caminho_dados}{casos}", low_memory = False)
-ultimas_previsoes = pd.read_csv(f"{caminho_previsao}{ultimas_previsoes}", low_memory = False)
-previsao_pivot = pd.read_csv(f"{caminho_previsao}{previsao_pivot}", low_memory = False)
-previsao_melt = pd.read_csv(f"{caminho_previsao}{previsao_melt}", low_memory = False)
+try:
+	ultimas_previsoes = pd.read_csv(f"{caminho_previsao}{ultimas_previsoes}", low_memory = False)
+	previsao_pivot = pd.read_csv(f"{caminho_previsao}{previsao_pivot}", low_memory = False)
+	previsao_melt = pd.read_csv(f"{caminho_previsao}{previsao_melt}", low_memory = False)
+except FileNotFoundError:
+	ultimas_previsoes = pd.read_csv(f"{caminho_previsao}{ultimas_previsoes_ontem}", low_memory = False)
+	previsao_pivot = pd.read_csv(f"{caminho_previsao}{previsao_pivot_ontem}", low_memory = False)
+	previsao_melt = pd.read_csv(f"{caminho_previsao}{previsao_melt_ontem}", low_memory = False)
 #focos = pd.read_csv(f"{caminho_dados}{focos}", low_memory = False)
 prec = pd.read_csv(f"{caminho_dados}{prec}", low_memory = False)
 tmin = pd.read_csv(f"{caminho_dados}{tmin}", low_memory = False)
@@ -115,6 +125,7 @@ tmax = pd.read_csv(f"{caminho_dados}{tmax}", low_memory = False)
 unicos = pd.read_csv(f"{caminho_dados}{unicos}")
 municipios = gpd.read_file(f"{caminho_shape}{municipios}")
 br = gpd.read_file(f"{caminho_shape}{br}")
+regionais = pd.read_csv(f"{caminho_dados}{regionais}")
 troca = {'Á': 'A', 'Â': 'A', 'À': 'A', 'Ã': 'A',
          'É': 'E', 'Ê': 'E', 'È': 'E', 'Ẽ': 'E',
          'Í': 'I', 'Î': 'I', 'Ì': 'I', 'Ĩ': 'I',
@@ -231,6 +242,12 @@ print(f"\n{green}PREVISÃO TOTAL (melt):\n{reset}{previsao_melt}\n")
 
 print(f"\n{green}CASOS.dtypes:\n{reset}{casos.dtypes}\n")
 print(f"\n{green}ÚLTIMAS PREVISÕES.dtypes:\n{reset}{ultimas_previsoes.dtypes}\n")
+
+print(f"\n{green}REGIONAIS:\n{reset}{regionais}\n")
+print(f"\n{green}REGIONAIS (colunas):\n{reset}{regionais.columns}\n")
+print(f"\n{green}REGIONAIS:\n{reset}{regionais['regional'].unique()}\n")
+
+#sys.exit()
 previstos = ultimas_previsoes.iloc[:3, :]
 previsao_pivot["Semana"] = pd.to_datetime(previsao_pivot["Semana"])
 previsao12 = previsao_pivot.iloc[:-2, :]
@@ -238,13 +255,37 @@ previstos["Semana"] = pd.to_datetime(previstos["Semana"])
 casos["Semana"] = pd.to_datetime(casos["Semana"])
 casos_atual = casos[casos["Semana"].dt.year == 2025]
 casos_atual = casos_atual.iloc[:-1,:]
+
+mapeamento = regionais.drop_duplicates(subset = ["Municipio"]).set_index("Municipio")["regional"]
+previstos = previstos.set_index("Semana")
+previsao12 = previsao12.set_index("Semana")
+casos_atual = casos_atual.set_index("Semana")
+previstos_reg = previstos.groupby(previstos.columns.map(mapeamento), axis = 1).sum()
+previsao12_reg = previsao12.groupby(previsao12.columns.map(mapeamento), axis = 1).sum()
+casos_atual_reg = casos_atual.groupby(casos_atual.columns.map(mapeamento), axis = 1).sum()
+previstos.reset_index(inplace = True)
+previsao12.reset_index(inplace = True)
+casos_atual.reset_index(inplace = True)
+
+
 print(f"\n{green}CASOS.dtypes:\n{reset}{casos}\n{casos.dtypes}\n")
 print(f"\n{green}CASOS_ATUAL.dtypes:\n{reset}{casos_atual.dtypes}\n")
 print(f"\n{green}PREVISTOS.dtypes:\n{reset}{previstos}\n{previstos.dtypes}\n")
 
+print(f"\n{green}CASOS REGIONAIS:\n{reset}{casos_atual_reg}\n{casos_atual_reg.dtypes}\n")
+print(f"\n{green}PREVISTOS REGIONAIS:\n{reset}{previstos_reg}\n{previstos_reg.dtypes}\n")
+print(f"\n{green}ÚLTIMOS PREVISTOS REGIONAIS:\n{reset}{previsao12_reg}\n{previsao12_reg.dtypes}\n")
+#sys.exit()
+
+regionais = ["FOZ DO RIO ITAJAÍ", "GRANDE FLORIANÓPOLIS", "EXTREMO OESTE", "OESTE",
+			"XANXERÊ", "ALTO URUGUAI CATARINENSE", "ALTO VALE DO RIO DO PEIXE",
+			"MEIO OESTE", "NORDESTE", "VALE DO ITAPOCU", "PLANALTO NORTE",
+			"SERRA CATARINENSE", "CARBONÍFERA", "EXTREMO SUL CATARINENSE", "LAGUNA",
+			"ALTO VALE DO ITAJAÍ", "MÉDIO VALE DO ITAJAÍ"]
 ###
 
 ### Visualizações Gráficas
+
 
 ## Série (observado-previsão)
 modelo = abre_modelo(_CIDADE)
@@ -272,16 +313,14 @@ plt.plot(previstos2["Semana"], previstos2[_CIDADE],
 			label = "Previsto", color = "red", linewidth = 3)
 plt.plot(casos_atual["Semana"], casos_atual[_CIDADE],
 				label = "Observado", color = "blue")
-plt.plot(previsao12["Semana"], previsao12[_CIDADE], alpha = .4,
-			label = "Previsto (.csv)", color = "black", linewidth = 6)
+#plt.plot(previsao12["Semana"], previsao12[_CIDADE], alpha = .4,
+#			label = "Previsto (.csv)", color = "black", linewidth = 6)
 plt.xlabel("Semanas Epidemiológicas (Série Histórica)")
 plt.ylabel("Número de Casos de Dengue")
 plt.title(f"COMPARAÇÃO ENTRE CASOS DE DENGUE PREVISTOS E OBSERVADOS, MUNICÍPIO DE {_CIDADE} (R² = {R_2})")
 plt.legend()
 plt.gca().set_facecolor("honeydew")
 plt.show()
-
-
 
 plt.figure(figsize = (15, 8), layout = "constrained", frameon = False)
 plt.plot(previstos["Semana"], previstos[_CIDADE],
@@ -297,6 +336,27 @@ plt.legend()
 plt.gca().set_facecolor("honeydew")
 plt.show()
 
+regionais = ["FOZ DO RIO ITAJAÍ", "GRANDE FLORIANÓPOLIS", "EXTREMO OESTE", "OESTE",
+			"XANXERÊ", "ALTO URUGUAI CATARINENSE", "ALTO VALE DO RIO DO PEIXE",
+			"MEIO OESTE", "NORDESTE", "VALE DO ITAPOCU", "PLANALTO NORTE",
+			"SERRA CATARINENSE", "CARBONÍFERA", "EXTREMO SUL CATARINENSE", "LAGUNA",
+			"ALTO VALE DO ITAJAÍ", "MÉDIO VALE DO ITAJAÍ"]
+"""			
+for _REG in regionais:
+	plt.figure(figsize = (15, 8), layout = "constrained", frameon = False)
+	plt.plot(previstos_reg.index, previstos_reg[_REG],
+				label = "Previsto (GFS)", color = "red", linewidth = 3, linestyle = ":")
+	plt.plot(previsao12_reg.index, previsao12_reg[_REG],
+				label = "Previsto", color = "red", linewidth = 3)
+	plt.plot(casos_atual_reg.index, casos_atual_reg[_REG],
+					label = "Observado", color = "blue")
+	plt.xlabel("Semanas Epidemiológicas (Série Histórica)")
+	plt.ylabel("Número de Casos de Dengue")
+	plt.title(f"COMPARAÇÃO ENTRE CASOS PROVÁVEIS DE DENGUE PREVISTOS E OBSERVADOS\nREGIONAL: {_REG}")
+	plt.legend()
+	plt.gca().set_facecolor("honeydew")
+	plt.show()
+"""
 """
 sns.lineplot(x = previstos["Semana"], y = previstos[_CIDADE],
              color = "red", alpha = 0.7, linewidth = 3, label = "Previsto")
