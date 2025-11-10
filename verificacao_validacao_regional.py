@@ -262,7 +262,7 @@ print(f"\n{green}REGIONAIS:\n{reset}{regionais['regional'].unique()}\n")
 tempo = tempo_epidemiologico(tmin)
 tempo = tempo_epidemiologico(casos)
 
-#sys.exit()
+sys.exit()
 previstos = ultimas_previsoes.iloc[:3, :]
 previsao_pivot["Semana"] = pd.to_datetime(previsao_pivot["Semana"])
 previsao12 = previsao_pivot.iloc[:-2, :]
