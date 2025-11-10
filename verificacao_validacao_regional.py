@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as cls  
 import seaborn as sns 
 from datetime import date, datetime, timedelta
+from epiweeks import Week, Year
 # Suporte
 import os
 import sys
@@ -227,6 +228,17 @@ def metricas(dataset, previsoes, n, y):
 	print("="*80)
 	return EQM, RQ_EQM, R_2
 	
+def tempo_epidemiologico(df_original):
+	tempo = pd.DataFrame()
+	tempo["Semana"] = df_original["Semana"]
+	tempo["Semana"] = pd.to_datetime(tempo["Semana"])
+	tempo["SE"] = tempo["Semana"].apply(lambda data: Week.fromdate(data).week)
+	tempo["ano_epi"] = tempo["Semana"].dt.year
+	tempo.loc[(tempo["Semana"].dt.month == 1) & (tempo["SE"] > 50), "ano_epi"] -= 1
+	tempo.loc[(tempo["Semana"].dt.month == 12) & (tempo["SE"] == 1), "ano_epi"] += 1
+	print(f"\n{green}TEMPO CRONOLÓGICO (epidemiológico):\n{reset}{tempo}\n")
+	return tempo
+	
 ##########################################################################################
 
 ### Visualizando arquivos
@@ -246,6 +258,9 @@ print(f"\n{green}ÚLTIMAS PREVISÕES.dtypes:\n{reset}{ultimas_previsoes.dtypes}\
 print(f"\n{green}REGIONAIS:\n{reset}{regionais}\n")
 print(f"\n{green}REGIONAIS (colunas):\n{reset}{regionais.columns}\n")
 print(f"\n{green}REGIONAIS:\n{reset}{regionais['regional'].unique()}\n")
+
+tempo = tempo_epidemiologico(tmin)
+tempo = tempo_epidemiologico(casos)
 
 #sys.exit()
 previstos = ultimas_previsoes.iloc[:3, :]
@@ -276,12 +291,13 @@ print(f"\n{green}CASOS REGIONAIS:\n{reset}{casos_atual_reg}\n{casos_atual_reg.dt
 print(f"\n{green}PREVISTOS REGIONAIS:\n{reset}{previstos_reg}\n{previstos_reg.dtypes}\n")
 print(f"\n{green}ÚLTIMOS PREVISTOS REGIONAIS:\n{reset}{previsao12_reg}\n{previsao12_reg.dtypes}\n")
 #sys.exit()
-
+"""
 regionais = ["FOZ DO RIO ITAJAÍ", "GRANDE FLORIANÓPOLIS", "EXTREMO OESTE", "OESTE",
 			"XANXERÊ", "ALTO URUGUAI CATARINENSE", "ALTO VALE DO RIO DO PEIXE",
 			"MEIO OESTE", "NORDESTE", "VALE DO ITAPOCU", "PLANALTO NORTE",
 			"SERRA CATARINENSE", "CARBONÍFERA", "EXTREMO SUL CATARINENSE", "LAGUNA",
 			"ALTO VALE DO ITAJAÍ", "MÉDIO VALE DO ITAJAÍ"]
+"""
 ###
 
 ### Visualizações Gráficas
@@ -307,8 +323,23 @@ regionais = ["GRANDE FLORIANÓPOLIS", "EXTREMO OESTE", "OESTE",
 			"MEIO OESTE", "NORDESTE", "VALE DO ITAPOCU", "PLANALTO NORTE",
 			"SERRA CATARINENSE", "CARBONÍFERA", "EXTREMO SUL CATARINENSE", "LAGUNA",
 			"ALTO VALE DO ITAJAÍ", "MÉDIO VALE DO ITAJAÍ", "FOZ DO RIO ITAJAÍ"]
+
+troca = {'Á': 'A', 'Â': 'A', 'À': 'A', 'Ã': 'A', 'Ä': 'A',
+		 'É': 'E', 'Ê': 'E', 'È': 'E', 'Ẽ': 'E', 'Ë': 'E',
+		 'Í': 'I', 'Î': 'I', 'Ì': 'I', 'Ĩ': 'I', 'Ï': 'I',
+		 'Ó': 'O', 'Ô': 'O', 'Ò': 'O', 'Õ': 'O', 'Ö': 'O',
+		 'Ú': 'U', 'Û': 'U', 'Ù': 'U', 'Ũ': 'U', 'Ü': 'U',
+		 'Ç': 'C', " " : "_", "'" : "_", "-" : "_"}
+
+
+
 			
 for idx, _REG in enumerate(regionais):
+	print(f"\n{green}REGIONAL:\n{reset}{_REG}\n")
+	if isinstance(_REG, str):
+		for velho, novo in troca.items():
+			_REG_unicode = _REG.replace(velho, novo)
+		print(f"\n{green}REGIONAL (unicode):\n{reset}{_REG_unicode}\n")
 	plt.figure(figsize = (15, 8), layout = "constrained", frameon = False)
 	plt.plot(previstos_reg.index, previstos_reg[_REG],
 				label = "Previsto (GFS)", color = "red", linewidth = 3, linestyle = ":")
