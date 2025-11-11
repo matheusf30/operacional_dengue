@@ -44,7 +44,7 @@ python cartografia_monitoramento_epidemio.py True False True
 python cartografia_preditiva_casos.py True False True
 python cartografia_preditiva_incidencia.py True False True
 ### VALIDAÇÕES
-python verificacao_validacao.py False True False
+python verificacao_validacao_regional.py True False True
 """
 python teste_modelagem_casos.py
 python teste_cartografia.py True False True
