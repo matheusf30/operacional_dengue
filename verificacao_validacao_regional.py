@@ -261,8 +261,8 @@ print(f"\n{green}REGIONAIS:\n{reset}{regionais['regional'].unique()}\n")
 
 tempo = tempo_epidemiologico(tmin)
 tempo = tempo_epidemiologico(casos)
-
-sys.exit()
+print(f"\n{green}DATA EPIDEMIOLÓGICA:\n{reset}{tempo['SE'].iloc[-1]}/{tempo['ano_epi'].iloc[-1]}\n")
+#sys.exit()
 previstos = ultimas_previsoes.iloc[:3, :]
 previsao_pivot["Semana"] = pd.to_datetime(previsao_pivot["Semana"])
 previsao12 = previsao_pivot.iloc[:-2, :]
@@ -299,6 +299,12 @@ regionais = ["FOZ DO RIO ITAJAÍ", "GRANDE FLORIANÓPOLIS", "EXTREMO OESTE", "OE
 			"ALTO VALE DO ITAJAÍ", "MÉDIO VALE DO ITAJAÍ"]
 """
 ###
+troca = {'Á': 'A', 'Â': 'A', 'À': 'A', 'Ã': 'A', 'Ä': 'A',
+		'É': 'E', 'Ê': 'E', 'È': 'E', 'Ẽ': 'E', 'Ë': 'E',
+		'Í': 'I', 'Î': 'I', 'Ì': 'I', 'Ĩ': 'I', 'Ï': 'I',
+		'Ó': 'O', 'Ô': 'O', 'Ò': 'O', 'Õ': 'O', 'Ö': 'O',
+		'Ú': 'U', 'Û': 'U', 'Ù': 'U', 'Ũ': 'U', 'Ü': 'U',
+		'Ç': 'C', " " : "_", "'" : "_", "-" : "_"}
 
 ### Visualizações Gráficas
 
@@ -314,8 +320,19 @@ plt.ylabel("Número de Casos de Dengue")
 plt.title(f"COMPARAÇÃO ENTRE CASOS PROVÁVEIS DE DENGUE PREVISTOS E OBSERVADOS\nMUNICÍPIO DE {_CIDADE}")
 plt.legend()
 plt.gca().set_facecolor("honeydew")
-plt.show()
-
+if _VISUALIZAR == True:
+	print(f"\n{green}VISUALIZAÇÃO GRÁFICA:\n{reset}{_CIDADE}\n")
+	plt.show()
+if _SALVAR == True and _AUTOMATIZA == True:
+	for velho, novo in troca.items():
+		_CIDADE = _CIDADE.replace(velho, novo)
+	caminho_png = "modelagem/resultados/dados_previstos/graficos/"
+	nome_arquivo = f"CASOS_serie_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_{_CIDADE}_SE{tempo['SE'].iloc[-1]}.png"
+	os.makedirs(caminho_png, exist_ok = True)
+	#plt.savefig(f"{caminho_png}{nome_arquivo}", format = "png", dpi = 300)
+	print(f"\n{green}ARQUIVO COM MUNICÍPIO SALVO:\n{reset}{caminho_png}{nome_arquivo}\n")
+	print(f"\n\n{green}{caminho_png}\n{nome_arquivo}\nSALVO COM SUCESSO!{reset}\n\n")
+	plt.close()
 #sys.exit()
 
 regionais = ["GRANDE FLORIANÓPOLIS", "EXTREMO OESTE", "OESTE",
@@ -324,22 +341,13 @@ regionais = ["GRANDE FLORIANÓPOLIS", "EXTREMO OESTE", "OESTE",
 			"SERRA CATARINENSE", "CARBONÍFERA", "EXTREMO SUL CATARINENSE", "LAGUNA",
 			"ALTO VALE DO ITAJAÍ", "MÉDIO VALE DO ITAJAÍ", "FOZ DO RIO ITAJAÍ"]
 
-troca = {'Á': 'A', 'Â': 'A', 'À': 'A', 'Ã': 'A', 'Ä': 'A',
-		 'É': 'E', 'Ê': 'E', 'È': 'E', 'Ẽ': 'E', 'Ë': 'E',
-		 'Í': 'I', 'Î': 'I', 'Ì': 'I', 'Ĩ': 'I', 'Ï': 'I',
-		 'Ó': 'O', 'Ô': 'O', 'Ò': 'O', 'Õ': 'O', 'Ö': 'O',
-		 'Ú': 'U', 'Û': 'U', 'Ù': 'U', 'Ũ': 'U', 'Ü': 'U',
-		 'Ç': 'C', " " : "_", "'" : "_", "-" : "_"}
+
 
 
 
 			
 for idx, _REG in enumerate(regionais):
-	print(f"\n{green}REGIONAL:\n{reset}{_REG}\n")
-	if isinstance(_REG, str):
-		for velho, novo in troca.items():
-			_REG_unicode = _REG.replace(velho, novo)
-		print(f"\n{green}REGIONAL (unicode):\n{reset}{_REG_unicode}\n")
+	print(f"\n{green}REGIONAL - {idx}:\n{reset}{_REG}\n")
 	plt.figure(figsize = (15, 8), layout = "constrained", frameon = False)
 	plt.plot(previstos_reg.index, previstos_reg[_REG],
 				label = "Previsto (GFS)", color = "red", linewidth = 3, linestyle = ":")
@@ -352,12 +360,17 @@ for idx, _REG in enumerate(regionais):
 	plt.title(f"COMPARAÇÃO ENTRE CASOS PROVÁVEIS DE DENGUE PREVISTOS E OBSERVADOS\nREGIONAL: {_REG}")
 	plt.legend()
 	plt.gca().set_facecolor("honeydew")
-	#plt.show()
-	if _SALVAR == True: #_AUTOMATIZA == True and 
+	if _VISUALIZAR == True:
+		print(f"\n{green}VISUALIZAÇÃO GRÁFICA:\n{reset}{_REG}\n")
+		plt.show()
+	if _SALVAR == True and _AUTOMATIZA == True:
+		for velho, novo in troca.items():
+			_REG = _REG.replace(velho, novo)
+		print(f"\n{green}REGIONAL:\n{reset}{_REG}\n")
 		caminho_png = "modelagem/resultados/dados_previstos/graficos/"
-		nome_arquivo = f"CASOS_serie_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_regional{idx}.png"
+		nome_arquivo = f"CASOS_serie_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_{_REG}_SE{tempo['SE'].iloc[-1]}.png"
 		os.makedirs(caminho_png, exist_ok = True)
-		plt.savefig(f"{caminho_png}{nome_arquivo}", format = "png", dpi = 300)
+		#plt.savefig(f"{caminho_png}{nome_arquivo}", format = "png", dpi = 300)
 		print(f"\n{green}ARQUIVO COM REGIONAIS SALVO:\n{reset}{caminho_png}{nome_arquivo}\n")
 		print(f"\n\n{green}{caminho_png}\n{nome_arquivo}\nSALVO COM SUCESSO!{reset}\n\n")
 		plt.close()
