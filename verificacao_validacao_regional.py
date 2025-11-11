@@ -63,8 +63,8 @@ _MES_ATUAL = _AGORA.strftime("%m")
 _DIA_ATUAL = _AGORA.strftime("%d")
 _ANO_MES = f"{_ANO_ATUAL}{_MES_ATUAL}"
 _ANO_MES_DIA = f"{_ANO_ATUAL}{_MES_ATUAL}{_DIA_ATUAL}"
-_ANO_MES = 202510
-_ANO_MES_DIA = 20251028 #f"{_ANO_ATUAL}{_MES_ATUAL}{_DIA_ATUAL}"
+#_ANO_MES = 202510
+#_ANO_MES_DIA = 20251028 #f"{_ANO_ATUAL}{_MES_ATUAL}{_DIA_ATUAL}"
 _ONTEM = datetime.today() - timedelta(days = 1)
 _ANO_ONTEM = str(_ONTEM.year)
 _MES_ONTEM = _ONTEM.strftime("%m")

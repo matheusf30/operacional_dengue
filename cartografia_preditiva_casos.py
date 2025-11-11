@@ -612,7 +612,7 @@ print(f"\n{green}ultimas_previsoes.T_df.T\n{reset}{ultimas_previsoes_vdd}\n")
 #ultimas_previsoes_vdd = ultimas_previsoes_vdd.drop(columns = "Semana")
 if _SALVAR == True:
 	os.makedirs(caminho_resultados, exist_ok = True)
-	ultimas_previsoes_csv = f"ultimas_previsoes_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_{semana_epidemio['ano_epi']}_SE{semana_epidemio['SE']}.csv"
+	ultimas_previsoes_csv = f"ultimas_previsoes_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
 	ultimas_previsoes_vdd.to_csv(f"{caminho_resultados}{ultimas_previsoes_csv}", index = False)
 	print(f"\n\n{green}{caminho_resultados}\n{ultimas_previsoes_csv}\nSALVO COM SUCESSO!{reset}\n\n")
 	print(f"\n\n{green}OS VALORES DAS ÚLTIMAS PREVISÕES SÃO APRESENTADOS ABAIXO:\n{reset}{ultimas_previsoes_vdd}\n\n")
