@@ -326,10 +326,10 @@ if _VISUALIZAR == True:
 if _SALVAR == True and _AUTOMATIZA == True:
 	for velho, novo in troca.items():
 		_CIDADE = _CIDADE.replace(velho, novo)
-	caminho_png = "modelagem/resultados/dados_previstos/graficos/"
+	caminho_png = f"modelagem/resultados/{_ANO_ATUAL}/{_ANO_MES}/graficos_obsXprev/"
 	nome_arquivo = f"CASOS_serie_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_{_CIDADE}_SE{tempo['SE'].iloc[-1]}.png"
 	os.makedirs(caminho_png, exist_ok = True)
-	#plt.savefig(f"{caminho_png}{nome_arquivo}", format = "png", dpi = 300)
+	plt.savefig(f"{caminho_png}{nome_arquivo}", format = "png", dpi = 300)
 	print(f"\n{green}ARQUIVO COM MUNICÍPIO SALVO:\n{reset}{caminho_png}{nome_arquivo}\n")
 	print(f"\n\n{green}{caminho_png}\n{nome_arquivo}\nSALVO COM SUCESSO!{reset}\n\n")
 	plt.close()
@@ -367,10 +367,10 @@ for idx, _REG in enumerate(regionais):
 		for velho, novo in troca.items():
 			_REG = _REG.replace(velho, novo)
 		print(f"\n{green}REGIONAL:\n{reset}{_REG}\n")
-		caminho_png = "modelagem/resultados/dados_previstos/graficos/"
+		caminho_png = f"modelagem/resultados/{_ANO_ATUAL}/{_ANO_MES}/graficos_obsXprev/"
 		nome_arquivo = f"CASOS_serie_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_{_REG}_SE{tempo['SE'].iloc[-1]}.png"
 		os.makedirs(caminho_png, exist_ok = True)
-		#plt.savefig(f"{caminho_png}{nome_arquivo}", format = "png", dpi = 300)
+		plt.savefig(f"{caminho_png}{nome_arquivo}", format = "png", dpi = 300)
 		print(f"\n{green}ARQUIVO COM REGIONAIS SALVO:\n{reset}{caminho_png}{nome_arquivo}\n")
 		print(f"\n\n{green}{caminho_png}\n{nome_arquivo}\nSALVO COM SUCESSO!{reset}\n\n")
 		plt.close()
