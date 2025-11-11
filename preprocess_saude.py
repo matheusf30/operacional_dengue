@@ -1,11 +1,12 @@
+# -*- coding: latin-1 -*-
 #################################################################################
 ## Roteiro adaptado para pré-processar dados     ## PALAVRAS-CHAVE:            ##
-## Dados: Focos de _Aedes_ sp. e                 ## > PrÃ©-processamento;      ##
-##        Casos Prováveis de Dengue (DIVE/SC)    ## > Dados de SaÃºde;         ##
-## Demanda: FAPESC edital nº 37/2024             ## > EstruturaÃ§Ã£o;          ##
-## Adaptado por: Matheus Ferreira de Souza       ## > Semana Epidemiol[ogica;  ##
-##               e Everton Weber Galliani        ## > SÃ©rie Temporal;         ##
-## Data: 31/07/2025                              ## > DicionÃ¡rio de Dados.    ##
+## Dados: Focos de _Aedes_ sp. e                 ## > Pré-processamento;       ##
+##        Casos Prováveis de Dengue (DIVE/SC)    ## > Dados de Saúde;          ##
+## Demanda: FAPESC edital nº 37/2024             ## > Estruturação;            ##
+## Adaptado por: Matheus Ferreira de Souza       ## > Semana Epidemiológica;   ##
+##               e Everton Weber Galliani        ## > Série Temporal;          ##
+## Data: 31/07/2025                              ## > Dicionário de Dados.     ##
 #################################################################################
 
 ##### Bibliotecas correlatas ####################################################
@@ -38,10 +39,12 @@ try: # versão nova do excel (.xlsx)
 	casos = pd.read_excel(f"{caminho_dados}{casos}", engine = "openpyxl")
 except: # versão antiga do excel (.xls)
 	casos = pd.read_excel(f"{caminho_dados}{casos}", engine = "xlrd")
+"""
 try:
 	focos = pd.read_excel(f"{caminho_dados}{focos}", engine = "openpyxl", skiprows = 2)
 except:
 	focos = pd.read_excel(f"{caminho_dados}{focos}", engine = "xlrd", skiprows = 2)
+"""
 municipios = gpd.read_file(f"{caminho_shape}{municipios}")
 
 ### PRÉ-PROCESSAMENTO ############################################################
@@ -142,8 +145,8 @@ print(f"\n{green}CASOS:\n{reset}{casos_semanal_pivot.columns}\n")
 casos_semanal_pivot.to_csv(f"{caminho_dados}casos_semanal_pivot.csv", index = False)
 print(f"\n{green}SALVANDO CASOS (semanal):\n{reset}{caminho_dados}{casos_semanal_pivot}\n")
 
-
-#sys.exit()
+"""
+sys.exit()
 
 ### FOCOS
 print(f"\n{green}FOCOS:\n{reset}{focos}\n")
@@ -157,7 +160,7 @@ colunas_renomear = {f"Atualizado em {data}":"EXCLUIR",
 					"Data da Coleta":"data"}
 focos = focos.rename(columns = colunas_renomear)
 print(f"\n{green}FOCOS:\n{reset}{focos}\n")
-print(f"\n{green}FOCOS:\n{reset}{focos.columns}\n")
+print(f"\n{green}FOline 43COS:\n{reset}{focos.columns}\n")
 focos.drop(columns = ["EXCLUIR"], inplace = True)
 focos.dropna(axis = 0, inplace = True)
 focos["data"] = pd.to_datetime(focos["data"], format = "%d/%m/%Y", errors = "coerce")
@@ -200,6 +203,7 @@ print(f"\n{green}FOCOS:\n{reset}{focos_semanal_pivot}\n")
 print(f"\n{green}FOCOS:\n{reset}{focos_semanal_pivot.columns}\n")
 focos_semanal_pivot.to_csv(f"{caminho_dados}focos_semanal_pivot.csv", index = False)
 print(f"\n{green}SALVANDO FOCOS (semanal):\n{reset}{caminho_dados}{focos_semanal_pivot}\n")
+"""
 """
 print(f"\n{green}FOCOS:\n{reset}{focos}\n")
 print(f"\n{green}FOCOS:\n{reset}{focos.columns}\n")
