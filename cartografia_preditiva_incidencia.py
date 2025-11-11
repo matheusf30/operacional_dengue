@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as cls  
 import seaborn as sns 
 from datetime import date, datetime, timedelta
+from epiweeks import Week, Year
 # Suporte
 import os
 import sys
@@ -429,6 +430,17 @@ def salva_modelo(modelo, cidade):
 	print(f"\n{green}Caminho e Nome:\n {bold}{caminho_modelos}{nome_modelo}\n{reset}")
 	print("\n" + f"{red}~{cyan}~{reset}"*40 + "\n")
 	print("\n" + "="*80 + "\n")
+	
+def tempo_epidemiologico(df_original):
+	tempo = pd.DataFrame()
+	tempo["Semana"] = df_original["Semana"]
+	tempo["Semana"] = pd.to_datetime(tempo["Semana"])
+	tempo["SE"] = tempo["Semana"].apply(lambda data: Week.fromdate(data).week)
+	tempo["ano_epi"] = tempo["Semana"].dt.year
+	tempo.loc[(tempo["Semana"].dt.month == 1) & (tempo["SE"] > 50), "ano_epi"] -= 1
+	tempo.loc[(tempo["Semana"].dt.month == 12) & (tempo["SE"] == 1), "ano_epi"] += 1
+	print(f"\n{green}TEMPO CRONOLÓGICO (epidemiológico):\n{reset}{tempo}\n")
+	return tempo
 
 ######################################################MODELAGEM############################################################
 municipios["NM_MUN"] = municipios["NM_MUN"].str.upper()
@@ -448,7 +460,7 @@ previsao_total["Semana"] = tmin_ultimos["Semana"].copy()
  #pd.date_range(start = "2014-01-05", end = "2022-12-25", freq = "W")
 previsao_total["Semana"] = pd.to_datetime(previsao_total["Semana"])
 previsao_total.reset_index(inplace = True)
-#previsao_total.drop(1, axis = 0, inplace = True)
+previsao_total.drop(1, axis = 0, inplace = True)
 previsao_total.drop(columns = "index", inplace = True)
 #previsao_total.drop([d for d in range(_RETROAGIR)], axis = 0, inplace = True)
 #previsao_total.drop(previsao_total.index[-_RETROAGIR:], axis = 0, inplace = True)
@@ -484,6 +496,9 @@ else:
 	previsoes2 = preve(modelo, x2)
 	previsao_total[_CIDADE] = previsoes2
 	grafico(previsoes2, R_2)
+	
+tempo = tempo_epidemiologico(previsao_total)
+print(f"\n{green}DATA EPIDEMIOLÓGICA:\n{reset}{tempo['SE'].iloc[-1]}/{tempo['ano_epi'].iloc[-1]}\n")
 
 print(f"\n{green}previsao_total:\n{cyan}{previsao_total}{reset}\n")
 incidencia = previsao_total.copy()
@@ -517,12 +532,15 @@ if _SALVAR == True:
 
 # Semana Epidemiológica
 #semana_epidemio = "2024-10-20"
-semana_epidemio1 = previsao_total.loc[previsao_total.index[-3], "Semana"]
-semana_epidemio2 = previsao_total.loc[previsao_total.index[-2], "Semana"]
-semana_epidemio3 = previsao_total.loc[previsao_total.index[-1], "Semana"]
+semana_epidemio1 = tempo.loc[tempo.index[-3],:]#previsao_total.loc[previsao_total.index[-3], "Semana"]
+semana_epidemio2 = tempo.loc[tempo.index[-2],:]#previsao_total.loc[previsao_total.index[-2], "Semana"]
+semana_epidemio3 = tempo.loc[tempo.index[-1],:]#previsao_total.loc[previsao_total.index[-1], "Semana"]
 lista_semanas = [semana_epidemio1, semana_epidemio2, semana_epidemio3]
 # "2020-04-19" "2021-04-18" "2022-04-17" "2023-04-16"
 for idx, semana_epidemio in enumerate(lista_semanas):
+	print(f"\n{green}CALENDÁRIO EPIDEMIOLÓGICO:\n{cyan}{semana_epidemio}{reset}\n")
+	print(f"\n{green}SEMANA EPIDEMIOLÓGICA:\n{cyan}{semana_epidemio['SE']}{reset}\n")
+	print(f"\n{green}ANO EPIDEMIOLÓGICO:\n{cyan}{semana_epidemio['ano_epi']}{reset}\n")
 	# SC_Coroplético
 	xy = municipios.copy()
 	xy.drop(columns = ["CD_MUN", "SIGLA_UF", "AREA_KM2"], inplace = True)
@@ -539,13 +557,13 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 	print(f"\n{green}v_min\n{reset}{v_min}\n")
 	print(f"\n{green}v_max\n{reset}{v_max}\n")
 	print(f"\n{green}levels\n{reset}{levels}\n")
-	previsao_melt_poligeo[previsao_melt_poligeo["Semana"] == semana_epidemio].plot(ax = ax, column = "Incidencia",  legend = True, edgecolor = "white", # fontsize = 20,
+	previsao_melt_poligeo[previsao_melt_poligeo["Semana"] == semana_epidemio["Semana"]].plot(ax = ax, column = "Incidencia",  legend = True, edgecolor = "white", # fontsize = 20,
 		                                                                           label = "Incidência (Casos Prováveis de Dengue)", cmap = "YlOrRd", linewidth = 0.05,   legend_kwds = {"extend": "max"},#levels = levels, 
 		                                                                           norm = cls.Normalize(vmin = v_min, vmax = v_max, clip = True))
 	cbar_ax = ax.get_figure().get_axes()[-1]
 	cbar_ax.tick_params(labelsize = 20)
 	zero = previsao_melt_poligeo[previsao_melt_poligeo["Incidencia"] <= 0]
-	zero[zero["Semana"] == semana_epidemio].plot(ax = ax, column = "Incidencia", legend = False, edgecolor = "white", linewidth = 0.05, label = "Incidência (Casos Prováveis de Dengue)", cmap = "YlOrBr")#"YlOrBr")
+	zero[zero["Semana"] == semana_epidemio["Semana"]].plot(ax = ax, column = "Incidencia", legend = False, edgecolor = "white", linewidth = 0.05, label = "Incidência (Casos Prováveis de Dengue)", cmap = "YlOrBr")#"YlOrBr")
 	regionais.plot(ax = ax, facecolor = "none",
 				edgecolor = "dimgray", linewidth = 0.6)	
 	plt.xlim(-54, -48)
@@ -565,10 +583,10 @@ modelagem inexistente.""",
 		    color = "black", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 20)
 	plt.xlabel("Longitude", fontsize = 18)
 	plt.ylabel("Latitude", fontsize = 18)
-	plt.title(f"Incidência de Dengue Prevista em Santa Catarina.\nSemana Epidemiológica: {semana_epidemio.strftime('%Y-%m-%d')}.", fontsize = 28)
+	plt.title(f"Incidência de Dengue Prevista em Santa Catarina.\nSemana Epidemiológica: {semana_epidemio['SE']}/{semana_epidemio['ano_epi']}.", fontsize = 28)
 	#plt.grid(True)
 	nome_arquivo = f"INCIDENCIA_mapa_preditivo_{data_atual}_{idx}.pdf"
-	nome_arquivo_png = f"INCIDENCIA_mapa_preditivo_{data_atual}_{idx}.png"
+	nome_arquivo_png = f"INCIDENCIA_mapa_preditivo_{semana_epidemio['ano_epi']}_SE{semana_epidemio['SE']}.png"
 	if _AUTOMATIZA == True and _SALVAR == True:
 		os.makedirs(caminho_resultados, exist_ok = True)
 		#plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "pdf", dpi = 150)
@@ -614,7 +632,7 @@ print(f"\n{green}ultimas_previsoes.T_df.T\n{reset}{ultimas_previsoes_vdd}\n")
 #ultimas_previsoes_vdd = ultimas_previsoes_vdd.drop(columns = "Semana")
 if _SALVAR == True:
 	os.makedirs(caminho_resultados, exist_ok = True)
-	ultimas_previsoes_csv = f"ultimas_previsoes_incidencia_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
+	ultimas_previsoes_csv = f"ultimas_previsoes_incidencia_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_{semana_epidemio['ano_epi']}_SE{semana_epidemio['SE']}.csv"
 	ultimas_previsoes_vdd.to_csv(f"{caminho_resultados}{ultimas_previsoes_csv}", index = False)
 	print(f"\n\n{green}{caminho_resultados}\n{ultimas_previsoes_csv}\nSALVO COM SUCESSO!{reset}\n\n")
 	print(f"\n\n{green}OS VALORES DAS ÚLTIMAS PREVISÕES DE INCIDÊNCIA SÃO APRESENTADOS ABAIXO:\n{reset}{ultimas_previsoes_vdd}\n\n")

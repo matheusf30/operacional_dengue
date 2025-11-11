@@ -15,6 +15,7 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as cls  
 import seaborn as sns 
 from datetime import date, datetime, timedelta
+from epiweeks import Week, Year
 # Suporte
 import os
 import sys
@@ -101,6 +102,22 @@ troca = {'Á': 'A', 'Â': 'A', 'À': 'A', 'Ã': 'A',
 cidades = unicos["Município"].copy()
 
 ##################################################################################
+#sys.exit()
+def tempo_epidemiologico(df_original):
+	tempo = pd.DataFrame()
+	df_original.reset_index(inplace = True)
+	tempo["Semana"] = df_original["Semana"]
+	tempo["Semana"] = pd.to_datetime(tempo["Semana"])
+	tempo["SE"] = tempo["Semana"].apply(lambda data: Week.fromdate(data).week)
+	tempo["ano_epi"] = tempo["Semana"].dt.year
+	tempo.loc[(tempo["Semana"].dt.month == 1) & (tempo["SE"] > 50), "ano_epi"] -= 1
+	tempo.loc[(tempo["Semana"].dt.month == 12) & (tempo["SE"] == 1), "ano_epi"] += 1
+	print(f"\n{green}TEMPO CRONOLÓGICO (epidemiológico):\n{reset}{tempo}\n")
+	return tempo
+	
+tempo = tempo_epidemiologico(casos)
+print(f"\n{green}DATA EPIDEMIOLÓGICA:\n{reset}{tempo['SE'].iloc[-2]}/{tempo['ano_epi'].iloc[-2]}\n")
+#sys.exit()
 ### Pré-processamento
 print(f"\n{green}CASOS:\n{reset}{casos}\n")
 casos["Semana"] = pd.to_datetime(casos["Semana"], format = "%Y-%m-%d")
@@ -135,11 +152,6 @@ municipios = municipios.merge(regionais[["Municipio", "regional"]],
 								how = "left")
 regionais = municipios.dissolve(by = "regional")
 
-_d7 = datetime.today() - timedelta(days = 7)
-_d7 = _d7 - timedelta(days = _d7.weekday() + 1)
-_d7 = _d7.strftime("%Y-%m-%d")
-
-#sys.exit()
 
 ##################################################################################
 ### Cartografia
@@ -163,17 +175,13 @@ cbar_ax = ax.get_figure().get_axes()[-1]
 cbar_ax.tick_params(labelsize = 20)
 plt.xlim(-54, -48)
 plt.ylim(-29.5, -25.75)
-x_tail = -48.5
-y_tail = -29.25
-x_head = -48.5
-y_head = -28.75
 ax.text(-52.5, -29, "Sistema de Referência de Coordenadas\nDATUM: SIRGAS 2000/22S.\nBase Cartográfica: IBGE, 2024.",
 	    color = "white", backgroundcolor = "darkgray", ha = "center", va = "center", fontsize = 14)
 plt.xlabel("Longitude", fontsize = 18)
 plt.ylabel("Latitude", fontsize = 18)
-plt.title(f"Soma de Casos Prováveis de Dengue em Santa Catarina\nSemana Epidemiológica: {_d7}.", fontsize = 28)
+plt.title(f"Soma de Casos Prováveis de Dengue em Santa Catarina\nSemana Epidemiológica: {tempo['SE'].iloc[-2]}/{tempo['ano_epi'].iloc[-2]}.", fontsize = 28)
 
-nome_arquivo = f"CASOS_mapa_monitoramento_{_d7}.png"
+nome_arquivo = f"CASOS_mapa_monitoramento_{tempo['ano_epi'].iloc[-2]}_SE{tempo['SE'].iloc[-2]}.png"
 if _AUTOMATIZA == True and _SALVAR == True:
 	os.makedirs(caminho_resultados, exist_ok = True)
 	plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "png", dpi = 300)
@@ -203,17 +211,13 @@ cbar_ax = ax.get_figure().get_axes()[-1]
 cbar_ax.tick_params(labelsize = 20)
 plt.xlim(-54, -48)
 plt.ylim(-29.5, -25.75)
-x_tail = -48.5
-y_tail = -29.25
-x_head = -48.5
-y_head = -28.75
 ax.text(-52.5, -29, "Sistema de Referência de Coordenadas\nDATUM: SIRGAS 2000/22S.\nBase Cartográfica: IBGE, 2024.",
 	    color = "white", backgroundcolor = "darkgray", ha = "center", va = "center", fontsize = 14)
 plt.xlabel("Longitude", fontsize = 18)
 plt.ylabel("Latitude", fontsize = 18)
-plt.title(f"Incidência da Soma de Casos Prováveis de Dengue em Santa Catarina.\nSemana Epidemiológica: {_d7}.", fontsize = 28)
+plt.title(f"Incidência da Soma de Casos Prováveis de Dengue em Santa Catarina\nSemana Epidemiológica: {tempo['SE'].iloc[-2]}/{tempo['ano_epi'].iloc[-2]}", fontsize = 28)
 
-nome_arquivo = f"INCIDENCIA_mapa_monitoramento_{_d7}.png"
+nome_arquivo = f"INCIDENCIA_mapa_monitoramento_{tempo['ano_epi'].iloc[-2]}_SE{tempo['SE'].iloc[-2]}.png"
 if _AUTOMATIZA == True and _SALVAR == True:
 	os.makedirs(caminho_resultados, exist_ok = True)
 	plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "png", dpi = 300)
