@@ -566,7 +566,7 @@ modelagem inexistente.""",
 	plt.title(f"Casos Prováveis de Dengue Previstos em Santa Catarina.\nSemana Epidemiológica: {semana_epidemio['SE']}/{semana_epidemio['ano_epi']}.", fontsize = 28)
 	#plt.grid(True)
 	nome_arquivo = f"CASOS_mapa_preditivo_{data_atual}_{idx}.pdf"
-	nome_arquivo_png = f"CASOS_mapa_preditivo_{semana_epidemio['ano_epi']}_SE{semana_epidemio['SE']}.png"
+	nome_arquivo_png = f"CASOS_mapa_preditivo_{_ANO_MES_DIA}_SE{semana_epidemio['SE']}-{semana_epidemio['ano_epi']}.png"
 	if _AUTOMATIZA == True and _SALVAR == True:
 		os.makedirs(caminho_resultados, exist_ok = True)
 		#plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "pdf", dpi = 150)
