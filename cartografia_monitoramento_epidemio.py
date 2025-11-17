@@ -177,6 +177,13 @@ plt.xlim(-54, -48)
 plt.ylim(-29.5, -25.75)
 ax.text(-52.5, -29, "Sistema de Referência de Coordenadas\nDATUM: SIRGAS 2000/22S.\nBase Cartográfica: IBGE, 2024.",
 	    color = "white", backgroundcolor = "darkgray", ha = "center", va = "center", fontsize = 14)
+ax.text(-52.5, -28.25, """LEGENDA
+
+▢           Sem registro*
+
+*Não há registro oficial
+de casos prováveis de dengue""",
+        color = "black", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 14)
 plt.xlabel("Longitude", fontsize = 18)
 plt.ylabel("Latitude", fontsize = 18)
 plt.title(f"Soma de Casos Prováveis de Dengue em Santa Catarina\nSemana Epidemiológica: {tempo['SE'].iloc[-2]}/{tempo['ano_epi'].iloc[-2]}.", fontsize = 28)
@@ -193,7 +200,7 @@ if _AUTOMATIZA == True and _VISUALIZAR == True:
 
 ### Incidência	
 fig, ax = plt.subplots(figsize = (20, 12), layout = "constrained", frameon = True)
-municipios.plot(ax = ax, color = "lightgray", edgecolor = "white", linewidth = 0.05)
+municipios.plot(ax = ax, color = "lightgray", edgecolor = "red", linewidth = 0.3)
 v_max = base_carto["incidencia"].max()
 v_min = base_carto["incidencia"].min()
 intervalo = 250
@@ -218,6 +225,7 @@ ax.text(-52.5, -29, "Sistema de Referência de Coordenadas\nDATUM: SIRGAS 2000/2
 	    color = "white", backgroundcolor = "darkgray", ha = "center", va = "center", fontsize = 14)
 ax.text(-52.5, -28.25, """LEGENDA
 
+▢       Sem registro
 ⣿⣿           Epidemia*
 
 *Municípios que atingiram nível de epidemia
