@@ -206,15 +206,23 @@ base_carto.plot(ax = ax, column = "incidencia",  legend = True,
 				cmap = "RdPu", linewidth = 0.05, linestyle = ":",
 				norm = cls.Normalize(vmin = v_min, vmax = v_max, clip = True))
 epidemia = base_carto[base_carto["incidencia"] > 300]
-epidemia.plot(ax = ax, facecolor = "none", edgecolor = "red", linewidth = 0.1, hatch = "///")
+epidemia.plot(ax = ax, facecolor = "none", edgecolor = "red",
+				linewidth = 0.3, hatch = "..")#, linestyle = ":")
 regionais.plot(ax = ax, facecolor = "none",
-			   edgecolor = "dimgray", linewidth = 0.6)
+				edgecolor = "dimgray", linewidth = 0.6)
 cbar_ax = ax.get_figure().get_axes()[-1]
 cbar_ax.tick_params(labelsize = 20)
 plt.xlim(-54, -48)
 plt.ylim(-29.5, -25.75)
 ax.text(-52.5, -29, "Sistema de Referência de Coordenadas\nDATUM: SIRGAS 2000/22S.\nBase Cartográfica: IBGE, 2024.",
 	    color = "white", backgroundcolor = "darkgray", ha = "center", va = "center", fontsize = 14)
+ax.text(-52.5, -28.25, """LEGENDA
+
+⣿⣿           Epidemia*
+
+*Municípios que atingiram nível de epidemia
+(acima de 300 casos prováveis/100mil habitantes)""",
+        color = "red", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 14)
 plt.xlabel("Longitude", fontsize = 18)
 plt.ylabel("Latitude", fontsize = 18)
 plt.title(f"Incidência da Soma de Casos Prováveis de Dengue em Santa Catarina\nSemana Epidemiológica: {tempo['SE'].iloc[-2]}/{tempo['ano_epi'].iloc[-2]}", fontsize = 28)
