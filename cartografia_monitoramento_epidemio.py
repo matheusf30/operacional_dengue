@@ -205,6 +205,8 @@ base_carto.plot(ax = ax, column = "incidencia",  legend = True,
 				edgecolor = "white", label = "Incidência", legend_kwds = {"extend": "max"},
 				cmap = "RdPu", linewidth = 0.05, linestyle = ":",
 				norm = cls.Normalize(vmin = v_min, vmax = v_max, clip = True))
+epidemia = base_carto[base_carto["incidencia"] > 300]
+epidemia.plot(ax = ax, facecolor = "none", edgecolor = "red", linewidth = 0.1, hatch = "///")
 regionais.plot(ax = ax, facecolor = "none",
 			   edgecolor = "dimgray", linewidth = 0.6)
 cbar_ax = ax.get_figure().get_axes()[-1]
