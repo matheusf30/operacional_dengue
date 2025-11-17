@@ -34,8 +34,8 @@ python modelagem_casos.py True
 #python modelagem_incidencia.py True
 ### CARTOGRAFIAS
 #python cartografia_casos_incidencia.py True False True
-python everton_temp.py
-python everton_prec.py
+python temp_samet.py #everton_temp.py
+python prec_merge.py #everton_prec.py
 #python temp_semanal_samet_media.py
 #python prec_semanal_merge_acumulado.py
 #python temp_semanal_samet_anomalia.py
