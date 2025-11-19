@@ -239,6 +239,8 @@ def gerar_mapa(dataset, str_var, comportamento):
 	gl.top_labels = False
 	gl.right_labels = False
 	plt.figtext(0.55, 0.045, "Fonte: SAMeT - CPTEC/INPE", ha = "center", fontsize = 10)
+	plt.xlim(-54, -48)
+	plt.ylim(-29.5, -25.75)
 	nome_arquivo = f"{str_var}_samet_{comportamento}_{_d7}_SE{SE}.png"
 	if _SALVAR == True:	
 		plt.savefig(f"{caminho_resultado}{nome_arquivo}",
