@@ -69,7 +69,21 @@ caminho_resultado = f"/home/meteoro/scripts/matheus/operacional_dengue/meteorolo
 os.makedirs(f"{caminho_resultado}", mode = 0o777, exist_ok = True)
 
 # CLimatologia de semanas epidemiológicas (by Everton)
-SE = 42
+def calcula_numero_se(dia):
+	N_SE = 0
+	dia = pd.to_datetime(dia)
+	# Retornando ao domingo da semana
+	wkd = dia.weekday()
+	domingo = dia - timedelta(days = wkd + 1)
+	ano_func = domingo.strftime("%Y")
+	dia_inicio = pd.to_datetime(f"{ano_func}-01-01")
+	while domingo >= dia_inicio:
+		N_SE += 1
+		domingo -= timedelta(days = 7)
+	if (dia_inicio - domingo).days <= 3:
+		N_SE += 1
+	return N_SE
+SE = calcula_numero_se(_ANO_MES_DIA) - 1
 prec_climatologia = xr.open_dataset("/home/meteoro/scripts/matheus/operacional_dengue/meteorologia/climatologia/prec_climatologia_epidemiosemanal.nc").sel(week = SE)['prec']
 
 municipios = "/media/dados/shapefiles/SC/SC_Municipios_2024.shp"
@@ -240,9 +254,9 @@ def gerar_mapa(dataset, str_var):
 	gl.top_labels = False
 	gl.right_labels = False
 	plt.figtext(0.55, 0.045, "Fonte: MERGE - CPTEC/INPE", ha = "center", fontsize = 10)
-	plt.savefig(f"{caminho_resultado}prec_semanal_merge_{str_var}_{_d7}.png",
-				transparent = False, dpi = 300, bbox_inches = "tight", pad_inches = 0.02)
-	#plt.show()
+	#plt.savefig(f"{caminho_resultado}prec_semanal_merge_{str_var}_{_d7}.png",
+	#			transparent = False, dpi = 300, bbox_inches = "tight", pad_inches = 0.02)
+	plt.show()
 	
 #################################################################################
 # EXECUTANDO FUNÇÕES
