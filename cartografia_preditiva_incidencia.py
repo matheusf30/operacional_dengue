@@ -568,10 +568,6 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 				edgecolor = "dimgray", linewidth = 0.6)	
 	plt.xlim(-54, -48)
 	plt.ylim(-29.5, -25.75)
-	x_tail = -48.5
-	y_tail = -29.25
-	x_head = -48.5
-	y_head = -28.75
 	ax.text(-52.5, -29, "Sistema de Referência de Coordenadas\nDATUM: SIRGAS 2000/22S.\nBase Cartográfica: IBGE, 2022.",
 		    color = "white", backgroundcolor = "darkgray", ha = "center", va = "center", fontsize = 20)
 	ax.text(-52.5, -28.25, """LEGENDA
@@ -583,6 +579,11 @@ modelagem inexistente.""",
 		    color = "black", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 20)
 	plt.xlabel("Longitude", fontsize = 18)
 	plt.ylabel("Latitude", fontsize = 18)
+	ax.tick_params(axis = "both", labelsize = 18)
+	ax.set_xticks([-54, -52, -50, -48])
+	ax.set_xticklabels(["54°W", "52°W", "50°W", "48°W"], fontsize = 18)
+	ax.set_yticks([-29, -28, -27, -26])
+	ax.set_yticklabels(["29°S", "28°S", "27°S", "26°S"], fontsize = 18)
 	plt.title(f"Incidência de Dengue Prevista em Santa Catarina.\nSemana Epidemiológica: {semana_epidemio['SE']}/{semana_epidemio['ano_epi']}.", fontsize = 28)
 	#plt.grid(True)
 	nome_arquivo = f"INCIDENCIA_mapa_preditivo_{data_atual}_{idx}.pdf"

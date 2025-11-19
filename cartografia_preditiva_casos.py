@@ -563,6 +563,11 @@ modelagem inexistente.""",
 		    color = "black", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 20)
 	plt.xlabel("Longitude", fontsize = 18)
 	plt.ylabel("Latitude", fontsize = 18)
+	ax.tick_params(axis = "both", labelsize = 18)
+	ax.set_xticks([-54, -52, -50, -48])
+	ax.set_xticklabels(["54°W", "52°W", "50°W", "48°W"], fontsize = 18)
+	ax.set_yticks([-29, -28, -27, -26])
+	ax.set_yticklabels(["29°S", "28°S", "27°S", "26°S"], fontsize = 18)
 	plt.title(f"Casos Prováveis de Dengue Previstos em Santa Catarina.\nSemana Epidemiológica: {semana_epidemio['SE']}/{semana_epidemio['ano_epi']}.", fontsize = 28)
 	#plt.grid(True)
 	nome_arquivo = f"CASOS_mapa_preditivo_{data_atual}_{idx}.pdf"
