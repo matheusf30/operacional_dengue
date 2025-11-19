@@ -46,6 +46,13 @@ cyan = "\033[36m"
 white = "\033[37m"
 reset = "\033[0m"
 
+##################### Valores Booleanos ##########################
+_VISUALIZAR = sys.argv[1]   # True|False                     #####
+_VISUALIZAR = True if _VISUALIZAR == "True" else False       #####
+_SALVAR = sys.argv[2]    # True|False                        #####
+_SALVAR = True if _SALVAR == "True" else False               #####
+##################################################################
+
 #################################################################################
 # DATA DO SISTEMA (POSSIBILIDADE DE ACESSAR ARQUIVO DE 1 DIA)
 _AGORA = datetime.now()
@@ -61,14 +68,9 @@ _DIA_ONTEM = _ONTEM.strftime("%d")
 _ANO_MES_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}"
 _ANO_MES_DIA_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}{_DIA_ONTEM}"
 
-#################################################################################
-# CAMINHOS E ARQUIVOS
-caminho_samet = "/media/dados/operacao/samet/daily/"
-caminho_shapefile = "/media/dados/shapefiles/BR/"
-caminho_resultado = f"/home/meteoro/scripts/matheus/operacional_dengue/meteorologia/{_ANO_ATUAL}/"
-
-# CLimatologia de semanas epidemiológicas (by Everton)
 def calcula_numero_se(dia):
+	"""
+	"""
 	N_SE = 0
 	dia = pd.to_datetime(dia)
 	# Retornando ao domingo da semana
@@ -83,13 +85,18 @@ def calcula_numero_se(dia):
 		N_SE += 1
 	return N_SE
 SE = calcula_numero_se(_ANO_MES_DIA) - 1
-print(SE)
 
-tmed_climatologia = xr.open_dataset("/home/meteoro/scripts/matheus/operacional_dengue/meteorologia/climatologia/tmed_climatologia_epidemiosemanal.nc").sel(week = SE)['tmed']
+#################################################################################
+# CAMINHOS E ARQUIVOS
+caminho_samet = "/media/dados/operacao/samet/daily/"
+caminho_shapefile = "/media/dados/shapefiles/BR/"
+caminho_resultado = f"/home/meteoro/scripts/matheus/teste/operacional_dengue/meteorologia/{_ANO_ATUAL}/{_MES_ATUAL}/"
+
+tmed_climatologia = xr.open_dataset("/home/meteoro/scripts/matheus/teste/operacional_dengue/meteorologia/climatologia/tmed_climatologia_epidemiosemanal.nc").sel(week = SE)['tmed']
 
 os.makedirs(f"{caminho_resultado}", mode = 0o777, exist_ok = True)
 municipios = "/media/dados/shapefiles/SC/SC_Municipios_2024.shp"
-regionais = "/home/meteoro/scripts/matheus/operacional_dengue/dados_operacao/censo_sc_regional.csv"
+regionais = "/home/meteoro/scripts/matheus/teste/operacional_dengue/dados_operacao/censo_sc_regional.csv"
 municipios = gpd.read_file(municipios, low_memory = False)
 sc_shape = gpd.read_file(f"/media/dados/shapefiles/SC/SC_UF_2024.shp")
 regionais = pd.read_csv(regionais, low_memory = False)
@@ -114,7 +121,30 @@ municipios = municipios.merge(regionais[["Municipio", "regional"]],
 								left_on = "NM_MUN", right_on = "Municipio",
 								how = "left")
 regionais = municipios.dissolve(by = "regional")
+
+#################################################################################
 # DEFININDO FUNÇÕES
+
+# Climatologia de semanas epidemiológicas (by Everton)
+def calcula_numero_se(dia):
+	"""
+	"""
+	N_SE = 0
+	dia = pd.to_datetime(dia)
+	# Retornando ao domingo da semana
+	wkd = dia.weekday()
+	domingo = dia - timedelta(days = wkd + 1)
+	ano_func = domingo.strftime("%Y")
+	dia_inicio = pd.to_datetime(f"{ano_func}-01-01")
+	while domingo >= dia_inicio:
+		N_SE += 1
+		domingo -= timedelta(days = 7)
+	if (dia_inicio - domingo).days <= 3:
+		N_SE += 1
+	print(f"{green}*{reset}*"*30)
+	print(f"\n{green}SEMANA EPIDEMIOLÓGICA nº:\n{reset}{N_SE}\n")
+	print(f"{green}*{reset}*"*30)
+	return N_SE
 
 def selecionar_tempo_espaco(dataset, tempo, str_var):
 	"""
@@ -184,6 +214,8 @@ def limite_colobar(regiao_tmin, regiao_tmax):
 	return levels, norm, int_min, int_max, cmap
 
 def mascara(dataset):
+	"""
+	"""
 	shape_estado = sc_shape
 	var = dataset
 	mask = regionmask.mask_geopandas(shape_estado, var.lon, var.lat)
@@ -192,11 +224,20 @@ def mascara(dataset):
 	media = media.round(1)
 	return media
 	
-def quadradinho_do_mario(media_sc):
-    plt.text(-53, -29.15, f"Média de SC\n {media_sc} °C",
-            color="black", 
-            ha="center", va="center", fontsize=12, zorder=10,
-            bbox=dict(boxstyle="square", facecolor="white", edgecolor="black"))
+def quadradinho_do_mario(media_sc, comportamento = None):
+	"""
+	"""
+	if comportamento == "anomalia":
+		plt.text(-53, -29, f"Anomalia de SC:\n {media_sc} °C",
+				color="black", 
+				ha="center", va="center", fontsize=12, zorder=10,
+				bbox=dict(boxstyle="square", facecolor="white", edgecolor="black"))
+	else:
+		plt.text(-53, -29, f"Média de SC:\n {media_sc} °C",
+				color="black", 
+				ha="center", va="center", fontsize=12, zorder=10,
+				bbox=dict(boxstyle="square", facecolor="white", edgecolor="black"))
+        
 	
 def gerar_mapa(dataset, str_var, comportamento):
 	"""
@@ -235,31 +276,34 @@ def gerar_mapa(dataset, str_var, comportamento):
 	if (comportamento == "media"):
 		match str_var:
 			case "tmin":
-				plt.title(f"Temperatura Mínima Média Semanal\nPeríodo observado: {_d7}",
+				plt.title(f"Temperatura Mínima na Semana Epidemiológica Nº {SE}\nPeríodo observado: {_d7} a {_d8}",
 							fontsize = 14, ha = "center")
 			case "tmed":
-				plt.title(f"Temperatura Média Semanal Para a Semana Epidemiológica N°{SE}\nPeríodo observado: {_d7} a {_d8}",
+				plt.title(f"Temperatura Média na Semana Epidemiológica Nº {SE}\nPeríodo observado: {_d7} a {_d8}",
 							fontsize = 14, ha = "center")
 			case "tmax":
-				plt.title(f"Temperatura Máxima Média Semanal\nPeríodo observado: {_d7}",
+				plt.title(f"Temperatura Máxima na Semana Epidemiológica Nº {SE}\nPeríodo observado: {_d7} a {_d8}",
 							fontsize = 14, ha = "center")
 			case _:
 				print(f"\nVariável não encontrada!\n{str_var}\nVariável não encontrada!\n")
 	elif (comportamento == "anomalia"):
 		match str_var:
 			case "tmin":
-				plt.title(f"Temperatura Mínima Média Semanal\nPeríodo observado: {_d7}",
+				plt.title(f"Anomalia de Temperatura Mínima na Semana Epidemiológica Nº {SE}\nPeríodo observado: {_d7} a {_d8}",
 							fontsize = 14, ha = "center")
 			case "tmed":
-				plt.title(f"Anomalia de Temperatura Média Para a Semana Epidemiológica {SE}\nPeríodo observado: {_d7} a {_d8}",
+				plt.title(f"Anomalia de Temperatura Média na Semana Epidemiológica Nº {SE}\nPeríodo observado: {_d7} a {_d8}",
 							fontsize = 14, ha = "center")
 			case "tmax":
-				plt.title(f"Temperatura Máxima Média Semanal\nPeríodo observado: {_d7}",
+				plt.title(f"Anomalia de Temperatura Máxima na Semana Epidemiológica Nº {SE}\nPeríodo observado: {_d7} a {_d8}",
 							fontsize = 14, ha = "center")
 			case _:
 				print(f"\nVariável não encontrada!\n{str_var}\nVariável não encontrada!\n")
 	media = mascara(dataset)
-	quadradinho_do_mario(media)		
+	if comportamento == "anomalia":
+		quadradinho_do_mario(media, comportamento)	
+	else:
+		quadradinho_do_mario(media)		
 	ax.add_geometries(shp, ccrs.PlateCarree(), edgecolor = "black",
 					facecolor = "none", linewidth = 0.5)
 	ax.coastlines(resolution = "10m", color = "black", linewidth = 0.8)
@@ -270,8 +314,15 @@ def gerar_mapa(dataset, str_var, comportamento):
 	gl.top_labels = False
 	gl.right_labels = False
 	plt.figtext(0.55, 0.045, "Fonte: SAMeT - CPTEC/INPE", ha = "center", fontsize = 10)
-	plt.savefig(f"{caminho_resultado}{str_var}_semanal_samet_{comportamento}_{_d7}.png",
+	nome_arquivo = f"{str_var}_samet_{comportamento}_{_d7}_SE{SE}.png"
+	if _SALVAR == True:	
+		plt.savefig(f"{caminho_resultado}{nome_arquivo}",
 				transparent = False, dpi = 300, bbox_inches = "tight", pad_inches = 0.02)
+		print(f"\n\n{green}{caminho_resultado}\n{nome_arquivo}\nSALVO COM SUCESSO!{reset}\n\n")
+	if _VISUALIZAR == True:
+		print(f"{cyan}\nVISUALIZANDO:\n{caminho_resultado}\n{nome_arquivo}\n{reset}\n\n")
+		plt.show()
+		print(f"{cyan}\nENCERRADO:\n{caminho_resultado}\n{nome_arquivo}\n{reset}\n\n")
 	#plt.show()
 	
 #################################################################################
