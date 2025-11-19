@@ -63,8 +63,8 @@ _MES_ATUAL = _AGORA.strftime("%m")
 _DIA_ATUAL = _AGORA.strftime("%d")
 _ANO_MES = f"{_ANO_ATUAL}{_MES_ATUAL}"
 _ANO_MES_DIA = f"{_ANO_ATUAL}{_MES_ATUAL}{_DIA_ATUAL}"
-#_ANO_MES = 202510
-#_ANO_MES_DIA = 20251028 #f"{_ANO_ATUAL}{_MES_ATUAL}{_DIA_ATUAL}"
+#_ANO_MES = 202511
+#_ANO_MES_DIA = 20251117 #f"{_ANO_ATUAL}{_MES_ATUAL}{_DIA_ATUAL}"
 _ONTEM = datetime.today() - timedelta(days = 1)
 _ANO_ONTEM = str(_ONTEM.year)
 _MES_ONTEM = _ONTEM.strftime("%m")
@@ -308,18 +308,25 @@ troca = {'Á': 'A', 'Â': 'A', 'À': 'A', 'Ã': 'A', 'Ä': 'A',
 
 ### Visualizações Gráficas
 
-plt.figure(figsize = (15, 8), layout = "constrained", frameon = False)
+plt.figure(figsize = (10, 6), layout = "constrained", frameon = False)
 plt.plot(previstos["Semana"], previstos[_CIDADE],
 			label = "Previsto (GFS)", color = "red", linewidth = 3, linestyle = ":")
 plt.plot(previsao12["Semana"], previsao12[_CIDADE],
 			label = "Previsto", color = "red", linewidth = 3)
 plt.plot(casos_atual["Semana"], casos_atual[_CIDADE],
 				label = "Observado", color = "blue")
-plt.xlabel("Semanas Epidemiológicas (Série Histórica)")
-plt.ylabel("Número de Casos de Dengue")
-plt.title(f"COMPARAÇÃO ENTRE CASOS PROVÁVEIS DE DENGUE PREVISTOS E OBSERVADOS\nMUNICÍPIO DE {_CIDADE}")
-plt.legend()
-plt.gca().set_facecolor("honeydew")
+plt.xlabel("Semanas Epidemiológicas (Série Temporal)")
+plt.ylabel("Número de Casos Prováveis de Dengue")
+plt.title("COMPARAÇÃO ENTRE CASOS PROVÁVEIS DE DENGUE PREVISTOS E OBSERVADOS", fontsize = 12, y = 1.03, loc = "center", pad = 10)
+plt.suptitle(f"MUNICÍPIO DE {_CIDADE}", fontsize = 16, y = 0.96)
+plt.legend(fontsize = 14)
+ax = plt.gca()
+ax.set_facecolor("honeydew")
+"""
+plt.text(0.1, 0.9, f"MUNICÍPIO:\n {_CIDADE}", transform = ax.transAxes,
+			color = "black", ha = "center", va = "center", fontsize = 12, zorder = 10,
+			bbox = dict(boxstyle = "square", facecolor = "white", edgecolor = "black"))
+"""
 if _VISUALIZAR == True:
 	print(f"\n{green}VISUALIZAÇÃO GRÁFICA:\n{reset}{_CIDADE}\n")
 	plt.show()
@@ -340,26 +347,23 @@ regionais = ["GRANDE FLORIANÓPOLIS", "EXTREMO OESTE", "OESTE",
 			"MEIO OESTE", "NORDESTE", "VALE DO ITAPOCU", "PLANALTO NORTE",
 			"SERRA CATARINENSE", "CARBONÍFERA", "EXTREMO SUL CATARINENSE", "LAGUNA",
 			"ALTO VALE DO ITAJAÍ", "MÉDIO VALE DO ITAJAÍ", "FOZ DO RIO ITAJAÍ"]
-
-
-
-
-
 			
 for idx, _REG in enumerate(regionais):
 	print(f"\n{green}REGIONAL - {idx}:\n{reset}{_REG}\n")
-	plt.figure(figsize = (15, 8), layout = "constrained", frameon = False)
+	plt.figure(figsize = (10, 6), layout = "constrained", frameon = False)
 	plt.plot(previstos_reg.index, previstos_reg[_REG],
 				label = "Previsto (GFS)", color = "red", linewidth = 3, linestyle = ":")
 	plt.plot(previsao12_reg.index, previsao12_reg[_REG],
 				label = "Previsto", color = "red", linewidth = 3)
 	plt.plot(casos_atual_reg.index, casos_atual_reg[_REG],
 					label = "Observado", color = "blue")
-	plt.xlabel("Semanas Epidemiológicas (Série Histórica)")
-	plt.ylabel("Número de Casos de Dengue")
-	plt.title(f"COMPARAÇÃO ENTRE CASOS PROVÁVEIS DE DENGUE PREVISTOS E OBSERVADOS\nREGIONAL: {_REG}")
-	plt.legend()
-	plt.gca().set_facecolor("honeydew")
+	plt.xlabel("Semanas Epidemiológicas (Série Temporal)")
+	plt.ylabel("Número de Casos Prováveis de Dengue")
+	plt.title("COMPARAÇÃO ENTRE CASOS PROVÁVEIS DE DENGUE PREVISTOS E OBSERVADOS", fontsize = 12, y = 1.03, loc = "center", pad = 10)
+	plt.suptitle(f"REGIONAL: {_REG}", fontsize = 16, y = 0.96)
+	plt.legend(fontsize = 14)
+	ax = plt.gca()
+	ax.set_facecolor("honeydew")
 	if _VISUALIZAR == True:
 		print(f"\n{green}VISUALIZAÇÃO GRÁFICA:\n{reset}{_REG}\n")
 		plt.show()
