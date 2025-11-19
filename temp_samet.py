@@ -276,26 +276,26 @@ def gerar_mapa(dataset, str_var, comportamento):
 	if (comportamento == "media"):
 		match str_var:
 			case "tmin":
-				plt.title(f"Temperatura Mínima na Semana Epidemiológica Nº {SE}\nPeríodo observado: {_d7} a {_d8}",
+				plt.title(f"Temperatura Mínima na Semana Epidemiológica Nº {SE}\nPeríodo Observado: {_d7} a {_d8}",
 							fontsize = 14, ha = "center")
 			case "tmed":
-				plt.title(f"Temperatura Média na Semana Epidemiológica Nº {SE}\nPeríodo observado: {_d7} a {_d8}",
+				plt.title(f"Temperatura Média na Semana Epidemiológica Nº {SE}\nPeríodo Observado: {_d7} a {_d8}",
 							fontsize = 14, ha = "center")
 			case "tmax":
-				plt.title(f"Temperatura Máxima na Semana Epidemiológica Nº {SE}\nPeríodo observado: {_d7} a {_d8}",
+				plt.title(f"Temperatura Máxima na Semana Epidemiológica Nº {SE}\nPeríodo Observado: {_d7} a {_d8}",
 							fontsize = 14, ha = "center")
 			case _:
 				print(f"\nVariável não encontrada!\n{str_var}\nVariável não encontrada!\n")
 	elif (comportamento == "anomalia"):
 		match str_var:
 			case "tmin":
-				plt.title(f"Anomalia de Temperatura Mínima na Semana Epidemiológica Nº {SE}\nPeríodo observado: {_d7} a {_d8}",
+				plt.title(f"Anomalia de Temperatura Mínima na Semana Epidemiológica Nº {SE}\nPeríodo Observado: {_d7} a {_d8}",
 							fontsize = 14, ha = "center")
 			case "tmed":
-				plt.title(f"Anomalia de Temperatura Média na Semana Epidemiológica Nº {SE}\nPeríodo observado: {_d7} a {_d8}",
+				plt.title(f"Anomalia de Temperatura Média na Semana Epidemiológica Nº {SE}\nPeríodo Observado: {_d7} a {_d8}",
 							fontsize = 14, ha = "center")
 			case "tmax":
-				plt.title(f"Anomalia de Temperatura Máxima na Semana Epidemiológica Nº {SE}\nPeríodo observado: {_d7} a {_d8}",
+				plt.title(f"Anomalia de Temperatura Máxima na Semana Epidemiológica Nº {SE}\nPeríodo Observado: {_d7} a {_d8}",
 							fontsize = 14, ha = "center")
 			case _:
 				print(f"\nVariável não encontrada!\n{str_var}\nVariável não encontrada!\n")
