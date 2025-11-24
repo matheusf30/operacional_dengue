@@ -23884,3 +23884,7229 @@ No action taken.
 
 CondaError: Run 'conda init' before 'conda deactivate'
 
+./automatiza2.sh: 21: 
+Tentando automatizar tudo para executar de uma única vez.
+Deve-se alterar as permissões deste próprio roteiro,
+que originalmente são apenas leitura (w) e escrita (r).
+No terminal, fazer um [ls -l] para verificar as permissões dos roteiros.
+Depois executar [chmod +x {script}.sh] para incluir a permissão de executável (x).
+E executar da seguinte forma [./{script}.sh]
+: File name too long
+no change     /home/meteoro/miniconda3/condabin/conda
+no change     /home/meteoro/miniconda3/bin/conda
+no change     /home/meteoro/miniconda3/bin/conda-env
+no change     /home/meteoro/miniconda3/bin/activate
+no change     /home/meteoro/miniconda3/bin/deactivate
+no change     /home/meteoro/miniconda3/etc/profile.d/conda.sh
+no change     /home/meteoro/miniconda3/etc/fish/conf.d/conda.fish
+no change     /home/meteoro/miniconda3/shell/condabin/Conda.psm1
+no change     /home/meteoro/miniconda3/shell/condabin/conda-hook.ps1
+no change     /home/meteoro/miniconda3/lib/python3.12/site-packages/xontrib/conda.xsh
+no change     /home/meteoro/miniconda3/etc/profile.d/conda.csh
+no change     /home/meteoro/.bashrc
+No action taken.
+
+CondaError: Run 'conda init' before 'conda activate'
+
+/home/meteoro/scripts/matheus/teste/operacional_dengue/preprocess_saude.py:109: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  pre_dict["NM_MUN"] = pre_dict["NM_MUN"].str.upper()
+
+[92mCASOS (ORIGINAL):
+[0m        NU_NOTIFIC,C,7  TP_NOT,C,1  ... IDENT_MICR,C,50 MIGRADO_W,C,1
+0              3917529           2  ...             4.0           NaN
+1              8856730           2  ...             4.0           NaN
+2              8892465           2  ...             4.0           NaN
+3              8892467           2  ...             4.0           NaN
+4              9106771           2  ...             4.0           NaN
+...                ...         ...  ...             ...           ...
+134660         8139503           2  ...             4.0           NaN
+134661         8781696           2  ...             4.0           NaN
+134662         8777752           2  ...             4.0           NaN
+134663         8781298           2  ...             4.0           NaN
+134664         8769786           2  ...             4.0           NaN
+
+[134665 rows x 146 columns]
+
+
+[92mCASOS (ORIGINAL):
+[0mIndex(['NU_NOTIFIC,C,7', 'TP_NOT,C,1', 'ID_AGRAVO,C,5', 'DT_NOTIFIC,D',
+       'SEM_NOT,C,6', 'NU_ANO,C,4', 'SG_UF_NOT,C,2', 'ID_MUNICIP,C,6',
+       'ID_REGIONA,C,8', 'ID_UNIDADE,C,7', 'DT_SIN_PRI,D', 'SEM_PRI,C,6',
+       'DT_NASC,D', 'SOUNDEX,C,70', 'NU_IDADE_N,N,4,0', 'CS_SEXO,C,1',
+       'CS_GESTANT,C,1', 'CS_RACA,C,1', 'CS_ESCOL_N,C,2', 'SG_UF,C,2',
+       'ID_MN_RESI,C,6', 'ID_RG_RESI,C,8', 'ID_DISTRIT,C,9', 'ID_BAIRRO,C,8',
+       'NM_BAIRRO,C,60', 'ID_GEO1,C,8', 'ID_GEO2,C,8', 'CS_ZONA,C,1',
+       'ID_PAIS,C,4', 'DT_INVEST,D', 'ID_OCUPA_N,C,6', 'FEBRE,C,1',
+       'MIALGIA,C,1', 'CEFALEIA,C,1', 'EXANTEMA,C,1', 'VOMITO,C,1',
+       'NAUSEA,C,1', 'DOR_COSTAS,C,1', 'CONJUNTVIT,C,1', 'ARTRITE,C,1',
+       'ARTRALGIA,C,1', 'PETEQUIA_N,C,1', 'LEUCOPENIA,C,1', 'LACO,C,1',
+       'DOR_RETRO,C,1', 'DIABETES,C,1', 'HEMATOLOG,C,1', 'HEPATOPAT,C,1',
+       'RENAL,C,1', 'HIPERTENSA,C,1'],
+      dtype='object')
+
+
+[92mCASOS (ORIGINAL):
+[0mIndex(['ACIDO_PEPT,C,1', 'AUTO_IMUNE,C,1', 'DT_CHIK_S1,D', 'DT_CHIK_S2,D',
+       'DT_PRNT,D', 'RES_CHIKS1,C,1', 'RES_CHIKS2,C,1', 'RESUL_PRNT,C,1',
+       'DT_SORO,D', 'RESUL_SORO,C,1', 'DT_NS1,D', 'RESUL_NS1,C,1',
+       'DT_VIRAL,D', 'RESUL_VI_N,C,1', 'DT_PCR,D', 'RESUL_PCR_,C,1',
+       'SOROTIPO,C,1', 'HISTOPA_N,C,1', 'IMUNOH_N,C,1', 'HOSPITALIZ,C,1',
+       'DT_INTERNA,D', 'UF,C,2', 'MUNICIPIO,C,6', 'HOSPITAL,C,7',
+       'DDD_HOSP,C,2', 'TEL_HOSP,C,9', 'TPAUTOCTO,C,1', 'COUFINF,C,2',
+       'COPAISINF,C,4', 'COMUNINF,C,6', 'CODISINF,C,4', 'CO_BAINF,C,8',
+       'NOBAIINF,C,60', 'CLASSI_FIN,C,2', 'CRITERIO,C,1', 'DOENCA_TRA,C,1',
+       'CLINC_CHIK,C,1', 'EVOLUCAO,C,1', 'DT_OBITO,D', 'DT_ENCERRA,D',
+       'ALRM_HIPOT,C,1', 'ALRM_PLAQ,C,1', 'ALRM_VOM,C,1', 'ALRM_SANG,C,1',
+       'ALRM_HEMAT,C,1', 'ALRM_ABDOM,C,1', 'ALRM_LETAR,C,1', 'ALRM_HEPAT,C,1',
+       'ALRM_LIQ,C,1', 'DT_ALRM,D'],
+      dtype='object')
+
+
+[92mCASOS (ORIGINAL):
+[0mIndex(['GRAV_PULSO,C,1', 'GRAV_CONV,C,1', 'GRAV_ENCH,C,1', 'GRAV_INSUF,C,1',
+       'GRAV_TAQUI,C,1', 'GRAV_EXTRE,C,1', 'GRAV_HIPOT,C,1', 'GRAV_HEMAT,C,1',
+       'GRAV_MELEN,C,1', 'GRAV_METRO,C,1', 'GRAV_SANG,C,1', 'GRAV_AST,C,1',
+       'GRAV_MIOC,C,1', 'GRAV_CONSC,C,1', 'GRAV_ORGAO,C,1', 'DT_GRAV,D',
+       'MANI_HEMOR,C,1', 'EPISTAXE,C,1', 'GENGIVO,C,1', 'METRO,C,1',
+       'PETEQUIAS,C,1', 'HEMATURA,C,1', 'SANGRAM,C,1', 'LACO_N,C,1',
+       'PLASMATICO,C,1', 'EVIDENCIA,C,1', 'PLAQ_MENOR,C,7', 'CON_FHD,C,1',
+       'COMPLICA,C,1', 'NU_LOTE_I,C,9', 'DS_OBS,C,255', 'TP_SISTEMA,C,1',
+       'NDUPLIC_N,C,1', 'DT_DIGITA,D', 'DT_TRANSUS,D', 'DT_TRANSDM,D',
+       'DT_TRANSSM,D', 'DT_TRANSRM,D', 'DT_TRANSRS,D', 'DT_TRANSSE,D',
+       'NU_LOTE_V,C,7', 'NU_LOTE_H,C,7', 'CS_FLXRET,C,1', 'FLXRECEBI,C,7',
+       'IDENT_MICR,C,50', 'MIGRADO_W,C,1'],
+      dtype='object')
+
+
+[92mCASOS (ORIGINAL):
+[0mIndex(['NU_NOTIFIC,C,7', 'TP_NOT,C,1', 'ID_AGRAVO,C,5', 'DT_NOTIFIC,D',
+       'SEM_NOT,C,6', 'NU_ANO,C,4', 'SG_UF_NOT,C,2', 'ID_MUNICIP,C,6',
+       'ID_REGIONA,C,8', 'ID_UNIDADE,C,7',
+       ...
+       'DT_TRANSSM,D', 'DT_TRANSRM,D', 'DT_TRANSRS,D', 'DT_TRANSSE,D',
+       'NU_LOTE_V,C,7', 'NU_LOTE_H,C,7', 'CS_FLXRET,C,1', 'FLXRECEBI,C,7',
+       'IDENT_MICR,C,50', 'MIGRADO_W,C,1'],
+      dtype='object', length=146)
+
+
+[92mCLASSIFICAÇÃO:
+[0m[ 5.  8. 10. 11. nan 12.]
+
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 134665 entries, 0 to 134664
+Data columns (total 9 columns):
+ #   Column            Non-Null Count   Dtype         
+---  ------            --------------   -----         
+ 0   data_sintoma      134665 non-null  datetime64[ns]
+ 1   semana_sintoma    134665 non-null  int64         
+ 2   data_notificacao  134665 non-null  datetime64[ns]
+ 3   municipio_id      134624 non-null  float64       
+ 4   regional          134506 non-null  float64       
+ 5   doenca            134665 non-null  object        
+ 6   classificacao     132603 non-null  float64       
+ 7   criterio          126816 non-null  float64       
+ 8   sorotipo          1689 non-null    float64       
+dtypes: datetime64[ns](2), float64(5), int64(1), object(1)
+memory usage: 9.2+ MB
+
+[92mINFO:
+[0mNone
+
+
+[92mCLASSIFICAÇÃO:
+[0m[ 8. 10. 11. nan 12.]
+
+
+[92mCASOS (SELEÇÃO):
+[0m       data_sintoma  semana_sintoma  ... criterio  sorotipo
+10       2025-01-29          202505  ...      NaN       NaN
+41       2025-02-06          202506  ...      1.0       NaN
+71       2025-03-05          202510  ...      2.0       NaN
+77       2025-03-10          202511  ...      NaN       NaN
+79       2025-03-08          202510  ...      1.0       NaN
+...             ...             ...  ...      ...       ...
+134660   2025-05-10          202519  ...      NaN       NaN
+134661   2025-05-27          202522  ...      NaN       NaN
+134662   2025-05-02          202518  ...      NaN       NaN
+134663   2025-05-24          202521  ...      NaN       NaN
+134664   2025-03-11          202511  ...      NaN       NaN
+
+[26402 rows x 9 columns]
+
+
+[92mCASOS (SELEÇÃO):
+[0mIndex(['data_sintoma', 'semana_sintoma', 'data_notificacao', 'municipio_id',
+       'regional', 'doenca', 'classificacao', 'criterio', 'sorotipo'],
+      dtype='object')
+
+
+[91mQuantidade de registros faltando município: 12![0m
+
+
+[92mCASOS:
+[0m        semana_sintoma data_sintoma  municipio_id  casos
+73601           202501   2025-01-01        420820      1
+57063           202501   2025-01-01        420590      1
+134253          202501   2025-01-01        530010      1
+134147          202501   2025-01-01        421660      1
+127871          202501   2025-01-01        420540      1
+...                ...          ...           ...    ...
+69314           202548   2025-11-23        420420      1
+66265           202548   2025-11-23        420420      1
+89112           202548   2025-11-23        420420      1
+115414          202548   2025-11-24        421740      1
+108882          202548   2025-11-24        420650      1
+
+[26299 rows x 4 columns]
+
+
+[92mMUNICÍPIOS:
+[0m      CD_MUN  ...                                           geometry
+0    4200051  ...  POLYGON ((-51.08425 -27.62958, -51.08440 -27.6...
+1    4200101  ...  POLYGON ((-52.31299 -26.65577, -52.32464 -26.6...
+2    4200200  ...  POLYGON ((-49.83981 -27.52449, -49.83982 -27.5...
+3    4200309  ...  POLYGON ((-49.68847 -27.31815, -49.68822 -27.3...
+4    4200408  ...  POLYGON ((-51.53125 -27.05144, -51.53139 -27.0...
+..       ...  ...                                                ...
+290  4219507  ...  POLYGON ((-52.31260 -26.86934, -52.29499 -26.8...
+291  4219606  ...  POLYGON ((-52.34481 -27.08497, -52.38079 -27.0...
+292  4219705  ...  POLYGON ((-52.52430 -27.07980, -52.52443 -27.0...
+293  4219853  ...  POLYGON ((-51.55557 -27.44458, -51.55557 -27.4...
+294  4220000  ...  POLYGON ((-49.24160 -28.78534, -49.24162 -28.7...
+
+[295 rows x 5 columns]
+
+
+[92mMUNICÍPIOS (DIC.):
+[0m{'420005': 'ABDON BATISTA', '420010': 'ABELARDO LUZ', '420020': 'AGROLÂNDIA', '420030': 'AGRONÔMICA', '420040': 'ÁGUA DOCE', '420050': 'ÁGUAS DE CHAPECÓ', '420055': 'ÁGUAS FRIAS', '420060': 'ÁGUAS MORNAS', '420070': 'ALFREDO WAGNER', '420075': 'ALTO BELA VISTA', '420080': 'ANCHIETA', '420090': 'ANGELINA', '420100': 'ANITA GARIBALDI', '420110': 'ANITÁPOLIS', '420120': 'ANTÔNIO CARLOS', '420125': 'APIÚNA', '420127': 'ARABUTÃ', '420130': 'ARAQUARI', '420140': 'ARARANGUÁ', '420150': 'ARMAZÉM', '420160': 'ARROIO TRINTA', '420165': 'ARVOREDO', '420170': 'ASCURRA', '420180': 'ATALANTA', '420190': 'AURORA', '420195': 'BALNEÁRIO ARROIO DO SILVA', '420200': 'BALNEÁRIO CAMBORIÚ', '420205': 'BALNEÁRIO BARRA DO SUL', '420207': 'BALNEÁRIO GAIVOTA', '420208': 'BANDEIRANTE', '420209': 'BARRA BONITA', '420210': 'BARRA VELHA', '420213': 'BELA VISTA DO TOLDO', '420215': 'BELMONTE', '420220': 'BENEDITO NOVO', '420230': 'BIGUAÇU', '420240': 'BLUMENAU', '420243': 'BOCAINA DO SUL', '420245': 'BOMBINHAS', '420250': 'BOM JARDIM DA SERRA', '420253': 'BOM JESUS', '420257': 'BOM JESUS DO OESTE', '420260': 'BOM RETIRO', '420270': 'BOTUVERÁ', '420280': 'BRAÇO DO NORTE', '420285': 'BRAÇO DO TROMBUDO', '420287': 'BRUNÓPOLIS', '420290': 'BRUSQUE', '420300': 'CAÇADOR', '420310': 'CAIBI', '420315': 'CALMON', '420320': 'CAMBORIÚ', '420325': 'CAPÃO ALTO', '420330': 'CAMPO ALEGRE', '420340': 'CAMPO BELO DO SUL', '420350': 'CAMPO ERÊ', '420360': 'CAMPOS NOVOS', '420370': 'CANELINHA', '420380': 'CANOINHAS', '420390': 'CAPINZAL', '420395': 'CAPIVARI DE BAIXO', '420400': 'CATANDUVAS', '420410': 'CAXAMBU DO SUL', '420415': 'CELSO RAMOS', '420417': 'CERRO NEGRO', '420419': 'CHAPADÃO DO LAGEADO', '420420': 'CHAPECÓ', '420425': 'COCAL DO SUL', '420430': 'CONCÓRDIA', '420435': 'CORDILHEIRA ALTA', '420440': 'CORONEL FREITAS', '420445': 'CORONEL MARTINS', '420450': 'CORUPÁ', '420455': 'CORREIA PINTO', '420460': 'CRICIÚMA', '420470': 'CUNHA PORÃ', '420475': 'CUNHATAÍ', '420480': 'CURITIBANOS', '420490': 'DESCANSO', '420500': 'DIONÍSIO CERQUEIRA', '420510': 'DONA EMMA', '420515': 'DOUTOR PEDRINHO', '420517': 'ENTRE RIOS', '420519': 'ERMO', '420520': 'ERVAL VELHO', '420530': 'FAXINAL DOS GUEDES', '420535': 'FLOR DO SERTÃO', '420540': 'FLORIANÓPOLIS', '420543': 'FORMOSA DO SUL', '420545': 'FORQUILHINHA', '420550': 'FRAIBURGO', '420555': 'FREI ROGÉRIO', '420560': 'GALVÃO', '420570': 'GAROPABA', '420580': 'GARUVA', '420590': 'GASPAR', '420600': 'GOVERNADOR CELSO RAMOS', '420610': 'GRÃO-PARÁ', '420620': 'GRAVATAL', '420630': 'GUABIRUBA', '420640': 'GUARACIABA', '420650': 'GUARAMIRIM', '420660': 'GUARUJÁ DO SUL', '420665': 'GUATAMBÚ', '420670': "HERVAL D'OESTE", '420675': 'IBIAM', '420680': 'IBICARÉ', '420690': 'IBIRAMA', '420700': 'IÇARA', '420710': 'ILHOTA', '420720': 'IMARUÍ', '420730': 'IMBITUBA', '420740': 'IMBUIA', '420750': 'INDAIAL', '420757': 'IOMERÊ', '420760': 'IPIRA', '420765': 'IPORÃ DO OESTE', '420768': 'IPUAÇU', '420770': 'IPUMIRIM', '420775': 'IRACEMINHA', '420780': 'IRANI', '420785': 'IRATI', '420790': 'IRINEÓPOLIS', '420800': 'ITÁ', '420810': 'ITAIÓPOLIS', '420820': 'ITAJAÍ', '420830': 'ITAPEMA', '420840': 'ITAPIRANGA', '420845': 'ITAPOÁ', '420850': 'ITUPORANGA', '420860': 'JABORÁ', '420870': 'JACINTO MACHADO', '420880': 'JAGUARUNA', '420890': 'JARAGUÁ DO SUL', '420895': 'JARDINÓPOLIS', '420900': 'JOAÇABA', '420910': 'JOINVILLE', '420915': 'JOSÉ BOITEUX', '420917': 'JUPIÁ', '420920': 'LACERDÓPOLIS', '420930': 'LAGES', '420940': 'LAGUNA', '420945': 'LAJEADO GRANDE', '420950': 'LAURENTINO', '420960': 'LAURO MÜLLER', '420970': 'LEBON RÉGIS', '420980': 'LEOBERTO LEAL', '420985': 'LINDÓIA DO SUL', '420990': 'LONTRAS', '421000': 'LUIZ ALVES', '421003': 'LUZERNA', '421005': 'MACIEIRA', '421010': 'MAFRA', '421020': 'MAJOR GERCINO', '421030': 'MAJOR VIEIRA', '421040': 'MARACAJÁ', '421050': 'MARAVILHA', '421055': 'MAREMA', '421060': 'MASSARANDUBA', '421070': 'MATOS COSTA', '421080': 'MELEIRO', '421085': 'MIRIM DOCE', '421090': 'MODELO', '421100': 'MONDAÍ', '421105': 'MONTE CARLO', '421110': 'MONTE CASTELO', '421120': 'MORRO DA FUMAÇA', '421125': 'MORRO GRANDE', '421130': 'NAVEGANTES', '421140': 'NOVA ERECHIM', '421145': 'NOVA ITABERABA', '421150': 'NOVA TRENTO', '421160': 'NOVA VENEZA', '421165': 'NOVO HORIZONTE', '421170': 'ORLEANS', '421175': 'OTACÍLIO COSTA', '421180': 'OURO', '421185': 'OURO VERDE', '421187': 'PAIAL', '421189': 'PAINEL', '421190': 'PALHOÇA', '421200': 'PALMA SOLA', '421205': 'PALMEIRA', '421210': 'PALMITOS', '421220': 'PAPANDUVA', '421223': 'PARAÍSO', '421225': 'PASSO DE TORRES', '421227': 'PASSOS MAIA', '421230': 'PAULO LOPES', '421240': 'PEDRAS GRANDES', '421250': 'PENHA', '421260': 'PERITIBA', '421265': 'PESCARIA BRAVA', '421270': 'PETROLÂNDIA', '421280': 'BALNEÁRIO PIÇARRAS', '421290': 'PINHALZINHO', '421300': 'PINHEIRO PRETO', '421310': 'PIRATUBA', '421315': 'PLANALTO ALEGRE', '421320': 'POMERODE', '421330': 'PONTE ALTA', '421335': 'PONTE ALTA DO NORTE', '421340': 'PONTE SERRADA', '421350': 'PORTO BELO', '421360': 'PORTO UNIÃO', '421370': 'POUSO REDONDO', '421380': 'PRAIA GRANDE', '421390': 'PRESIDENTE CASTELLO BRANCO', '421400': 'PRESIDENTE GETÚLIO', '421410': 'PRESIDENTE NEREU', '421415': 'PRINCESA', '421420': 'QUILOMBO', '421430': 'RANCHO QUEIMADO', '421440': 'RIO DAS ANTAS', '421450': 'RIO DO CAMPO', '421460': 'RIO DO OESTE', '421470': 'RIO DOS CEDROS', '421480': 'RIO DO SUL', '421490': 'RIO FORTUNA', '421500': 'RIO NEGRINHO', '421505': 'RIO RUFINO', '421507': 'RIQUEZA', '421510': 'RODEIO', '421520': 'ROMELÂNDIA', '421530': 'SALETE', '421535': 'SALTINHO', '421540': 'SALTO VELOSO', '421545': 'SANGÃO', '421550': 'SANTA CECÍLIA', '421555': 'SANTA HELENA', '421560': 'SANTA ROSA DE LIMA', '421565': 'SANTA ROSA DO SUL', '421567': 'SANTA TEREZINHA', '421568': 'SANTA TEREZINHA DO PROGRESSO', '421569': 'SANTIAGO DO SUL', '421570': 'SANTO AMARO DA IMPERATRIZ', '421575': 'SÃO BERNARDINO', '421580': 'SÃO BENTO DO SUL', '421590': 'SÃO BONIFÁCIO', '421600': 'SÃO CARLOS', '421605': 'SÃO CRISTÓVÃO DO SUL', '421610': 'SÃO DOMINGOS', '421620': 'SÃO FRANCISCO DO SUL', '421625': 'SÃO JOÃO DO OESTE', '421630': 'SÃO JOÃO BATISTA', '421635': 'SÃO JOÃO DO ITAPERIÚ', '421640': 'SÃO JOÃO DO SUL', '421650': 'SÃO JOAQUIM', '421660': 'SÃO JOSÉ', '421670': 'SÃO JOSÉ DO CEDRO', '421680': 'SÃO JOSÉ DO CERRITO', '421690': 'SÃO LOURENÇO DO OESTE', '421700': 'SÃO LUDGERO', '421710': 'SÃO MARTINHO', '421715': 'SÃO MIGUEL DA BOA VISTA', '421720': 'SÃO MIGUEL DO OESTE', '421725': 'SÃO PEDRO DE ALCÂNTARA', '421730': 'SAUDADES', '421740': 'SCHROEDER', '421750': 'SEARA', '421755': 'SERRA ALTA', '421760': 'SIDERÓPOLIS', '421770': 'SOMBRIO', '421775': 'SUL BRASIL', '421780': 'TAIÓ', '421790': 'TANGARÁ', '421795': 'TIGRINHOS', '421800': 'TIJUCAS', '421810': 'TIMBÉ DO SUL', '421820': 'TIMBÓ', '421825': 'TIMBÓ GRANDE', '421830': 'TRÊS BARRAS', '421835': 'TREVISO', '421840': 'TREZE DE MAIO', '421850': 'TREZE TÍLIAS', '421860': 'TROMBUDO CENTRAL', '421870': 'TUBARÃO', '421875': 'TUNÁPOLIS', '421880': 'TURVO', '421885': 'UNIÃO DO OESTE', '421890': 'URUBICI', '421895': 'URUPEMA', '421900': 'URUSSANGA', '421910': 'VARGEÃO', '421915': 'VARGEM', '421917': 'VARGEM BONITA', '421920': 'VIDAL RAMOS', '421930': 'VIDEIRA', '421935': 'VITOR MEIRELES', '421940': 'WITMARSUM', '421950': 'XANXERÊ', '421960': 'XAVANTINA', '421970': 'XAXIM', '421985': 'ZORTÉA', '422000': 'BALNEÁRIO RINCÃO'}
+
+/home/meteoro/scripts/matheus/teste/operacional_dengue/preprocess_saude.py:137: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  casos_semanal_pivot.reset_index(inplace = True)
+
+[92mCASOS:
+[0m        semana_sintoma data_sintoma municipio_id  casos   municipio
+73601           202501   2025-01-01       420820      1      ITAJAÍ
+59284           202501   2025-01-01       421190      1     PALHOÇA
+89581           202501   2025-01-01       420420      1     CHAPECÓ
+30206           202501   2025-01-01       420820      1      ITAJAÍ
+30152           202501   2025-01-01       420820      1      ITAJAÍ
+...                ...          ...          ...    ...         ...
+115633          202548   2025-11-23       420820      1      ITAJAÍ
+100738          202548   2025-11-23       420910      1   JOINVILLE
+128569          202548   2025-11-23       420910      1   JOINVILLE
+115414          202548   2025-11-24       421740      1   SCHROEDER
+108882          202548   2025-11-24       420650      1  GUARAMIRIM
+
+[26299 rows x 5 columns]
+
+<class 'pandas.core.frame.DataFrame'>
+Index: 26299 entries, 73601 to 108882
+Data columns (total 5 columns):
+ #   Column          Non-Null Count  Dtype         
+---  ------          --------------  -----         
+ 0   semana_sintoma  26299 non-null  int64         
+ 1   data_sintoma    26299 non-null  datetime64[ns]
+ 2   municipio_id    26299 non-null  object        
+ 3   casos           26299 non-null  int64         
+ 4   municipio       25741 non-null  object        
+dtypes: datetime64[ns](1), int64(2), object(2)
+memory usage: 1.2+ MB
+
+[92mCASOS (info):
+[0mNone
+
+
+[92mCASOS:
+[0mIndex(['semana_sintoma', 'data_sintoma', 'municipio_id', 'casos', 'municipio'], dtype='object')
+
+
+[92mANOS PRESENTES NO CONJUNTO DE DADOS:
+[0m[2025]
+
+
+[92mCASOS:
+[0mmunicipio     Semana  ABELARDO LUZ  ...  ÁGUAS FRIAS  ÁGUAS MORNAS
+0         2024-12-29             0  ...            0             0
+1         2025-01-05             0  ...            0             0
+2         2025-01-12             0  ...            0             0
+3         2025-01-19             0  ...            0             0
+4         2025-01-26             0  ...            0             0
+5         2025-02-02             0  ...            0             0
+6         2025-02-09             0  ...            0             0
+7         2025-02-16             0  ...            0             0
+8         2025-02-23             1  ...            0             0
+9         2025-03-02             0  ...            0             0
+10        2025-03-09             2  ...            0             0
+11        2025-03-16             2  ...            0             0
+12        2025-03-23             0  ...            0             0
+13        2025-03-30             0  ...            0             0
+14        2025-04-06             1  ...            0             0
+15        2025-04-13             0  ...            0             1
+16        2025-04-20             1  ...            1             0
+17        2025-04-27             1  ...            0             0
+18        2025-05-04             1  ...            1             0
+19        2025-05-11             1  ...            0             0
+20        2025-05-18             0  ...            0             1
+21        2025-05-25             0  ...            0             0
+22        2025-06-01             0  ...            0             0
+23        2025-06-08             0  ...            0             0
+24        2025-06-15             0  ...            0             0
+25        2025-06-22             0  ...            0             0
+26        2025-06-29             0  ...            0             0
+27        2025-07-06             0  ...            0             0
+28        2025-07-13             0  ...            0             0
+29        2025-07-20             0  ...            0             0
+30        2025-07-27             0  ...            0             0
+31        2025-08-03             0  ...            0             0
+32        2025-08-10             1  ...            0             0
+33        2025-08-17             0  ...            0             1
+34        2025-08-24             0  ...            0             0
+35        2025-08-31             0  ...            0             0
+36        2025-09-07             0  ...            0             0
+37        2025-09-14             0  ...            0             0
+38        2025-09-21             0  ...            0             0
+39        2025-09-28             0  ...            0             0
+40        2025-10-05             0  ...            0             0
+41        2025-10-12             1  ...            0             0
+42        2025-10-19             0  ...            0             0
+43        2025-10-26             0  ...            0             0
+44        2025-11-02             1  ...            0             0
+45        2025-11-09             1  ...            0             0
+46        2025-11-16             0  ...            0             0
+47        2025-11-23             0  ...            0             0
+
+[48 rows x 235 columns]
+
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 48 entries, 0 to 47
+Columns: 235 entries, Semana to ÁGUAS MORNAS
+dtypes: datetime64[ns](1), int64(234)
+memory usage: 88.3 KB
+
+[92mCASOS (info):
+[0mNone
+
+
+[92mCASOS:
+[0mIndex(['Semana', 'ABELARDO LUZ', 'AGROLÂNDIA', 'AGRONÔMICA', 'ALFREDO WAGNER',
+       'ANCHIETA', 'ANITA GARIBALDI', 'ANTÔNIO CARLOS', 'APIÚNA', 'ARABUTÃ',
+       ...
+       'VIDAL RAMOS', 'VIDEIRA', 'VITOR MEIRELES', 'XANXERÊ', 'XAXIM',
+       'ZORTÉA', 'ÁGUA DOCE', 'ÁGUAS DE CHAPECÓ', 'ÁGUAS FRIAS',
+       'ÁGUAS MORNAS'],
+      dtype='object', name='municipio', length=235)
+
+
+[92mSALVANDO CASOS (semanal):
+[0m/home/meteoro/scripts/matheus/teste/operacional_dengue/dados_operacao/municipio     Semana  ABELARDO LUZ  ...  ÁGUAS FRIAS  ÁGUAS MORNAS
+0         2024-12-29             0  ...            0             0
+1         2025-01-05             0  ...            0             0
+2         2025-01-12             0  ...            0             0
+3         2025-01-19             0  ...            0             0
+4         2025-01-26             0  ...            0             0
+5         2025-02-02             0  ...            0             0
+6         2025-02-09             0  ...            0             0
+7         2025-02-16             0  ...            0             0
+8         2025-02-23             1  ...            0             0
+9         2025-03-02             0  ...            0             0
+10        2025-03-09             2  ...            0             0
+11        2025-03-16             2  ...            0             0
+12        2025-03-23             0  ...            0             0
+13        2025-03-30             0  ...            0             0
+14        2025-04-06             1  ...            0             0
+15        2025-04-13             0  ...            0             1
+16        2025-04-20             1  ...            1             0
+17        2025-04-27             1  ...            0             0
+18        2025-05-04             1  ...            1             0
+19        2025-05-11             1  ...            0             0
+20        2025-05-18             0  ...            0             1
+21        2025-05-25             0  ...            0             0
+22        2025-06-01             0  ...            0             0
+23        2025-06-08             0  ...            0             0
+24        2025-06-15             0  ...            0             0
+25        2025-06-22             0  ...            0             0
+26        2025-06-29             0  ...            0             0
+27        2025-07-06             0  ...            0             0
+28        2025-07-13             0  ...            0             0
+29        2025-07-20             0  ...            0             0
+30        2025-07-27             0  ...            0             0
+31        2025-08-03             0  ...            0             0
+32        2025-08-10             1  ...            0             0
+33        2025-08-17             0  ...            0             1
+34        2025-08-24             0  ...            0             0
+35        2025-08-31             0  ...            0             0
+36        2025-09-07             0  ...            0             0
+37        2025-09-14             0  ...            0             0
+38        2025-09-21             0  ...            0             0
+39        2025-09-28             0  ...            0             0
+40        2025-10-05             0  ...            0             0
+41        2025-10-12             1  ...            0             0
+42        2025-10-19             0  ...            0             0
+43        2025-10-26             0  ...            0             0
+44        2025-11-02             1  ...            0             0
+45        2025-11-09             1  ...            0             0
+46        2025-11-16             0  ...            0             0
+47        2025-11-23             0  ...            0             0
+
+[48 rows x 235 columns]
+
+/home/meteoro/scripts/matheus/teste/operacional_dengue/une_casos_tabnet.py:429: SyntaxWarning: invalid escape sequence '\d'
+  """
+
+[92mserie_casos:
+[0m         Semana  ABDON BATISTA  ...  TREZE DE MAIO  ANITA GARIBALDI
+0    2014-01-05              0  ...              0                0
+1    2014-01-12              0  ...              0                0
+2    2014-01-19              0  ...              0                0
+3    2014-01-26              0  ...              0                0
+4    2014-02-02              0  ...              0                0
+..          ...            ...  ...            ...              ...
+629  2025-10-26              0  ...              0                1
+630  2025-11-02              0  ...              0                0
+631  2025-11-09              0  ...              0                0
+632  2025-11-16              0  ...              0                0
+633  2025-11-23              0  ...              0                0
+
+[634 rows x 272 columns]
+
+
+[92mcasos_atuais (TabNetSinanDiveSC):
+[0m        Semana  ABELARDO LUZ  ...  ÁGUAS FRIAS  ÁGUAS MORNAS
+0   2024-12-29             0  ...            0             0
+1   2025-01-05             0  ...            0             0
+2   2025-01-12             0  ...            0             0
+3   2025-01-19             0  ...            0             0
+4   2025-01-26             0  ...            0             0
+5   2025-02-02             0  ...            0             0
+6   2025-02-09             0  ...            0             0
+7   2025-02-16             0  ...            0             0
+8   2025-02-23             1  ...            0             0
+9   2025-03-02             0  ...            0             0
+10  2025-03-09             2  ...            0             0
+11  2025-03-16             2  ...            0             0
+12  2025-03-23             0  ...            0             0
+13  2025-03-30             0  ...            0             0
+14  2025-04-06             1  ...            0             0
+15  2025-04-13             0  ...            0             1
+16  2025-04-20             1  ...            1             0
+17  2025-04-27             1  ...            0             0
+18  2025-05-04             1  ...            1             0
+19  2025-05-11             1  ...            0             0
+20  2025-05-18             0  ...            0             1
+21  2025-05-25             0  ...            0             0
+22  2025-06-01             0  ...            0             0
+23  2025-06-08             0  ...            0             0
+24  2025-06-15             0  ...            0             0
+25  2025-06-22             0  ...            0             0
+26  2025-06-29             0  ...            0             0
+27  2025-07-06             0  ...            0             0
+28  2025-07-13             0  ...            0             0
+29  2025-07-20             0  ...            0             0
+30  2025-07-27             0  ...            0             0
+31  2025-08-03             0  ...            0             0
+32  2025-08-10             1  ...            0             0
+33  2025-08-17             0  ...            0             1
+34  2025-08-24             0  ...            0             0
+35  2025-08-31             0  ...            0             0
+36  2025-09-07             0  ...            0             0
+37  2025-09-14             0  ...            0             0
+38  2025-09-21             0  ...            0             0
+39  2025-09-28             0  ...            0             0
+40  2025-10-05             0  ...            0             0
+41  2025-10-12             1  ...            0             0
+42  2025-10-19             0  ...            0             0
+43  2025-10-26             0  ...            0             0
+44  2025-11-02             1  ...            0             0
+45  2025-11-09             1  ...            0             0
+46  2025-11-16             0  ...            0             0
+47  2025-11-23             0  ...            0             0
+
+[48 rows x 235 columns]
+
+
+[92mcasos_atuais (DiveSC):
+[0m        Semana  ABELARDO LUZ  ...  ÁGUAS FRIAS  ÁGUAS MORNAS
+0   2024-12-29             0  ...            0             0
+1   2025-01-05             0  ...            0             0
+2   2025-01-12             0  ...            0             0
+3   2025-01-19             0  ...            0             0
+4   2025-01-26             0  ...            0             0
+5   2025-02-02             0  ...            0             0
+6   2025-02-09             0  ...            0             0
+7   2025-02-16             0  ...            0             0
+8   2025-02-23             1  ...            0             0
+9   2025-03-02             0  ...            0             0
+10  2025-03-09             2  ...            0             0
+11  2025-03-16             2  ...            0             0
+12  2025-03-23             0  ...            0             0
+13  2025-03-30             0  ...            0             0
+14  2025-04-06             1  ...            0             0
+15  2025-04-13             0  ...            0             1
+16  2025-04-20             1  ...            1             0
+17  2025-04-27             1  ...            0             0
+18  2025-05-04             1  ...            1             0
+19  2025-05-11             1  ...            0             0
+20  2025-05-18             0  ...            0             1
+21  2025-05-25             0  ...            0             0
+22  2025-06-01             0  ...            0             0
+23  2025-06-08             0  ...            0             0
+24  2025-06-15             0  ...            0             0
+25  2025-06-22             0  ...            0             0
+26  2025-06-29             0  ...            0             0
+27  2025-07-06             0  ...            0             0
+28  2025-07-13             0  ...            0             0
+29  2025-07-20             0  ...            0             0
+30  2025-07-27             0  ...            0             0
+31  2025-08-03             0  ...            0             0
+32  2025-08-10             1  ...            0             0
+33  2025-08-17             0  ...            0             1
+34  2025-08-24             0  ...            0             0
+35  2025-08-31             0  ...            0             0
+36  2025-09-07             0  ...            0             0
+37  2025-09-14             0  ...            0             0
+38  2025-09-21             0  ...            0             0
+39  2025-09-28             0  ...            0             0
+40  2025-10-05             0  ...            0             0
+41  2025-10-12             1  ...            0             0
+42  2025-10-19             0  ...            0             0
+43  2025-10-26             0  ...            0             0
+44  2025-11-02             1  ...            0             0
+45  2025-11-09             1  ...            0             0
+46  2025-11-16             0  ...            0             0
+47  2025-11-23             0  ...            0             0
+
+[48 rows x 235 columns]
+
+2025-11-24
+2025-11-24 19:04:49.109553
+2025-11-24
+[92m
+ INVESTIGAÇÃO DENGUE A PARTIR DE 2014
+Frequência por Mun infec SC e Sem.Epid.Sintomas[91m
+Classificacao Nova: [92mDengue com complicações, Febre Hemorrágica do Dengue, Síndrome do Choque do Dengue, Dengue, Dengue com sinais de alarme, Dengre grave[91m
+Conf.Desc pos2010: [92mLaboratórial, Clínico-epidemiológico[91m
+Período: [92m2025[35m
+
+    A partir de 2020 o estado do Espírito Santo passou a utilizar o sistema e-SUS Vigilância em Saúde. Portanto, para os casos de Arboviroses urbanas do Espírito Santo foram considerados apenas os dados disponibilizados pelo Sinan online (dengue e chikungunya) e Sinan Net (zika).
+    Períodos Disponíveis ou período - Correspondem aos anos de notificação dos casos e semana epidemiológica, em cada período pode apresentar notificações com data de notificação do ano anterior (semana epidemiológica 52 ou 53) e posterior (semana epidemiológica 01).[91m
+    Para cálculo da incidência recomenda-se utilizar locais de residência.
+    Dados de 2014 atualizados em 13/07/2015.
+    Dados de 2015 atualizados em 27/09/2016.
+    Dados de 2016 atualizados em 06/07/2017.
+    Dados de 2017 atualizados em 18/07/2018.
+    Dados de 2018 atualizados em 01/10/2019.
+    Dados de 2019 atualizados em 10/07/2020.
+    Dados de 2020 atualizados em 23/07/2021.
+    Dados de 2021 atualizados em 12/07/2022.
+    Dados de 2022 atualizados em 18/07/2023.
+    Dados de 2023 atualizados em 04/03/2024 à 01 hora, sujeitos à revisão.
+    Dados de 2024 atualizados em 11/03/2024 às 08 horas, sujeitos à revisão.
+<<<<<<< HEAD
+[92m
+=======
+>>>>>>> 72ec65a... Iniciando com dados brutos TabNet/DiveSC.
+    * Dados disponibilizados no TABNET em março de 2024. 
+
+Legenda:
+-	- Dado numérico igual a 0 não resultante de arredondamento.
+0; 0,0	- Dado numérico igual a 0 resultante de arredondamento de um dado originalmente positivo.[0m
+
+
+ 
+ [92mSÉRIE TEMPORAL TOTAL[0m
+         Semana  ABDON BATISTA  ...  TREZE DE MAIO  ANITA GARIBALDI
+0    2014-01-05              0  ...              0                0
+1    2014-01-12              0  ...              0                0
+2    2014-01-19              0  ...              0                0
+3    2014-01-26              0  ...              0                0
+4    2014-02-02              0  ...              0                0
+..          ...            ...  ...            ...              ...
+630  2025-10-26              0  ...              0                1
+631  2025-11-02              0  ...              0                0
+632  2025-11-09              0  ...              0                0
+633  2025-11-16              0  ...              0                0
+634  2025-11-23              0  ...              0                0
+
+[635 rows x 272 columns]
+
+
+ 
+ [92mSÉRIE TEMPORAL TOTAL (NULOS)[0m
+Semana             0
+ABDON BATISTA      0
+ABELARDO LUZ       0
+ALFREDO WAGNER     0
+ALTO BELA VISTA    0
+                  ..
+MACIEIRA           0
+PESCARIA BRAVA     0
+SANTA CECÍLIA      0
+TREZE DE MAIO      0
+ANITA GARIBALDI    0
+Length: 272, dtype: int64
+
+
+ 
+ [92mCASOS DE DENGUE EM SANTA CATARINA - TEMPORAL [0m 
+
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 172085 entries, 0 to 172084
+Data columns (total 3 columns):
+ #   Column     Non-Null Count   Dtype 
+---  ------     --------------   ----- 
+ 0   Semana     172085 non-null  object
+ 1   Município  172085 non-null  object
+ 2   Casos      172085 non-null  int64 
+dtypes: int64(1), object(2)
+memory usage: 3.9+ MB
+None
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Semana       object
+Município    object
+Casos         int64
+dtype: object
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            Semana        Município  Casos
+0       2014-01-05    ABDON BATISTA      0
+1       2014-01-12    ABDON BATISTA      0
+2       2014-01-19    ABDON BATISTA      0
+3       2014-01-26    ABDON BATISTA      0
+4       2014-02-02    ABDON BATISTA      0
+...            ...              ...    ...
+172080  2025-10-26  ANITA GARIBALDI      1
+172081  2025-11-02  ANITA GARIBALDI      0
+172082  2025-11-09  ANITA GARIBALDI      0
+172083  2025-11-16  ANITA GARIBALDI      0
+172084  2025-11-23  ANITA GARIBALDI      0
+
+[172085 rows x 3 columns]
+================================================================================
+
+ 
+ [92mCASOS DE DENGUE EM SANTA CATARINA - TABELA DINÂMICA / SÉRIE HISTÓRICA [0m 
+
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 635 entries, 0 to 634
+Columns: 272 entries, Semana to ANITA GARIBALDI
+dtypes: int64(271), object(1)
+memory usage: 1.3+ MB
+None
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Semana             object
+ABDON BATISTA       int64
+ABELARDO LUZ        int64
+ALFREDO WAGNER      int64
+ALTO BELA VISTA     int64
+                    ...  
+MACIEIRA            int64
+PESCARIA BRAVA      int64
+SANTA CECÍLIA       int64
+TREZE DE MAIO       int64
+ANITA GARIBALDI     int64
+Length: 272, dtype: object
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         Semana  ABDON BATISTA  ...  TREZE DE MAIO  ANITA GARIBALDI
+0    2014-01-05              0  ...              0                0
+1    2014-01-12              0  ...              0                0
+2    2014-01-19              0  ...              0                0
+3    2014-01-26              0  ...              0                0
+4    2014-02-02              0  ...              0                0
+..          ...            ...  ...            ...              ...
+630  2025-10-26              0  ...              0                1
+631  2025-11-02              0  ...              0                0
+632  2025-11-09              0  ...              0                0
+633  2025-11-16              0  ...              0                0
+634  2025-11-23              0  ...              0                0
+
+[635 rows x 272 columns]
+================================================================================
+
+ 
+ [92m CASOS DE DENGUE EM SANTA CATARINA - 1º REGISTRO NA SÉRIE HISTÓRICA  [0m 
+
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 264 entries, 0 to 263
+Data columns (total 5 columns):
+ #   Column     Non-Null Count  Dtype  
+---  ------     --------------  -----  
+ 0   Semana     264 non-null    object 
+ 1   Município  264 non-null    object 
+ 2   Casos      264 non-null    int64  
+ 3   latitude   262 non-null    float64
+ 4   longitude  262 non-null    float64
+dtypes: float64(2), int64(1), object(2)
+memory usage: 10.4+ KB
+None
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Semana        object
+Município     object
+Casos          int64
+latitude     float64
+longitude    float64
+dtype: object
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         Semana        Município  Casos   latitude  longitude
+0    2024-04-07    ABDON BATISTA      1 -27.583825 -51.056263
+1    2020-05-10     ABELARDO LUZ      2 -26.562427 -52.255719
+2    2023-05-14   ALFREDO WAGNER      1 -27.705947 -49.330751
+3    2022-02-20  ALTO BELA VISTA      1 -27.421535 -51.925948
+4    2020-03-08         ANCHIETA      1 -26.532948 -53.333109
+..          ...              ...    ...        ...        ...
+259  2025-03-30            TURVO      1 -28.903082 -49.703422
+260  2025-03-30           VARGEM      1 -27.466877 -50.950464
+261  2025-03-30   VITOR MEIRELES      1 -26.826434 -49.845202
+262  2025-09-14    SANTA CECÍLIA      1 -26.926038 -50.446240
+263  2025-10-26  ANITA GARIBALDI      1 -27.730322 -51.079558
+
+[264 rows x 5 columns]
+================================================================================
+
+ 
+ [92m CASOS DE DENGUE EM SANTA CATARINA - 1º REGISTRO NA SÉRIE HISTÓRICA [0m 
+
+<class 'geopandas.geodataframe.GeoDataFrame'>
+RangeIndex: 295 entries, 0 to 294
+Data columns (total 5 columns):
+ #   Column     Non-Null Count  Dtype   
+---  ------     --------------  -----   
+ 0   Município  295 non-null    object  
+ 1   geometry   295 non-null    geometry
+ 2   centroide  295 non-null    geometry
+ 3   latitude   295 non-null    float64 
+ 4   longitude  295 non-null    float64 
+dtypes: float64(2), geometry(2), object(1)
+memory usage: 11.7+ KB
+None
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Município      object
+geometry     geometry
+centroide    geometry
+latitude      float64
+longitude     float64
+dtype: object
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            Município  ...  longitude
+0       ABDON BATISTA  ... -51.056263
+1        ABELARDO LUZ  ... -52.255719
+2          AGROLÂNDIA  ... -49.824780
+3          AGRONÔMICA  ... -49.720747
+4           ÁGUA DOCE  ... -51.612406
+..                ...  ...        ...
+290           XANXERÊ  ... -52.409754
+291         XAVANTINA  ... -52.321890
+292             XAXIM  ... -52.529105
+293            ZORTÉA  ... -51.535615
+294  BALNEÁRIO RINCÃO  ... -49.254237
+
+[295 rows x 5 columns]
+================================================================================
+[92mCoordinate Reference System (CRS)
+IBGE.shp: [0mEPSG:4674
+[91m(Instituto Brasileiro de Geografia e Estatística)[0m
+================================================================================
+/home/meteoro/miniconda3/envs/dados_nc/lib/python3.12/site-packages/numpy/core/getlimits.py:549: UserWarning: The value of the smallest subnormal for <class 'numpy.float32'> type is zero.
+  setattr(self, word, getattr(machar, word).flat[0])
+/home/meteoro/miniconda3/envs/dados_nc/lib/python3.12/site-packages/numpy/core/getlimits.py:89: UserWarning: The value of the smallest subnormal for <class 'numpy.float32'> type is zero.
+  return self._float_to_str(self.smallest_subnormal)
+/home/meteoro/scripts/matheus/teste/operacional_dengue/extrai_clima.py:168: UserWarning: Geometry is in a geographic CRS. Results from 'centroid' are likely incorrect. Use 'GeoSeries.to_crs()' to re-project geometries to a projected CRS before this operation.
+
+  shapefile["centroide"] = shapefile["geometry"].centroid
+
+[92m2025, 2025-11-23 19:04:51.605700, 2025, 2024
+[0m
+
+[92mtmin.variables["tmin"][:]
+[0m<xarray.Variable (time: 327, lat: 1381, lon: 1001)> Size: 4GB
+[452038587 values with dtype=float64]
+
+
+[92mtmin.variables["time"][:]
+[0m<xarray.Variable (time: 327, lat: 1381, lon: 1001)> Size: 4GB
+[452038587 values with dtype=float64]
+
+
+[92mtmin.variables["nobs"][:]
+[0m<xarray.Variable (time: 327, lat: 1381, lon: 1001)> Size: 4GB
+[452038587 values with dtype=float64]
+
+
+[92mtmin
+[0m<xarray.Dataset> Size: 7GB
+Dimensions:  (time: 327, lon: 1001, lat: 1381)
+Coordinates:
+  * time     (time) datetime64[ns] 3kB 2025-01-01 2025-01-02 ... 2025-11-23
+  * lon      (lon) float64 8kB -83.0 -82.95 -82.9 -82.85 ... -33.1 -33.05 -33.0
+  * lat      (lat) float64 11kB -56.0 -55.95 -55.9 -55.85 ... 12.9 12.95 13.0
+Data variables:
+    tmin     (time, lat, lon) float64 4GB ...
+    nobs     (time, lat, lon) float64 4GB ...
+Attributes:
+    CDI:          Climate Data Interface version 2.0.4 (https://mpimet.mpg.de...
+    Conventions:  CF-1.6
+    history:      Mon Nov 24 03:06:11 2025: cdo mergetime 01/SAMeT_CPTEC_TMIN...
+    CDO:          Climate Data Operators version 2.0.4 (https://mpimet.mpg.de...
+
+
+[92mtmin
+[0m<xarray.Dataset> Size: 7GB
+Dimensions:  (time: 327, lon: 1001, lat: 1381)
+Coordinates:
+  * time     (time) datetime64[ns] 3kB 2025-01-01 2025-01-02 ... 2025-11-23
+  * lon      (lon) float64 8kB -83.0 -82.95 -82.9 -82.85 ... -33.1 -33.05 -33.0
+  * lat      (lat) float64 11kB -56.0 -55.95 -55.9 -55.85 ... 12.9 12.95 13.0
+Data variables:
+    tmin     (time, lat, lon) float64 4GB ...
+    nobs     (time, lat, lon) float64 4GB ...
+Attributes:
+    CDI:          Climate Data Interface version 2.0.4 (https://mpimet.mpg.de...
+    Conventions:  CF-1.6
+    history:      Mon Nov 24 03:06:11 2025: cdo mergetime 01/SAMeT_CPTEC_TMIN...
+    CDO:          Climate Data Operators version 2.0.4 (https://mpimet.mpg.de...
+
+
+[92mserie_tmin
+[0m            Data  BALNEÁRIO CAMBORIÚ  BOMBINHAS  PORTO BELO
+0     2000-01-01           20.699972  20.250231   20.132607
+1     2000-01-02           19.665144  19.495092   19.257845
+2     2000-01-03           17.001421  17.508383   16.978849
+3     2000-01-04           19.663364  18.672174   18.776052
+4     2000-01-05           21.257969  21.070021   20.848860
+...          ...                 ...        ...         ...
+9118  2024-12-18           19.512001  18.910229   18.598690
+9119  2024-12-19           19.919317  19.499537   19.217718
+9120  2024-12-20           21.815290  21.405237   21.102549
+9121  2024-12-21           21.550596  21.118656   20.815825
+9122  2024-12-22           21.508970  21.010044   20.677139
+
+[9123 rows x 4 columns]
+
+
+[92mserie_tmin_se
+[0m          Semana  ABDON BATISTA  ...     ZORTÉA  BALNEÁRIO RINCÃO
+0     2000-01-02      15.287972  ...  15.962094         18.476916
+1     2000-01-09      18.646281  ...  18.864906         21.226584
+2     2000-01-16      18.261652  ...  18.757634         20.085676
+3     2000-01-23      15.943129  ...  16.423533         18.478626
+4     2000-01-30      16.598627  ...  17.242286         18.887034
+...          ...            ...  ...        ...               ...
+1299  2024-11-24      17.451606  ...  18.246837         20.500022
+1300  2024-12-01      17.424114  ...  17.624319         18.785271
+1301  2024-12-08      15.720061  ...  16.482010         17.978996
+1302  2024-12-15      15.994020  ...  16.492357         19.710955
+1303  2024-12-22      18.427650  ...  18.759138         18.032478
+
+[1304 rows x 296 columns]
+
+
+[92mserie_tmin_se
+[0m          Semana  BALNEÁRIO CAMBORIÚ  BOMBINHAS  PORTO BELO
+0     2000-01-02           19.889465  19.684949   19.466002
+1     2000-01-09           21.878692  21.811293   21.547604
+2     2000-01-16           20.980207  21.023731   20.711785
+3     2000-01-23           19.931761  20.103031   19.732616
+4     2000-01-30           20.693173  20.572209   20.331810
+...          ...                 ...        ...         ...
+1299  2024-11-24           20.212226  19.794639   19.551998
+1300  2024-12-01           20.608670  20.133797   19.848017
+1301  2024-12-08           18.617686  18.151443   17.933668
+1302  2024-12-15           20.242091  19.772854   19.486294
+1303  2024-12-22           21.508970  21.010044   20.677139
+
+[1304 rows x 4 columns]
+
+
+[92mmunicipios
+[0m      CD_MUN  ...                                           geometry
+0    4200051  ...  POLYGON ((-51.08425 -27.62958, -51.08440 -27.6...
+1    4200101  ...  POLYGON ((-52.31299 -26.65577, -52.32464 -26.6...
+2    4200200  ...  POLYGON ((-49.83981 -27.52449, -49.83982 -27.5...
+3    4200309  ...  POLYGON ((-49.68847 -27.31815, -49.68822 -27.3...
+4    4200408  ...  POLYGON ((-51.53125 -27.05144, -51.53139 -27.0...
+..       ...  ...                                                ...
+290  4219507  ...  POLYGON ((-52.31260 -26.86934, -52.29499 -26.8...
+291  4219606  ...  POLYGON ((-52.34481 -27.08497, -52.38079 -27.0...
+292  4219705  ...  POLYGON ((-52.52430 -27.07980, -52.52443 -27.0...
+293  4219853  ...  POLYGON ((-51.55557 -27.44458, -51.55557 -27.4...
+294  4220000  ...  POLYGON ((-49.24160 -28.78534, -49.24162 -28.7...
+
+[295 rows x 5 columns]
+
+
+[92m---prec---
+
+[0mABDON BATISTA: Finalizado!
+
+
+[91m1 de 295.[0m
+
+
+[92m---prec---
+
+[0mABELARDO LUZ: Finalizado!
+
+
+[91m2 de 295.[0m
+
+
+[92m---prec---
+
+[0mAGROLÂNDIA: Finalizado!
+
+
+[91m3 de 295.[0m
+
+
+[92m---prec---
+
+[0mAGRONÔMICA: Finalizado!
+
+
+[91m4 de 295.[0m
+
+
+[92m---prec---
+
+[0mÁGUA DOCE: Finalizado!
+
+
+[91m5 de 295.[0m
+
+
+[92m---prec---
+
+[0mÁGUAS DE CHAPECÓ: Finalizado!
+
+
+[91m6 de 295.[0m
+
+
+[92m---prec---
+
+[0mÁGUAS FRIAS: Finalizado!
+
+
+[91m7 de 295.[0m
+
+
+[92m---prec---
+
+[0mÁGUAS MORNAS: Finalizado!
+
+
+[91m8 de 295.[0m
+
+
+[92m---prec---
+
+[0mALFREDO WAGNER: Finalizado!
+
+
+[91m9 de 295.[0m
+
+
+[92m---prec---
+
+[0mALTO BELA VISTA: Finalizado!
+
+
+[91m10 de 295.[0m
+
+
+[92m---prec---
+
+[0mANCHIETA: Finalizado!
+
+
+[91m11 de 295.[0m
+
+
+[92m---prec---
+
+[0mANGELINA: Finalizado!
+
+
+[91m12 de 295.[0m
+
+
+[92m---prec---
+
+[0mANITA GARIBALDI: Finalizado!
+
+
+[91m13 de 295.[0m
+
+
+[92m---prec---
+
+[0mANITÁPOLIS: Finalizado!
+
+
+[91m14 de 295.[0m
+
+
+[92m---prec---
+
+[0mANTÔNIO CARLOS: Finalizado!
+
+
+[91m15 de 295.[0m
+
+
+[92m---prec---
+
+[0mAPIÚNA: Finalizado!
+
+
+[91m16 de 295.[0m
+
+
+[92m---prec---
+
+[0mARABUTÃ: Finalizado!
+
+
+[91m17 de 295.[0m
+
+
+[92m---prec---
+
+[0mARAQUARI: Finalizado!
+
+
+[91m18 de 295.[0m
+
+
+[92m---prec---
+
+[0mARARANGUÁ: Finalizado!
+
+
+[91m19 de 295.[0m
+
+
+[92m---prec---
+
+[0mARMAZÉM: Finalizado!
+
+
+[91m20 de 295.[0m
+
+
+[92m---prec---
+
+[0mARROIO TRINTA: Finalizado!
+
+
+[91m21 de 295.[0m
+
+
+[92m---prec---
+
+[0mARVOREDO: Finalizado!
+
+
+[91m22 de 295.[0m
+
+
+[92m---prec---
+
+[0mASCURRA: Finalizado!
+
+
+[91m23 de 295.[0m
+
+
+[92m---prec---
+
+[0mATALANTA: Finalizado!
+
+
+[91m24 de 295.[0m
+
+
+[92m---prec---
+
+[0mAURORA: Finalizado!
+
+
+[91m25 de 295.[0m
+
+
+[92m---prec---
+
+[0mBALNEÁRIO ARROIO DO SILVA: Finalizado!
+
+
+[91m26 de 295.[0m
+
+
+[92m---prec---
+
+[0mBALNEÁRIO CAMBORIÚ: Finalizado!
+
+
+[91m27 de 295.[0m
+
+
+[92m---prec---
+
+[0mBALNEÁRIO BARRA DO SUL: Finalizado!
+
+
+[91m28 de 295.[0m
+
+
+[92m---prec---
+
+[0mBALNEÁRIO GAIVOTA: Finalizado!
+
+
+[91m29 de 295.[0m
+
+
+[92m---prec---
+
+[0mBANDEIRANTE: Finalizado!
+
+
+[91m30 de 295.[0m
+
+
+[92m---prec---
+
+[0mBARRA BONITA: Finalizado!
+
+
+[91m31 de 295.[0m
+
+
+[92m---prec---
+
+[0mBARRA VELHA: Finalizado!
+
+
+[91m32 de 295.[0m
+
+
+[92m---prec---
+
+[0mBELA VISTA DO TOLDO: Finalizado!
+
+
+[91m33 de 295.[0m
+
+
+[92m---prec---
+
+[0mBELMONTE: Finalizado!
+
+
+[91m34 de 295.[0m
+
+
+[92m---prec---
+
+[0mBENEDITO NOVO: Finalizado!
+
+
+[91m35 de 295.[0m
+
+
+[92m---prec---
+
+[0mBIGUAÇU: Finalizado!
+
+
+[91m36 de 295.[0m
+
+
+[92m---prec---
+
+[0mBLUMENAU: Finalizado!
+
+
+[91m37 de 295.[0m
+
+
+[92m---prec---
+
+[0mBOCAINA DO SUL: Finalizado!
+
+
+[91m38 de 295.[0m
+
+
+[92m---prec---
+
+[0mBOMBINHAS: Finalizado!
+
+
+[91m39 de 295.[0m
+
+
+[92m---prec---
+
+[0mBOM JARDIM DA SERRA: Finalizado!
+
+
+[91m40 de 295.[0m
+
+
+[92m---prec---
+
+[0mBOM JESUS: Finalizado!
+
+
+[91m41 de 295.[0m
+
+
+[92m---prec---
+
+[0mBOM JESUS DO OESTE: Finalizado!
+
+
+[91m42 de 295.[0m
+
+
+[92m---prec---
+
+[0mBOM RETIRO: Finalizado!
+
+
+[91m43 de 295.[0m
+
+
+[92m---prec---
+
+[0mBOTUVERÁ: Finalizado!
+
+
+[91m44 de 295.[0m
+
+
+[92m---prec---
+
+[0mBRAÇO DO NORTE: Finalizado!
+
+
+[91m45 de 295.[0m
+
+
+[92m---prec---
+
+[0mBRAÇO DO TROMBUDO: Finalizado!
+
+
+[91m46 de 295.[0m
+
+
+[92m---prec---
+
+[0mBRUNÓPOLIS: Finalizado!
+
+
+[91m47 de 295.[0m
+
+
+[92m---prec---
+
+[0mBRUSQUE: Finalizado!
+
+
+[91m48 de 295.[0m
+
+
+[92m---prec---
+
+[0mCAÇADOR: Finalizado!
+
+
+[91m49 de 295.[0m
+
+
+[92m---prec---
+
+[0mCAIBI: Finalizado!
+
+
+[91m50 de 295.[0m
+
+
+[92m---prec---
+
+[0mCALMON: Finalizado!
+
+
+[91m51 de 295.[0m
+
+
+[92m---prec---
+
+[0mCAMBORIÚ: Finalizado!
+
+
+[91m52 de 295.[0m
+
+
+[92m---prec---
+
+[0mCAPÃO ALTO: Finalizado!
+
+
+[91m53 de 295.[0m
+
+
+[92m---prec---
+
+[0mCAMPO ALEGRE: Finalizado!
+
+
+[91m54 de 295.[0m
+
+
+[92m---prec---
+
+[0mCAMPO BELO DO SUL: Finalizado!
+
+
+[91m55 de 295.[0m
+
+
+[92m---prec---
+
+[0mCAMPO ERÊ: Finalizado!
+
+
+[91m56 de 295.[0m
+
+
+[92m---prec---
+
+[0mCAMPOS NOVOS: Finalizado!
+
+
+[91m57 de 295.[0m
+
+
+[92m---prec---
+
+[0mCANELINHA: Finalizado!
+
+
+[91m58 de 295.[0m
+
+
+[92m---prec---
+
+[0mCANOINHAS: Finalizado!
+
+
+[91m59 de 295.[0m
+
+
+[92m---prec---
+
+[0mCAPINZAL: Finalizado!
+
+
+[91m60 de 295.[0m
+
+
+[92m---prec---
+
+[0mCAPIVARI DE BAIXO: Finalizado!
+
+
+[91m61 de 295.[0m
+
+
+[92m---prec---
+
+[0mCATANDUVAS: Finalizado!
+
+
+[91m62 de 295.[0m
+
+
+[92m---prec---
+
+[0mCAXAMBU DO SUL: Finalizado!
+
+
+[91m63 de 295.[0m
+
+
+[92m---prec---
+
+[0mCELSO RAMOS: Finalizado!
+
+
+[91m64 de 295.[0m
+
+
+[92m---prec---
+
+[0mCERRO NEGRO: Finalizado!
+
+
+[91m65 de 295.[0m
+
+
+[92m---prec---
+
+[0mCHAPADÃO DO LAGEADO: Finalizado!
+
+
+[91m66 de 295.[0m
+
+
+[92m---prec---
+
+[0mCHAPECÓ: Finalizado!
+
+
+[91m67 de 295.[0m
+
+
+[92m---prec---
+
+[0mCOCAL DO SUL: Finalizado!
+
+
+[91m68 de 295.[0m
+
+
+[92m---prec---
+
+[0mCONCÓRDIA: Finalizado!
+
+
+[91m69 de 295.[0m
+
+
+[92m---prec---
+
+[0mCORDILHEIRA ALTA: Finalizado!
+
+
+[91m70 de 295.[0m
+
+
+[92m---prec---
+
+[0mCORONEL FREITAS: Finalizado!
+
+
+[91m71 de 295.[0m
+
+
+[92m---prec---
+
+[0mCORONEL MARTINS: Finalizado!
+
+
+[91m72 de 295.[0m
+
+
+[92m---prec---
+
+[0mCORUPÁ: Finalizado!
+
+
+[91m73 de 295.[0m
+
+
+[92m---prec---
+
+[0mCORREIA PINTO: Finalizado!
+
+
+[91m74 de 295.[0m
+
+
+[92m---prec---
+
+[0mCRICIÚMA: Finalizado!
+
+
+[91m75 de 295.[0m
+
+
+[92m---prec---
+
+[0mCUNHA PORÃ: Finalizado!
+
+
+[91m76 de 295.[0m
+
+
+[92m---prec---
+
+[0mCUNHATAÍ: Finalizado!
+
+
+[91m77 de 295.[0m
+
+
+[92m---prec---
+
+[0mCURITIBANOS: Finalizado!
+
+
+[91m78 de 295.[0m
+
+
+[92m---prec---
+
+[0mDESCANSO: Finalizado!
+
+
+[91m79 de 295.[0m
+
+
+[92m---prec---
+
+[0mDIONÍSIO CERQUEIRA: Finalizado!
+
+
+[91m80 de 295.[0m
+
+
+[92m---prec---
+
+[0mDONA EMMA: Finalizado!
+
+
+[91m81 de 295.[0m
+
+
+[92m---prec---
+
+[0mDOUTOR PEDRINHO: Finalizado!
+
+
+[91m82 de 295.[0m
+
+
+[92m---prec---
+
+[0mENTRE RIOS: Finalizado!
+
+
+[91m83 de 295.[0m
+
+
+[92m---prec---
+
+[0mERMO: Finalizado!
+
+
+[91m84 de 295.[0m
+
+
+[92m---prec---
+
+[0mERVAL VELHO: Finalizado!
+
+
+[91m85 de 295.[0m
+
+
+[92m---prec---
+
+[0mFAXINAL DOS GUEDES: Finalizado!
+
+
+[91m86 de 295.[0m
+
+
+[92m---prec---
+
+[0mFLOR DO SERTÃO: Finalizado!
+
+
+[91m87 de 295.[0m
+
+
+[92m---prec---
+
+[0mFLORIANÓPOLIS: Finalizado!
+
+
+[91m88 de 295.[0m
+
+
+[92m---prec---
+
+[0mFORMOSA DO SUL: Finalizado!
+
+
+[91m89 de 295.[0m
+
+
+[92m---prec---
+
+[0mFORQUILHINHA: Finalizado!
+
+
+[91m90 de 295.[0m
+
+
+[92m---prec---
+
+[0mFRAIBURGO: Finalizado!
+
+
+[91m91 de 295.[0m
+
+
+[92m---prec---
+
+[0mFREI ROGÉRIO: Finalizado!
+
+
+[91m92 de 295.[0m
+
+
+[92m---prec---
+
+[0mGALVÃO: Finalizado!
+
+
+[91m93 de 295.[0m
+
+
+[92m---prec---
+
+[0mGAROPABA: Finalizado!
+
+
+[91m94 de 295.[0m
+
+
+[92m---prec---
+
+[0mGARUVA: Finalizado!
+
+
+[91m95 de 295.[0m
+
+
+[92m---prec---
+
+[0mGASPAR: Finalizado!
+
+
+[91m96 de 295.[0m
+
+
+[92m---prec---
+
+[0mGOVERNADOR CELSO RAMOS: Finalizado!
+
+
+[91m97 de 295.[0m
+
+
+[92m---prec---
+
+[0mGRÃO-PARÁ: Finalizado!
+
+
+[91m98 de 295.[0m
+
+
+[92m---prec---
+
+[0mGRAVATAL: Finalizado!
+
+
+[91m99 de 295.[0m
+
+
+[92m---prec---
+
+[0mGUABIRUBA: Finalizado!
+
+
+[91m100 de 295.[0m
+
+
+[92m---prec---
+
+[0mGUARACIABA: Finalizado!
+
+
+[91m101 de 295.[0m
+
+
+[92m---prec---
+
+[0mGUARAMIRIM: Finalizado!
+
+
+[91m102 de 295.[0m
+
+
+[92m---prec---
+
+[0mGUARUJÁ DO SUL: Finalizado!
+
+
+[91m103 de 295.[0m
+
+
+[92m---prec---
+
+[0mGUATAMBÚ: Finalizado!
+
+
+[91m104 de 295.[0m
+
+
+[92m---prec---
+
+[0mHERVAL D'OESTE: Finalizado!
+
+
+[91m105 de 295.[0m
+
+
+[92m---prec---
+
+[0mIBIAM: Finalizado!
+
+
+[91m106 de 295.[0m
+
+
+[92m---prec---
+
+[0mIBICARÉ: Finalizado!
+
+
+[91m107 de 295.[0m
+
+
+[92m---prec---
+
+[0mIBIRAMA: Finalizado!
+
+
+[91m108 de 295.[0m
+
+
+[92m---prec---
+
+[0mIÇARA: Finalizado!
+
+
+[91m109 de 295.[0m
+
+
+[92m---prec---
+
+[0mILHOTA: Finalizado!
+
+
+[91m110 de 295.[0m
+
+
+[92m---prec---
+
+[0mIMARUÍ: Finalizado!
+
+
+[91m111 de 295.[0m
+
+
+[92m---prec---
+
+[0mIMBITUBA: Finalizado!
+
+
+[91m112 de 295.[0m
+
+
+[92m---prec---
+
+[0mIMBUIA: Finalizado!
+
+
+[91m113 de 295.[0m
+
+
+[92m---prec---
+
+[0mINDAIAL: Finalizado!
+
+
+[91m114 de 295.[0m
+
+
+[92m---prec---
+
+[0mIOMERÊ: Finalizado!
+
+
+[91m115 de 295.[0m
+
+
+[92m---prec---
+
+[0mIPIRA: Finalizado!
+
+
+[91m116 de 295.[0m
+
+
+[92m---prec---
+
+[0mIPORÃ DO OESTE: Finalizado!
+
+
+[91m117 de 295.[0m
+
+
+[92m---prec---
+
+[0mIPUAÇU: Finalizado!
+
+
+[91m118 de 295.[0m
+
+
+[92m---prec---
+
+[0mIPUMIRIM: Finalizado!
+
+
+[91m119 de 295.[0m
+
+
+[92m---prec---
+
+[0mIRACEMINHA: Finalizado!
+
+
+[91m120 de 295.[0m
+
+
+[92m---prec---
+
+[0mIRANI: Finalizado!
+
+
+[91m121 de 295.[0m
+
+
+[92m---prec---
+
+[0mIRATI: Finalizado!
+
+
+[91m122 de 295.[0m
+
+
+[92m---prec---
+
+[0mIRINEÓPOLIS: Finalizado!
+
+
+[91m123 de 295.[0m
+
+
+[92m---prec---
+
+[0mITÁ: Finalizado!
+
+
+[91m124 de 295.[0m
+
+
+[92m---prec---
+
+[0mITAIÓPOLIS: Finalizado!
+
+
+[91m125 de 295.[0m
+
+
+[92m---prec---
+
+[0mITAJAÍ: Finalizado!
+
+
+[91m126 de 295.[0m
+
+
+[92m---prec---
+
+[0mITAPEMA: Finalizado!
+
+
+[91m127 de 295.[0m
+
+
+[92m---prec---
+
+[0mITAPIRANGA: Finalizado!
+
+
+[91m128 de 295.[0m
+
+
+[92m---prec---
+
+[0mITAPOÁ: Finalizado!
+
+
+[91m129 de 295.[0m
+
+
+[92m---prec---
+
+[0mITUPORANGA: Finalizado!
+
+
+[91m130 de 295.[0m
+
+
+[92m---prec---
+
+[0mJABORÁ: Finalizado!
+
+
+[91m131 de 295.[0m
+
+
+[92m---prec---
+
+[0mJACINTO MACHADO: Finalizado!
+
+
+[91m132 de 295.[0m
+
+
+[92m---prec---
+
+[0mJAGUARUNA: Finalizado!
+
+
+[91m133 de 295.[0m
+
+
+[92m---prec---
+
+[0mJARAGUÁ DO SUL: Finalizado!
+
+
+[91m134 de 295.[0m
+
+
+[92m---prec---
+
+[0mJARDINÓPOLIS: Finalizado!
+
+
+[91m135 de 295.[0m
+
+
+[92m---prec---
+
+[0mJOAÇABA: Finalizado!
+
+
+[91m136 de 295.[0m
+
+
+[92m---prec---
+
+[0mJOINVILLE: Finalizado!
+
+
+[91m137 de 295.[0m
+
+
+[92m---prec---
+
+[0mJOSÉ BOITEUX: Finalizado!
+
+
+[91m138 de 295.[0m
+
+
+[92m---prec---
+
+[0mJUPIÁ: Finalizado!
+
+
+[91m139 de 295.[0m
+
+
+[92m---prec---
+
+[0mLACERDÓPOLIS: Finalizado!
+
+
+[91m140 de 295.[0m
+
+
+[92m---prec---
+
+[0mLAGES: Finalizado!
+
+
+[91m141 de 295.[0m
+
+
+[92m---prec---
+
+[0mLAGUNA: Finalizado!
+
+
+[91m142 de 295.[0m
+
+
+[92m---prec---
+
+[0mLAJEADO GRANDE: Finalizado!
+
+
+[91m143 de 295.[0m
+
+
+[92m---prec---
+
+[0mLAURENTINO: Finalizado!
+
+
+[91m144 de 295.[0m
+
+
+[92m---prec---
+
+[0mLAURO MÜLLER: Finalizado!
+
+
+[91m145 de 295.[0m
+
+
+[92m---prec---
+
+[0mLEBON RÉGIS: Finalizado!
+
+
+[91m146 de 295.[0m
+
+
+[92m---prec---
+
+[0mLEOBERTO LEAL: Finalizado!
+
+
+[91m147 de 295.[0m
+
+
+[92m---prec---
+
+[0mLINDÓIA DO SUL: Finalizado!
+
+
+[91m148 de 295.[0m
+
+
+[92m---prec---
+
+[0mLONTRAS: Finalizado!
+
+
+[91m149 de 295.[0m
+
+
+[92m---prec---
+
+[0mLUIZ ALVES: Finalizado!
+
+
+[91m150 de 295.[0m
+
+
+[92m---prec---
+
+[0mLUZERNA: Finalizado!
+
+
+[91m151 de 295.[0m
+
+
+[92m---prec---
+
+[0mMACIEIRA: Finalizado!
+
+
+[91m152 de 295.[0m
+
+
+[92m---prec---
+
+[0mMAFRA: Finalizado!
+
+
+[91m153 de 295.[0m
+
+
+[92m---prec---
+
+[0mMAJOR GERCINO: Finalizado!
+
+
+[91m154 de 295.[0m
+
+
+[92m---prec---
+
+[0mMAJOR VIEIRA: Finalizado!
+
+
+[91m155 de 295.[0m
+
+
+[92m---prec---
+
+[0mMARACAJÁ: Finalizado!
+
+
+[91m156 de 295.[0m
+
+
+[92m---prec---
+
+[0mMARAVILHA: Finalizado!
+
+
+[91m157 de 295.[0m
+
+
+[92m---prec---
+
+[0mMAREMA: Finalizado!
+
+
+[91m158 de 295.[0m
+
+
+[92m---prec---
+
+[0mMASSARANDUBA: Finalizado!
+
+
+[91m159 de 295.[0m
+
+
+[92m---prec---
+
+[0mMATOS COSTA: Finalizado!
+
+
+[91m160 de 295.[0m
+
+
+[92m---prec---
+
+[0mMELEIRO: Finalizado!
+
+
+[91m161 de 295.[0m
+
+
+[92m---prec---
+
+[0mMIRIM DOCE: Finalizado!
+
+
+[91m162 de 295.[0m
+
+
+[92m---prec---
+
+[0mMODELO: Finalizado!
+
+
+[91m163 de 295.[0m
+
+
+[92m---prec---
+
+[0mMONDAÍ: Finalizado!
+
+
+[91m164 de 295.[0m
+
+
+[92m---prec---
+
+[0mMONTE CARLO: Finalizado!
+
+
+[91m165 de 295.[0m
+
+
+[92m---prec---
+
+[0mMONTE CASTELO: Finalizado!
+
+
+[91m166 de 295.[0m
+
+
+[92m---prec---
+
+[0mMORRO DA FUMAÇA: Finalizado!
+
+
+[91m167 de 295.[0m
+
+
+[92m---prec---
+
+[0mMORRO GRANDE: Finalizado!
+
+
+[91m168 de 295.[0m
+
+
+[92m---prec---
+
+[0mNAVEGANTES: Finalizado!
+
+
+[91m169 de 295.[0m
+
+
+[92m---prec---
+
+[0mNOVA ERECHIM: Finalizado!
+
+
+[91m170 de 295.[0m
+
+
+[92m---prec---
+
+[0mNOVA ITABERABA: Finalizado!
+
+
+[91m171 de 295.[0m
+
+
+[92m---prec---
+
+[0mNOVA TRENTO: Finalizado!
+
+
+[91m172 de 295.[0m
+
+
+[92m---prec---
+
+[0mNOVA VENEZA: Finalizado!
+
+
+[91m173 de 295.[0m
+
+
+[92m---prec---
+
+[0mNOVO HORIZONTE: Finalizado!
+
+
+[91m174 de 295.[0m
+
+
+[92m---prec---
+
+[0mORLEANS: Finalizado!
+
+
+[91m175 de 295.[0m
+
+
+[92m---prec---
+
+[0mOTACÍLIO COSTA: Finalizado!
+
+
+[91m176 de 295.[0m
+
+
+[92m---prec---
+
+[0mOURO: Finalizado!
+
+
+[91m177 de 295.[0m
+
+
+[92m---prec---
+
+[0mOURO VERDE: Finalizado!
+
+
+[91m178 de 295.[0m
+
+
+[92m---prec---
+
+[0mPAIAL: Finalizado!
+
+
+[91m179 de 295.[0m
+
+
+[92m---prec---
+
+[0mPAINEL: Finalizado!
+
+
+[91m180 de 295.[0m
+
+
+[92m---prec---
+
+[0mPALHOÇA: Finalizado!
+
+
+[91m181 de 295.[0m
+
+
+[92m---prec---
+
+[0mPALMA SOLA: Finalizado!
+
+
+[91m182 de 295.[0m
+
+
+[92m---prec---
+
+[0mPALMEIRA: Finalizado!
+
+
+[91m183 de 295.[0m
+
+
+[92m---prec---
+
+[0mPALMITOS: Finalizado!
+
+
+[91m184 de 295.[0m
+
+
+[92m---prec---
+
+[0mPAPANDUVA: Finalizado!
+
+
+[91m185 de 295.[0m
+
+
+[92m---prec---
+
+[0mPARAÍSO: Finalizado!
+
+
+[91m186 de 295.[0m
+
+
+[92m---prec---
+
+[0mPASSO DE TORRES: Finalizado!
+
+
+[91m187 de 295.[0m
+
+
+[92m---prec---
+
+[0mPASSOS MAIA: Finalizado!
+
+
+[91m188 de 295.[0m
+
+
+[92m---prec---
+
+[0mPAULO LOPES: Finalizado!
+
+
+[91m189 de 295.[0m
+
+
+[92m---prec---
+
+[0mPEDRAS GRANDES: Finalizado!
+
+
+[91m190 de 295.[0m
+
+
+[92m---prec---
+
+[0mPENHA: Finalizado!
+
+
+[91m191 de 295.[0m
+
+
+[92m---prec---
+
+[0mPERITIBA: Finalizado!
+
+
+[91m192 de 295.[0m
+
+
+[92m---prec---
+
+[0mPESCARIA BRAVA: Finalizado!
+
+
+[91m193 de 295.[0m
+
+
+[92m---prec---
+
+[0mPETROLÂNDIA: Finalizado!
+
+
+[91m194 de 295.[0m
+
+
+[92m---prec---
+
+[0mBALNEÁRIO PIÇARRAS: Finalizado!
+
+
+[91m195 de 295.[0m
+
+
+[92m---prec---
+
+[0mPINHALZINHO: Finalizado!
+
+
+[91m196 de 295.[0m
+
+
+[92m---prec---
+
+[0mPINHEIRO PRETO: Finalizado!
+
+
+[91m197 de 295.[0m
+
+
+[92m---prec---
+
+[0mPIRATUBA: Finalizado!
+
+
+[91m198 de 295.[0m
+
+
+[92m---prec---
+
+[0mPLANALTO ALEGRE: Finalizado!
+
+
+[91m199 de 295.[0m
+
+
+[92m---prec---
+
+[0mPOMERODE: Finalizado!
+
+
+[91m200 de 295.[0m
+
+
+[92m---prec---
+
+[0mPONTE ALTA: Finalizado!
+
+
+[91m201 de 295.[0m
+
+
+[92m---prec---
+
+[0mPONTE ALTA DO NORTE: Finalizado!
+
+
+[91m202 de 295.[0m
+
+
+[92m---prec---
+
+[0mPONTE SERRADA: Finalizado!
+
+
+[91m203 de 295.[0m
+
+
+[92m---prec---
+
+[0mPORTO BELO: Finalizado!
+
+
+[91m204 de 295.[0m
+
+
+[92m---prec---
+
+[0mPORTO UNIÃO: Finalizado!
+
+
+[91m205 de 295.[0m
+
+
+[92m---prec---
+
+[0mPOUSO REDONDO: Finalizado!
+
+
+[91m206 de 295.[0m
+
+
+[92m---prec---
+
+[0mPRAIA GRANDE: Finalizado!
+
+
+[91m207 de 295.[0m
+
+
+[92m---prec---
+
+[0mPRESIDENTE CASTELLO BRANCO: Finalizado!
+
+
+[91m208 de 295.[0m
+
+
+[92m---prec---
+
+[0mPRESIDENTE GETÚLIO: Finalizado!
+
+
+[91m209 de 295.[0m
+
+
+[92m---prec---
+
+[0mPRESIDENTE NEREU: Finalizado!
+
+
+[91m210 de 295.[0m
+
+
+[92m---prec---
+
+[0mPRINCESA: Finalizado!
+
+
+[91m211 de 295.[0m
+
+
+[92m---prec---
+
+[0mQUILOMBO: Finalizado!
+
+
+[91m212 de 295.[0m
+
+
+[92m---prec---
+
+[0mRANCHO QUEIMADO: Finalizado!
+
+
+[91m213 de 295.[0m
+
+
+[92m---prec---
+
+[0mRIO DAS ANTAS: Finalizado!
+
+
+[91m214 de 295.[0m
+
+
+[92m---prec---
+
+[0mRIO DO CAMPO: Finalizado!
+
+
+[91m215 de 295.[0m
+
+
+[92m---prec---
+
+[0mRIO DO OESTE: Finalizado!
+
+
+[91m216 de 295.[0m
+
+
+[92m---prec---
+
+[0mRIO DOS CEDROS: Finalizado!
+
+
+[91m217 de 295.[0m
+
+
+[92m---prec---
+
+[0mRIO DO SUL: Finalizado!
+
+
+[91m218 de 295.[0m
+
+
+[92m---prec---
+
+[0mRIO FORTUNA: Finalizado!
+
+
+[91m219 de 295.[0m
+
+
+[92m---prec---
+
+[0mRIO NEGRINHO: Finalizado!
+
+
+[91m220 de 295.[0m
+
+
+[92m---prec---
+
+[0mRIO RUFINO: Finalizado!
+
+
+[91m221 de 295.[0m
+
+
+[92m---prec---
+
+[0mRIQUEZA: Finalizado!
+
+
+[91m222 de 295.[0m
+
+
+[92m---prec---
+
+[0mRODEIO: Finalizado!
+
+
+[91m223 de 295.[0m
+
+
+[92m---prec---
+
+[0mROMELÂNDIA: Finalizado!
+
+
+[91m224 de 295.[0m
+
+
+[92m---prec---
+
+[0mSALETE: Finalizado!
+
+
+[91m225 de 295.[0m
+
+
+[92m---prec---
+
+[0mSALTINHO: Finalizado!
+
+
+[91m226 de 295.[0m
+
+
+[92m---prec---
+
+[0mSALTO VELOSO: Finalizado!
+
+
+[91m227 de 295.[0m
+
+
+[92m---prec---
+
+[0mSANGÃO: Finalizado!
+
+
+[91m228 de 295.[0m
+
+
+[92m---prec---
+
+[0mSANTA CECÍLIA: Finalizado!
+
+
+[91m229 de 295.[0m
+
+
+[92m---prec---
+
+[0mSANTA HELENA: Finalizado!
+
+
+[91m230 de 295.[0m
+
+
+[92m---prec---
+
+[0mSANTA ROSA DE LIMA: Finalizado!
+
+
+[91m231 de 295.[0m
+
+
+[92m---prec---
+
+[0mSANTA ROSA DO SUL: Finalizado!
+
+
+[91m232 de 295.[0m
+
+
+[92m---prec---
+
+[0mSANTA TEREZINHA: Finalizado!
+
+
+[91m233 de 295.[0m
+
+
+[92m---prec---
+
+[0mSANTA TEREZINHA DO PROGRESSO: Finalizado!
+
+
+[91m234 de 295.[0m
+
+
+[92m---prec---
+
+[0mSANTIAGO DO SUL: Finalizado!
+
+
+[91m235 de 295.[0m
+
+
+[92m---prec---
+
+[0mSANTO AMARO DA IMPERATRIZ: Finalizado!
+
+
+[91m236 de 295.[0m
+
+
+[92m---prec---
+
+[0mSÃO BERNARDINO: Finalizado!
+
+
+[91m237 de 295.[0m
+
+
+[92m---prec---
+
+[0mSÃO BENTO DO SUL: Finalizado!
+
+
+[91m238 de 295.[0m
+
+
+[92m---prec---
+
+[0mSÃO BONIFÁCIO: Finalizado!
+
+
+[91m239 de 295.[0m
+
+
+[92m---prec---
+
+[0mSÃO CARLOS: Finalizado!
+
+
+[91m240 de 295.[0m
+
+
+[92m---prec---
+
+[0mSÃO CRISTÓVÃO DO SUL: Finalizado!
+
+
+[91m241 de 295.[0m
+
+
+[92m---prec---
+
+[0mSÃO DOMINGOS: Finalizado!
+
+
+[91m242 de 295.[0m
+
+
+[92m---prec---
+
+[0mSÃO FRANCISCO DO SUL: Finalizado!
+
+
+[91m243 de 295.[0m
+
+
+[92m---prec---
+
+[0mSÃO JOÃO DO OESTE: Finalizado!
+
+
+[91m244 de 295.[0m
+
+
+[92m---prec---
+
+[0mSÃO JOÃO BATISTA: Finalizado!
+
+
+[91m245 de 295.[0m
+
+
+[92m---prec---
+
+[0mSÃO JOÃO DO ITAPERIÚ: Finalizado!
+
+
+[91m246 de 295.[0m
+
+
+[92m---prec---
+
+[0mSÃO JOÃO DO SUL: Finalizado!
+
+
+[91m247 de 295.[0m
+
+
+[92m---prec---
+
+[0mSÃO JOAQUIM: Finalizado!
+
+
+[91m248 de 295.[0m
+
+
+[92m---prec---
+
+[0mSÃO JOSÉ: Finalizado!
+
+
+[91m249 de 295.[0m
+
+
+[92m---prec---
+
+[0mSÃO JOSÉ DO CEDRO: Finalizado!
+
+
+[91m250 de 295.[0m
+
+
+[92m---prec---
+
+[0mSÃO JOSÉ DO CERRITO: Finalizado!
+
+
+[91m251 de 295.[0m
+
+
+[92m---prec---
+
+[0mSÃO LOURENÇO DO OESTE: Finalizado!
+
+
+[91m252 de 295.[0m
+
+
+[92m---prec---
+
+[0mSÃO LUDGERO: Finalizado!
+
+
+[91m253 de 295.[0m
+
+
+[92m---prec---
+
+[0mSÃO MARTINHO: Finalizado!
+
+
+[91m254 de 295.[0m
+
+
+[92m---prec---
+
+[0mSÃO MIGUEL DA BOA VISTA: Finalizado!
+
+
+[91m255 de 295.[0m
+
+
+[92m---prec---
+
+[0mSÃO MIGUEL DO OESTE: Finalizado!
+
+
+[91m256 de 295.[0m
+
+
+[92m---prec---
+
+[0mSÃO PEDRO DE ALCÂNTARA: Finalizado!
+
+
+[91m257 de 295.[0m
+
+
+[92m---prec---
+
+[0mSAUDADES: Finalizado!
+
+
+[91m258 de 295.[0m
+
+
+[92m---prec---
+
+[0mSCHROEDER: Finalizado!
+
+
+[91m259 de 295.[0m
+
+
+[92m---prec---
+
+[0mSEARA: Finalizado!
+
+
+[91m260 de 295.[0m
+
+
+[92m---prec---
+
+[0mSERRA ALTA: Finalizado!
+
+
+[91m261 de 295.[0m
+
+
+[92m---prec---
+
+[0mSIDERÓPOLIS: Finalizado!
+
+
+[91m262 de 295.[0m
+
+
+[92m---prec---
+
+[0mSOMBRIO: Finalizado!
+
+
+[91m263 de 295.[0m
+
+
+[92m---prec---
+
+[0mSUL BRASIL: Finalizado!
+
+
+[91m264 de 295.[0m
+
+
+[92m---prec---
+
+[0mTAIÓ: Finalizado!
+
+
+[91m265 de 295.[0m
+
+
+[92m---prec---
+
+[0mTANGARÁ: Finalizado!
+
+
+[91m266 de 295.[0m
+
+
+[92m---prec---
+
+[0mTIGRINHOS: Finalizado!
+
+
+[91m267 de 295.[0m
+
+
+[92m---prec---
+
+[0mTIJUCAS: Finalizado!
+
+
+[91m268 de 295.[0m
+
+
+[92m---prec---
+
+[0mTIMBÉ DO SUL: Finalizado!
+
+
+[91m269 de 295.[0m
+
+
+[92m---prec---
+
+[0mTIMBÓ: Finalizado!
+
+
+[91m270 de 295.[0m
+
+
+[92m---prec---
+
+[0mTIMBÓ GRANDE: Finalizado!
+
+
+[91m271 de 295.[0m
+
+
+[92m---prec---
+
+[0mTRÊS BARRAS: Finalizado!
+
+
+[91m272 de 295.[0m
+
+/home/meteoro/scripts/matheus/teste/operacional_dengue/extrai_clima.py:203: FutureWarning: Setting an Index with object dtype into a DataFrame will stop inferring another dtype in a future version. Cast the Index explicitly before setting it into the DataFrame.
+  valores_centroides["Data"] = valores_centroides.index
+
+[92m---prec---
+
+[0mTREVISO: Finalizado!
+
+
+[91m273 de 295.[0m
+
+
+[92m---prec---
+
+[0mTREZE DE MAIO: Finalizado!
+
+
+[91m274 de 295.[0m
+
+
+[92m---prec---
+
+[0mTREZE TÍLIAS: Finalizado!
+
+
+[91m275 de 295.[0m
+
+
+[92m---prec---
+
+[0mTROMBUDO CENTRAL: Finalizado!
+
+
+[91m276 de 295.[0m
+
+
+[92m---prec---
+
+[0mTUBARÃO: Finalizado!
+
+
+[91m277 de 295.[0m
+
+
+[92m---prec---
+
+[0mTUNÁPOLIS: Finalizado!
+
+
+[91m278 de 295.[0m
+
+
+[92m---prec---
+
+[0mTURVO: Finalizado!
+
+
+[91m279 de 295.[0m
+
+
+[92m---prec---
+
+[0mUNIÃO DO OESTE: Finalizado!
+
+
+[91m280 de 295.[0m
+
+
+[92m---prec---
+
+[0mURUBICI: Finalizado!
+
+
+[91m281 de 295.[0m
+
+
+[92m---prec---
+
+[0mURUPEMA: Finalizado!
+
+
+[91m282 de 295.[0m
+
+
+[92m---prec---
+
+[0mURUSSANGA: Finalizado!
+
+
+[91m283 de 295.[0m
+
+
+[92m---prec---
+
+[0mVARGEÃO: Finalizado!
+
+
+[91m284 de 295.[0m
+
+
+[92m---prec---
+
+[0mVARGEM: Finalizado!
+
+
+[91m285 de 295.[0m
+
+
+[92m---prec---
+
+[0mVARGEM BONITA: Finalizado!
+
+
+[91m286 de 295.[0m
+
+
+[92m---prec---
+
+[0mVIDAL RAMOS: Finalizado!
+
+
+[91m287 de 295.[0m
+
+
+[92m---prec---
+
+[0mVIDEIRA: Finalizado!
+
+
+[91m288 de 295.[0m
+
+
+[92m---prec---
+
+[0mVITOR MEIRELES: Finalizado!
+
+
+[91m289 de 295.[0m
+
+
+[92m---prec---
+
+[0mWITMARSUM: Finalizado!
+
+
+[91m290 de 295.[0m
+
+
+[92m---prec---
+
+[0mXANXERÊ: Finalizado!
+
+
+[91m291 de 295.[0m
+
+
+[92m---prec---
+
+[0mXAVANTINA: Finalizado!
+
+
+[91m292 de 295.[0m
+
+
+[92m---prec---
+
+[0mXAXIM: Finalizado!
+
+
+[91m293 de 295.[0m
+
+
+[92m---prec---
+
+[0mZORTÉA: Finalizado!
+
+
+[91m294 de 295.[0m
+
+
+[92m---prec---
+
+[0mBALNEÁRIO RINCÃO: Finalizado!
+
+
+[91m295 de 295.[0m
+
+================================================================================
+
+[92m/media/dados/shapefiles/SC/prec_diario_2025.csv[0m
+
+
+[92mARQUIVO SALVO COM SUCESSO![0m
+
+================================================================================
+<xarray.Variable (time: 327, lat: 179, lon: 179)> Size: 42MB
+array([[[ 0.125 ,  0.    , ...,  0.375 ,  0.    ],
+        [ 0.25  ,  0.25  , ...,  0.5   ,  0.625 ],
+        ...,
+        [ 0.    ,  0.    , ...,  3.625 ,  3.5   ],
+        [ 0.    ,  0.    , ...,  3.625 ,  3.875 ]],
+
+       [[ 0.    ,  0.    , ...,  0.0625,  0.    ],
+        [ 0.    ,  0.    , ...,  0.0625,  0.    ],
+        ...,
+        [ 1.    ,  0.3125, ...,  0.0625,  0.75  ],
+        [ 0.9375,  0.3125, ...,  0.3125,  0.625 ]],
+
+       ...,
+
+       [[ 0.    ,  0.    , ..., 35.3125, 34.125 ],
+        [ 0.    ,  0.    , ..., 32.4375, 35.3125],
+        ...,
+        [ 1.1875,  0.8125, ...,  0.    ,  0.    ],
+        [ 1.1875,  1.4375, ...,  0.    ,  0.    ]],
+
+       [[ 0.    ,  0.    , ...,  0.    ,  0.    ],
+        [ 0.    ,  0.    , ...,  0.    ,  0.    ],
+        ...,
+        [ 0.    ,  0.    , ...,  0.    ,  0.    ],
+        [ 0.    ,  0.    , ...,  0.    ,  0.    ]]], dtype=float32)
+Attributes:
+    long_name:  Surface Precipitation [kg/m^2]
+<xarray.IndexVariable 'time' (time: 327)> Size: 3kB
+array(['2025-01-01T12:00:00.000000000', '2025-01-02T12:00:00.000000000',
+       '2025-01-03T12:00:00.000000000', ..., '2025-11-21T12:00:00.000000000',
+       '2025-11-22T12:00:00.000000000', '2025-11-23T12:00:00.000000000'],
+      dtype='datetime64[ns]')
+Attributes:
+    standard_name:  time
+    axis:           T
+================================================================================
+['2025-01-01T12:00:00.000000000' '2025-01-02T12:00:00.000000000'
+ '2025-01-03T12:00:00.000000000' '2025-01-04T12:00:00.000000000'
+ '2025-01-05T12:00:00.000000000' '2025-01-06T12:00:00.000000000'
+ '2025-01-07T12:00:00.000000000' '2025-01-08T12:00:00.000000000'
+ '2025-01-09T12:00:00.000000000' '2025-01-10T12:00:00.000000000'
+ '2025-01-11T12:00:00.000000000' '2025-01-12T12:00:00.000000000'
+ '2025-01-13T12:00:00.000000000' '2025-01-14T12:00:00.000000000'
+ '2025-01-15T12:00:00.000000000' '2025-01-16T12:00:00.000000000'
+ '2025-01-17T12:00:00.000000000' '2025-01-18T12:00:00.000000000'
+ '2025-01-19T12:00:00.000000000' '2025-01-20T12:00:00.000000000'
+ '2025-01-21T12:00:00.000000000' '2025-01-22T12:00:00.000000000'
+ '2025-01-23T12:00:00.000000000' '2025-01-24T12:00:00.000000000'
+ '2025-01-25T12:00:00.000000000' '2025-01-26T12:00:00.000000000'
+ '2025-01-27T12:00:00.000000000' '2025-01-28T12:00:00.000000000'
+ '2025-01-29T12:00:00.000000000' '2025-01-30T12:00:00.000000000'
+ '2025-01-31T12:00:00.000000000' '2025-02-01T12:00:00.000000000'
+ '2025-02-02T12:00:00.000000000' '2025-02-03T12:00:00.000000000'
+ '2025-02-04T12:00:00.000000000' '2025-02-05T12:00:00.000000000'
+ '2025-02-06T12:00:00.000000000' '2025-02-07T12:00:00.000000000'
+ '2025-02-08T12:00:00.000000000' '2025-02-09T12:00:00.000000000'
+ '2025-02-10T12:00:00.000000000' '2025-02-11T12:00:00.000000000'
+ '2025-02-12T12:00:00.000000000' '2025-02-13T12:00:00.000000000'
+ '2025-02-14T12:00:00.000000000' '2025-02-15T12:00:00.000000000'
+ '2025-02-16T12:00:00.000000000' '2025-02-17T12:00:00.000000000'
+ '2025-02-18T12:00:00.000000000' '2025-02-19T12:00:00.000000000'
+ '2025-02-20T12:00:00.000000000' '2025-02-21T12:00:00.000000000'
+ '2025-02-22T12:00:00.000000000' '2025-02-23T12:00:00.000000000'
+ '2025-02-24T12:00:00.000000000' '2025-02-25T12:00:00.000000000'
+ '2025-02-26T12:00:00.000000000' '2025-02-27T12:00:00.000000000'
+ '2025-02-28T12:00:00.000000000' '2025-03-01T12:00:00.000000000'
+ '2025-03-02T12:00:00.000000000' '2025-03-03T12:00:00.000000000'
+ '2025-03-04T12:00:00.000000000' '2025-03-05T12:00:00.000000000'
+ '2025-03-06T12:00:00.000000000' '2025-03-07T12:00:00.000000000'
+ '2025-03-08T12:00:00.000000000' '2025-03-09T12:00:00.000000000'
+ '2025-03-10T12:00:00.000000000' '2025-03-11T12:00:00.000000000'
+ '2025-03-12T12:00:00.000000000' '2025-03-13T12:00:00.000000000'
+ '2025-03-14T12:00:00.000000000' '2025-03-15T12:00:00.000000000'
+ '2025-03-16T12:00:00.000000000' '2025-03-17T12:00:00.000000000'
+ '2025-03-18T12:00:00.000000000' '2025-03-19T12:00:00.000000000'
+ '2025-03-20T12:00:00.000000000' '2025-03-21T12:00:00.000000000'
+ '2025-03-22T12:00:00.000000000' '2025-03-23T12:00:00.000000000'
+ '2025-03-24T12:00:00.000000000' '2025-03-25T12:00:00.000000000'
+ '2025-03-26T12:00:00.000000000' '2025-03-27T12:00:00.000000000'
+ '2025-03-28T12:00:00.000000000' '2025-03-29T12:00:00.000000000'
+ '2025-03-30T12:00:00.000000000' '2025-03-31T12:00:00.000000000'
+ '2025-04-01T12:00:00.000000000' '2025-04-02T12:00:00.000000000'
+ '2025-04-03T12:00:00.000000000' '2025-04-04T12:00:00.000000000'
+ '2025-04-05T12:00:00.000000000' '2025-04-06T12:00:00.000000000'
+ '2025-04-07T12:00:00.000000000' '2025-04-08T12:00:00.000000000'
+ '2025-04-09T12:00:00.000000000' '2025-04-10T12:00:00.000000000'
+ '2025-04-11T12:00:00.000000000' '2025-04-12T12:00:00.000000000'
+ '2025-04-13T12:00:00.000000000' '2025-04-14T12:00:00.000000000'
+ '2025-04-15T12:00:00.000000000' '2025-04-16T12:00:00.000000000'
+ '2025-04-17T12:00:00.000000000' '2025-04-18T12:00:00.000000000'
+ '2025-04-19T12:00:00.000000000' '2025-04-20T12:00:00.000000000'
+ '2025-04-21T12:00:00.000000000' '2025-04-22T12:00:00.000000000'
+ '2025-04-23T12:00:00.000000000' '2025-04-24T12:00:00.000000000'
+ '2025-04-25T12:00:00.000000000' '2025-04-26T12:00:00.000000000'
+ '2025-04-27T12:00:00.000000000' '2025-04-28T12:00:00.000000000'
+ '2025-04-29T12:00:00.000000000' '2025-04-30T12:00:00.000000000'
+ '2025-05-01T12:00:00.000000000' '2025-05-02T12:00:00.000000000'
+ '2025-05-03T12:00:00.000000000' '2025-05-04T12:00:00.000000000'
+ '2025-05-05T12:00:00.000000000' '2025-05-06T12:00:00.000000000'
+ '2025-05-07T12:00:00.000000000' '2025-05-08T12:00:00.000000000'
+ '2025-05-09T12:00:00.000000000' '2025-05-10T12:00:00.000000000'
+ '2025-05-11T12:00:00.000000000' '2025-05-12T12:00:00.000000000'
+ '2025-05-13T12:00:00.000000000' '2025-05-14T12:00:00.000000000'
+ '2025-05-15T12:00:00.000000000' '2025-05-16T12:00:00.000000000'
+ '2025-05-17T12:00:00.000000000' '2025-05-18T12:00:00.000000000'
+ '2025-05-19T12:00:00.000000000' '2025-05-20T12:00:00.000000000'
+ '2025-05-21T12:00:00.000000000' '2025-05-22T12:00:00.000000000'
+ '2025-05-23T12:00:00.000000000' '2025-05-24T12:00:00.000000000'
+ '2025-05-25T12:00:00.000000000' '2025-05-26T12:00:00.000000000'
+ '2025-05-27T12:00:00.000000000' '2025-05-28T12:00:00.000000000'
+ '2025-05-29T12:00:00.000000000' '2025-05-30T12:00:00.000000000'
+ '2025-05-31T12:00:00.000000000' '2025-06-01T12:00:00.000000000'
+ '2025-06-02T12:00:00.000000000' '2025-06-03T12:00:00.000000000'
+ '2025-06-04T12:00:00.000000000' '2025-06-05T12:00:00.000000000'
+ '2025-06-06T12:00:00.000000000' '2025-06-07T12:00:00.000000000'
+ '2025-06-08T12:00:00.000000000' '2025-06-09T12:00:00.000000000'
+ '2025-06-10T12:00:00.000000000' '2025-06-11T12:00:00.000000000'
+ '2025-06-12T12:00:00.000000000' '2025-06-13T12:00:00.000000000'
+ '2025-06-14T12:00:00.000000000' '2025-06-15T12:00:00.000000000'
+ '2025-06-16T12:00:00.000000000' '2025-06-17T12:00:00.000000000'
+ '2025-06-18T12:00:00.000000000' '2025-06-19T12:00:00.000000000'
+ '2025-06-20T12:00:00.000000000' '2025-06-21T12:00:00.000000000'
+ '2025-06-22T12:00:00.000000000' '2025-06-23T12:00:00.000000000'
+ '2025-06-24T12:00:00.000000000' '2025-06-25T12:00:00.000000000'
+ '2025-06-26T12:00:00.000000000' '2025-06-27T12:00:00.000000000'
+ '2025-06-28T12:00:00.000000000' '2025-06-29T12:00:00.000000000'
+ '2025-06-30T12:00:00.000000000' '2025-07-01T12:00:00.000000000'
+ '2025-07-02T12:00:00.000000000' '2025-07-03T12:00:00.000000000'
+ '2025-07-04T12:00:00.000000000' '2025-07-05T12:00:00.000000000'
+ '2025-07-06T12:00:00.000000000' '2025-07-07T12:00:00.000000000'
+ '2025-07-08T12:00:00.000000000' '2025-07-09T12:00:00.000000000'
+ '2025-07-10T12:00:00.000000000' '2025-07-11T12:00:00.000000000'
+ '2025-07-12T12:00:00.000000000' '2025-07-13T12:00:00.000000000'
+ '2025-07-14T12:00:00.000000000' '2025-07-15T12:00:00.000000000'
+ '2025-07-16T12:00:00.000000000' '2025-07-17T12:00:00.000000000'
+ '2025-07-18T12:00:00.000000000' '2025-07-19T12:00:00.000000000'
+ '2025-07-20T12:00:00.000000000' '2025-07-21T12:00:00.000000000'
+ '2025-07-22T12:00:00.000000000' '2025-07-23T12:00:00.000000000'
+ '2025-07-24T12:00:00.000000000' '2025-07-25T12:00:00.000000000'
+ '2025-07-26T12:00:00.000000000' '2025-07-27T12:00:00.000000000'
+ '2025-07-28T12:00:00.000000000' '2025-07-29T12:00:00.000000000'
+ '2025-07-30T12:00:00.000000000' '2025-07-31T12:00:00.000000000'
+ '2025-08-01T12:00:00.000000000' '2025-08-02T12:00:00.000000000'
+ '2025-08-03T12:00:00.000000000' '2025-08-04T12:00:00.000000000'
+ '2025-08-05T12:00:00.000000000' '2025-08-06T12:00:00.000000000'
+ '2025-08-07T12:00:00.000000000' '2025-08-08T12:00:00.000000000'
+ '2025-08-09T12:00:00.000000000' '2025-08-10T12:00:00.000000000'
+ '2025-08-11T12:00:00.000000000' '2025-08-12T12:00:00.000000000'
+ '2025-08-13T12:00:00.000000000' '2025-08-14T12:00:00.000000000'
+ '2025-08-15T12:00:00.000000000' '2025-08-16T12:00:00.000000000'
+ '2025-08-17T12:00:00.000000000' '2025-08-18T12:00:00.000000000'
+ '2025-08-19T12:00:00.000000000' '2025-08-20T12:00:00.000000000'
+ '2025-08-21T12:00:00.000000000' '2025-08-22T12:00:00.000000000'
+ '2025-08-23T12:00:00.000000000' '2025-08-24T12:00:00.000000000'
+ '2025-08-25T12:00:00.000000000' '2025-08-26T12:00:00.000000000'
+ '2025-08-27T12:00:00.000000000' '2025-08-28T12:00:00.000000000'
+ '2025-08-29T12:00:00.000000000' '2025-08-30T12:00:00.000000000'
+ '2025-08-31T12:00:00.000000000' '2025-09-01T12:00:00.000000000'
+ '2025-09-02T12:00:00.000000000' '2025-09-03T12:00:00.000000000'
+ '2025-09-04T12:00:00.000000000' '2025-09-05T12:00:00.000000000'
+ '2025-09-06T12:00:00.000000000' '2025-09-07T12:00:00.000000000'
+ '2025-09-08T12:00:00.000000000' '2025-09-09T12:00:00.000000000'
+ '2025-09-10T12:00:00.000000000' '2025-09-11T12:00:00.000000000'
+ '2025-09-12T12:00:00.000000000' '2025-09-13T12:00:00.000000000'
+ '2025-09-14T12:00:00.000000000' '2025-09-15T12:00:00.000000000'
+ '2025-09-16T12:00:00.000000000' '2025-09-17T12:00:00.000000000'
+ '2025-09-18T12:00:00.000000000' '2025-09-19T12:00:00.000000000'
+ '2025-09-20T12:00:00.000000000' '2025-09-21T12:00:00.000000000'
+ '2025-09-22T12:00:00.000000000' '2025-09-23T12:00:00.000000000'
+ '2025-09-24T12:00:00.000000000' '2025-09-25T12:00:00.000000000'
+ '2025-09-26T12:00:00.000000000' '2025-09-27T12:00:00.000000000'
+ '2025-09-28T12:00:00.000000000' '2025-09-29T12:00:00.000000000'
+ '2025-09-30T12:00:00.000000000' '2025-10-01T12:00:00.000000000'
+ '2025-10-02T12:00:00.000000000' '2025-10-03T12:00:00.000000000'
+ '2025-10-04T12:00:00.000000000' '2025-10-05T12:00:00.000000000'
+ '2025-10-06T12:00:00.000000000' '2025-10-07T12:00:00.000000000'
+ '2025-10-08T12:00:00.000000000' '2025-10-09T12:00:00.000000000'
+ '2025-10-10T12:00:00.000000000' '2025-10-11T12:00:00.000000000'
+ '2025-10-12T12:00:00.000000000' '2025-10-13T12:00:00.000000000'
+ '2025-10-14T12:00:00.000000000' '2025-10-15T12:00:00.000000000'
+ '2025-10-16T12:00:00.000000000' '2025-10-17T12:00:00.000000000'
+ '2025-10-18T12:00:00.000000000' '2025-10-19T12:00:00.000000000'
+ '2025-10-20T12:00:00.000000000' '2025-10-21T12:00:00.000000000'
+ '2025-10-22T12:00:00.000000000' '2025-10-23T12:00:00.000000000'
+ '2025-10-24T12:00:00.000000000' '2025-10-25T12:00:00.000000000'
+ '2025-10-26T12:00:00.000000000' '2025-10-27T12:00:00.000000000'
+ '2025-10-28T12:00:00.000000000' '2025-10-29T12:00:00.000000000'
+ '2025-10-30T12:00:00.000000000' '2025-10-31T12:00:00.000000000'
+ '2025-11-01T12:00:00.000000000' '2025-11-02T12:00:00.000000000'
+ '2025-11-03T12:00:00.000000000' '2025-11-04T12:00:00.000000000'
+ '2025-11-05T12:00:00.000000000' '2025-11-06T12:00:00.000000000'
+ '2025-11-07T12:00:00.000000000' '2025-11-08T12:00:00.000000000'
+ '2025-11-09T12:00:00.000000000' '2025-11-10T12:00:00.000000000'
+ '2025-11-11T12:00:00.000000000' '2025-11-12T12:00:00.000000000'
+ '2025-11-13T12:00:00.000000000' '2025-11-14T12:00:00.000000000'
+ '2025-11-15T12:00:00.000000000' '2025-11-16T12:00:00.000000000'
+ '2025-11-17T12:00:00.000000000' '2025-11-18T12:00:00.000000000'
+ '2025-11-19T12:00:00.000000000' '2025-11-20T12:00:00.000000000'
+ '2025-11-21T12:00:00.000000000' '2025-11-22T12:00:00.000000000'
+ '2025-11-23T12:00:00.000000000']
+(327,)
+================================================================================
+[[[1.25000e-01 0.00000e+00 0.00000e+00 ... 3.75000e-01 3.75000e-01
+   0.00000e+00]
+  [2.50000e-01 2.50000e-01 2.50000e-01 ... 2.50000e-01 5.00000e-01
+   6.25000e-01]
+  [3.75000e-01 3.75000e-01 3.75000e-01 ... 1.25000e-01 2.50000e-01
+   5.00000e-01]
+  ...
+  [0.00000e+00 0.00000e+00 0.00000e+00 ... 3.50000e+00 3.37500e+00
+   2.75000e+00]
+  [0.00000e+00 0.00000e+00 0.00000e+00 ... 3.50000e+00 3.62500e+00
+   3.50000e+00]
+  [0.00000e+00 0.00000e+00 0.00000e+00 ... 4.12500e+00 3.62500e+00
+   3.87500e+00]]
+
+ [[0.00000e+00 0.00000e+00 0.00000e+00 ... 3.75000e-01 6.25000e-02
+   0.00000e+00]
+  [0.00000e+00 0.00000e+00 0.00000e+00 ... 3.12500e-01 6.25000e-02
+   0.00000e+00]
+  [0.00000e+00 0.00000e+00 0.00000e+00 ... 2.50000e-01 1.25000e-01
+   0.00000e+00]
+  ...
+  [8.75000e-01 6.25000e-01 5.00000e-01 ... 6.25000e-02 1.25000e-01
+   6.25000e-01]
+  [1.00000e+00 3.12500e-01 1.25000e-01 ... 6.25000e-02 6.25000e-02
+   7.50000e-01]
+  [9.37500e-01 3.12500e-01 2.50000e-01 ... 2.50000e-01 3.12500e-01
+   6.25000e-01]]
+
+ [[0.00000e+00 0.00000e+00 0.00000e+00 ... 8.79375e+01 6.21250e+01
+   5.03750e+01]
+  [0.00000e+00 0.00000e+00 0.00000e+00 ... 8.39375e+01 6.70625e+01
+   5.40625e+01]
+  [0.00000e+00 0.00000e+00 0.00000e+00 ... 8.40625e+01 5.49375e+01
+   5.41250e+01]
+  ...
+  [6.93750e+00 7.93750e+00 3.62500e+00 ... 3.81250e+00 3.56250e+00
+   3.87500e+00]
+  [4.56250e+00 3.12500e+00 4.75000e+00 ... 3.50000e+00 3.43750e+00
+   3.75000e+00]
+  [2.56250e+00 2.25000e+00 2.43750e+00 ... 5.43750e+00 4.43750e+00
+   3.37500e+00]]
+
+ ...
+
+ [[2.56250e+00 2.43750e+00 2.25000e+00 ... 0.00000e+00 0.00000e+00
+   0.00000e+00]
+  [1.75000e+00 1.87500e+00 2.75000e+00 ... 0.00000e+00 0.00000e+00
+   0.00000e+00]
+  [2.81250e+00 3.50000e+00 4.00000e+00 ... 0.00000e+00 0.00000e+00
+   0.00000e+00]
+  ...
+  [2.50000e-01 2.50000e-01 2.50000e-01 ... 0.00000e+00 0.00000e+00
+   0.00000e+00]
+  [2.50000e-01 3.12500e-01 3.12500e-01 ... 0.00000e+00 0.00000e+00
+   0.00000e+00]
+  [3.12500e-01 3.75000e-01 3.75000e-01 ... 0.00000e+00 0.00000e+00
+   0.00000e+00]]
+
+ [[0.00000e+00 0.00000e+00 0.00000e+00 ... 3.44375e+01 3.53125e+01
+   3.41250e+01]
+  [0.00000e+00 0.00000e+00 0.00000e+00 ... 3.46250e+01 3.24375e+01
+   3.53125e+01]
+  [0.00000e+00 0.00000e+00 0.00000e+00 ... 3.52500e+01 2.82500e+01
+   2.68125e+01]
+  ...
+  [4.37500e-01 5.00000e-01 7.50000e-01 ... 0.00000e+00 0.00000e+00
+   0.00000e+00]
+  [1.18750e+00 8.12500e-01 1.68750e+00 ... 0.00000e+00 0.00000e+00
+   0.00000e+00]
+  [1.18750e+00 1.43750e+00 2.25000e+00 ... 0.00000e+00 0.00000e+00
+   0.00000e+00]]
+
+ [[0.00000e+00 0.00000e+00 0.00000e+00 ... 0.00000e+00 0.00000e+00
+   0.00000e+00]
+  [0.00000e+00 0.00000e+00 0.00000e+00 ... 0.00000e+00 0.00000e+00
+   0.00000e+00]
+  [0.00000e+00 0.00000e+00 0.00000e+00 ... 0.00000e+00 0.00000e+00
+   0.00000e+00]
+  ...
+  [0.00000e+00 0.00000e+00 0.00000e+00 ... 0.00000e+00 0.00000e+00
+   0.00000e+00]
+  [0.00000e+00 0.00000e+00 0.00000e+00 ... 0.00000e+00 0.00000e+00
+   0.00000e+00]
+  [0.00000e+00 0.00000e+00 0.00000e+00 ... 0.00000e+00 0.00000e+00
+   0.00000e+00]]]
+(327, 179, 179)
+================================================================================
+prec                Data                prec  ...  ZORTÉA  BALNEÁRIO RINCÃO
+0    2025-01-01 12:00:00 2025-01-01 12:00:00  ...  0.5000            0.5000
+1    2025-01-02 12:00:00 2025-01-02 12:00:00  ...  6.3750           17.3125
+2    2025-01-03 12:00:00 2025-01-03 12:00:00  ...  6.9375            2.0000
+3    2025-01-04 12:00:00 2025-01-04 12:00:00  ...  0.0000            0.0000
+4    2025-01-05 12:00:00 2025-01-05 12:00:00  ...  0.0000            0.0000
+..                   ...                 ...  ...     ...               ...
+322  2025-11-19 12:00:00 2025-11-19 12:00:00  ...  1.7500            0.6250
+323  2025-11-20 12:00:00 2025-11-20 12:00:00  ...  0.0000            0.0000
+324  2025-11-21 12:00:00 2025-11-21 12:00:00  ...  0.0000            0.0000
+325  2025-11-22 12:00:00 2025-11-22 12:00:00  ...  0.0000            0.0000
+326  2025-11-23 12:00:00 2025-11-23 12:00:00  ...  3.2500           13.5625
+
+[327 rows x 297 columns]
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 327 entries, 0 to 326
+Columns: 297 entries, Data to BALNEÁRIO RINCÃO
+dtypes: datetime64[ns](2), float64(295)
+memory usage: 758.9 KB
+None
+prec
+Data                datetime64[ns]
+prec                datetime64[ns]
+ABDON BATISTA              float64
+ABELARDO LUZ               float64
+AGROLÂNDIA                 float64
+                         ...      
+XANXERÊ                    float64
+XAVANTINA                  float64
+XAXIM                      float64
+ZORTÉA                     float64
+BALNEÁRIO RINCÃO           float64
+Length: 297, dtype: object
+================================================================================
+
+[1mVERIFICAÇÃO DE DADOS FALTANTES[1m
+
+
+Quantidade de valores [91m[1mNaN: 0[1m[0m
+
+[92m[1mNÃO há valores [91mNaN[0m
+
+================================================================================
+/home/meteoro/scripts/matheus/teste/operacional_dengue/extrai_clima.py:168: UserWarning: Geometry is in a geographic CRS. Results from 'centroid' are likely incorrect. Use 'GeoSeries.to_crs()' to re-project geometries to a projected CRS before this operation.
+
+  shapefile["centroide"] = shapefile["geometry"].centroid
+
+[92mARQUIVO SALVO COM SUCESSO!
+
+Semana Epidemiológica - PREC[0m
+
+prec     Semana  ABDON BATISTA  ...   ZORTÉA  BALNEÁRIO RINCÃO
+1    2025-01-05        8.25000  ...   2.5000            1.8125
+2    2025-01-12        1.68750  ...   2.6250            5.8750
+3    2025-01-19       12.15625  ...   8.5625           10.5000
+4    2025-01-26       25.93750  ...  14.8125           21.5000
+5    2025-02-02        8.75000  ...   0.7500           12.5000
+6    2025-02-09        7.50000  ...  19.8125           34.2500
+7    2025-02-16       39.75000  ...  16.1875           55.6875
+8    2025-02-23       21.43750  ...  17.5625           37.5625
+9    2025-03-02       14.00000  ...   2.8750            0.0000
+10   2025-03-09       30.25000  ...  10.3750           15.9375
+11   2025-03-16        0.00000  ...   0.3750            0.0000
+12   2025-03-23        2.75000  ...  15.8750            2.1250
+13   2025-03-30       21.25000  ...  17.8125           57.1250
+14   2025-04-06       39.37500  ...  20.3750           45.0000
+15   2025-04-13       33.68750  ...  36.5625            6.1250
+16   2025-04-20        2.81250  ...   0.7500            1.3750
+17   2025-04-27        0.43750  ...   2.6250           12.2500
+18   2025-05-04       26.68750  ...   9.7500            8.4375
+19   2025-05-11        0.25000  ...   0.0000            1.9375
+20   2025-05-18       10.12500  ...   4.6250            5.5625
+21   2025-05-25       31.43750  ...  14.6875           23.6250
+22   2025-06-01       53.37500  ...  21.8750           29.6875
+23   2025-06-08        8.25000  ...   4.1250            1.5000
+24   2025-06-15       76.25000  ...  47.0000           26.0625
+25   2025-06-22       67.18750  ...  45.7500           53.2500
+26   2025-06-29      126.87500  ...  38.6250           63.3750
+27   2025-07-06        0.00000  ...   0.0000            0.0000
+28   2025-07-13        0.00000  ...   0.6875            0.4375
+29   2025-07-20        4.37500  ...   3.1875            3.6250
+30   2025-07-27       58.25000  ...  48.1250           17.0625
+31   2025-08-03       52.12500  ...  81.8125           61.1250
+32   2025-08-10        0.00000  ...   0.0000            0.1875
+33   2025-08-17       24.43750  ...  19.8750            5.2500
+34   2025-08-24       59.12500  ...  38.0625           37.5625
+35   2025-08-31       30.62500  ...  31.0625           26.1250
+36   2025-09-07       39.56250  ...  46.2500           18.8750
+37   2025-09-14        6.75000  ...   7.2500            3.6250
+38   2025-09-21       63.87500  ...  91.7500           49.3750
+39   2025-09-28       33.87500  ...  57.1250           28.2500
+40   2025-10-05       20.50000  ...  23.3750            8.5000
+41   2025-10-12       68.00000  ...  90.8125           22.0000
+42   2025-10-19        0.06250  ...   1.1250           19.1250
+43   2025-10-26       53.12500  ...  60.8750           75.5000
+44   2025-11-02        9.75000  ...  46.3125           76.7500
+45   2025-11-09        0.06250  ...   0.0000            9.7500
+46   2025-11-16        8.31250  ...  19.9375            6.6875
+47   2025-11-23        0.00000  ...   3.2500           13.5625
+
+[47 rows x 296 columns]
+
+
+[91mAs variáveis do arquivo (PREC), em semanas epidemiológicas, são:[0m
+prec
+Semana              datetime64[ns]
+ABDON BATISTA              float64
+ABELARDO LUZ               float64
+AGROLÂNDIA                 float64
+AGRONÔMICA                 float64
+                         ...      
+XANXERÊ                    float64
+XAVANTINA                  float64
+XAXIM                      float64
+ZORTÉA                     float64
+BALNEÁRIO RINCÃO           float64
+Length: 296, dtype: object
+
+
+[92mprectotal
+[0m            Data        prec  ABDON BATISTA  ...   XAXIM  ZORTÉA  BALNEÁRIO RINCÃO
+0     2000-06-02  2000-06-02          0.000  ...   9.250    0.00            0.0000
+1     2000-06-03  2000-06-03          0.000  ...   1.125    0.00            0.0000
+2     2000-06-04  2000-06-04          0.000  ...   0.250    2.00            0.0000
+3     2000-06-05  2000-06-05          8.500  ...  10.500    9.00            0.7500
+4     2000-06-06  2000-06-06         18.750  ...   3.875    8.75           10.6250
+...          ...         ...            ...  ...     ...     ...               ...
+9292  2025-11-19         NaN          3.125  ...   0.000    1.75            0.6250
+9293  2025-11-20         NaN          0.000  ...   0.000    0.00            0.0000
+9294  2025-11-21         NaN          0.000  ...   0.000    0.00            0.0000
+9295  2025-11-22         NaN          0.000  ...   0.000    0.00            0.0000
+9296  2025-11-23         NaN          0.000  ...   0.000    3.25           13.5625
+
+[9297 rows x 297 columns]
+
+
+[92mprectotal_se
+[0m          Semana  ABDON BATISTA  ...   ZORTÉA  BALNEÁRIO RINCÃO
+0     2000-06-04        27.5000  ...  20.5000           15.0000
+1     2000-06-11        12.0000  ...  12.1250            0.1250
+2     2000-06-18        35.6250  ...  25.2500           38.1250
+3     2000-06-25        67.2500  ...  59.6250           83.5000
+4     2000-07-02        23.6250  ...  20.2500            6.7500
+...          ...            ...  ...      ...               ...
+1324  2025-10-26        53.1250  ...  60.8750           75.5000
+1325  2025-11-02         9.7500  ...  46.3125           76.7500
+1326  2025-11-09         0.0625  ...   0.0000            9.7500
+1327  2025-11-16         8.3125  ...  19.9375            6.6875
+1328  2025-11-23         0.0000  ...   3.2500           13.5625
+
+[1329 rows x 296 columns]
+
+      BALNEÁRIO CAMBORIÚ  BOMBINHAS  PORTO BELO
+0                 2.6250     2.1250      3.0000
+1                20.3750    19.5000     17.0000
+2                44.2500    45.5000     40.7500
+3                38.8750    47.1250     36.3750
+4                 1.7500     2.0000      1.8750
+...                  ...        ...         ...
+1324             21.3125    20.3750     13.3750
+1325             48.4375    38.4375     36.0625
+1326              2.7500     2.0000      1.8750
+1327             13.1875     8.5625     10.5625
+1328              6.2500    12.5000     10.6875
+
+[1329 rows x 3 columns]
+
+[92m---tmin---
+
+[0mABDON BATISTA: Finalizado!
+
+
+[91m1 de 295.[0m
+
+
+[92m---tmin---
+
+[0mABELARDO LUZ: Finalizado!
+
+
+[91m2 de 295.[0m
+
+
+[92m---tmin---
+
+[0mAGROLÂNDIA: Finalizado!
+
+
+[91m3 de 295.[0m
+
+
+[92m---tmin---
+
+[0mAGRONÔMICA: Finalizado!
+
+
+[91m4 de 295.[0m
+
+
+[92m---tmin---
+
+[0mÁGUA DOCE: Finalizado!
+
+
+[91m5 de 295.[0m
+
+
+[92m---tmin---
+
+[0mÁGUAS DE CHAPECÓ: Finalizado!
+
+
+[91m6 de 295.[0m
+
+
+[92m---tmin---
+
+[0mÁGUAS FRIAS: Finalizado!
+
+
+[91m7 de 295.[0m
+
+
+[92m---tmin---
+
+[0mÁGUAS MORNAS: Finalizado!
+
+
+[91m8 de 295.[0m
+
+
+[92m---tmin---
+
+[0mALFREDO WAGNER: Finalizado!
+
+
+[91m9 de 295.[0m
+
+
+[92m---tmin---
+
+[0mALTO BELA VISTA: Finalizado!
+
+
+[91m10 de 295.[0m
+
+
+[92m---tmin---
+
+[0mANCHIETA: Finalizado!
+
+
+[91m11 de 295.[0m
+
+
+[92m---tmin---
+
+[0mANGELINA: Finalizado!
+
+
+[91m12 de 295.[0m
+
+
+[92m---tmin---
+
+[0mANITA GARIBALDI: Finalizado!
+
+
+[91m13 de 295.[0m
+
+
+[92m---tmin---
+
+[0mANITÁPOLIS: Finalizado!
+
+
+[91m14 de 295.[0m
+
+
+[92m---tmin---
+
+[0mANTÔNIO CARLOS: Finalizado!
+
+
+[91m15 de 295.[0m
+
+
+[92m---tmin---
+
+[0mAPIÚNA: Finalizado!
+
+
+[91m16 de 295.[0m
+
+
+[92m---tmin---
+
+[0mARABUTÃ: Finalizado!
+
+
+[91m17 de 295.[0m
+
+
+[92m---tmin---
+
+[0mARAQUARI: Finalizado!
+
+
+[91m18 de 295.[0m
+
+
+[92m---tmin---
+
+[0mARARANGUÁ: Finalizado!
+
+
+[91m19 de 295.[0m
+
+
+[92m---tmin---
+
+[0mARMAZÉM: Finalizado!
+
+
+[91m20 de 295.[0m
+
+
+[92m---tmin---
+
+[0mARROIO TRINTA: Finalizado!
+
+
+[91m21 de 295.[0m
+
+
+[92m---tmin---
+
+[0mARVOREDO: Finalizado!
+
+
+[91m22 de 295.[0m
+
+
+[92m---tmin---
+
+[0mASCURRA: Finalizado!
+
+
+[91m23 de 295.[0m
+
+
+[92m---tmin---
+
+[0mATALANTA: Finalizado!
+
+
+[91m24 de 295.[0m
+
+
+[92m---tmin---
+
+[0mAURORA: Finalizado!
+
+
+[91m25 de 295.[0m
+
+
+[92m---tmin---
+
+[0mBALNEÁRIO ARROIO DO SILVA: Finalizado!
+
+
+[91m26 de 295.[0m
+
+
+[92m---tmin---
+
+[0mBALNEÁRIO CAMBORIÚ: Finalizado!
+
+
+[91m27 de 295.[0m
+
+
+[92m---tmin---
+
+[0mBALNEÁRIO BARRA DO SUL: Finalizado!
+
+
+[91m28 de 295.[0m
+
+
+[92m---tmin---
+
+[0mBALNEÁRIO GAIVOTA: Finalizado!
+
+
+[91m29 de 295.[0m
+
+
+[92m---tmin---
+
+[0mBANDEIRANTE: Finalizado!
+
+
+[91m30 de 295.[0m
+
+
+[92m---tmin---
+
+[0mBARRA BONITA: Finalizado!
+
+
+[91m31 de 295.[0m
+
+
+[92m---tmin---
+
+[0mBARRA VELHA: Finalizado!
+
+
+[91m32 de 295.[0m
+
+
+[92m---tmin---
+
+[0mBELA VISTA DO TOLDO: Finalizado!
+
+
+[91m33 de 295.[0m
+
+
+[92m---tmin---
+
+[0mBELMONTE: Finalizado!
+
+
+[91m34 de 295.[0m
+
+
+[92m---tmin---
+
+[0mBENEDITO NOVO: Finalizado!
+
+
+[91m35 de 295.[0m
+
+
+[92m---tmin---
+
+[0mBIGUAÇU: Finalizado!
+
+
+[91m36 de 295.[0m
+
+
+[92m---tmin---
+
+[0mBLUMENAU: Finalizado!
+
+
+[91m37 de 295.[0m
+
+
+[92m---tmin---
+
+[0mBOCAINA DO SUL: Finalizado!
+
+
+[91m38 de 295.[0m
+
+
+[92m---tmin---
+
+[0mBOMBINHAS: Finalizado!
+
+
+[91m39 de 295.[0m
+
+
+[92m---tmin---
+
+[0mBOM JARDIM DA SERRA: Finalizado!
+
+
+[91m40 de 295.[0m
+
+
+[92m---tmin---
+
+[0mBOM JESUS: Finalizado!
+
+
+[91m41 de 295.[0m
+
+
+[92m---tmin---
+
+[0mBOM JESUS DO OESTE: Finalizado!
+
+
+[91m42 de 295.[0m
+
+
+[92m---tmin---
+
+[0mBOM RETIRO: Finalizado!
+
+
+[91m43 de 295.[0m
+
+
+[92m---tmin---
+
+[0mBOTUVERÁ: Finalizado!
+
+
+[91m44 de 295.[0m
+
+
+[92m---tmin---
+
+[0mBRAÇO DO NORTE: Finalizado!
+
+
+[91m45 de 295.[0m
+
+
+[92m---tmin---
+
+[0mBRAÇO DO TROMBUDO: Finalizado!
+
+
+[91m46 de 295.[0m
+
+
+[92m---tmin---
+
+[0mBRUNÓPOLIS: Finalizado!
+
+
+[91m47 de 295.[0m
+
+
+[92m---tmin---
+
+[0mBRUSQUE: Finalizado!
+
+
+[91m48 de 295.[0m
+
+
+[92m---tmin---
+
+[0mCAÇADOR: Finalizado!
+
+
+[91m49 de 295.[0m
+
+
+[92m---tmin---
+
+[0mCAIBI: Finalizado!
+
+
+[91m50 de 295.[0m
+
+
+[92m---tmin---
+
+[0mCALMON: Finalizado!
+
+
+[91m51 de 295.[0m
+
+
+[92m---tmin---
+
+[0mCAMBORIÚ: Finalizado!
+
+
+[91m52 de 295.[0m
+
+
+[92m---tmin---
+
+[0mCAPÃO ALTO: Finalizado!
+
+
+[91m53 de 295.[0m
+
+
+[92m---tmin---
+
+[0mCAMPO ALEGRE: Finalizado!
+
+
+[91m54 de 295.[0m
+
+
+[92m---tmin---
+
+[0mCAMPO BELO DO SUL: Finalizado!
+
+
+[91m55 de 295.[0m
+
+
+[92m---tmin---
+
+[0mCAMPO ERÊ: Finalizado!
+
+
+[91m56 de 295.[0m
+
+
+[92m---tmin---
+
+[0mCAMPOS NOVOS: Finalizado!
+
+
+[91m57 de 295.[0m
+
+
+[92m---tmin---
+
+[0mCANELINHA: Finalizado!
+
+
+[91m58 de 295.[0m
+
+
+[92m---tmin---
+
+[0mCANOINHAS: Finalizado!
+
+
+[91m59 de 295.[0m
+
+
+[92m---tmin---
+
+[0mCAPINZAL: Finalizado!
+
+
+[91m60 de 295.[0m
+
+
+[92m---tmin---
+
+[0mCAPIVARI DE BAIXO: Finalizado!
+
+
+[91m61 de 295.[0m
+
+
+[92m---tmin---
+
+[0mCATANDUVAS: Finalizado!
+
+
+[91m62 de 295.[0m
+
+
+[92m---tmin---
+
+[0mCAXAMBU DO SUL: Finalizado!
+
+
+[91m63 de 295.[0m
+
+
+[92m---tmin---
+
+[0mCELSO RAMOS: Finalizado!
+
+
+[91m64 de 295.[0m
+
+
+[92m---tmin---
+
+[0mCERRO NEGRO: Finalizado!
+
+
+[91m65 de 295.[0m
+
+
+[92m---tmin---
+
+[0mCHAPADÃO DO LAGEADO: Finalizado!
+
+
+[91m66 de 295.[0m
+
+
+[92m---tmin---
+
+[0mCHAPECÓ: Finalizado!
+
+
+[91m67 de 295.[0m
+
+
+[92m---tmin---
+
+[0mCOCAL DO SUL: Finalizado!
+
+
+[91m68 de 295.[0m
+
+
+[92m---tmin---
+
+[0mCONCÓRDIA: Finalizado!
+
+
+[91m69 de 295.[0m
+
+
+[92m---tmin---
+
+[0mCORDILHEIRA ALTA: Finalizado!
+
+
+[91m70 de 295.[0m
+
+
+[92m---tmin---
+
+[0mCORONEL FREITAS: Finalizado!
+
+
+[91m71 de 295.[0m
+
+
+[92m---tmin---
+
+[0mCORONEL MARTINS: Finalizado!
+
+
+[91m72 de 295.[0m
+
+
+[92m---tmin---
+
+[0mCORUPÁ: Finalizado!
+
+
+[91m73 de 295.[0m
+
+
+[92m---tmin---
+
+[0mCORREIA PINTO: Finalizado!
+
+
+[91m74 de 295.[0m
+
+
+[92m---tmin---
+
+[0mCRICIÚMA: Finalizado!
+
+
+[91m75 de 295.[0m
+
+
+[92m---tmin---
+
+[0mCUNHA PORÃ: Finalizado!
+
+
+[91m76 de 295.[0m
+
+
+[92m---tmin---
+
+[0mCUNHATAÍ: Finalizado!
+
+
+[91m77 de 295.[0m
+
+
+[92m---tmin---
+
+[0mCURITIBANOS: Finalizado!
+
+
+[91m78 de 295.[0m
+
+
+[92m---tmin---
+
+[0mDESCANSO: Finalizado!
+
+
+[91m79 de 295.[0m
+
+
+[92m---tmin---
+
+[0mDIONÍSIO CERQUEIRA: Finalizado!
+
+
+[91m80 de 295.[0m
+
+
+[92m---tmin---
+
+[0mDONA EMMA: Finalizado!
+
+
+[91m81 de 295.[0m
+
+
+[92m---tmin---
+
+[0mDOUTOR PEDRINHO: Finalizado!
+
+
+[91m82 de 295.[0m
+
+
+[92m---tmin---
+
+[0mENTRE RIOS: Finalizado!
+
+
+[91m83 de 295.[0m
+
+
+[92m---tmin---
+
+[0mERMO: Finalizado!
+
+
+[91m84 de 295.[0m
+
+
+[92m---tmin---
+
+[0mERVAL VELHO: Finalizado!
+
+
+[91m85 de 295.[0m
+
+
+[92m---tmin---
+
+[0mFAXINAL DOS GUEDES: Finalizado!
+
+
+[91m86 de 295.[0m
+
+
+[92m---tmin---
+
+[0mFLOR DO SERTÃO: Finalizado!
+
+
+[91m87 de 295.[0m
+
+
+[92m---tmin---
+
+[0mFLORIANÓPOLIS: Finalizado!
+
+
+[91m88 de 295.[0m
+
+
+[92m---tmin---
+
+[0mFORMOSA DO SUL: Finalizado!
+
+
+[91m89 de 295.[0m
+
+
+[92m---tmin---
+
+[0mFORQUILHINHA: Finalizado!
+
+
+[91m90 de 295.[0m
+
+
+[92m---tmin---
+
+[0mFRAIBURGO: Finalizado!
+
+
+[91m91 de 295.[0m
+
+
+[92m---tmin---
+
+[0mFREI ROGÉRIO: Finalizado!
+
+
+[91m92 de 295.[0m
+
+
+[92m---tmin---
+
+[0mGALVÃO: Finalizado!
+
+
+[91m93 de 295.[0m
+
+
+[92m---tmin---
+
+[0mGAROPABA: Finalizado!
+
+
+[91m94 de 295.[0m
+
+
+[92m---tmin---
+
+[0mGARUVA: Finalizado!
+
+
+[91m95 de 295.[0m
+
+
+[92m---tmin---
+
+[0mGASPAR: Finalizado!
+
+
+[91m96 de 295.[0m
+
+
+[92m---tmin---
+
+[0mGOVERNADOR CELSO RAMOS: Finalizado!
+
+
+[91m97 de 295.[0m
+
+
+[92m---tmin---
+
+[0mGRÃO-PARÁ: Finalizado!
+
+
+[91m98 de 295.[0m
+
+
+[92m---tmin---
+
+[0mGRAVATAL: Finalizado!
+
+
+[91m99 de 295.[0m
+
+
+[92m---tmin---
+
+[0mGUABIRUBA: Finalizado!
+
+
+[91m100 de 295.[0m
+
+
+[92m---tmin---
+
+[0mGUARACIABA: Finalizado!
+
+
+[91m101 de 295.[0m
+
+
+[92m---tmin---
+
+[0mGUARAMIRIM: Finalizado!
+
+
+[91m102 de 295.[0m
+
+
+[92m---tmin---
+
+[0mGUARUJÁ DO SUL: Finalizado!
+
+
+[91m103 de 295.[0m
+
+
+[92m---tmin---
+
+[0mGUATAMBÚ: Finalizado!
+
+
+[91m104 de 295.[0m
+
+
+[92m---tmin---
+
+[0mHERVAL D'OESTE: Finalizado!
+
+
+[91m105 de 295.[0m
+
+
+[92m---tmin---
+
+[0mIBIAM: Finalizado!
+
+
+[91m106 de 295.[0m
+
+
+[92m---tmin---
+
+[0mIBICARÉ: Finalizado!
+
+
+[91m107 de 295.[0m
+
+
+[92m---tmin---
+
+[0mIBIRAMA: Finalizado!
+
+
+[91m108 de 295.[0m
+
+
+[92m---tmin---
+
+[0mIÇARA: Finalizado!
+
+
+[91m109 de 295.[0m
+
+
+[92m---tmin---
+
+[0mILHOTA: Finalizado!
+
+
+[91m110 de 295.[0m
+
+
+[92m---tmin---
+
+[0mIMARUÍ: Finalizado!
+
+
+[91m111 de 295.[0m
+
+
+[92m---tmin---
+
+[0mIMBITUBA: Finalizado!
+
+
+[91m112 de 295.[0m
+
+
+[92m---tmin---
+
+[0mIMBUIA: Finalizado!
+
+
+[91m113 de 295.[0m
+
+
+[92m---tmin---
+
+[0mINDAIAL: Finalizado!
+
+
+[91m114 de 295.[0m
+
+
+[92m---tmin---
+
+[0mIOMERÊ: Finalizado!
+
+
+[91m115 de 295.[0m
+
+
+[92m---tmin---
+
+[0mIPIRA: Finalizado!
+
+
+[91m116 de 295.[0m
+
+
+[92m---tmin---
+
+[0mIPORÃ DO OESTE: Finalizado!
+
+
+[91m117 de 295.[0m
+
+
+[92m---tmin---
+
+[0mIPUAÇU: Finalizado!
+
+
+[91m118 de 295.[0m
+
+
+[92m---tmin---
+
+[0mIPUMIRIM: Finalizado!
+
+
+[91m119 de 295.[0m
+
+
+[92m---tmin---
+
+[0mIRACEMINHA: Finalizado!
+
+
+[91m120 de 295.[0m
+
+
+[92m---tmin---
+
+[0mIRANI: Finalizado!
+
+
+[91m121 de 295.[0m
+
+
+[92m---tmin---
+
+[0mIRATI: Finalizado!
+
+
+[91m122 de 295.[0m
+
+
+[92m---tmin---
+
+[0mIRINEÓPOLIS: Finalizado!
+
+
+[91m123 de 295.[0m
+
+
+[92m---tmin---
+
+[0mITÁ: Finalizado!
+
+
+[91m124 de 295.[0m
+
+
+[92m---tmin---
+
+[0mITAIÓPOLIS: Finalizado!
+
+
+[91m125 de 295.[0m
+
+
+[92m---tmin---
+
+[0mITAJAÍ: Finalizado!
+
+
+[91m126 de 295.[0m
+
+
+[92m---tmin---
+
+[0mITAPEMA: Finalizado!
+
+
+[91m127 de 295.[0m
+
+
+[92m---tmin---
+
+[0mITAPIRANGA: Finalizado!
+
+
+[91m128 de 295.[0m
+
+
+[92m---tmin---
+
+[0mITAPOÁ: Finalizado!
+
+
+[91m129 de 295.[0m
+
+
+[92m---tmin---
+
+[0mITUPORANGA: Finalizado!
+
+
+[91m130 de 295.[0m
+
+
+[92m---tmin---
+
+[0mJABORÁ: Finalizado!
+
+
+[91m131 de 295.[0m
+
+
+[92m---tmin---
+
+[0mJACINTO MACHADO: Finalizado!
+
+
+[91m132 de 295.[0m
+
+
+[92m---tmin---
+
+[0mJAGUARUNA: Finalizado!
+
+
+[91m133 de 295.[0m
+
+
+[92m---tmin---
+
+[0mJARAGUÁ DO SUL: Finalizado!
+
+
+[91m134 de 295.[0m
+
+
+[92m---tmin---
+
+[0mJARDINÓPOLIS: Finalizado!
+
+
+[91m135 de 295.[0m
+
+
+[92m---tmin---
+
+[0mJOAÇABA: Finalizado!
+
+
+[91m136 de 295.[0m
+
+
+[92m---tmin---
+
+[0mJOINVILLE: Finalizado!
+
+
+[91m137 de 295.[0m
+
+
+[92m---tmin---
+
+[0mJOSÉ BOITEUX: Finalizado!
+
+
+[91m138 de 295.[0m
+
+
+[92m---tmin---
+
+[0mJUPIÁ: Finalizado!
+
+
+[91m139 de 295.[0m
+
+
+[92m---tmin---
+
+[0mLACERDÓPOLIS: Finalizado!
+
+
+[91m140 de 295.[0m
+
+
+[92m---tmin---
+
+[0mLAGES: Finalizado!
+
+
+[91m141 de 295.[0m
+
+
+[92m---tmin---
+
+[0mLAGUNA: Finalizado!
+
+
+[91m142 de 295.[0m
+
+
+[92m---tmin---
+
+[0mLAJEADO GRANDE: Finalizado!
+
+
+[91m143 de 295.[0m
+
+
+[92m---tmin---
+
+[0mLAURENTINO: Finalizado!
+
+
+[91m144 de 295.[0m
+
+
+[92m---tmin---
+
+[0mLAURO MÜLLER: Finalizado!
+
+
+[91m145 de 295.[0m
+
+
+[92m---tmin---
+
+[0mLEBON RÉGIS: Finalizado!
+
+
+[91m146 de 295.[0m
+
+
+[92m---tmin---
+
+[0mLEOBERTO LEAL: Finalizado!
+
+
+[91m147 de 295.[0m
+
+
+[92m---tmin---
+
+[0mLINDÓIA DO SUL: Finalizado!
+
+
+[91m148 de 295.[0m
+
+
+[92m---tmin---
+
+[0mLONTRAS: Finalizado!
+
+
+[91m149 de 295.[0m
+
+
+[92m---tmin---
+
+[0mLUIZ ALVES: Finalizado!
+
+
+[91m150 de 295.[0m
+
+
+[92m---tmin---
+
+[0mLUZERNA: Finalizado!
+
+
+[91m151 de 295.[0m
+
+
+[92m---tmin---
+
+[0mMACIEIRA: Finalizado!
+
+
+[91m152 de 295.[0m
+
+
+[92m---tmin---
+
+[0mMAFRA: Finalizado!
+
+
+[91m153 de 295.[0m
+
+
+[92m---tmin---
+
+[0mMAJOR GERCINO: Finalizado!
+
+
+[91m154 de 295.[0m
+
+
+[92m---tmin---
+
+[0mMAJOR VIEIRA: Finalizado!
+
+
+[91m155 de 295.[0m
+
+
+[92m---tmin---
+
+[0mMARACAJÁ: Finalizado!
+
+
+[91m156 de 295.[0m
+
+
+[92m---tmin---
+
+[0mMARAVILHA: Finalizado!
+
+
+[91m157 de 295.[0m
+
+
+[92m---tmin---
+
+[0mMAREMA: Finalizado!
+
+
+[91m158 de 295.[0m
+
+
+[92m---tmin---
+
+[0mMASSARANDUBA: Finalizado!
+
+
+[91m159 de 295.[0m
+
+
+[92m---tmin---
+
+[0mMATOS COSTA: Finalizado!
+
+
+[91m160 de 295.[0m
+
+
+[92m---tmin---
+
+[0mMELEIRO: Finalizado!
+
+
+[91m161 de 295.[0m
+
+
+[92m---tmin---
+
+[0mMIRIM DOCE: Finalizado!
+
+
+[91m162 de 295.[0m
+
+
+[92m---tmin---
+
+[0mMODELO: Finalizado!
+
+
+[91m163 de 295.[0m
+
+
+[92m---tmin---
+
+[0mMONDAÍ: Finalizado!
+
+
+[91m164 de 295.[0m
+
+
+[92m---tmin---
+
+[0mMONTE CARLO: Finalizado!
+
+
+[91m165 de 295.[0m
+
+
+[92m---tmin---
+
+[0mMONTE CASTELO: Finalizado!
+
+
+[91m166 de 295.[0m
+
+
+[92m---tmin---
+
+[0mMORRO DA FUMAÇA: Finalizado!
+
+
+[91m167 de 295.[0m
+
+
+[92m---tmin---
+
+[0mMORRO GRANDE: Finalizado!
+
+
+[91m168 de 295.[0m
+
+
+[92m---tmin---
+
+[0mNAVEGANTES: Finalizado!
+
+
+[91m169 de 295.[0m
+
+
+[92m---tmin---
+
+[0mNOVA ERECHIM: Finalizado!
+
+
+[91m170 de 295.[0m
+
+
+[92m---tmin---
+
+[0mNOVA ITABERABA: Finalizado!
+
+
+[91m171 de 295.[0m
+
+
+[92m---tmin---
+
+[0mNOVA TRENTO: Finalizado!
+
+
+[91m172 de 295.[0m
+
+
+[92m---tmin---
+
+[0mNOVA VENEZA: Finalizado!
+
+
+[91m173 de 295.[0m
+
+
+[92m---tmin---
+
+[0mNOVO HORIZONTE: Finalizado!
+
+
+[91m174 de 295.[0m
+
+
+[92m---tmin---
+
+[0mORLEANS: Finalizado!
+
+
+[91m175 de 295.[0m
+
+
+[92m---tmin---
+
+[0mOTACÍLIO COSTA: Finalizado!
+
+
+[91m176 de 295.[0m
+
+
+[92m---tmin---
+
+[0mOURO: Finalizado!
+
+
+[91m177 de 295.[0m
+
+
+[92m---tmin---
+
+[0mOURO VERDE: Finalizado!
+
+
+[91m178 de 295.[0m
+
+
+[92m---tmin---
+
+[0mPAIAL: Finalizado!
+
+
+[91m179 de 295.[0m
+
+
+[92m---tmin---
+
+[0mPAINEL: Finalizado!
+
+
+[91m180 de 295.[0m
+
+
+[92m---tmin---
+
+[0mPALHOÇA: Finalizado!
+
+
+[91m181 de 295.[0m
+
+
+[92m---tmin---
+
+[0mPALMA SOLA: Finalizado!
+
+
+[91m182 de 295.[0m
+
+
+[92m---tmin---
+
+[0mPALMEIRA: Finalizado!
+
+
+[91m183 de 295.[0m
+
+
+[92m---tmin---
+
+[0mPALMITOS: Finalizado!
+
+
+[91m184 de 295.[0m
+
+
+[92m---tmin---
+
+[0mPAPANDUVA: Finalizado!
+
+
+[91m185 de 295.[0m
+
+
+[92m---tmin---
+
+[0mPARAÍSO: Finalizado!
+
+
+[91m186 de 295.[0m
+
+
+[92m---tmin---
+
+[0mPASSO DE TORRES: Finalizado!
+
+
+[91m187 de 295.[0m
+
+
+[92m---tmin---
+
+[0mPASSOS MAIA: Finalizado!
+
+
+[91m188 de 295.[0m
+
+
+[92m---tmin---
+
+[0mPAULO LOPES: Finalizado!
+
+
+[91m189 de 295.[0m
+
+
+[92m---tmin---
+
+[0mPEDRAS GRANDES: Finalizado!
+
+
+[91m190 de 295.[0m
+
+
+[92m---tmin---
+
+[0mPENHA: Finalizado!
+
+
+[91m191 de 295.[0m
+
+
+[92m---tmin---
+
+[0mPERITIBA: Finalizado!
+
+
+[91m192 de 295.[0m
+
+
+[92m---tmin---
+
+[0mPESCARIA BRAVA: Finalizado!
+
+
+[91m193 de 295.[0m
+
+
+[92m---tmin---
+
+[0mPETROLÂNDIA: Finalizado!
+
+
+[91m194 de 295.[0m
+
+
+[92m---tmin---
+
+[0mBALNEÁRIO PIÇARRAS: Finalizado!
+
+
+[91m195 de 295.[0m
+
+
+[92m---tmin---
+
+[0mPINHALZINHO: Finalizado!
+
+
+[91m196 de 295.[0m
+
+
+[92m---tmin---
+
+[0mPINHEIRO PRETO: Finalizado!
+
+
+[91m197 de 295.[0m
+
+
+[92m---tmin---
+
+[0mPIRATUBA: Finalizado!
+
+
+[91m198 de 295.[0m
+
+
+[92m---tmin---
+
+[0mPLANALTO ALEGRE: Finalizado!
+
+
+[91m199 de 295.[0m
+
+
+[92m---tmin---
+
+[0mPOMERODE: Finalizado!
+
+
+[91m200 de 295.[0m
+
+
+[92m---tmin---
+
+[0mPONTE ALTA: Finalizado!
+
+
+[91m201 de 295.[0m
+
+
+[92m---tmin---
+
+[0mPONTE ALTA DO NORTE: Finalizado!
+
+
+[91m202 de 295.[0m
+
+
+[92m---tmin---
+
+[0mPONTE SERRADA: Finalizado!
+
+
+[91m203 de 295.[0m
+
+
+[92m---tmin---
+
+[0mPORTO BELO: Finalizado!
+
+
+[91m204 de 295.[0m
+
+
+[92m---tmin---
+
+[0mPORTO UNIÃO: Finalizado!
+
+
+[91m205 de 295.[0m
+
+
+[92m---tmin---
+
+[0mPOUSO REDONDO: Finalizado!
+
+
+[91m206 de 295.[0m
+
+
+[92m---tmin---
+
+[0mPRAIA GRANDE: Finalizado!
+
+
+[91m207 de 295.[0m
+
+
+[92m---tmin---
+
+[0mPRESIDENTE CASTELLO BRANCO: Finalizado!
+
+
+[91m208 de 295.[0m
+
+
+[92m---tmin---
+
+[0mPRESIDENTE GETÚLIO: Finalizado!
+
+
+[91m209 de 295.[0m
+
+
+[92m---tmin---
+
+[0mPRESIDENTE NEREU: Finalizado!
+
+
+[91m210 de 295.[0m
+
+
+[92m---tmin---
+
+[0mPRINCESA: Finalizado!
+
+
+[91m211 de 295.[0m
+
+
+[92m---tmin---
+
+[0mQUILOMBO: Finalizado!
+
+
+[91m212 de 295.[0m
+
+
+[92m---tmin---
+
+[0mRANCHO QUEIMADO: Finalizado!
+
+
+[91m213 de 295.[0m
+
+
+[92m---tmin---
+
+[0mRIO DAS ANTAS: Finalizado!
+
+
+[91m214 de 295.[0m
+
+
+[92m---tmin---
+
+[0mRIO DO CAMPO: Finalizado!
+
+
+[91m215 de 295.[0m
+
+
+[92m---tmin---
+
+[0mRIO DO OESTE: Finalizado!
+
+
+[91m216 de 295.[0m
+
+
+[92m---tmin---
+
+[0mRIO DOS CEDROS: Finalizado!
+
+
+[91m217 de 295.[0m
+
+
+[92m---tmin---
+
+[0mRIO DO SUL: Finalizado!
+
+
+[91m218 de 295.[0m
+
+
+[92m---tmin---
+
+[0mRIO FORTUNA: Finalizado!
+
+
+[91m219 de 295.[0m
+
+
+[92m---tmin---
+
+[0mRIO NEGRINHO: Finalizado!
+
+
+[91m220 de 295.[0m
+
+
+[92m---tmin---
+
+[0mRIO RUFINO: Finalizado!
+
+
+[91m221 de 295.[0m
+
+
+[92m---tmin---
+
+[0mRIQUEZA: Finalizado!
+
+
+[91m222 de 295.[0m
+
+
+[92m---tmin---
+
+[0mRODEIO: Finalizado!
+
+
+[91m223 de 295.[0m
+
+
+[92m---tmin---
+
+[0mROMELÂNDIA: Finalizado!
+
+
+[91m224 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSALETE: Finalizado!
+
+
+[91m225 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSALTINHO: Finalizado!
+
+
+[91m226 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSALTO VELOSO: Finalizado!
+
+
+[91m227 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSANGÃO: Finalizado!
+
+
+[91m228 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSANTA CECÍLIA: Finalizado!
+
+
+[91m229 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSANTA HELENA: Finalizado!
+
+
+[91m230 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSANTA ROSA DE LIMA: Finalizado!
+
+
+[91m231 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSANTA ROSA DO SUL: Finalizado!
+
+
+[91m232 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSANTA TEREZINHA: Finalizado!
+
+
+[91m233 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSANTA TEREZINHA DO PROGRESSO: Finalizado!
+
+
+[91m234 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSANTIAGO DO SUL: Finalizado!
+
+
+[91m235 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSANTO AMARO DA IMPERATRIZ: Finalizado!
+
+
+[91m236 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSÃO BERNARDINO: Finalizado!
+
+
+[91m237 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSÃO BENTO DO SUL: Finalizado!
+
+
+[91m238 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSÃO BONIFÁCIO: Finalizado!
+
+
+[91m239 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSÃO CARLOS: Finalizado!
+
+
+[91m240 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSÃO CRISTÓVÃO DO SUL: Finalizado!
+
+
+[91m241 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSÃO DOMINGOS: Finalizado!
+
+
+[91m242 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSÃO FRANCISCO DO SUL: Finalizado!
+
+
+[91m243 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSÃO JOÃO DO OESTE: Finalizado!
+
+
+[91m244 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSÃO JOÃO BATISTA: Finalizado!
+
+
+[91m245 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSÃO JOÃO DO ITAPERIÚ: Finalizado!
+
+
+[91m246 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSÃO JOÃO DO SUL: Finalizado!
+
+
+[91m247 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSÃO JOAQUIM: Finalizado!
+
+
+[91m248 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSÃO JOSÉ: Finalizado!
+
+
+[91m249 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSÃO JOSÉ DO CEDRO: Finalizado!
+
+
+[91m250 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSÃO JOSÉ DO CERRITO: Finalizado!
+
+
+[91m251 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSÃO LOURENÇO DO OESTE: Finalizado!
+
+
+[91m252 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSÃO LUDGERO: Finalizado!
+
+
+[91m253 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSÃO MARTINHO: Finalizado!
+
+
+[91m254 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSÃO MIGUEL DA BOA VISTA: Finalizado!
+
+
+[91m255 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSÃO MIGUEL DO OESTE: Finalizado!
+
+
+[91m256 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSÃO PEDRO DE ALCÂNTARA: Finalizado!
+
+
+[91m257 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSAUDADES: Finalizado!
+
+
+[91m258 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSCHROEDER: Finalizado!
+
+/home/meteoro/scripts/matheus/teste/operacional_dengue/extrai_clima.py:203: FutureWarning: Setting an Index with object dtype into a DataFrame will stop inferring another dtype in a future version. Cast the Index explicitly before setting it into the DataFrame.
+  valores_centroides["Data"] = valores_centroides.index
+
+[91m259 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSEARA: Finalizado!
+
+
+[91m260 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSERRA ALTA: Finalizado!
+
+
+[91m261 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSIDERÓPOLIS: Finalizado!
+
+
+[91m262 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSOMBRIO: Finalizado!
+
+
+[91m263 de 295.[0m
+
+
+[92m---tmin---
+
+[0mSUL BRASIL: Finalizado!
+
+
+[91m264 de 295.[0m
+
+
+[92m---tmin---
+
+[0mTAIÓ: Finalizado!
+
+
+[91m265 de 295.[0m
+
+
+[92m---tmin---
+
+[0mTANGARÁ: Finalizado!
+
+
+[91m266 de 295.[0m
+
+
+[92m---tmin---
+
+[0mTIGRINHOS: Finalizado!
+
+
+[91m267 de 295.[0m
+
+
+[92m---tmin---
+
+[0mTIJUCAS: Finalizado!
+
+
+[91m268 de 295.[0m
+
+
+[92m---tmin---
+
+[0mTIMBÉ DO SUL: Finalizado!
+
+
+[91m269 de 295.[0m
+
+
+[92m---tmin---
+
+[0mTIMBÓ: Finalizado!
+
+
+[91m270 de 295.[0m
+
+
+[92m---tmin---
+
+[0mTIMBÓ GRANDE: Finalizado!
+
+
+[91m271 de 295.[0m
+
+
+[92m---tmin---
+
+[0mTRÊS BARRAS: Finalizado!
+
+
+[91m272 de 295.[0m
+
+
+[92m---tmin---
+
+[0mTREVISO: Finalizado!
+
+
+[91m273 de 295.[0m
+
+
+[92m---tmin---
+
+[0mTREZE DE MAIO: Finalizado!
+
+
+[91m274 de 295.[0m
+
+
+[92m---tmin---
+
+[0mTREZE TÍLIAS: Finalizado!
+
+
+[91m275 de 295.[0m
+
+
+[92m---tmin---
+
+[0mTROMBUDO CENTRAL: Finalizado!
+
+
+[91m276 de 295.[0m
+
+
+[92m---tmin---
+
+[0mTUBARÃO: Finalizado!
+
+
+[91m277 de 295.[0m
+
+
+[92m---tmin---
+
+[0mTUNÁPOLIS: Finalizado!
+
+
+[91m278 de 295.[0m
+
+
+[92m---tmin---
+
+[0mTURVO: Finalizado!
+
+
+[91m279 de 295.[0m
+
+
+[92m---tmin---
+
+[0mUNIÃO DO OESTE: Finalizado!
+
+
+[91m280 de 295.[0m
+
+
+[92m---tmin---
+
+[0mURUBICI: Finalizado!
+
+
+[91m281 de 295.[0m
+
+
+[92m---tmin---
+
+[0mURUPEMA: Finalizado!
+
+
+[91m282 de 295.[0m
+
+
+[92m---tmin---
+
+[0mURUSSANGA: Finalizado!
+
+
+[91m283 de 295.[0m
+
+
+[92m---tmin---
+
+[0mVARGEÃO: Finalizado!
+
+
+[91m284 de 295.[0m
+
+
+[92m---tmin---
+
+[0mVARGEM: Finalizado!
+
+
+[91m285 de 295.[0m
+
+
+[92m---tmin---
+
+[0mVARGEM BONITA: Finalizado!
+
+
+[91m286 de 295.[0m
+
+
+[92m---tmin---
+
+[0mVIDAL RAMOS: Finalizado!
+
+
+[91m287 de 295.[0m
+
+
+[92m---tmin---
+
+[0mVIDEIRA: Finalizado!
+
+
+[91m288 de 295.[0m
+
+
+[92m---tmin---
+
+[0mVITOR MEIRELES: Finalizado!
+
+
+[91m289 de 295.[0m
+
+
+[92m---tmin---
+
+[0mWITMARSUM: Finalizado!
+
+
+[91m290 de 295.[0m
+
+
+[92m---tmin---
+
+[0mXANXERÊ: Finalizado!
+
+
+[91m291 de 295.[0m
+
+
+[92m---tmin---
+
+[0mXAVANTINA: Finalizado!
+
+
+[91m292 de 295.[0m
+
+
+[92m---tmin---
+
+[0mXAXIM: Finalizado!
+
+
+[91m293 de 295.[0m
+
+
+[92m---tmin---
+
+[0mZORTÉA: Finalizado!
+
+
+[91m294 de 295.[0m
+
+
+[92m---tmin---
+
+[0mBALNEÁRIO RINCÃO: Finalizado!
+
+
+[91m295 de 295.[0m
+
+================================================================================
+
+[92m/media/dados/shapefiles/SC/tmin_diario_2025.csv[0m
+
+
+[92mARQUIVO SALVO COM SUCESSO![0m
+
+================================================================================
+<xarray.Variable (time: 327, lat: 1381, lon: 1001)> Size: 4GB
+array([[[nan, nan, ..., nan, nan],
+        [nan, nan, ..., nan, nan],
+        ...,
+        [nan, nan, ..., nan, nan],
+        [nan, nan, ..., nan, nan]],
+
+       [[nan, nan, ..., nan, nan],
+        [nan, nan, ..., nan, nan],
+        ...,
+        [nan, nan, ..., nan, nan],
+        [nan, nan, ..., nan, nan]],
+
+       ...,
+
+       [[nan, nan, ..., nan, nan],
+        [nan, nan, ..., nan, nan],
+        ...,
+        [nan, nan, ..., nan, nan],
+        [nan, nan, ..., nan, nan]],
+
+       [[nan, nan, ..., nan, nan],
+        [nan, nan, ..., nan, nan],
+        ...,
+        [nan, nan, ..., nan, nan],
+        [nan, nan, ..., nan, nan]]])
+<xarray.IndexVariable 'time' (time: 327)> Size: 3kB
+array(['2025-01-01T00:00:00.000000000', '2025-01-02T00:00:00.000000000',
+       '2025-01-03T00:00:00.000000000', ..., '2025-11-21T00:00:00.000000000',
+       '2025-11-22T00:00:00.000000000', '2025-11-23T00:00:00.000000000'],
+      dtype='datetime64[ns]')
+Attributes:
+    standard_name:  time
+    long_name:      Time
+    axis:           T
+================================================================================
+['2025-01-01T00:00:00.000000000' '2025-01-02T00:00:00.000000000'
+ '2025-01-03T00:00:00.000000000' '2025-01-04T00:00:00.000000000'
+ '2025-01-05T00:00:00.000000000' '2025-01-06T00:00:00.000000000'
+ '2025-01-07T00:00:00.000000000' '2025-01-08T00:00:00.000000000'
+ '2025-01-09T00:00:00.000000000' '2025-01-10T00:00:00.000000000'
+ '2025-01-11T00:00:00.000000000' '2025-01-12T00:00:00.000000000'
+ '2025-01-13T00:00:00.000000000' '2025-01-14T00:00:00.000000000'
+ '2025-01-15T00:00:00.000000000' '2025-01-16T00:00:00.000000000'
+ '2025-01-17T00:00:00.000000000' '2025-01-18T00:00:00.000000000'
+ '2025-01-19T00:00:00.000000000' '2025-01-20T00:00:00.000000000'
+ '2025-01-21T00:00:00.000000000' '2025-01-22T00:00:00.000000000'
+ '2025-01-23T00:00:00.000000000' '2025-01-24T00:00:00.000000000'
+ '2025-01-25T00:00:00.000000000' '2025-01-26T00:00:00.000000000'
+ '2025-01-27T00:00:00.000000000' '2025-01-28T00:00:00.000000000'
+ '2025-01-29T00:00:00.000000000' '2025-01-30T00:00:00.000000000'
+ '2025-01-31T00:00:00.000000000' '2025-02-01T00:00:00.000000000'
+ '2025-02-02T00:00:00.000000000' '2025-02-03T00:00:00.000000000'
+ '2025-02-04T00:00:00.000000000' '2025-02-05T00:00:00.000000000'
+ '2025-02-06T00:00:00.000000000' '2025-02-07T00:00:00.000000000'
+ '2025-02-08T00:00:00.000000000' '2025-02-09T00:00:00.000000000'
+ '2025-02-10T00:00:00.000000000' '2025-02-11T00:00:00.000000000'
+ '2025-02-12T00:00:00.000000000' '2025-02-13T00:00:00.000000000'
+ '2025-02-14T00:00:00.000000000' '2025-02-15T00:00:00.000000000'
+ '2025-02-16T00:00:00.000000000' '2025-02-17T00:00:00.000000000'
+ '2025-02-18T00:00:00.000000000' '2025-02-19T00:00:00.000000000'
+ '2025-02-20T00:00:00.000000000' '2025-02-21T00:00:00.000000000'
+ '2025-02-22T00:00:00.000000000' '2025-02-23T00:00:00.000000000'
+ '2025-02-24T00:00:00.000000000' '2025-02-25T00:00:00.000000000'
+ '2025-02-26T00:00:00.000000000' '2025-02-27T00:00:00.000000000'
+ '2025-02-28T00:00:00.000000000' '2025-03-01T00:00:00.000000000'
+ '2025-03-02T00:00:00.000000000' '2025-03-03T00:00:00.000000000'
+ '2025-03-04T00:00:00.000000000' '2025-03-05T00:00:00.000000000'
+ '2025-03-06T00:00:00.000000000' '2025-03-07T00:00:00.000000000'
+ '2025-03-08T00:00:00.000000000' '2025-03-09T00:00:00.000000000'
+ '2025-03-10T00:00:00.000000000' '2025-03-11T00:00:00.000000000'
+ '2025-03-12T00:00:00.000000000' '2025-03-13T00:00:00.000000000'
+ '2025-03-14T00:00:00.000000000' '2025-03-15T00:00:00.000000000'
+ '2025-03-16T00:00:00.000000000' '2025-03-17T00:00:00.000000000'
+ '2025-03-18T00:00:00.000000000' '2025-03-19T00:00:00.000000000'
+ '2025-03-20T00:00:00.000000000' '2025-03-21T00:00:00.000000000'
+ '2025-03-22T00:00:00.000000000' '2025-03-23T00:00:00.000000000'
+ '2025-03-24T00:00:00.000000000' '2025-03-25T00:00:00.000000000'
+ '2025-03-26T00:00:00.000000000' '2025-03-27T00:00:00.000000000'
+ '2025-03-28T00:00:00.000000000' '2025-03-29T00:00:00.000000000'
+ '2025-03-30T00:00:00.000000000' '2025-03-31T00:00:00.000000000'
+ '2025-04-01T00:00:00.000000000' '2025-04-02T00:00:00.000000000'
+ '2025-04-03T00:00:00.000000000' '2025-04-04T00:00:00.000000000'
+ '2025-04-05T00:00:00.000000000' '2025-04-06T00:00:00.000000000'
+ '2025-04-07T00:00:00.000000000' '2025-04-08T00:00:00.000000000'
+ '2025-04-09T00:00:00.000000000' '2025-04-10T00:00:00.000000000'
+ '2025-04-11T00:00:00.000000000' '2025-04-12T00:00:00.000000000'
+ '2025-04-13T00:00:00.000000000' '2025-04-14T00:00:00.000000000'
+ '2025-04-15T00:00:00.000000000' '2025-04-16T00:00:00.000000000'
+ '2025-04-17T00:00:00.000000000' '2025-04-18T00:00:00.000000000'
+ '2025-04-19T00:00:00.000000000' '2025-04-20T00:00:00.000000000'
+ '2025-04-21T00:00:00.000000000' '2025-04-22T00:00:00.000000000'
+ '2025-04-23T00:00:00.000000000' '2025-04-24T00:00:00.000000000'
+ '2025-04-25T00:00:00.000000000' '2025-04-26T00:00:00.000000000'
+ '2025-04-27T00:00:00.000000000' '2025-04-28T00:00:00.000000000'
+ '2025-04-29T00:00:00.000000000' '2025-04-30T00:00:00.000000000'
+ '2025-05-01T00:00:00.000000000' '2025-05-02T00:00:00.000000000'
+ '2025-05-03T00:00:00.000000000' '2025-05-04T00:00:00.000000000'
+ '2025-05-05T00:00:00.000000000' '2025-05-06T00:00:00.000000000'
+ '2025-05-07T00:00:00.000000000' '2025-05-08T00:00:00.000000000'
+ '2025-05-09T00:00:00.000000000' '2025-05-10T00:00:00.000000000'
+ '2025-05-11T00:00:00.000000000' '2025-05-12T00:00:00.000000000'
+ '2025-05-13T00:00:00.000000000' '2025-05-14T00:00:00.000000000'
+ '2025-05-15T00:00:00.000000000' '2025-05-16T00:00:00.000000000'
+ '2025-05-17T00:00:00.000000000' '2025-05-18T00:00:00.000000000'
+ '2025-05-19T00:00:00.000000000' '2025-05-20T00:00:00.000000000'
+ '2025-05-21T00:00:00.000000000' '2025-05-22T00:00:00.000000000'
+ '2025-05-23T00:00:00.000000000' '2025-05-24T00:00:00.000000000'
+ '2025-05-25T00:00:00.000000000' '2025-05-26T00:00:00.000000000'
+ '2025-05-27T00:00:00.000000000' '2025-05-28T00:00:00.000000000'
+ '2025-05-29T00:00:00.000000000' '2025-05-30T00:00:00.000000000'
+ '2025-05-31T00:00:00.000000000' '2025-06-01T00:00:00.000000000'
+ '2025-06-02T00:00:00.000000000' '2025-06-03T00:00:00.000000000'
+ '2025-06-04T00:00:00.000000000' '2025-06-05T00:00:00.000000000'
+ '2025-06-06T00:00:00.000000000' '2025-06-07T00:00:00.000000000'
+ '2025-06-08T00:00:00.000000000' '2025-06-09T00:00:00.000000000'
+ '2025-06-10T00:00:00.000000000' '2025-06-11T00:00:00.000000000'
+ '2025-06-12T00:00:00.000000000' '2025-06-13T00:00:00.000000000'
+ '2025-06-14T00:00:00.000000000' '2025-06-15T00:00:00.000000000'
+ '2025-06-16T00:00:00.000000000' '2025-06-17T00:00:00.000000000'
+ '2025-06-18T00:00:00.000000000' '2025-06-19T00:00:00.000000000'
+ '2025-06-20T00:00:00.000000000' '2025-06-21T00:00:00.000000000'
+ '2025-06-22T00:00:00.000000000' '2025-06-23T00:00:00.000000000'
+ '2025-06-24T00:00:00.000000000' '2025-06-25T00:00:00.000000000'
+ '2025-06-26T00:00:00.000000000' '2025-06-27T00:00:00.000000000'
+ '2025-06-28T00:00:00.000000000' '2025-06-29T00:00:00.000000000'
+ '2025-06-30T00:00:00.000000000' '2025-07-01T00:00:00.000000000'
+ '2025-07-02T00:00:00.000000000' '2025-07-03T00:00:00.000000000'
+ '2025-07-04T00:00:00.000000000' '2025-07-05T00:00:00.000000000'
+ '2025-07-06T00:00:00.000000000' '2025-07-07T00:00:00.000000000'
+ '2025-07-08T00:00:00.000000000' '2025-07-09T00:00:00.000000000'
+ '2025-07-10T00:00:00.000000000' '2025-07-11T00:00:00.000000000'
+ '2025-07-12T00:00:00.000000000' '2025-07-13T00:00:00.000000000'
+ '2025-07-14T00:00:00.000000000' '2025-07-15T00:00:00.000000000'
+ '2025-07-16T00:00:00.000000000' '2025-07-17T00:00:00.000000000'
+ '2025-07-18T00:00:00.000000000' '2025-07-19T00:00:00.000000000'
+ '2025-07-20T00:00:00.000000000' '2025-07-21T00:00:00.000000000'
+ '2025-07-22T00:00:00.000000000' '2025-07-23T00:00:00.000000000'
+ '2025-07-24T00:00:00.000000000' '2025-07-25T00:00:00.000000000'
+ '2025-07-26T00:00:00.000000000' '2025-07-27T00:00:00.000000000'
+ '2025-07-28T00:00:00.000000000' '2025-07-29T00:00:00.000000000'
+ '2025-07-30T00:00:00.000000000' '2025-07-31T00:00:00.000000000'
+ '2025-08-01T00:00:00.000000000' '2025-08-02T00:00:00.000000000'
+ '2025-08-03T00:00:00.000000000' '2025-08-04T00:00:00.000000000'
+ '2025-08-05T00:00:00.000000000' '2025-08-06T00:00:00.000000000'
+ '2025-08-07T00:00:00.000000000' '2025-08-08T00:00:00.000000000'
+ '2025-08-09T00:00:00.000000000' '2025-08-10T00:00:00.000000000'
+ '2025-08-11T00:00:00.000000000' '2025-08-12T00:00:00.000000000'
+ '2025-08-13T00:00:00.000000000' '2025-08-14T00:00:00.000000000'
+ '2025-08-15T00:00:00.000000000' '2025-08-16T00:00:00.000000000'
+ '2025-08-17T00:00:00.000000000' '2025-08-18T00:00:00.000000000'
+ '2025-08-19T00:00:00.000000000' '2025-08-20T00:00:00.000000000'
+ '2025-08-21T00:00:00.000000000' '2025-08-22T00:00:00.000000000'
+ '2025-08-23T00:00:00.000000000' '2025-08-24T00:00:00.000000000'
+ '2025-08-25T00:00:00.000000000' '2025-08-26T00:00:00.000000000'
+ '2025-08-27T00:00:00.000000000' '2025-08-28T00:00:00.000000000'
+ '2025-08-29T00:00:00.000000000' '2025-08-30T00:00:00.000000000'
+ '2025-08-31T00:00:00.000000000' '2025-09-01T00:00:00.000000000'
+ '2025-09-02T00:00:00.000000000' '2025-09-03T00:00:00.000000000'
+ '2025-09-04T00:00:00.000000000' '2025-09-05T00:00:00.000000000'
+ '2025-09-06T00:00:00.000000000' '2025-09-07T00:00:00.000000000'
+ '2025-09-08T00:00:00.000000000' '2025-09-09T00:00:00.000000000'
+ '2025-09-10T00:00:00.000000000' '2025-09-11T00:00:00.000000000'
+ '2025-09-12T00:00:00.000000000' '2025-09-13T00:00:00.000000000'
+ '2025-09-14T00:00:00.000000000' '2025-09-15T00:00:00.000000000'
+ '2025-09-16T00:00:00.000000000' '2025-09-17T00:00:00.000000000'
+ '2025-09-18T00:00:00.000000000' '2025-09-19T00:00:00.000000000'
+ '2025-09-20T00:00:00.000000000' '2025-09-21T00:00:00.000000000'
+ '2025-09-22T00:00:00.000000000' '2025-09-23T00:00:00.000000000'
+ '2025-09-24T00:00:00.000000000' '2025-09-25T00:00:00.000000000'
+ '2025-09-26T00:00:00.000000000' '2025-09-27T00:00:00.000000000'
+ '2025-09-28T00:00:00.000000000' '2025-09-29T00:00:00.000000000'
+ '2025-09-30T00:00:00.000000000' '2025-10-01T00:00:00.000000000'
+ '2025-10-02T00:00:00.000000000' '2025-10-03T00:00:00.000000000'
+ '2025-10-04T00:00:00.000000000' '2025-10-05T00:00:00.000000000'
+ '2025-10-06T00:00:00.000000000' '2025-10-07T00:00:00.000000000'
+ '2025-10-08T00:00:00.000000000' '2025-10-09T00:00:00.000000000'
+ '2025-10-10T00:00:00.000000000' '2025-10-11T00:00:00.000000000'
+ '2025-10-12T00:00:00.000000000' '2025-10-13T00:00:00.000000000'
+ '2025-10-14T00:00:00.000000000' '2025-10-15T00:00:00.000000000'
+ '2025-10-16T00:00:00.000000000' '2025-10-17T00:00:00.000000000'
+ '2025-10-18T00:00:00.000000000' '2025-10-19T00:00:00.000000000'
+ '2025-10-20T00:00:00.000000000' '2025-10-21T00:00:00.000000000'
+ '2025-10-22T00:00:00.000000000' '2025-10-23T00:00:00.000000000'
+ '2025-10-24T00:00:00.000000000' '2025-10-25T00:00:00.000000000'
+ '2025-10-26T00:00:00.000000000' '2025-10-27T00:00:00.000000000'
+ '2025-10-28T00:00:00.000000000' '2025-10-29T00:00:00.000000000'
+ '2025-10-30T00:00:00.000000000' '2025-10-31T00:00:00.000000000'
+ '2025-11-01T00:00:00.000000000' '2025-11-02T00:00:00.000000000'
+ '2025-11-03T00:00:00.000000000' '2025-11-04T00:00:00.000000000'
+ '2025-11-05T00:00:00.000000000' '2025-11-06T00:00:00.000000000'
+ '2025-11-07T00:00:00.000000000' '2025-11-08T00:00:00.000000000'
+ '2025-11-09T00:00:00.000000000' '2025-11-10T00:00:00.000000000'
+ '2025-11-11T00:00:00.000000000' '2025-11-12T00:00:00.000000000'
+ '2025-11-13T00:00:00.000000000' '2025-11-14T00:00:00.000000000'
+ '2025-11-15T00:00:00.000000000' '2025-11-16T00:00:00.000000000'
+ '2025-11-17T00:00:00.000000000' '2025-11-18T00:00:00.000000000'
+ '2025-11-19T00:00:00.000000000' '2025-11-20T00:00:00.000000000'
+ '2025-11-21T00:00:00.000000000' '2025-11-22T00:00:00.000000000'
+ '2025-11-23T00:00:00.000000000']
+(327,)
+================================================================================
+[[[nan nan nan ... nan nan nan]
+  [nan nan nan ... nan nan nan]
+  [nan nan nan ... nan nan nan]
+  ...
+  [nan nan nan ... nan nan nan]
+  [nan nan nan ... nan nan nan]
+  [nan nan nan ... nan nan nan]]
+
+ [[nan nan nan ... nan nan nan]
+  [nan nan nan ... nan nan nan]
+  [nan nan nan ... nan nan nan]
+  ...
+  [nan nan nan ... nan nan nan]
+  [nan nan nan ... nan nan nan]
+  [nan nan nan ... nan nan nan]]
+
+ [[nan nan nan ... nan nan nan]
+  [nan nan nan ... nan nan nan]
+  [nan nan nan ... nan nan nan]
+  ...
+  [nan nan nan ... nan nan nan]
+  [nan nan nan ... nan nan nan]
+  [nan nan nan ... nan nan nan]]
+
+ ...
+
+ [[nan nan nan ... nan nan nan]
+  [nan nan nan ... nan nan nan]
+  [nan nan nan ... nan nan nan]
+  ...
+  [nan nan nan ... nan nan nan]
+  [nan nan nan ... nan nan nan]
+  [nan nan nan ... nan nan nan]]
+
+ [[nan nan nan ... nan nan nan]
+  [nan nan nan ... nan nan nan]
+  [nan nan nan ... nan nan nan]
+  ...
+  [nan nan nan ... nan nan nan]
+  [nan nan nan ... nan nan nan]
+  [nan nan nan ... nan nan nan]]
+
+ [[nan nan nan ... nan nan nan]
+  [nan nan nan ... nan nan nan]
+  [nan nan nan ... nan nan nan]
+  ...
+  [nan nan nan ... nan nan nan]
+  [nan nan nan ... nan nan nan]
+  [nan nan nan ... nan nan nan]]]
+(327, 1381, 1001)
+================================================================================
+tmin       Data       tmin  ...     ZORTÉA  BALNEÁRIO RINCÃO
+0    2025-01-01 2025-01-01  ...  18.496643         20.274351
+1    2025-01-02 2025-01-02  ...  18.470646         20.518705
+2    2025-01-03 2025-01-03  ...  18.146946         20.753647
+3    2025-01-04 2025-01-04  ...  15.644930         19.593431
+4    2025-01-05 2025-01-05  ...  13.888945         18.905729
+..          ...        ...  ...        ...               ...
+322  2025-11-19 2025-11-19  ...  11.708042         16.316618
+323  2025-11-20 2025-11-20  ...  12.624153         12.781981
+324  2025-11-21 2025-11-21  ...  16.353571         17.739285
+325  2025-11-22 2025-11-22  ...  17.047909         20.209352
+326  2025-11-23 2025-11-23  ...  16.570456         16.863625
+
+[327 rows x 297 columns]
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 327 entries, 0 to 326
+Columns: 297 entries, Data to BALNEÁRIO RINCÃO
+dtypes: datetime64[ns](2), float64(295)
+memory usage: 758.9 KB
+None
+tmin
+Data                datetime64[ns]
+tmin                datetime64[ns]
+ABDON BATISTA              float64
+ABELARDO LUZ               float64
+AGROLÂNDIA                 float64
+                         ...      
+XANXERÊ                    float64
+XAVANTINA                  float64
+XAXIM                      float64
+ZORTÉA                     float64
+BALNEÁRIO RINCÃO           float64
+Length: 297, dtype: object
+================================================================================
+
+[1mVERIFICAÇÃO DE DADOS FALTANTES[1m
+
+
+Quantidade de valores [91m[1mNaN: 0[1m[0m
+
+[92m[1mNÃO há valores [91mNaN[0m
+
+================================================================================
+
+[92mARQUIVO SALVO COM SUCESSO!
+
+Semana Epidemiológica - TMIN[0m
+
+tmin     Semana  ABDON BATISTA  ...     ZORTÉA  BALNEÁRIO RINCÃO
+1    2025-01-05      15.508568  ...  16.248856         18.924192
+2    2025-01-12      16.884468  ...  17.705477         19.594934
+3    2025-01-19      19.097068  ...  19.389747         21.547221
+4    2025-01-26      18.521252  ...  19.008483         21.021862
+5    2025-02-02      19.156901  ...  19.468445         22.012142
+6    2025-02-09      19.151127  ...  20.244331         21.765746
+7    2025-02-16      18.894655  ...  19.517277         21.122027
+8    2025-02-23      19.697836  ...  20.489939         21.974002
+9    2025-03-02      18.871562  ...  19.792980         21.260365
+10   2025-03-09      16.888900  ...  17.090005         18.437275
+11   2025-03-16      14.772467  ...  15.402838         16.166300
+12   2025-03-23      17.521212  ...  18.442492         19.340582
+13   2025-03-30      16.240266  ...  16.691193         19.498736
+14   2025-04-06      13.537387  ...  13.633014         16.472000
+15   2025-04-13      14.895389  ...  15.852776         16.363846
+16   2025-04-20      13.218985  ...  13.572993         13.301652
+17   2025-04-27      10.467648  ...  11.126694         12.462390
+18   2025-05-04      14.327747  ...  15.191660         14.867859
+19   2025-05-11      11.225807  ...  12.340945         12.446225
+20   2025-05-18      13.785747  ...  14.707184         14.422222
+21   2025-05-25      10.091122  ...   9.958188         12.809658
+22   2025-06-01      11.362945  ...  11.225360         12.760312
+23   2025-06-08       7.126124  ...   7.437519          9.657751
+24   2025-06-15      11.713841  ...  12.740740         13.928287
+25   2025-06-22       5.063449  ...   5.665106          7.404835
+26   2025-06-29       3.963298  ...   4.220351          6.845046
+27   2025-07-06       7.557211  ...   8.581473          9.845384
+28   2025-07-13       9.846197  ...  10.915514         11.305562
+29   2025-07-20       9.084436  ...  10.437523         10.673123
+30   2025-07-27       8.491637  ...   9.385973          9.654024
+31   2025-08-03      10.439812  ...  10.653237         13.320218
+32   2025-08-10       5.773459  ...   6.434772          9.448315
+33   2025-08-17      13.251877  ...  13.772362         15.491773
+34   2025-08-24      10.099095  ...   9.819661         13.095817
+35   2025-08-31      13.345370  ...  13.730796         15.760025
+36   2025-09-07       9.630515  ...  10.512113         11.901702
+37   2025-09-14      12.238930  ...  12.837746         15.440991
+38   2025-09-21      10.097288  ...  10.289670         12.662733
+39   2025-09-28      14.547770  ...  14.699371         17.389402
+40   2025-10-05      13.141742  ...  13.157889         15.505127
+41   2025-10-12      14.396737  ...  14.410464         16.553157
+42   2025-10-19      10.031771  ...  10.445618         14.651543
+43   2025-10-26      13.847431  ...  13.940114         16.521690
+44   2025-11-02      14.465296  ...  14.703887         17.931660
+45   2025-11-09      13.602085  ...  14.310477         16.207045
+46   2025-11-16      14.820987  ...  15.052748         17.178007
+47   2025-11-23      16.337397  ...  16.570456         16.863625
+
+[47 rows x 296 columns]
+
+
+[91mAs variáveis do arquivo (TMIN), em semanas epidemiológicas, são:[0m
+tmin
+Semana              datetime64[ns]
+ABDON BATISTA              float64
+ABELARDO LUZ               float64
+AGROLÂNDIA                 float64
+AGRONÔMICA                 float64
+                         ...      
+XANXERÊ                    float64
+XAVANTINA                  float64
+XAXIM                      float64
+ZORTÉA                     float64
+BALNEÁRIO RINCÃO           float64
+Length: 296, dtype: object
+
+
+[92mtmintotal
+[0m            Data        tmin  ...     ZORTÉA  BALNEÁRIO RINCÃO
+0     2000-01-01  2000-01-01  ...  16.228107         18.856792
+1     2000-01-02  2000-01-02  ...  15.443636         17.573320
+2     2000-01-03  2000-01-03  ...  13.728493         16.280436
+3     2000-01-04  2000-01-04  ...  14.906363         18.075630
+4     2000-01-05  2000-01-05  ...  16.340117         18.939342
+...          ...         ...  ...        ...               ...
+9445  2025-11-19         NaN  ...  11.708042         16.316618
+9446  2025-11-20         NaN  ...  12.624153         12.781981
+9447  2025-11-21         NaN  ...  16.353571         17.739285
+9448  2025-11-22         NaN  ...  17.047909         20.209352
+9449  2025-11-23         NaN  ...  16.570456         16.863625
+
+[9450 rows x 297 columns]
+
+/home/meteoro/scripts/matheus/teste/operacional_dengue/extrai_clima.py:168: UserWarning: Geometry is in a geographic CRS. Results from 'centroid' are likely incorrect. Use 'GeoSeries.to_crs()' to re-project geometries to a projected CRS before this operation.
+
+  shapefile["centroide"] = shapefile["geometry"].centroid
+
+[92mtmintotal_se
+[0m          Semana  ABDON BATISTA  ...     ZORTÉA  BALNEÁRIO RINCÃO
+0     2000-01-02      15.287972  ...  15.962094         18.476916
+1     2000-01-09      18.646281  ...  18.864906         21.226584
+2     2000-01-16      18.261652  ...  18.757634         20.085676
+3     2000-01-23      15.943129  ...  16.423533         18.478626
+4     2000-01-30      16.598627  ...  17.242286         18.887034
+...          ...            ...  ...        ...               ...
+1346  2025-10-26      13.847431  ...  13.940114         16.521690
+1347  2025-11-02      14.465296  ...  14.703887         17.931660
+1348  2025-11-09      13.602085  ...  14.310477         16.207045
+1349  2025-11-16      14.820987  ...  15.052748         17.178007
+1350  2025-11-23      16.337397  ...  16.570456         16.863625
+
+[1351 rows x 296 columns]
+
+      BALNEÁRIO CAMBORIÚ  BOMBINHAS  PORTO BELO
+0              19.889465  19.684949   19.466002
+1              21.878692  21.811293   21.547604
+2              20.980207  21.023731   20.711785
+3              19.931761  20.103031   19.732616
+4              20.693173  20.572209   20.331810
+...                  ...        ...         ...
+1346           17.415759  16.972622   16.725929
+1347           18.219965  17.791497   17.551967
+1348           15.824715  15.485188   15.228732
+1349           17.410970  16.917869   16.615598
+1350           17.726725  16.844439   16.760672
+
+[1351 rows x 3 columns]
+
+[92m---tmed---
+
+[0mABDON BATISTA: Finalizado!
+
+
+[91m1 de 295.[0m
+
+
+[92m---tmed---
+
+[0mABELARDO LUZ: Finalizado!
+
+
+[91m2 de 295.[0m
+
+
+[92m---tmed---
+
+[0mAGROLÂNDIA: Finalizado!
+
+
+[91m3 de 295.[0m
+
+
+[92m---tmed---
+
+[0mAGRONÔMICA: Finalizado!
+
+
+[91m4 de 295.[0m
+
+
+[92m---tmed---
+
+[0mÁGUA DOCE: Finalizado!
+
+
+[91m5 de 295.[0m
+
+
+[92m---tmed---
+
+[0mÁGUAS DE CHAPECÓ: Finalizado!
+
+
+[91m6 de 295.[0m
+
+
+[92m---tmed---
+
+[0mÁGUAS FRIAS: Finalizado!
+
+
+[91m7 de 295.[0m
+
+
+[92m---tmed---
+
+[0mÁGUAS MORNAS: Finalizado!
+
+
+[91m8 de 295.[0m
+
+
+[92m---tmed---
+
+[0mALFREDO WAGNER: Finalizado!
+
+
+[91m9 de 295.[0m
+
+
+[92m---tmed---
+
+[0mALTO BELA VISTA: Finalizado!
+
+
+[91m10 de 295.[0m
+
+
+[92m---tmed---
+
+[0mANCHIETA: Finalizado!
+
+
+[91m11 de 295.[0m
+
+
+[92m---tmed---
+
+[0mANGELINA: Finalizado!
+
+
+[91m12 de 295.[0m
+
+
+[92m---tmed---
+
+[0mANITA GARIBALDI: Finalizado!
+
+
+[91m13 de 295.[0m
+
+
+[92m---tmed---
+
+[0mANITÁPOLIS: Finalizado!
+
+
+[91m14 de 295.[0m
+
+
+[92m---tmed---
+
+[0mANTÔNIO CARLOS: Finalizado!
+
+
+[91m15 de 295.[0m
+
+
+[92m---tmed---
+
+[0mAPIÚNA: Finalizado!
+
+
+[91m16 de 295.[0m
+
+
+[92m---tmed---
+
+[0mARABUTÃ: Finalizado!
+
+
+[91m17 de 295.[0m
+
+
+[92m---tmed---
+
+[0mARAQUARI: Finalizado!
+
+
+[91m18 de 295.[0m
+
+
+[92m---tmed---
+
+[0mARARANGUÁ: Finalizado!
+
+
+[91m19 de 295.[0m
+
+
+[92m---tmed---
+
+[0mARMAZÉM: Finalizado!
+
+
+[91m20 de 295.[0m
+
+
+[92m---tmed---
+
+[0mARROIO TRINTA: Finalizado!
+
+
+[91m21 de 295.[0m
+
+
+[92m---tmed---
+
+[0mARVOREDO: Finalizado!
+
+
+[91m22 de 295.[0m
+
+
+[92m---tmed---
+
+[0mASCURRA: Finalizado!
+
+
+[91m23 de 295.[0m
+
+
+[92m---tmed---
+
+[0mATALANTA: Finalizado!
+
+
+[91m24 de 295.[0m
+
+
+[92m---tmed---
+
+[0mAURORA: Finalizado!
+
+
+[91m25 de 295.[0m
+
+
+[92m---tmed---
+
+[0mBALNEÁRIO ARROIO DO SILVA: Finalizado!
+
+
+[91m26 de 295.[0m
+
+
+[92m---tmed---
+
+[0mBALNEÁRIO CAMBORIÚ: Finalizado!
+
+
+[91m27 de 295.[0m
+
+
+[92m---tmed---
+
+[0mBALNEÁRIO BARRA DO SUL: Finalizado!
+
+
+[91m28 de 295.[0m
+
+
+[92m---tmed---
+
+[0mBALNEÁRIO GAIVOTA: Finalizado!
+
+
+[91m29 de 295.[0m
+
+
+[92m---tmed---
+
+[0mBANDEIRANTE: Finalizado!
+
+
+[91m30 de 295.[0m
+
+
+[92m---tmed---
+
+[0mBARRA BONITA: Finalizado!
+
+
+[91m31 de 295.[0m
+
+
+[92m---tmed---
+
+[0mBARRA VELHA: Finalizado!
+
+
+[91m32 de 295.[0m
+
+
+[92m---tmed---
+
+[0mBELA VISTA DO TOLDO: Finalizado!
+
+
+[91m33 de 295.[0m
+
+
+[92m---tmed---
+
+[0mBELMONTE: Finalizado!
+
+
+[91m34 de 295.[0m
+
+
+[92m---tmed---
+
+[0mBENEDITO NOVO: Finalizado!
+
+
+[91m35 de 295.[0m
+
+
+[92m---tmed---
+
+[0mBIGUAÇU: Finalizado!
+
+
+[91m36 de 295.[0m
+
+
+[92m---tmed---
+
+[0mBLUMENAU: Finalizado!
+
+
+[91m37 de 295.[0m
+
+
+[92m---tmed---
+
+[0mBOCAINA DO SUL: Finalizado!
+
+
+[91m38 de 295.[0m
+
+
+[92m---tmed---
+
+[0mBOMBINHAS: Finalizado!
+
+
+[91m39 de 295.[0m
+
+
+[92m---tmed---
+
+[0mBOM JARDIM DA SERRA: Finalizado!
+
+
+[91m40 de 295.[0m
+
+
+[92m---tmed---
+
+[0mBOM JESUS: Finalizado!
+
+
+[91m41 de 295.[0m
+
+
+[92m---tmed---
+
+[0mBOM JESUS DO OESTE: Finalizado!
+
+
+[91m42 de 295.[0m
+
+
+[92m---tmed---
+
+[0mBOM RETIRO: Finalizado!
+
+
+[91m43 de 295.[0m
+
+
+[92m---tmed---
+
+[0mBOTUVERÁ: Finalizado!
+
+
+[91m44 de 295.[0m
+
+
+[92m---tmed---
+
+[0mBRAÇO DO NORTE: Finalizado!
+
+
+[91m45 de 295.[0m
+
+
+[92m---tmed---
+
+[0mBRAÇO DO TROMBUDO: Finalizado!
+
+
+[91m46 de 295.[0m
+
+
+[92m---tmed---
+
+[0mBRUNÓPOLIS: Finalizado!
+
+
+[91m47 de 295.[0m
+
+
+[92m---tmed---
+
+[0mBRUSQUE: Finalizado!
+
+
+[91m48 de 295.[0m
+
+
+[92m---tmed---
+
+[0mCAÇADOR: Finalizado!
+
+
+[91m49 de 295.[0m
+
+
+[92m---tmed---
+
+[0mCAIBI: Finalizado!
+
+
+[91m50 de 295.[0m
+
+
+[92m---tmed---
+
+[0mCALMON: Finalizado!
+
+
+[91m51 de 295.[0m
+
+
+[92m---tmed---
+
+[0mCAMBORIÚ: Finalizado!
+
+
+[91m52 de 295.[0m
+
+
+[92m---tmed---
+
+[0mCAPÃO ALTO: Finalizado!
+
+
+[91m53 de 295.[0m
+
+
+[92m---tmed---
+
+[0mCAMPO ALEGRE: Finalizado!
+
+
+[91m54 de 295.[0m
+
+
+[92m---tmed---
+
+[0mCAMPO BELO DO SUL: Finalizado!
+
+
+[91m55 de 295.[0m
+
+
+[92m---tmed---
+
+[0mCAMPO ERÊ: Finalizado!
+
+
+[91m56 de 295.[0m
+
+
+[92m---tmed---
+
+[0mCAMPOS NOVOS: Finalizado!
+
+
+[91m57 de 295.[0m
+
+
+[92m---tmed---
+
+[0mCANELINHA: Finalizado!
+
+
+[91m58 de 295.[0m
+
+
+[92m---tmed---
+
+[0mCANOINHAS: Finalizado!
+
+
+[91m59 de 295.[0m
+
+
+[92m---tmed---
+
+[0mCAPINZAL: Finalizado!
+
+
+[91m60 de 295.[0m
+
+
+[92m---tmed---
+
+[0mCAPIVARI DE BAIXO: Finalizado!
+
+
+[91m61 de 295.[0m
+
+
+[92m---tmed---
+
+[0mCATANDUVAS: Finalizado!
+
+
+[91m62 de 295.[0m
+
+
+[92m---tmed---
+
+[0mCAXAMBU DO SUL: Finalizado!
+
+
+[91m63 de 295.[0m
+
+
+[92m---tmed---
+
+[0mCELSO RAMOS: Finalizado!
+
+
+[91m64 de 295.[0m
+
+
+[92m---tmed---
+
+[0mCERRO NEGRO: Finalizado!
+
+
+[91m65 de 295.[0m
+
+
+[92m---tmed---
+
+[0mCHAPADÃO DO LAGEADO: Finalizado!
+
+
+[91m66 de 295.[0m
+
+
+[92m---tmed---
+
+[0mCHAPECÓ: Finalizado!
+
+
+[91m67 de 295.[0m
+
+
+[92m---tmed---
+
+[0mCOCAL DO SUL: Finalizado!
+
+
+[91m68 de 295.[0m
+
+
+[92m---tmed---
+
+[0mCONCÓRDIA: Finalizado!
+
+
+[91m69 de 295.[0m
+
+
+[92m---tmed---
+
+[0mCORDILHEIRA ALTA: Finalizado!
+
+
+[91m70 de 295.[0m
+
+
+[92m---tmed---
+
+[0mCORONEL FREITAS: Finalizado!
+
+
+[91m71 de 295.[0m
+
+
+[92m---tmed---
+
+[0mCORONEL MARTINS: Finalizado!
+
+
+[91m72 de 295.[0m
+
+
+[92m---tmed---
+
+[0mCORUPÁ: Finalizado!
+
+
+[91m73 de 295.[0m
+
+
+[92m---tmed---
+
+[0mCORREIA PINTO: Finalizado!
+
+
+[91m74 de 295.[0m
+
+
+[92m---tmed---
+
+[0mCRICIÚMA: Finalizado!
+
+
+[91m75 de 295.[0m
+
+
+[92m---tmed---
+
+[0mCUNHA PORÃ: Finalizado!
+
+
+[91m76 de 295.[0m
+
+
+[92m---tmed---
+
+[0mCUNHATAÍ: Finalizado!
+
+
+[91m77 de 295.[0m
+
+
+[92m---tmed---
+
+[0mCURITIBANOS: Finalizado!
+
+
+[91m78 de 295.[0m
+
+
+[92m---tmed---
+
+[0mDESCANSO: Finalizado!
+
+
+[91m79 de 295.[0m
+
+
+[92m---tmed---
+
+[0mDIONÍSIO CERQUEIRA: Finalizado!
+
+
+[91m80 de 295.[0m
+
+
+[92m---tmed---
+
+[0mDONA EMMA: Finalizado!
+
+
+[91m81 de 295.[0m
+
+
+[92m---tmed---
+
+[0mDOUTOR PEDRINHO: Finalizado!
+
+
+[91m82 de 295.[0m
+
+
+[92m---tmed---
+
+[0mENTRE RIOS: Finalizado!
+
+
+[91m83 de 295.[0m
+
+
+[92m---tmed---
+
+[0mERMO: Finalizado!
+
+
+[91m84 de 295.[0m
+
+
+[92m---tmed---
+
+[0mERVAL VELHO: Finalizado!
+
+
+[91m85 de 295.[0m
+
+
+[92m---tmed---
+
+[0mFAXINAL DOS GUEDES: Finalizado!
+
+
+[91m86 de 295.[0m
+
+
+[92m---tmed---
+
+[0mFLOR DO SERTÃO: Finalizado!
+
+
+[91m87 de 295.[0m
+
+
+[92m---tmed---
+
+[0mFLORIANÓPOLIS: Finalizado!
+
+
+[91m88 de 295.[0m
+
+
+[92m---tmed---
+
+[0mFORMOSA DO SUL: Finalizado!
+
+
+[91m89 de 295.[0m
+
+
+[92m---tmed---
+
+[0mFORQUILHINHA: Finalizado!
+
+
+[91m90 de 295.[0m
+
+
+[92m---tmed---
+
+[0mFRAIBURGO: Finalizado!
+
+
+[91m91 de 295.[0m
+
+
+[92m---tmed---
+
+[0mFREI ROGÉRIO: Finalizado!
+
+
+[91m92 de 295.[0m
+
+
+[92m---tmed---
+
+[0mGALVÃO: Finalizado!
+
+
+[91m93 de 295.[0m
+
+
+[92m---tmed---
+
+[0mGAROPABA: Finalizado!
+
+
+[91m94 de 295.[0m
+
+
+[92m---tmed---
+
+[0mGARUVA: Finalizado!
+
+
+[91m95 de 295.[0m
+
