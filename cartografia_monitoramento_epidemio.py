@@ -156,7 +156,7 @@ regionais = municipios.dissolve(by = "regional")
 ##################################################################################
 ### Cartografia
 ### Casos
-fig, ax = plt.subplots(figsize = (20, 12), layout = "constrained", frameon = True)
+fig, ax = plt.subplots(figsize = (8, 6), layout = "constrained", frameon = True)
 municipios.plot(ax = ax, color = "lightgray", edgecolor = "white", linewidth = 0.05)
 v_max = base_carto["total"].max()
 v_min = base_carto["total"].min()
@@ -204,7 +204,7 @@ if _AUTOMATIZA == True and _VISUALIZAR == True:
 	print(f"{cyan}\nENCERRADO:\n{caminho_resultados}\n{nome_arquivo}\n{reset}\n\n")
 
 ### Incidência	
-fig, ax = plt.subplots(figsize = (20, 12), layout = "constrained", frameon = True)
+fig, ax = plt.subplots(figsize = (8, 6), layout = "constrained", frameon = True)
 municipios.plot(ax = ax, color = "lightgray", edgecolor = "red", linewidth = 0.3)
 v_max = base_carto["incidencia"].max()
 v_min = base_carto["incidencia"].min()
