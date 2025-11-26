@@ -64,7 +64,7 @@ _DIA_ATUAL = _AGORA.strftime("%d")
 _ANO_MES = f"{_ANO_ATUAL}{_MES_ATUAL}"
 _ANO_MES_DIA = f"{_ANO_ATUAL}{_MES_ATUAL}{_DIA_ATUAL}"
 #_ANO_MES = 202511
-#_ANO_MES_DIA = 20251117 #f"{_ANO_ATUAL}{_MES_ATUAL}{_DIA_ATUAL}"
+#_ANO_MES_DIA = 20251124 #f"{_ANO_ATUAL}{_MES_ATUAL}{_DIA_ATUAL}"
 _ONTEM = datetime.today() - timedelta(days = 1)
 _ANO_ONTEM = str(_ONTEM.year)
 _MES_ONTEM = _ONTEM.strftime("%m")
@@ -290,6 +290,9 @@ print(f"\n{green}PREVISTOS.dtypes:\n{reset}{previstos}\n{previstos.dtypes}\n")
 print(f"\n{green}CASOS REGIONAIS:\n{reset}{casos_atual_reg}\n{casos_atual_reg.dtypes}\n")
 print(f"\n{green}PREVISTOS REGIONAIS:\n{reset}{previstos_reg}\n{previstos_reg.dtypes}\n")
 print(f"\n{green}ÚLTIMOS PREVISTOS REGIONAIS:\n{reset}{previsao12_reg}\n{previsao12_reg.dtypes}\n")
+
+print(f"\n{green}VALOR MÁXIMO DOS CASOS ATUAIS (MUNICIPAL):\n{reset}{casos_atual.set_index('Semana').max().max()}")
+print(f"\n{green}VALOR MÁXIMO DOS CASOS ATUAIS (REGIONAL):\n{reset}{casos_atual_reg.max().max()}")
 #sys.exit()
 """
 regionais = ["FOZ DO RIO ITAJAÍ", "GRANDE FLORIANÓPOLIS", "EXTREMO OESTE", "OESTE",
@@ -320,6 +323,7 @@ plt.ylabel("Número de Casos Prováveis de Dengue")
 plt.title("COMPARAÇÃO ENTRE CASOS PROVÁVEIS DE DENGUE PREVISTOS E OBSERVADOS", fontsize = 12, y = 1.03, loc = "center", pad = 10)
 plt.suptitle(f"MUNICÍPIO DE {_CIDADE}", fontsize = 16, y = 0.96)
 plt.legend(fontsize = 14)
+plt.ylim(0, casos_atual_reg.max().max())
 ax = plt.gca()
 ax.set_facecolor("honeydew")
 """
@@ -362,6 +366,7 @@ for idx, _REG in enumerate(regionais):
 	plt.title("COMPARAÇÃO ENTRE CASOS PROVÁVEIS DE DENGUE PREVISTOS E OBSERVADOS", fontsize = 12, y = 1.03, loc = "center", pad = 10)
 	plt.suptitle(f"REGIONAL: {_REG}", fontsize = 16, y = 0.96)
 	plt.legend(fontsize = 14)
+	plt.ylim(0, casos_atual_reg.max().max())
 	ax = plt.gca()
 	ax.set_facecolor("honeydew")
 	if _VISUALIZAR == True:
