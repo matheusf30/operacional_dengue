@@ -196,7 +196,7 @@ def limite_minmax_anomalia(regiao_prec):
 	rounded_abs = ((abs_value + step - 1) // step) * step
 
 	# Create ranges that cover the full extent and include zero
-	levels = list(range(-rounded_abs, rounded_abs + 1, step)) #comentamos aqui
+	levels = list(range(-rounded_abs, rounded_abs + 1, step))
 	levels2 = levels
 	#levels = range(-50, 50, 10)
 	#levels2 = levels
@@ -335,6 +335,9 @@ except FileNotFoundError:
 	regiao_prec = selecionar_tempo_espaco(ds_prec, _ANO_ONTEM)
 
 levels, levels2, norm, cmap = limite_colobar(regiao_prec)
+levels = [0, 5, 10, 20, 30, 40, 50, 70, 80, 100]
+levels = np.array(levels)
+levels2 = levels
 #info_dataset(regiao_prec)
 print(levels)
 print(levels2)
