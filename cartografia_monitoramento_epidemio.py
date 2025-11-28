@@ -165,33 +165,37 @@ levels = np.arange(v_min, v_max + intervalo, intervalo)
 print(f"\n{green}v_min\n{reset}{v_min}\n")
 print(f"\n{green}v_max\n{reset}{v_max}\n")
 print(f"\n{green}levels\n{reset}{levels}\n")
-base_carto.plot(ax = ax, column = "total",  legend = True,
-				edgecolor = "white", label = "Casos", legend_kwds = {"extend": "max"},
+figure = base_carto.plot(ax = ax, column = "total",  legend = True,
+				edgecolor = "white", label = "Casos", legend_kwds = {"extend": "max", "fraction": 0.035, "pad": 0.03, "label": "Número de Casos Prováveis"},
 				cmap = "RdPu", linewidth = 0.05, linestyle = ":",
 				norm = cls.Normalize(vmin = v_min, vmax = v_max, clip = True))
+			
 regionais.plot(ax = ax, facecolor = "none",
 			   edgecolor = "dimgray", linewidth = 0.6)
 cbar_ax = ax.get_figure().get_axes()[-1]
-cbar_ax.tick_params(labelsize = 20)
-plt.xlim(-54, -48)
-plt.ylim(-29.5, -25.75)
+
+#cbar_ax.tick_params(labelsize = 20)
+#plt.xlim(-54, -48)
+#plt.ylim(-29.5, -25.75)
+plt.xlim(-54.05, -47.95)
+plt.ylim(-29.45, -25.75)
 ax.text(-52.5, -29, "Sistema de Referência de Coordenadas\nDATUM: SIRGAS 2000/22S.\nBase Cartográfica: IBGE, 2024.",
-	    color = "white", backgroundcolor = "darkgray", ha = "center", va = "center", fontsize = 14)
+	    color = "white", backgroundcolor = "darkgray", ha = "center", va = "center", fontsize = 10)
 ax.text(-52.5, -28.25, """LEGENDA
 
 ▢           Sem registro*
 
 *Não há registro oficial
 de casos prováveis de dengue""",
-        color = "black", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 14)
-plt.xlabel("Longitude", fontsize = 18)
-plt.ylabel("Latitude", fontsize = 18)
-ax.tick_params(axis = "both", labelsize = 18)
+        color = "black", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 10)
+plt.xlabel("Longitude")#, fontsize = 18)
+plt.ylabel("Latitude")#, fontsize = 18)
+ax.tick_params(axis = "both")#, labelsize = 18)
 ax.set_xticks([-54, -52, -50, -48])
-ax.set_xticklabels(["54°W", "52°W", "50°W", "48°W"], fontsize = 18)
+ax.set_xticklabels(["54°W", "52°W", "50°W", "48°W"])#, fontsize = 18)
 ax.set_yticks([-29, -28, -27, -26])
-ax.set_yticklabels(["29°S", "28°S", "27°S", "26°S"], fontsize = 18)
-plt.title(f"Soma de Casos Prováveis de Dengue em Santa Catarina\nSemana Epidemiológica: {tempo['SE'].iloc[-2]}/{tempo['ano_epi'].iloc[-2]}.", fontsize = 28)
+ax.set_yticklabels(["29°S", "28°S", "27°S", "26°S"])#, fontsize = 18)
+plt.title(f"Soma de Casos Prováveis de Dengue em Santa Catarina\nSemana Epidemiológica: {tempo['SE'].iloc[-2]}/{tempo['ano_epi'].iloc[-2]}.", fontsize = 14)
 
 nome_arquivo = f"CASOS_mapa_monitoramento_{tempo['ano_epi'].iloc[-2]}_SE{tempo['SE'].iloc[-2]}.png"
 if _AUTOMATIZA == True and _SALVAR == True:
@@ -214,42 +218,61 @@ print(f"\n{green}v_min\n{reset}{v_min}\n")
 print(f"\n{green}v_max\n{reset}{v_max}\n")
 print(f"\n{green}levels\n{reset}{levels}\n")
 base_carto.plot(ax = ax, column = "incidencia",  legend = True,
-				edgecolor = "white", label = "Incidência", legend_kwds = {"extend": "max"},
+				edgecolor = "white", label = "Incidência", legend_kwds = {"extend": "max", "fraction": 0.035, "pad": 0.03, "label": "Número de Casos Prováveis/100 Mil Habitantes"},
 				cmap = "RdPu", linewidth = 0.05, linestyle = ":",
 				norm = cls.Normalize(vmin = v_min, vmax = v_max, clip = True))
 epidemia = base_carto[base_carto["incidencia"] > 300]
 epidemia.plot(ax = ax, facecolor = "none", edgecolor = "red",
-				linewidth = 0.3, hatch = "..")#, linestyle = ":")
+				linewidth = 0.1, hatch = "..")#, linestyle = ":") #Alterado aqui
 regionais.plot(ax = ax, facecolor = "none",
 				edgecolor = "dimgray", linewidth = 0.6)
 cbar_ax = ax.get_figure().get_axes()[-1]
-cbar_ax.tick_params(labelsize = 20)
-plt.xlim(-54, -48)
-plt.ylim(-29.5, -25.75)
-ax.text(-52.5, -29.25, "Sistema de Referência de Coordenadas\nDATUM: SIRGAS 2000/22S.\nBase Cartográfica: IBGE, 2024.",
-	    color = "white", backgroundcolor = "darkgray", ha = "center", va = "center", fontsize = 14)
-ax.text(-52.5, -28.5, """LEGENDA
+#cbar_ax.tick_params(labelsize = 20)
+plt.xlim(-54.05, -47.95)
+plt.ylim(-29.45, -25.75)
+#plt.xlim(-54.15, -47.95)#(-54, -48)
+#plt.ylim(-29.45, -25.64)#(-29.5, -25.75)
+ax.text(-52.5, -29.15, "Sistema de Referência de Coordenadas\nDATUM: SIRGAS 2000/22S.\nBase Cartográfica: IBGE, 2024.",
+	    color = "white", backgroundcolor = "darkgray", ha = "center", va = "center", fontsize = 10)
+#ax.text(-52.5, -28.5, """LEGENDA
+#
+#▢       Sem registro*
+#⣿⣿           Epidemia**
+#
+#*Não há registro oficial de
+#casos prováveis de dengue
+#**Municípios que atingiram
+#nível de epidemia
+#(acima de 300 casos prováveis/100mil habitantes)""",
+#        color = "red", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 10)
+	
+ax.text(-52.5, -27.9, """LEGENDA
 
 ▢       Sem registro*
-⣿⣿           Epidemia**
-
-*Não há registro oficial
-de casos prováveis de dengue
-**Municípios que atingiram nível de epidemia
-(acima de 300 casos prováveis/100mil habitantes)""",
-        color = "red", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 14)
-plt.xlabel("Longitude", fontsize = 18)
-plt.ylabel("Latitude", fontsize = 18)
-ax.tick_params(axis = "both", labelsize = 18)
+⣿⣿           Epidemia**""",
+	color = "red", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 10)
+ax.text(-52.5, -28.55,
+"""*Não há registro oficial de
+casos prováveis de dengue
+**Municípios em nível
+de epidemia
+(acima de 300 casos prováveis
+para cada 100 mil habitantes)""",
+	color = "red", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 6)
+plt.xlabel("Longitude")#, fontsize = 18)
+plt.ylabel("Latitude")#, fontsize = 18)
+ax.tick_params(axis = "both")#, labelsize = 18)
 ax.set_xticks([-54, -52, -50, -48])
-ax.set_xticklabels(["54°W", "52°W", "50°W", "48°W"], fontsize = 18)
+ax.set_xticklabels(["54°W", "52°W", "50°W", "48°W"])#, fontsize = 18)
 ax.set_yticks([-29, -28, -27, -26])
-ax.set_yticklabels(["29°S", "28°S", "27°S", "26°S"], fontsize = 18)
-plt.title(f"Incidência da Soma de Casos Prováveis de Dengue em Santa Catarina\nSemana Epidemiológica: {tempo['SE'].iloc[-2]}/{tempo['ano_epi'].iloc[-2]}", fontsize = 28)
+ax.set_yticklabels(["29°S", "28°S", "27°S", "26°S"])#, fontsize = 18)
+plt.title(f"Incidência da Soma de Casos Prováveis de Dengue em Santa Catarina\nSemana Epidemiológica: {tempo['SE'].iloc[-2]}/{tempo['ano_epi'].iloc[-2]}", fontsize = 14)
 nome_arquivo = f"INCIDENCIA_mapa_monitoramento_{tempo['ano_epi'].iloc[-2]}_SE{tempo['SE'].iloc[-2]}.png"
 if _AUTOMATIZA == True and _SALVAR == True:
 	os.makedirs(caminho_resultados, exist_ok = True)
-	plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "png", dpi = 300)
+	#plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "png", dpi = 300)
+	plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "png", dpi = 300,
+				transparent = False, bbox_inches = "tight", pad_inches = 0.02)
 	print(f"\n\n{green}{caminho_resultados}\n{nome_arquivo}\nSALVO COM SUCESSO!{reset}\n\n")
 if _AUTOMATIZA == True and _VISUALIZAR == True:	
 	print(f"{cyan}\nVISUALIZANDO:\n{caminho_resultados}\n{nome_arquivo}\n{reset}\n\n")

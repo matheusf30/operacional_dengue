@@ -66,6 +66,7 @@ _MES_ATUAL = _AGORA.strftime("%m")
 _DIA_ATUAL = _AGORA.strftime("%d")
 _ANO_MES = f"{_ANO_ATUAL}{_MES_ATUAL}"
 _ANO_MES_DIA = f"{_ANO_ATUAL}{_MES_ATUAL}{_DIA_ATUAL}"
+_ANO_MES_DIA = "20251124" #Everton - Excluir
 _ONTEM = datetime.today() - timedelta(days = 1)
 _ANO_ONTEM = str(_ONTEM.year)
 _MES_ONTEM = _ONTEM.strftime("%m")
@@ -558,40 +559,43 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 	print(f"\n{green}v_max\n{reset}{v_max}\n")
 	print(f"\n{green}levels\n{reset}{levels}\n")
 	previsao_melt_poligeo[previsao_melt_poligeo["Semana"] == semana_epidemio["Semana"]].plot(ax = ax, column = "Incidencia",  legend = True, edgecolor = "white", # fontsize = 20,
-		                                                                           label = "Incidência (Casos Prováveis de Dengue)", cmap = "YlOrRd", linewidth = 0.05,   legend_kwds = {"extend": "max"},#levels = levels, 
+		                                                                           label = "Incidência (Casos Prováveis de Dengue)", cmap = "YlOrRd", linewidth = 0.05,   legend_kwds = {"extend": "max", "fraction": 0.035, "pad": 0.03, "label": "Número de Casos Prováveis/100 Mil Habitantes"},#levels = levels, 
 		                                                                           norm = cls.Normalize(vmin = v_min, vmax = v_max, clip = True))
 	cbar_ax = ax.get_figure().get_axes()[-1]
-	cbar_ax.tick_params(labelsize = 20)
+	#cbar_ax.tick_params(labelsize = 20)
 	zero = previsao_melt_poligeo[previsao_melt_poligeo["Incidencia"] <= 0]
 	zero[zero["Semana"] == semana_epidemio["Semana"]].plot(ax = ax, column = "Incidencia", legend = False, edgecolor = "white", linewidth = 0.05, label = "Incidência (Casos Prováveis de Dengue)", cmap = "YlOrBr")#"YlOrBr")
 	regionais.plot(ax = ax, facecolor = "none",
 				edgecolor = "dimgray", linewidth = 0.6)	
-	plt.xlim(-54, -48)
-	plt.ylim(-29.5, -25.75)
+	#plt.xlim(-54.15, -47.95)#(-54, -48)
+	#plt.ylim(-29.45, -25.64)#(-29.5, -25.75)
+	plt.xlim(-54.05, -47.95)
+	plt.ylim(-29.45, -25.75)
 	ax.text(-52.5, -29, "Sistema de Referência de Coordenadas\nDATUM: SIRGAS 2000/22S.\nBase Cartográfica: IBGE, 2022.",
-		    color = "white", backgroundcolor = "darkgray", ha = "center", va = "center", fontsize = 20)
+		    color = "white", backgroundcolor = "darkgray", ha = "center", va = "center", fontsize = 10)
 	ax.text(-52.5, -28.25, """LEGENDA
 
 ▢           Sem registro*
 
 *Não há registro oficial ou
 modelagem inexistente.""",
-		    color = "black", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 20)
-	plt.xlabel("Longitude", fontsize = 18)
-	plt.ylabel("Latitude", fontsize = 18)
-	ax.tick_params(axis = "both", labelsize = 18)
+		    color = "black", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 10)
+	plt.xlabel("Longitude")#, fontsize = 18)
+	plt.ylabel("Latitude")#, fontsize = 18)
+	ax.tick_params(axis = "both")#, labelsize = 18)
 	ax.set_xticks([-54, -52, -50, -48])
-	ax.set_xticklabels(["54°W", "52°W", "50°W", "48°W"], fontsize = 18)
+	ax.set_xticklabels(["54°W", "52°W", "50°W", "48°W"])#, fontsize = 18)
 	ax.set_yticks([-29, -28, -27, -26])
-	ax.set_yticklabels(["29°S", "28°S", "27°S", "26°S"], fontsize = 18)
-	plt.title(f"Incidência de Dengue Prevista em Santa Catarina.\nSemana Epidemiológica: {semana_epidemio['SE']}/{semana_epidemio['ano_epi']}.", fontsize = 28)
+	ax.set_yticklabels(["29°S", "28°S", "27°S", "26°S"])#, fontsize = 18)
+	plt.title(f"Incidência de Dengue Prevista em Santa Catarina.\nSemana Epidemiológica: {semana_epidemio['SE']}/{semana_epidemio['ano_epi']}.")#, fontsize = 28)
 	#plt.grid(True)
 	nome_arquivo = f"INCIDENCIA_mapa_preditivo_{data_atual}_{idx}.pdf"
 	nome_arquivo_png = f"INCIDENCIA_mapa_preditivo_v{_ANO_MES_DIA}_SE{semana_epidemio['SE']}-{semana_epidemio['ano_epi']}.png"
 	if _AUTOMATIZA == True and _SALVAR == True:
 		os.makedirs(caminho_resultados, exist_ok = True)
 		#plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "pdf", dpi = 150)
-		plt.savefig(f"{caminho_resultados}{nome_arquivo_png}", format = "png", dpi = 300)
+		plt.savefig(f"{caminho_resultados}{nome_arquivo_png}", format = "png", dpi = 300,
+					transparent = False, bbox_inches = "tight", pad_inches = 0.02)
 		print(f"\n\n{green}{caminho_resultados}\n{nome_arquivo}\nSALVO COM SUCESSO!{reset}\n\n")
 		print(f"\n\n{green}{caminho_resultados}\n{nome_arquivo_png}\nSALVO COM SUCESSO!{reset}\n\n")
 	if _AUTOMATIZA == True and _VISUALIZAR == True:	
