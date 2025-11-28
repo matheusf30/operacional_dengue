@@ -37,6 +37,7 @@ import os
 from datetime import date, datetime, timedelta
 import matplotlib.colors as colors
 import matplotlib.patches as patches
+from cartopy.mpl.gridliner import LONGITUDE_FORMATTER, LATITUDE_FORMATTER
 
 ##### Padrão ANSI ###############################################################
 bold = "\033[1m"
@@ -49,12 +50,20 @@ cyan = "\033[36m"
 white = "\033[37m"
 reset = "\033[0m"
 
-##################### Valores Booleanos ##########################
-_VISUALIZAR = sys.argv[1]   # True|False                     #####
+##################### Valores Booleanos ############ # sys.argv[0] is the script name itself and can be ignored!
+#_AUTOMATIZAR = sys.argv[1]   # True|False                    #####
+#_AUTOMATIZA = True if _AUTOMATIZAR == "True" else False      #####
+#_VISUALIZAR = sys.argv[2]    # True|False                    #####
+_VISUALIZAR = sys.argv[1]    # True|False                    #####
 _VISUALIZAR = True if _VISUALIZAR == "True" else False       #####
-_SALVAR = sys.argv[2]    # True|False                        #####
+#_SALVAR = sys.argv[3]        # True|False                    #####
+_SALVAR = sys.argv[2]        # True|False                    #####
 _SALVAR = True if _SALVAR == "True" else False               #####
 ##################################################################
+
+print(f"\n{red}Argumentos:")#\n{reset}Visualizar = {_VISUALIZAR}\n")
+print(f"Visualizar = {_VISUALIZAR}")
+print(f"Salvar = {_SALVAR}\n{reset}")
 
 #################################################################################
 # DATA DO SISTEMA (POSSIBILIDADE DE ACESSAR ARQUIVO DE 1 DIA)
@@ -71,9 +80,14 @@ _DIA_ONTEM = _ONTEM.strftime("%d")
 _ANO_MES_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}"
 _ANO_MES_DIA_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}{_DIA_ONTEM}"
 
+#################################################################################
+# CAMINHOS E ARQUIVOS
+caminho_shapefile = "/media/dados/shapefiles/BR/"
+caminho_resultado = f"/home/meteoro/scripts/matheus/operacional_dengue/meteorologia/{_ANO_ATUAL}/"
+os.makedirs(f"{caminho_resultado}", mode = 0o777, exist_ok = True)
+
+# CLimatologia de semanas epidemiológicas (by Everton)
 def calcula_numero_se(dia):
-	"""
-	"""
 	N_SE = 0
 	dia = pd.to_datetime(dia)
 	# Retornando ao domingo da semana
@@ -87,20 +101,14 @@ def calcula_numero_se(dia):
 	if (dia_inicio - domingo).days <= 3:
 		N_SE += 1
 	return N_SE
-SE = calcula_numero_se(_ANO_MES_DIA) - 1
+_SE = calcula_numero_se(_ANO_MES_DIA) - 1
+#print(_SE)
 
-
-#################################################################################
-# CAMINHOS E ARQUIVOS
-caminho_shapefile = "/media/dados/shapefiles/BR/"
-caminho_resultado = f"/home/meteoro/scripts/matheus/teste/operacional_dengue/meteorologia/{_ANO_ATUAL}/{_MES_ATUAL}/"
-os.makedirs(f"{caminho_resultado}", mode = 0o777, exist_ok = True)
-
-prec_climatologia = xr.open_dataset("/home/meteoro/scripts/matheus/teste/operacional_dengue/meteorologia/climatologia/prec_climatologia_epidemiosemanal.nc").sel(week = SE)['prec']
+prec_climatologia = xr.open_dataset("/home/meteoro/scripts/matheus/operacional_dengue/meteorologia/climatologia/prec_climatologia_epidemiosemanal.nc").sel(week = _SE)['prec']
 
 municipios = "/media/dados/shapefiles/SC/SC_Municipios_2024.shp"
 sc_shape = gpd.read_file(f"/media/dados/shapefiles/SC/SC_UF_2024.shp")
-regionais = "/home/meteoro/scripts/matheus/teste/operacional_dengue/dados_operacao/censo_sc_regional.csv"
+regionais = "/home/meteoro/scripts/matheus/operacional_dengue/dados_operacao/censo_sc_regional.csv"
 municipios = gpd.read_file(municipios, low_memory = False)
 regionais = pd.read_csv(regionais, low_memory = False)
 try:
@@ -118,31 +126,7 @@ municipios = municipios.merge(regionais[["Municipio", "regional"]],
 								left_on = "NM_MUN", right_on = "Municipio",
 								how = "left")
 regionais = municipios.dissolve(by = "regional")
-
-#################################################################################
 # DEFININDO FUNÇÕES
-
-# CLimatologia de semanas epidemiológicas (by Everton)
-def calcula_numero_se(dia):
-	"""
-	"""
-	N_SE = 0
-	dia = pd.to_datetime(dia)
-	# Retornando ao domingo da semana
-	wkd = dia.weekday()
-	domingo = dia - timedelta(days = wkd + 1)
-	ano_func = domingo.strftime("%Y")
-	dia_inicio = pd.to_datetime(f"{ano_func}-01-01")
-	while domingo >= dia_inicio:
-		N_SE += 1
-		domingo -= timedelta(days = 7)
-	if (dia_inicio - domingo).days <= 3:
-		N_SE += 1
-	print(f"{green}*{reset}*"*30)
-	print(f"\n{green}SEMANA EPIDEMIOLÓGICA nº:\n{reset}{N_SE}\n")
-	print(f"{green}*{reset}*"*30)
-	return N_SE
-
 def selecionar_tempo_espaco(dataset, tempo):
 	"""
 	"""
@@ -196,7 +180,7 @@ def limite_minmax_anomalia(regiao_prec):
 	rounded_abs = ((abs_value + step - 1) // step) * step
 
 	# Create ranges that cover the full extent and include zero
-	levels = list(range(-rounded_abs, rounded_abs + 1, step))
+	levels = list(range(-rounded_abs, rounded_abs + 1, step)) #comentamos aqui
 	levels2 = levels
 	#levels = range(-50, 50, 10)
 	#levels2 = levels
@@ -217,7 +201,7 @@ def limite_minmax_anomalia(regiao_prec):
 	
 def limite_colobar(regiao_prec):
 	max_tmax = regiao_prec.max().item()
-	int_max = int(max_tmax) - 10
+	int_max = int(max_tmax) - 10 #------------------- estamos atualizando aqui
 	min_tmin = 0#regiao_prec.min().item()
 	int_min = int(min_tmin)# + 10
 	if ((int_max - int_min)//2 != (int_max-int_min)/2):
@@ -243,20 +227,25 @@ def mascara(dataset):
 	media = media.round(1)
 	return media, maximo, minimo
 	
+#def quadradinho_do_mario(media_sc):
+#    plt.text(-52.5, -29.15, f"Média de SC\n {media_sc} mm\nFonte: MERGE - CPTEC/INPE",
+#            color="black", 
+#            ha="center", va="center", fontsize=12, zorder=10,
+#            bbox=dict(boxstyle="square", facecolor="white", edgecolor="black"))
 def quadradinho_do_mario(media_sc, comportamento = None):
 	"""
 	"""
 	if comportamento == "anomalia":
-		plt.text(-53, -29, f"Anomalia de SC:\n {media_sc} mm",
+		plt.text(-52.5, -29, f"Anomalia de SC:\n {media_sc} mm\nFonte: MERGE - CPTEC/INPE",
 				color="black", 
 				ha="center", va="center", fontsize=12, zorder=10,
 				bbox=dict(boxstyle="square", facecolor="white", edgecolor="black"))
 	else:
-		plt.text(-53, -29, f"Média de SC:\n {media_sc} mm",
+		plt.text(-52.5, -29, f"Média de SC:\n {media_sc} mm\nFonte: MERGE - CPTEC/INPE",
 				color="black", 
 				ha="center", va="center", fontsize=12, zorder=10,
 				bbox=dict(boxstyle="square", facecolor="white", edgecolor="black"))
-
+	
 def gerar_mapa(dataset, comportamento):
 	"""
 	Função relativa à síntese de mapas temáticos de precipitação utilizando MERGE.
@@ -266,6 +255,7 @@ def gerar_mapa(dataset, comportamento):
 	- mapa temático com a variável de interesse.
 	"""
 	plt.figure(figsize=(8, 6), layout = "constrained", frameon = True)
+	#plt.figure(figsize=(10, 6), layout = "constrained", frameon = True)
 	ax = plt.axes(projection=ccrs.PlateCarree())
 	shp = list(shpreader.Reader(f"{caminho_shapefile}/BR_UF_2022.shp").geometries())
 	#cmap = plt.get_cmap("YlGnBu")
@@ -276,7 +266,10 @@ def gerar_mapa(dataset, comportamento):
 	else:
 		aux = "both"
 	
-	figure = dataset.plot.contourf(cmap = cmap, norm = norm, robust = True,
+	#figure = dataset.plot.contourf(cmap = cmap, norm = norm, robust = True,
+	#								add_colorbar = False,  add_labels = False,
+	#								transform = ccrs.PlateCarree(),  levels = levels, extend = aux)
+	figure = dataset.plot.contourf(cmap = cmap, robust = True,
 									add_colorbar = False,  add_labels = False,
 									transform = ccrs.PlateCarree(),  levels = levels, extend = aux)
 	linhas = dataset.plot.contour(ax = ax, levels = levels2,
@@ -298,33 +291,49 @@ def gerar_mapa(dataset, comportamento):
 	_d7 = _d7.strftime("%Y-%m-%d")
 	print(f"\n{green}prec - DOMINGO: {reset}{_d7}\n")
 	if (comportamento == "acumulado"):
-		plt.title(f"Precipitação Acumulada na Semana Epidemiológica Nº {SE}\nPeríodo Observado: {_d7} a {_d8}", fontsize = 14, ha = "center")
+		plt.title(f"Precipitação Acumulada Para a Semana Epidemiológica N°{_SE}\nPeríodo observado: {_d7} a {_d8}", fontsize = 14, ha = "center")
 	elif (comportamento == "anomalia"):
-		plt.title(f"Anomalia de Precipitação na Semana Epidemiológica Nº {SE}\nPeríodo Observado: {_d7} a {_d8}", fontsize = 14, ha = "center")
+		plt.title(f"Anomalia de Precipitação Para a Semana Epidemiológica N°{_SE}\nPeríodo observado: {_d7} a {_d8}", fontsize = 14, ha = "center")
 	media = mascara(dataset)[0]
+	#quadradinho_do_mario(media)
 	if comportamento == "anomalia":
-		quadradinho_do_mario(media, comportamento)
+		quadradinho_do_mario(media, comportamento)	
 	else:
-		quadradinho_do_mario(media)
+		quadradinho_do_mario(media)	
 	ax.add_geometries(shp, ccrs.PlateCarree(), edgecolor = "black",
 					facecolor = "none", linewidth = 0.5)
 	ax.coastlines(resolution = "10m", color = "black", linewidth = 0.8)
 	ax.add_feature(cartopy.feature.BORDERS, edgecolor = "black", linewidth = 0.5)
-	gl = ax.gridlines(crs = ccrs.PlateCarree(), color = "white", alpha = 1.0,
-					linestyle = "--", linewidth = 0.25, xlocs = np.arange(-180, 180, 1),
-					ylocs = np.arange(-90, 90, 1), draw_labels = True)
-	gl.top_labels = False
-	gl.right_labels = False
-	plt.figtext(0.55, 0.045, "Fonte: MERGE - CPTEC/INPE", ha = "center", fontsize = 10)
-	nome_arquivo = f"prec_merge_{comportamento}_{_d7}_SE{SE}.png"
-	if _SALVAR == True:	
-		plt.savefig(f"{caminho_resultado}{nome_arquivo}",
-				transparent = False, dpi = 300, bbox_inches = "tight", pad_inches = 0.02)
-		print(f"\n\n{green}{caminho_resultado}\n{nome_arquivo}\nSALVO COM SUCESSO!{reset}\n\n")
+	#gl = ax.gridlines(crs = ccrs.PlateCarree(), color = "white", alpha = 1.0,
+	#				linestyle = "--", linewidth = 0.25, xlocs = np.arange(-180, 180, 1),
+	#				ylocs = np.arange(-90, 90, 1), draw_labels = True)
+	#gl.top_labels = False
+	#gl.right_labels = False
+# Less dense gridlines for better readability
+	gl = ax.gridlines(crs=ccrs.PlateCarree(), color="white", alpha=1.0,
+				linestyle="--", linewidth=0.25, draw_labels = False)# xlocs=np.arange(-180, 	plt.xlabel("Longitude")#, fontsize = 18)
+	plt.ylabel("Latitude")#, fontsize = 18)
+	plt.xlabel("Longitude")
+	plt.xlim(-54.05, -47.95)
+	plt.ylim(-29.45, -25.75)
+	ax.tick_params(axis = "both")#, labelsize = 18)
+	ax.set_xticks([-54, -52, -50, -48])
+	ax.set_xticklabels(["54°W", "52°W", "50°W", "48°W"])#, fontsize = 18)
+	ax.set_yticks([-29, -28, -27, -26])
+	ax.set_yticklabels(["29°S", "28°S", "27°S", "26°S"])#, fontsize = 18)
+
+# Remove these lines since gridlines now handle the labels:
+# plt.xlabel("Longitude")
+# plt.ylabel("Latitude")
+	#plt.figtext(0.55, 0.045, "Fonte: MERGE - CPTEC/INPE", ha = "center", fontsize = 10)
+	if _SALVAR == True:
+		print(f"\n{red}Figura salva como:")
+		print(f"{caminho_resultado}prec_semanal_merge_{comportamento}_{_SE}.png\n{reset}")
+		plt.savefig(f"{caminho_resultado}prec_semanal_merge_{comportamento}_{_ANO_ATUAL}{_SE}.png",
+					transparent = False, dpi = 300, bbox_inches = "tight", pad_inches = 0.02, format = "png")
+		#plt.savefig(f"{caminho_resultado}prec_semanal_merge_{str_var}_{_SE}.png", format = "png", dpi = 300)
 	if _VISUALIZAR == True:
-		print(f"{cyan}\nVISUALIZANDO:\n{caminho_resultado}\n{nome_arquivo}\n{reset}\n\n")
 		plt.show()
-		print(f"{cyan}\nENCERRADO:\n{caminho_resultado}\n{nome_arquivo}\n{reset}\n\n")
 	
 #################################################################################
 # EXECUTANDO FUNÇÕES
@@ -337,7 +346,7 @@ except FileNotFoundError:
 levels, levels2, norm, cmap = limite_colobar(regiao_prec)
 levels = [0, 5, 10, 20, 30, 40, 50, 70, 80, 100]
 levels = np.array(levels)
-levels2 = levels
+levels2 = levels 
 #info_dataset(regiao_prec)
 print(levels)
 print(levels2)
