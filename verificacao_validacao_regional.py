@@ -75,11 +75,11 @@ _ANO_MES_DIA_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}{_DIA_ONTEM}"
 ##################################################################################
 
 ### Encaminhamento aos Diretórios
-caminho_dados = "/home/meteoro/scripts/matheus/teste/operacional_dengue/dados_operacao/" # CLUSTER
-caminho_operacional = "/home/meteoro/scripts/matheus/teste/operacional_dengue/"
+caminho_dados = "/home/meteoro/scripts/operacional_dengue/dados_operacao/" # CLUSTER
+caminho_operacional = "/home/meteoro/scripts/operacional_dengue/"
 caminho_shape = "/media/dados/shapefiles/" #SC/SC_Municipios_2022.shp #BR/BR_UF_2022.shp
-caminho_modelos = f"/home/meteoro/scripts/matheus/teste/operacional_dengue/modelagem/casos/{_ANO_ATUAL}/{_ANO_MES_DIA}/"
-caminho_resultados = f"home/meteoro/scripts/matheus/teste/operacional_dengue/modelagem/resultados/{_ANO_ATUAL}/{_ANO_MES}/"
+caminho_modelos = f"/home/meteoro/scripts/operacional_dengue/modelagem/casos/{_ANO_ATUAL}/{_ANO_MES_DIA}/"
+caminho_resultados = f"home/meteoro/scripts/operacional_dengue/modelagem/resultados/{_ANO_ATUAL}/{_ANO_MES}/"
 caminho_previsao = f"modelagem/resultados/{_ANO_ATUAL}/{_ANO_MES}/"#dados_previstos/"
 print(f"\n{green}HOJE:\n{reset}{_ANO_MES_DIA}\n")
 print(f"\n{green}ONTEM:\n{reset}{_ANO_MES_DIA_ONTEM}\n")
@@ -323,7 +323,7 @@ plt.ylabel("Número de Casos Prováveis de Dengue")
 plt.title("COMPARAÇÃO ENTRE CASOS PROVÁVEIS DE DENGUE PREVISTOS E OBSERVADOS", fontsize = 12, y = 1.03, loc = "center", pad = 10)
 plt.suptitle(f"MUNICÍPIO DE {_CIDADE}", fontsize = 16, y = 0.96)
 plt.legend(fontsize = 14)
-plt.ylim(0, casos_atual_reg.max().max())
+#plt.ylim(0, casos_atual_reg.max().max())
 ax = plt.gca()
 ax.set_facecolor("honeydew")
 """
@@ -366,7 +366,7 @@ for idx, _REG in enumerate(regionais):
 	plt.title("COMPARAÇÃO ENTRE CASOS PROVÁVEIS DE DENGUE PREVISTOS E OBSERVADOS", fontsize = 12, y = 1.03, loc = "center", pad = 10)
 	plt.suptitle(f"REGIONAL: {_REG}", fontsize = 16, y = 0.96)
 	plt.legend(fontsize = 14)
-	plt.ylim(0, casos_atual_reg.max().max())
+	#plt.ylim(0, casos_atual_reg.max().max())
 	ax = plt.gca()
 	ax.set_facecolor("honeydew")
 	if _VISUALIZAR == True:
