@@ -75,9 +75,7 @@ print(f"\nOS DADOS UTILIZADOS ESTÃO ALOCADOS NOS SEGUINTES CAMINHOS:\n\n{caminh
 
 ##################################################################################
 ### Renomeação das Variáveis pelos Arquivos
-casos = "casos_dive_pivot_total.csv"  # TabNet/DiveSC
-# focos?
-unicos = "casos_primeiros.csv"
+focos = "focos_semanal_pivot.csv"
 municipios = "SC/SC_Municipios_2024.shp"
 br = "BR/BR_UF_2022.shp"
 censo = "censo_sc_xy.csv"
@@ -87,10 +85,8 @@ municipios = "/media/dados/shapefiles/SC/SC_Municipios_2024.shp"
 municipios = gpd.read_file(municipios, low_memory = False)
 regionais = pd.read_csv(regionais, low_memory = False)
 ### Abrindo Arquivo
-casos = pd.read_csv(f"{caminho_dados}{casos}", low_memory = False)
-#focos = pd.read_csv(f"{caminho_dados}{focos}", low_memory = False)
+focos = pd.read_csv(f"{caminho_dados}{focos}", low_memory = False)
 censo = pd.read_csv(f"{caminho_dados}{censo}", low_memory = False)
-unicos = pd.read_csv(f"{caminho_dados}{unicos}")
 #municipios = gpd.read_file(f"{caminho_shape}{municipios}")
 br = gpd.read_file(f"{caminho_shape}{br}")
 troca = {'Á': 'A', 'Â': 'A', 'À': 'A', 'Ã': 'A',
@@ -99,7 +95,6 @@ troca = {'Á': 'A', 'Â': 'A', 'À': 'A', 'Ã': 'A',
          'Ó': 'O', 'Ô': 'O', 'Ò': 'O', 'Õ': 'O',
          'Ú': 'U', 'Û': 'U', 'Ù': 'U', 'Ũ': 'U',
          'Ç': 'C', " " : "_", "'" : "_", "-" : "_"}
-cidades = unicos["Município"].copy()
 
 ##################################################################################
 #sys.exit()
@@ -115,25 +110,25 @@ def tempo_epidemiologico(df_original):
 	print(f"\n{green}TEMPO CRONOLÓGICO (epidemiológico):\n{reset}{tempo}\n")
 	return tempo
 	
-tempo = tempo_epidemiologico(casos)
+tempo = tempo_epidemiologico(focos)
 print(f"\n{green}DATA EPIDEMIOLÓGICA:\n{reset}{tempo['SE'].iloc[-2]}/{tempo['ano_epi'].iloc[-2]}\n")
 #sys.exit()
 ### Pré-processamento
-print(f"\n{green}CASOS:\n{reset}{casos}\n")
-casos["Semana"] = pd.to_datetime(casos["Semana"], format = "%Y-%m-%d")
-print(f"\n{green}CASOS.info():\n{reset}{casos.info()}\n")
-casos = casos[casos["Semana"].dt.year == datetime.today().year]
-semana_epidemio = casos.loc[casos.index[-1], "Semana"]
+print(f"\n{green}FOCOS:\n{reset}{focos}\n")
+focos["Semana"] = pd.to_datetime(focos["Semana"], format = "%Y-%m-%d")
+print(f"\n{green}FOCOS.info():\n{reset}{focos.info()}\n")
+focos = focos[focos["Semana"].dt.year == datetime.today().year]
+semana_epidemio = focos.loc[focos.index[-1], "Semana"]
 print(f"\n{green}SEMANA EPIDEMIOLÓGICA:\n{reset}{semana_epidemio}\n")
-casos.set_index("Semana", inplace = True)
-print(f"\n{green}CASOS.columns:\n{reset}{casos.columns}\n")
-print(f"\n{green}CASOS:\n{reset}{casos}\n")
+focos.set_index("Semana", inplace = True)
+print(f"\n{green}FOCOS.columns:\n{reset}{focos.columns}\n")
+print(f"\n{green}FOCOS:\n{reset}{focos}\n")
 censo["Municipio"] = censo["Municipio"].str.upper()
 municipios["NM_MUN"] = municipios["NM_MUN"].str.upper()
 print(f"\n{green}MUNICÍPIOS shapefile:\n{reset}{municipios}\n")
 print(f"\n{green}CENSO:\n{reset}{censo}\n")
-print(f"\n{green}CASOS:\n{reset}{casos}\n")
-total = casos.sum()
+print(f"\n{green}FOCOS:\n{reset}{focos}\n")
+total = focos.sum()
 total_dict = total.to_dict()
 print(f"\n{green}TOTAL:\n{reset}{total}\n")
 base_carto = censo[["Municipio", "Populacao"]]
@@ -145,7 +140,6 @@ base_carto["geometry"] = base_carto["Municipio"].map(geom_dict)
 base_carto = gpd.GeoDataFrame(base_carto, geometry = "geometry", crs = "EPSG:4674")
 print(f"\n{green}DICIONÁRIO geometry:\n{reset}{geom_dict}\n")
 print(f"\n{green}BASE CARTOGRÁFICA:\n{reset}{base_carto}\n")
-
 municipios["NM_MUN"] = municipios["NM_MUN"].str.upper()
 municipios = municipios.merge(regionais[["Municipio", "regional"]],
 								left_on = "NM_MUN", right_on = "Municipio",
@@ -155,8 +149,7 @@ regionais = municipios.dissolve(by = "regional")
 
 ##################################################################################
 ### Cartografia
-### Casos
-#fig, ax = plt.subplots(figsize = (8, 6), layout = "constrained", frameon = True)
+### FOCOS
 fig, ax = plt.subplots(figsize = (8, 5.3), layout = "constrained", frameon = True)
 municipios.plot(ax = ax, color = "lightgray", edgecolor = "white", linewidth = 0.05)
 v_max = base_carto["total"].max()
@@ -167,17 +160,13 @@ print(f"\n{green}v_min\n{reset}{v_min}\n")
 print(f"\n{green}v_max\n{reset}{v_max}\n")
 print(f"\n{green}levels\n{reset}{levels}\n")
 figure = base_carto.plot(ax = ax, column = "total",  legend = True,
-				edgecolor = "white", label = "Casos", legend_kwds = {"extend": "max", "fraction": 0.035, "pad": 0.03, "label": "Número de Casos Prováveis"},
-				cmap = "RdPu", linewidth = 0.05, linestyle = ":",
+				edgecolor = "white", label = "Focos de _Aedes_ sp.", legend_kwds = {"extend": "max", "fraction": 0.035, "pad": 0.03, "label": "Número de Focos de _Aedes_ sp."},
+				cmap = "BuPu", linewidth = 0.05, linestyle = ":",
 				norm = cls.Normalize(vmin = v_min, vmax = v_max, clip = True))
 			
 regionais.plot(ax = ax, facecolor = "none",
 			   edgecolor = "dimgray", linewidth = 0.6)
 cbar_ax = ax.get_figure().get_axes()[-1]
-
-#cbar_ax.tick_params(labelsize = 20)
-#plt.xlim(-54, -48)
-#plt.ylim(-29.5, -25.75)
 plt.xlim(-54.05, -47.95)
 plt.ylim(-29.45, -25.75)
 ax.text(-52.5, -29, "Sistema de Referência de Coordenadas\nDATUM: SIRGAS 2000/22S.\nBase Cartográfica: IBGE, 2024.",
@@ -187,18 +176,17 @@ ax.text(-52.5, -28.25, """LEGENDA
 ▢           Sem registro*
 
 *Não há registro oficial
-de casos prováveis de dengue""",
+de focos de _Aedes_ sp.""",
         color = "black", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 10)
-plt.xlabel("Longitude")#, fontsize = 18)
-plt.ylabel("Latitude")#, fontsize = 18)
-ax.tick_params(axis = "both")#, labelsize = 18)
+plt.xlabel("Longitude")
+plt.ylabel("Latitude")
+ax.tick_params(axis = "both")
 ax.set_xticks([-54, -52, -50, -48])
-ax.set_xticklabels(["54°W", "52°W", "50°W", "48°W"])#, fontsize = 18)
+ax.set_xticklabels(["54°W", "52°W", "50°W", "48°W"])
 ax.set_yticks([-29, -28, -27, -26])
-ax.set_yticklabels(["29°S", "28°S", "27°S", "26°S"])#, fontsize = 18)
-plt.title(f"Soma de Casos Prováveis de Dengue em Santa Catarina\nSemana Epidemiológica: {tempo['SE'].iloc[-2]}/{tempo['ano_epi'].iloc[-2]}.", fontsize = 14)
-
-nome_arquivo = f"CASOS_mapa_monitoramento_{tempo['ano_epi'].iloc[-2]}_SE{tempo['SE'].iloc[-2]}.png"
+ax.set_yticklabels(["29°S", "28°S", "27°S", "26°S"])
+plt.title(f"Soma de Focos de _Aedes_ sp. em Santa Catarina\nSemana Epidemiológica: {tempo['SE'].iloc[-2]}/{tempo['ano_epi'].iloc[-2]}.", fontsize = 14)
+nome_arquivo = f"FOCOS_mapa_monitoramento_{tempo['ano_epi'].iloc[-2]}_SE{tempo['SE'].iloc[-2]}.png"
 if _AUTOMATIZA == True and _SALVAR == True:
 	os.makedirs(caminho_resultados, exist_ok = True)
 	#plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "png", dpi = 300)
@@ -208,11 +196,10 @@ if _AUTOMATIZA == True and _VISUALIZAR == True:
 	print(f"{cyan}\nVISUALIZANDO:\n{caminho_resultados}\n{nome_arquivo}\n{reset}\n\n")
 	plt.show()
 	print(f"{cyan}\nENCERRADO:\n{caminho_resultados}\n{nome_arquivo}\n{reset}\n\n")
-
+#sys.exit()
 ### Incidência	
-#fig, ax = plt.subplots(figsize = (8, 6), layout = "constrained", frameon = True)
 fig, ax = plt.subplots(figsize = (8, 5.3), layout = "constrained", frameon = True)
-municipios.plot(ax = ax, color = "lightgray", edgecolor = "red", linewidth = 0.3)
+municipios.plot(ax = ax, color = "lightgray", edgecolor = "white", linewidth = 0.3)
 v_max = base_carto["incidencia"].max()
 v_min = base_carto["incidencia"].min()
 intervalo = 250
@@ -221,61 +208,39 @@ print(f"\n{green}v_min\n{reset}{v_min}\n")
 print(f"\n{green}v_max\n{reset}{v_max}\n")
 print(f"\n{green}levels\n{reset}{levels}\n")
 base_carto.plot(ax = ax, column = "incidencia",  legend = True,
-				edgecolor = "white", label = "Incidência", legend_kwds = {"extend": "max", "fraction": 0.035, "pad": 0.03, "label": "Número de Casos Prováveis/100 Mil Habitantes"},
-				cmap = "RdPu", linewidth = 0.05, linestyle = ":",
+				edgecolor = "white", label = "Focos Ponderados de _Aedes_ sp.", legend_kwds = {"extend": "max", "fraction": 0.035, "pad": 0.03, "label": "Número de Focos de _Aedes_ sp./100 Mil Habitantes"},
+				cmap = "BuPu", linewidth = 0.05, linestyle = ":",
 				norm = cls.Normalize(vmin = v_min, vmax = v_max, clip = True))
-epidemia = base_carto[base_carto["incidencia"] > 300]
-epidemia.plot(ax = ax, facecolor = "none", edgecolor = "red",
-				linewidth = 0.1, hatch = "..")#, linestyle = ":") #Alterado aqui
+#epidemia = base_carto[base_carto["incidencia"] > 300]
+#epidemia.plot(ax = ax, facecolor = "none", edgecolor = "purple",
+#				linewidth = 0.1, hatch = "..")
 regionais.plot(ax = ax, facecolor = "none",
 				edgecolor = "dimgray", linewidth = 0.6)
 cbar_ax = ax.get_figure().get_axes()[-1]
-#cbar_ax.tick_params(labelsize = 20)
 plt.xlim(-54.05, -47.95)
 plt.ylim(-29.45, -25.75)
-#plt.xlim(-54.15, -47.95)#(-54, -48)
-#plt.ylim(-29.45, -25.64)#(-29.5, -25.75)
 ax.text(-52.5, -29.15, "Sistema de Referência de Coordenadas\nDATUM: SIRGAS 2000/22S.\nBase Cartográfica: IBGE, 2024.",
-	    color = "white", backgroundcolor = "darkgray", ha = "center", va = "center", fontsize = 10)
-#ax.text(-52.5, -28.5, """LEGENDA
-#
-#▢       Sem registro*
-#⣿⣿           Epidemia**
-#
-#*Não há registro oficial de
-#casos prováveis de dengue
-#**Municípios que atingiram
-#nível de epidemia
-#(acima de 300 casos prováveis/100mil habitantes)""",
-#        color = "red", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 10)
-	
-ax.text(-52.5, -27.9, """LEGENDA
+	    color = "white", backgroundcolor = "darkgray", ha = "center", va = "center", fontsize = 10)	
+ax.text(-52.5, -28.25, """LEGENDA
 
-▢       Sem registro*
-⣿⣿           Epidemia**""",
-	color = "red", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 10)
-ax.text(-52.5, -28.55,
-"""*Não há registro oficial de
-casos prováveis de dengue
-**Municípios em nível
-de epidemia
-(acima de 300 casos prováveis
-para cada 100 mil habitantes)""",
-	color = "red", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 6)
-plt.xlabel("Longitude")#, fontsize = 18)
-plt.ylabel("Latitude")#, fontsize = 18)
-ax.tick_params(axis = "both")#, labelsize = 18)
+▢       Sem registro**
+
+*Soma Ponderada por População
+(Nº Focos de _Aedes_ sp./100 mil habitantes)
+**Não há registro oficial de
+Focos de _Aedes_ sp.""",
+	color = "black", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 10)
+plt.xlabel("Longitude")
+plt.ylabel("Latitude")
+ax.tick_params(axis = "both")
 ax.set_xticks([-54, -52, -50, -48])
-ax.set_xticklabels(["54°W", "52°W", "50°W", "48°W"])#, fontsize = 18)
+ax.set_xticklabels(["54°W", "52°W", "50°W", "48°W"])
 ax.set_yticks([-29, -28, -27, -26])
-ax.set_yticklabels(["29°S", "28°S", "27°S", "26°S"])#, fontsize = 18)
-plt.title(f"Incidência da Soma de Casos Prováveis de Dengue em Santa Catarina\nSemana Epidemiológica: {tempo['SE'].iloc[-2]}/{tempo['ano_epi'].iloc[-2]}", fontsize = 14)
-nome_arquivo = f"INCIDENCIA_mapa_monitoramento_{tempo['ano_epi'].iloc[-2]}_SE{tempo['SE'].iloc[-2]}.png"
+ax.set_yticklabels(["29°S", "28°S", "27°S", "26°S"])
+plt.title(f"Soma Ponderada* de Focos de _Aedes_ sp. em Santa Catarina\nSemana Epidemiológica: {tempo['SE'].iloc[-2]}/{tempo['ano_epi'].iloc[-2]}", fontsize = 14)
+nome_arquivo = f"FOCOPONDERADO_mapa_monitoramento_{tempo['ano_epi'].iloc[-2]}_SE{tempo['SE'].iloc[-2]}.png"
 if _AUTOMATIZA == True and _SALVAR == True:
 	os.makedirs(caminho_resultados, exist_ok = True)
-	#plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "png", dpi = 300)
-	#plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "png", dpi = 300,
-	#			transparent = False, bbox_inches = "tight", pad_inches = 0.02)
 	plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "png", dpi = 300,
 				transparent = False, pad_inches = 0.02)
 	print(f"\n\n{green}{caminho_resultados}\n{nome_arquivo}\nSALVO COM SUCESSO!{reset}\n\n")
