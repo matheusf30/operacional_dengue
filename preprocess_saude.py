@@ -272,15 +272,15 @@ lista_focos = [focos1, focos2, focos3, focos4, focos5, focos6,
                focos7, focos8, focos9, focos10, focos11, focos12, 
                focos13, focos14, focos15, focos16, focos17]
 lista_focos = [df.set_index("Semana") for df in lista_focos]
-focos_total = pd.concat(lista_focos, axis = 1)
-focos_total = focos_total.fillna(0)
-#focos_total = focos_total.groupby(level = 0, axis = 1).sum()
-for col in [focos_total.columns]:
-		focos_total[col] = focos_total[col].astype(int)
-focos_total.reset_index(inplace = True)
-focos_total.sort_values("Semana", inplace = True)
-print(f"\n{green}FOCOS CONSOLIDADOS (17 Regionais):\n{reset}{focos_total}\n")
-print(f"\n{green}FOCOS CONSOLIDADOS (17 Regionais - Colunas):\n{reset}{focos_total.columns}\n")
-focos_total.to_csv(f"{caminho_dados}focos_pivot.csv", index = False)
-print(f"\n{green}SALVANDO FOCOS (semanal):\n{reset}{caminho_dados}{focos_total}\n")
+focos_semanal_pivot = pd.concat(lista_focos, axis = 1)
+focos_semanal_pivot = focos_semanal_pivot.fillna(0)
+#focos_semanal_pivot = focos_semanal_pivot.groupby(level = 0, axis = 1).sum()
+for col in [focos_semanal_pivot.columns]:
+		focos_semanal_pivot[col] = focos_semanal_pivot[col].astype(int)
+focos_semanal_pivot.reset_index(inplace = True)
+focos_semanal_pivot.sort_values("Semana", inplace = True)
+print(f"\n{green}FOCOS CONSOLIDADOS (17 Regionais):\n{reset}{focos_semanal_pivot}\n")
+print(f"\n{green}FOCOS CONSOLIDADOS (17 Regionais - Colunas):\n{reset}{focos_semanal_pivot.columns}\n")
+focos_semanal_pivot.to_csv(f"{caminho_dados}focos_semanal_pivot.csv", index = False)
+print(f"\n{green}SALVANDO FOCOS (semanal):\n{reset}{caminho_dados}{focos_semanal_pivot}\n")
 #sys.exit()
