@@ -42,11 +42,11 @@ print(f"\n{green}{_ANO_FINAL}, {_ONTEM}, {_ANO_ONTEM}, {_ANO_ANTERIOR}\n{reset}"
 #sys.exit()
 ### Encaminhamento aos Diretórios
 caminho_github = "https://raw.githubusercontent.com/matheusf30/dados_dengue/refs/heads/main/" # WEB
-caminho_dados = f"/home/meteoro/scripts/matheus/teste/operacional_dengue/dados_operacao/{_ANO_FINAL}/" # CLUSTER
+caminho_dados = f"/home/meteoro/scripts/operacional_dengue/dados_operacao/{_ANO_FINAL}/" # CLUSTER
 os.makedirs(caminho_dados, exist_ok = True)
-caminho_dados_anterior = f"/home/meteoro/scripts/matheus/teste/operacional_dengue/dados_operacao/{_ANO_ANTERIOR}/" # CLUSTER
+caminho_dados_anterior = f"/home/meteoro/scripts/operacional_dengue/dados_operacao/{_ANO_ANTERIOR}/" # CLUSTER
 os.makedirs(caminho_dados_anterior, exist_ok = True)
-caminho_operacional = "/home/meteoro/scripts/matheus/teste/operacional_dengue/"
+caminho_operacional = "/home/meteoro/scripts/operacional_dengue/"
 caminho_shape = "/media/dados/shapefiles/SC/" #SC_Municipios_2022.shp
 caminho_gfs = "/media/dados/operacao/gfs/0p25/" #202410/20241012/ #prec_daily_gfs_2024101212.nc
 caminho_merge = "/media/dados/operacao/merge/daily/2024/" #MERGE_CPTEC_DAILY_SB_2024.nc
@@ -277,4 +277,3 @@ print(f"\n{green}{bold}FINALIZADA ATUALIZAÇÃO{reset}\n")
 print(f"\n{green}Atualização feita em produtos de reanálise até {red}{_ANO_FINAL}{reset}!\n")
 print(f"{bold}(MERGE e SAMeT - tmin, tmed, tmax){reset}")
 print("!!"*80)
-
