@@ -254,9 +254,9 @@ def gerar_mapa(dataset, comportamento):
 	_d7 = _d7.strftime("%Y-%m-%d")
 	print(f"\n{green}prec - DOMINGO: {reset}{_d7}\n")
 	if (comportamento == "acumulado"):
-		plt.title(f"Precipitação Acumulada na Semana Epidemiológica Nº {SE}\nPeríodo Observado: {_d7} a {_d8}", fontsize = 14, ha = "center")
+		plt.title(f"Precipitação Acumulada na Semana Epidemiológica Nº {_SE}\nPeríodo Observado: {_d7} a {_d8}", fontsize = 14, ha = "center")
 	elif (comportamento == "anomalia"):
-		plt.title(f"Anomalia de Precipitação na Semana Epidemiológica Nº {SE}\nPeríodo Observado: {_d7} a {_d8}", fontsize = 14, ha = "center")
+		plt.title(f"Anomalia de Precipitação na Semana Epidemiológica Nº {_SE}\nPeríodo Observado: {_d7} a {_d8}", fontsize = 14, ha = "center")
 	media = mascara(dataset)[0]
 	if comportamento == "anomalia":
 		quadradinho_do_mario(media, comportamento)	
