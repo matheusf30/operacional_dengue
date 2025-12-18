@@ -66,10 +66,10 @@ _ANO_MES_DIA_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}{_DIA_ONTEM}"
 ##################################################################################
 
 ### Encaminhamento aos Diretórios
-caminho_dados = "/home/meteoro/scripts/matheus/teste/operacional_dengue/dados_operacao/" # CLUSTER
-caminho_operacional = "/home/meteoro/scripts/matheus/teste/operacional_dengue/"
+caminho_dados = "/home/meteoro/scripts/operacional_dengue/dados_operacao/" # CLUSTER
+caminho_operacional = "/home/meteoro/scripts/operacional_dengue/"
 caminho_shape = "/media/dados/shapefiles/" #SC/SC_Municipios_2022.shp #BR/BR_UF_2022.shp
-caminho_modelos = f"/home/meteoro/scripts/matheus/teste/operacional_dengue/modelagem/casos/{_ANO_ATUAL}/{_ANO_MES_DIA}/"
+caminho_modelos = f"/home/meteoro/scripts/operacional_dengue/modelagem/casos/{_ANO_ATUAL}/{_ANO_MES_DIA}/"
 caminho_resultados = f"modelagem/resultados/{_ANO_ATUAL}/{_ANO_MES}/"
 print(f"\nOS DADOS UTILIZADOS ESTÃO ALOCADOS NOS SEGUINTES CAMINHOS:\n\n{caminho_dados}\n\n")
 
@@ -81,7 +81,7 @@ unicos = "casos_primeiros.csv"
 municipios = "SC/SC_Municipios_2024.shp"
 br = "BR/BR_UF_2022.shp"
 censo = "censo_sc_xy.csv"
-regionais = "/home/meteoro/scripts/matheus/teste/operacional_dengue/dados_operacao/censo_sc_regional.csv"
+regionais = "/home/meteoro/scripts/operacional_dengue/dados_operacao/censo_sc_regional.csv"
 municipios = "/media/dados/shapefiles/SC/SC_Municipios_2024.shp"
 ##################################################################################
 municipios = gpd.read_file(municipios, low_memory = False)
@@ -156,7 +156,8 @@ regionais = municipios.dissolve(by = "regional")
 ##################################################################################
 ### Cartografia
 ### Casos
-fig, ax = plt.subplots(figsize = (8, 6), layout = "constrained", frameon = True)
+#fig, ax = plt.subplots(figsize = (8, 6), layout = "constrained", frameon = True)
+fig, ax = plt.subplots(figsize = (8, 5.3), layout = "constrained", frameon = True)
 municipios.plot(ax = ax, color = "lightgray", edgecolor = "white", linewidth = 0.05)
 v_max = base_carto["total"].max()
 v_min = base_carto["total"].min()
@@ -200,6 +201,7 @@ plt.title(f"Soma de Casos Prováveis de Dengue em Santa Catarina\nSemana Epidemi
 nome_arquivo = f"CASOS_mapa_monitoramento_{tempo['ano_epi'].iloc[-2]}_SE{tempo['SE'].iloc[-2]}.png"
 if _AUTOMATIZA == True and _SALVAR == True:
 	os.makedirs(caminho_resultados, exist_ok = True)
+	#plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "png", dpi = 300)
 	plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "png", dpi = 300)
 	print(f"\n\n{green}{caminho_resultados}\n{nome_arquivo}\nSALVO COM SUCESSO!{reset}\n\n")
 if _AUTOMATIZA == True and _VISUALIZAR == True:	
@@ -208,7 +210,8 @@ if _AUTOMATIZA == True and _VISUALIZAR == True:
 	print(f"{cyan}\nENCERRADO:\n{caminho_resultados}\n{nome_arquivo}\n{reset}\n\n")
 
 ### Incidência	
-fig, ax = plt.subplots(figsize = (8, 6), layout = "constrained", frameon = True)
+#fig, ax = plt.subplots(figsize = (8, 6), layout = "constrained", frameon = True)
+fig, ax = plt.subplots(figsize = (8, 5.3), layout = "constrained", frameon = True)
 municipios.plot(ax = ax, color = "lightgray", edgecolor = "red", linewidth = 0.3)
 v_max = base_carto["incidencia"].max()
 v_min = base_carto["incidencia"].min()
@@ -271,11 +274,12 @@ nome_arquivo = f"INCIDENCIA_mapa_monitoramento_{tempo['ano_epi'].iloc[-2]}_SE{te
 if _AUTOMATIZA == True and _SALVAR == True:
 	os.makedirs(caminho_resultados, exist_ok = True)
 	#plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "png", dpi = 300)
+	#plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "png", dpi = 300,
+	#			transparent = False, bbox_inches = "tight", pad_inches = 0.02)
 	plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "png", dpi = 300,
-				transparent = False, bbox_inches = "tight", pad_inches = 0.02)
+				transparent = False, pad_inches = 0.02)
 	print(f"\n\n{green}{caminho_resultados}\n{nome_arquivo}\nSALVO COM SUCESSO!{reset}\n\n")
 if _AUTOMATIZA == True and _VISUALIZAR == True:	
 	print(f"{cyan}\nVISUALIZANDO:\n{caminho_resultados}\n{nome_arquivo}\n{reset}\n\n")
 	plt.show()
 	print(f"{cyan}\nENCERRADO:\n{caminho_resultados}\n{nome_arquivo}\n{reset}\n\n")
-
