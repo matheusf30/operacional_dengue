@@ -177,7 +177,7 @@ ax.text(-52.5, -28.25, """LEGENDA
 
 *Não há registro oficial
 de focos de _Aedes_ sp.""",
-        color = "black", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 10)
+        color = "black", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 8)
 plt.xlabel("Longitude")
 plt.ylabel("Latitude")
 ax.tick_params(axis = "both")
@@ -229,7 +229,7 @@ ax.text(-52.5, -28.25, """LEGENDA
 (Nº Focos de _Aedes_ sp./100 mil habitantes)
 **Não há registro oficial de
 Focos de _Aedes_ sp.""",
-	color = "black", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 10)
+	color = "black", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 8)
 plt.xlabel("Longitude")
 plt.ylabel("Latitude")
 ax.tick_params(axis = "both")
@@ -248,4 +248,3 @@ if _AUTOMATIZA == True and _VISUALIZAR == True:
 	print(f"{cyan}\nVISUALIZANDO:\n{caminho_resultados}\n{nome_arquivo}\n{reset}\n\n")
 	plt.show()
 	print(f"{cyan}\nENCERRADO:\n{caminho_resultados}\n{nome_arquivo}\n{reset}\n\n")
-
