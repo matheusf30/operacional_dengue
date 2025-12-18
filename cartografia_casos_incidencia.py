@@ -80,10 +80,10 @@ if _LOCAL == "GH": # _ = Variável Privada
 	caminho_dados = "https://raw.githubusercontent.com/matheusf30/dados_dengue/main/"
 	caminho_modelos = "https://github.com/matheusf30/dados_dengue/tree/main/modelos"
 elif _LOCAL == "IFSC":
-	caminho_dados = "/home/meteoro/scripts/matheus/operacional_dengue/dados_operacao/" # CLUSTER
-	caminho_operacional = "/home/meteoro/scripts/matheus/operacional_dengue/"
+	caminho_dados = "/home/meteoro/scripts/operacional_dengue/dados_operacao/" # CLUSTER
+	caminho_operacional = "/home/meteoro/scripts/operacional_dengue/"
 	caminho_shape = "/media/dados/shapefiles/" #SC/SC_Municipios_2022.shp #BR/BR_UF_2022.shp
-	caminho_modelos = f"/home/meteoro/scripts/matheus/operacional_dengue/modelagem/casos/{_ANO_ATUAL}/{_ANO_MES_DIA}/"
+	caminho_modelos = f"/home/meteoro/scripts/operacional_dengue/modelagem/casos/{_ANO_ATUAL}/{_ANO_MES_DIA}/"
 	caminho_resultados = "modelagem/resultados/"
 #	caminho_resultados = "home/meteoro/scripts/matheus/operacional_dengue/modelagem/resultados/"
 else:
