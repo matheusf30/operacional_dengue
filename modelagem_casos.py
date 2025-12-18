@@ -110,12 +110,12 @@ _SALVAR = True if _SALVAR == "True" else False               #####
 ##################################################################################
 
 ### Encaminhamento aos Diretórios
-#/home/meteoro/scripts/matheus/teste/operacional_dengue/#CLUSTER
-caminho_dados = "/home/meteoro/scripts/matheus/teste/operacional_dengue/dados_operacao/"
+#/home/meteoro/scripts/operacional_dengue/#CLUSTER
+caminho_dados = "/home/meteoro/scripts/operacional_dengue/dados_operacao/"
 #os.makedirs(caminho_dados, exist_ok = True)
-caminho_modelos = "home/meteoro/scripts/matheus/teste/operacional_dengue/modelagem/casos/"
+caminho_modelos = "home/meteoro/scripts/operacional_dengue/modelagem/casos/"
 #os.makedirs(caminho_modelos, exist_ok = True)
-caminho_resultados = "home/meteoro/scripts/matheus/teste/operacional_dengue/modelagem/resultados/"
+caminho_resultados = "home/meteoro/scripts/operacional_dengue/modelagem/resultados/"
 #os.makedirs(caminho_resultados, exist_ok = True)
 url_gh = "https://raw.githubusercontent.com/matheusf30/"
 
@@ -828,7 +828,8 @@ print(f"\n{green}list(x2['CASOS']):\n{reset}{list(x2['CASOS'])}")
 print(f"\n{green}semanas_futuras:\n{reset}{semanas_futuras}")
 print(f"\n{green}previsoes2:\n{reset}{previsoes2}")
 print(f"\n{green}type(previsoes2):\n{reset}{type(previsoes2)}")
-plt.show()
+#plt.show()
+plt.close()
 
 ################################################################################################
 ############ Testando 2º Salto de Previsão #####################################################
@@ -847,7 +848,7 @@ _ANO_MES_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}"
 _ANO_MES_DIA_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}{_DIA_ONTEM}"
 
 try:
-	caminho_dados = f"/home/meteoro/scripts/matheus/teste/operacional_dengue/dados_operacao/{_ANO_FINAL}/{_MES_FINAL}/"
+	caminho_dados = f"/home/meteoro/scripts/operacional_dengue/dados_operacao/{_ANO_FINAL}/{_MES_FINAL}/"
 	os.makedirs(caminho_dados, exist_ok = True)
 	prec_gfs = pd.read_csv(f"{caminho_dados}gfs_prec_semana_{_ANO_MES_DIA}.csv", low_memory = False)
 	tmin_gfs = pd.read_csv(f"{caminho_dados}gfs_tmin_semana_{_ANO_MES_DIA}.csv", low_memory = False)
@@ -856,7 +857,7 @@ try:
 	print(f"\n{green}Arquivos utilizados do dia:\n{bold}{_DIA_FINAL}/{_MES_FINAL}/{_ANO_FINAL}.\n{reset}")
 	data_atual = _ANO_MES_DIA
 except FileNotFoundError:
-	caminho_dados = f"/home/meteoro/scripts/matheus/teste/operacional_dengue/dados_operacao/{_ANO_ONTEM}/{_MES_ONTEM}/"
+	caminho_dados = f"/home/meteoro/scripts/operacional_dengue/dados_operacao/{_ANO_ONTEM}/{_MES_ONTEM}/"
 	os.makedirs(caminho_dados, exist_ok = True)
 	prec_gfs = pd.read_csv(f"{caminho_dados}gfs_prec_semana_{_ANO_MES_DIA_ONTEM}.csv", low_memory = False)
 	tmin_gfs = pd.read_csv(f"{caminho_dados}gfs_tmin_semana_{_ANO_MES_DIA_ONTEM}.csv", low_memory = False)
@@ -886,15 +887,19 @@ print(f"\n{green}casos:\n{reset}{casos}")
 print(f"\n{green}casos.info:\n{reset}{casos.info()}")
 
 prec = pd.concat([prec, prec_gfs])
+prec.reset_index(inplace = True)
 print(f"\n{green}prec:\n{reset}{prec}")
 print(f"\n{green}prec.info:\n{reset}{prec.info()}")
 tmin = pd.concat([tmin, tmin_gfs])
+tmin.reset_index(inplace = True)
 print(f"\n{green}tmin:\n{reset}{tmin}")
 print(f"\n{green}tmin.info:\n{reset}{tmin.info()}")
 tmed = pd.concat([tmed, tmed_gfs])
+tmed.reset_index(inplace = True)
 print(f"\n{green}tmed:\n{reset}{tmed}")
 print(f"\n{green}tmed.info:\n{reset}{tmed.info()}")
 tmax = pd.concat([tmax, tmax_gfs])
+tmax.reset_index(inplace = True)
 print(f"\n{green}tmax:\n{reset}{tmax}")
 print(f"\n{green}tmax.info:\n{reset}{tmax.info()}")
 dataset3 = tmin[["Semana"]].copy()
@@ -971,7 +976,8 @@ print(f"\n{green}list(x3['CASOS']):\n{reset}{list(x3['CASOS'])}")
 #print(f"\n{green}semanas_futuras:\n{reset}{semanas_futuras}")
 print(f"\n{green}previsoes3:\n{reset}{previsoes3}")
 print(f"\n{green}type(previsoes3):\n{reset}{type(previsoes3)}")
-plt.show()
+#plt.show()
+plt.close()
 	
 #histograma_erro(y, previsoes_modelo)
 #boxplot_erro(y, previsoes_modelo)
