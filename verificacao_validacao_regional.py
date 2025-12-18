@@ -311,7 +311,8 @@ troca = {'Á': 'A', 'Â': 'A', 'À': 'A', 'Ã': 'A', 'Ä': 'A',
 
 ### Visualizações Gráficas
 
-plt.figure(figsize = (10, 6), layout = "constrained", frameon = False)
+#plt.figure(figsize = (10, 6), layout = "constrained", frameon = False)
+plt.figure(figsize = (10, 6), layout = "constrained", frameon = True) #Alterado frameon = True by Everton
 plt.plot(previstos["Semana"], previstos[_CIDADE],
 			label = "Previsto (GFS)", color = "red", linewidth = 3, linestyle = ":")
 plt.plot(previsao12["Semana"], previsao12[_CIDADE],
@@ -340,7 +341,9 @@ if _SALVAR == True and _AUTOMATIZA == True:
 	caminho_png = f"modelagem/resultados/{_ANO_ATUAL}/{_ANO_MES}/graficos_obsXprev/"
 	nome_arquivo = f"CASOS_serie_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_{_CIDADE}_SE{tempo['SE'].iloc[-1]}.png"
 	os.makedirs(caminho_png, exist_ok = True)
-	plt.savefig(f"{caminho_png}{nome_arquivo}", format = "png", dpi = 300)
+	#plt.savefig(f"{caminho_png}{nome_arquivo}", format = "png", dpi = 300)
+	plt.savefig(f"{caminho_png}{nome_arquivo}", format = "png", dpi = 300,
+					transparent = False, pad_inches = 0.02) # Alteradas as propriedades de salvamento para seguir o padrão dos outros mapas by Everton)
 	print(f"\n{green}ARQUIVO COM MUNICÍPIO SALVO:\n{reset}{caminho_png}{nome_arquivo}\n")
 	print(f"\n\n{green}{caminho_png}\n{nome_arquivo}\nSALVO COM SUCESSO!{reset}\n\n")
 	plt.close()
@@ -354,7 +357,8 @@ regionais = ["GRANDE FLORIANÓPOLIS", "EXTREMO OESTE", "OESTE",
 			
 for idx, _REG in enumerate(regionais):
 	print(f"\n{green}REGIONAL - {idx}:\n{reset}{_REG}\n")
-	plt.figure(figsize = (10, 6), layout = "constrained", frameon = False)
+	#plt.figure(figsize = (10, 6), layout = "constrained", frameon = False)
+	plt.figure(figsize = (10, 6), layout = "constrained", frameon = True) #Alterado frameon = True by Everton
 	plt.plot(previstos_reg.index, previstos_reg[_REG],
 				label = "Previsto (GFS)", color = "red", linewidth = 3, linestyle = ":")
 	plt.plot(previsao12_reg.index, previsao12_reg[_REG],
@@ -379,7 +383,9 @@ for idx, _REG in enumerate(regionais):
 		caminho_png = f"modelagem/resultados/{_ANO_ATUAL}/{_ANO_MES}/graficos_obsXprev/"
 		nome_arquivo = f"CASOS_serie_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_{_REG}_SE{tempo['SE'].iloc[-1]}.png"
 		os.makedirs(caminho_png, exist_ok = True)
-		plt.savefig(f"{caminho_png}{nome_arquivo}", format = "png", dpi = 300)
+		#plt.savefig(f"{caminho_png}{nome_arquivo}", format = "png", dpi = 300)
+		plt.savefig(f"{caminho_png}{nome_arquivo}", format = "png", dpi = 300,
+					transparent = False, pad_inches = 0.02) # Alteradas as propriedades de salvamento para seguir o padrão dos outros mapas by Everton
 		print(f"\n{green}ARQUIVO COM REGIONAIS SALVO:\n{reset}{caminho_png}{nome_arquivo}\n")
 		print(f"\n\n{green}{caminho_png}\n{nome_arquivo}\nSALVO COM SUCESSO!{reset}\n\n")
 		plt.close()
