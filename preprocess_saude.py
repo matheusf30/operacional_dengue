@@ -1,12 +1,12 @@
 # -*- coding: latin-1 -*-
 #################################################################################
-## Roteiro adaptado para pré-processar dados     ## PALAVRAS-CHAVE:            ##
-## Dados: Focos de _Aedes_ sp. e                 ## > Pré-processamento;       ##
-##        Casos Prováveis de Dengue (DIVE/SC)    ## > Dados de Saúde;          ##
-## Demanda: FAPESC edital nº 37/2024             ## > Estruturação;            ##
-## Adaptado por: Matheus Ferreira de Souza       ## > Semana Epidemiológica;   ##
-##               e Everton Weber Galliani        ## > Série Temporal;          ##
-## Data: 31/07/2025                              ## > Dicionário de Dados.     ##
+## Roteiro adaptado para prÃ©-processar dados     ## PALAVRAS-CHAVE:            ##
+## Dados: Focos de _Aedes_ sp. e                 ## > PrÃ©-processamento;       ##
+##        Casos ProvÃ¡veis de Dengue (DIVE/SC)    ## > Dados de SaÃºde;          ##
+## Demanda: FAPESC edital nÂº 37/2024             ## > EstruturaÃ§Ã£o;            ##
+## Adaptado por: Matheus Ferreira de Souza       ## > Semana EpidemiolÃ³gica;   ##
+##               e Everton Weber Galliani        ## > SÃ©rie Temporal;          ##
+## Data: 31/07/2025                              ## > DicionÃ¡rio de Dados.     ##
 #################################################################################
 
 ##### Bibliotecas correlatas ####################################################
@@ -16,7 +16,7 @@ import geopandas as gpd
 import numpy as np
 import os, sys
 
-##### Padrão ANSI ###############################################################
+##### PadrÃ£o ANSI ###############################################################
 bold = "\033[1m"
 red = "\033[91m"
 green = "\033[92m"
@@ -31,30 +31,31 @@ reset = "\033[0m"
 caminho_dados = "/home/meteoro/scripts/operacional_dengue/dados_operacao/"
 caminho_shape = "/media/dados/shapefiles/SC/"
 casos = "dengue-2025.xlsx"
-focos1 = "relatorio.xlsx" # Araranguá
-focos2 = "relatorio(1).xlsx" # Xanxerê
+focos1 = "relatorio.xlsx" # AraranguÃ¡
+focos2 = "relatorio(1).xlsx" # XanxerÃª
 focos3 = "relatorio(2).xlsx" # Videira
-focos4 = "relatorio(3).xlsx" # Tubarão
-focos5 = "relatorio(4).xlsx" # São Miguel do Oeste
-focos6 = "relatorio(5).xlsx" # São José
+focos4 = "relatorio(3).xlsx" # TubarÃ£o
+focos5 = "relatorio(4).xlsx" # SÃ£o Miguel do Oeste
+focos6 = "relatorio(5).xlsx" # SÃ£o JosÃ©
 focos7 = "relatorio(6).xlsx" # Rio do Sul
 focos8 = "relatorio(7).xlsx" # Mafra
 focos9 = "relatorio(8).xlsx" # Lages
 focos10 = "relatorio(9).xlsx" # Joinville
-focos11 = "relatorio(10).xlsx" # Joaçaba
-focos12 = "relatorio(11).xlsx" # Jaraguá do Sul
-focos13 = "relatorio(12).xlsx" # Itajaí
-focos14 = "relatorio(13).xlsx" # Criciúma
-focos15 = "relatorio(14).xlsx" # Concórdia
-focos16 = "relatorio(15).xlsx" # Chapecó
+focos11 = "relatorio(10).xlsx" # JoaÃ§aba
+focos12 = "relatorio(11).xlsx" # JaraguÃ¡ do Sul
+focos13 = "relatorio(12).xlsx" # ItajaÃ­
+focos14 = "relatorio(13).xlsx" # CriciÃºma
+focos15 = "relatorio(14).xlsx" # ConcÃ³rdia
+focos16 = "relatorio(15).xlsx" # ChapecÃ³
 focos17 = "relatorio(16).xlsx" # Blumenau
 municipios = "SC_Municipios_2022.shp"
 
 ##### ABRINDO ARQUIVOS ###########################################################
-try: # versão nova do excel (.xlsx)
+try: # versÃ£o nova do excel (.xlsx)
 	casos = pd.read_excel(f"{caminho_dados}{casos}", engine = "openpyxl")
-except: # versão antiga do excel (.xls)
+except: # versÃ£o antiga do excel (.xls)
 	casos = pd.read_excel(f"{caminho_dados}{casos}", engine = "xlrd")
+
 try:
 	focos1 = pd.read_excel(f"{caminho_dados}{focos1}", engine = "openpyxl", skiprows = 2)
 	focos2 = pd.read_excel(f"{caminho_dados}{focos2}", engine = "openpyxl", skiprows = 2)
@@ -91,9 +92,10 @@ except:
 	focos15 = pd.read_excel(f"{caminho_dados}{focos15}", engine = "xlrd", skiprows = 2)
 	focos16 = pd.read_excel(f"{caminho_dados}{focos16}", engine = "xlrd", skiprows = 2)
 	focos17 = pd.read_excel(f"{caminho_dados}{focos17}", engine = "xlrd", skiprows = 2)
+
 municipios = gpd.read_file(f"{caminho_shape}{municipios}")
 
-###### FUNÇÕES ###################################################################
+###### FUNÃ‡Ã•ES ###################################################################
 def tratar_focos(focos):
 	"""
 	"""	
@@ -102,9 +104,9 @@ def tratar_focos(focos):
 	colunas = list(focos.columns)
 	colunas_renomear = {colunas[0]:"EXCLUIR",
 						"Regional":"regional",
-						"Município":"municipio",
-						"A. aegypti formas aquáticas":"A.aegypti",
-						"A. albopictus formas aquáticas":"A.albopictus",
+						"MunicÃ­pio":"municipio",
+						"A. aegypti formas aquÃ¡ticas":"A.aegypti",
+						"A. albopictus formas aquÃ¡ticas":"A.albopictus",
 						"Data da Coleta":"data"}
 	focos = focos.rename(columns = colunas_renomear)
 	print(f"\n{green}FOCOS (parte1):\n{reset}{focos}\n")
@@ -151,7 +153,7 @@ def tratar_focos(focos):
 	print(f"\n{green}FOCOS.columns (parte4):\n{reset}{focos_semanal_pivot.columns}\n")
 	return focos_semanal_pivot
 
-### PRÉ-PROCESSAMENTO ############################################################
+### PRÃ‰-PROCESSAMENTO ############################################################
 ### CASOS
 print(f"\n{green}CASOS (ORIGINAL):\n{reset}{casos}\n")
 print(f"\n{green}CASOS (ORIGINAL):\n{reset}{casos.columns[0:50]}\n")
@@ -159,7 +161,7 @@ print(f"\n{green}CASOS (ORIGINAL):\n{reset}{casos.columns[50:100]}\n")
 print(f"\n{green}CASOS (ORIGINAL):\n{reset}{casos.columns[100:]}\n")
 print(f"\n{green}CASOS (ORIGINAL):\n{reset}{casos.columns}\n")
 """
-#try: # Colunas com nome na versão original do banco de dados
+#try: # Colunas com nome na versÃ£o original do banco de dados
 colunas_renomear = {"ID_AGRAVO":"doenca",
 					"DT_NOTIFIC":"data_notificacao",
 					"DT_SIN_PRI":"data_sintoma",
@@ -170,7 +172,7 @@ colunas_renomear = {"ID_AGRAVO":"doenca",
 					"CRITERIO":"criterio ",
 					"SOROTIPO":"sorotipo"}
 """
-#except KeyError: # Colunas com padrão anomolo de nomenclatura
+#except KeyError: # Colunas com padrÃ£o anomolo de nomenclatura
 colunas_renomear = {"ID_AGRAVO,C,5":"doenca",
 					"DT_NOTIFIC,D":"data_notificacao",
 					"DT_SIN_PRI,D":"data_sintoma",
@@ -186,33 +188,33 @@ casos = casos[["data_sintoma", "semana_sintoma", "data_notificacao",
 				"classificacao", "criterio ", "sorotipo"]]
 casos.columns = casos.columns.str.strip()
 
-print(f"\n{green}CLASSIFICAÇÃO:\n{reset}{casos['classificacao'].unique()}\n")
+print(f"\n{green}CLASSIFICAÃ‡ÃƒO:\n{reset}{casos['classificacao'].unique()}\n")
 print(f"\n{green}INFO:\n{reset}{casos.info()}\n")
 filtro_numerico = casos["classificacao"].isin([10., 8., 11., 12.])
 filtro_nan = casos["classificacao"].isna()
 casos = casos[filtro_numerico | filtro_nan]
 #casos = casos[casos["classificacao"].isin(filtro_classificacao)] # "5." = Descartado
-print(f"\n{green}CLASSIFICAÇÃO:\n{reset}{casos['classificacao'].unique()}\n")
-print(f"\n{green}CASOS (SELEÇÃO):\n{reset}{casos}\n")
-print(f"\n{green}CASOS (SELEÇÃO):\n{reset}{casos.columns}\n")
+print(f"\n{green}CLASSIFICAÃ‡ÃƒO:\n{reset}{casos['classificacao'].unique()}\n")
+print(f"\n{green}CASOS (SELEÃ‡ÃƒO):\n{reset}{casos}\n")
+print(f"\n{green}CASOS (SELEÃ‡ÃƒO):\n{reset}{casos.columns}\n")
 #sys.exit()
 casos["data_sintoma"] = pd.to_datetime(casos["data_sintoma"])#, unit = "D", origin = "1899-12-30")
 casos["data_notificacao"] = pd.to_datetime(casos["data_notificacao"])#, unit = "D", origin = "1899-12-30")
 casos = casos[casos["data_sintoma"].dt.year == 2025]
 municipio_faltando = casos["municipio_id"].isnull().sum()
-print(f"\n{red}Quantidade de registros faltando município: {municipio_faltando}!{reset}\n")
+print(f"\n{red}Quantidade de registros faltando municÃ­pio: {municipio_faltando}!{reset}\n")
 casos["casos"] = np.ones(len(casos)).astype(int)
 casos = casos[["semana_sintoma", "data_sintoma", "municipio_id", "casos"]]
 casos.dropna(subset=["municipio_id"], inplace=True)
 casos["municipio_id"] = casos["municipio_id"].astype(int)
 casos.sort_values(by = ["data_sintoma"], inplace = True)
 print(f"\n{green}CASOS:\n{reset}{casos}\n")
-print(f"\n{green}MUNICÍPIOS:\n{reset}{municipios}\n")
+print(f"\n{green}MUNICÃPIOS:\n{reset}{municipios}\n")
 pre_dict = municipios[["CD_MUN", "NM_MUN"]]
 pre_dict.loc[:, "CD_MUN"] = pre_dict["CD_MUN"].str.slice(0, -1)
 pre_dict["NM_MUN"] = pre_dict["NM_MUN"].str.upper()
 mun_dict = pd.Series(pre_dict["NM_MUN"].values, index = pre_dict["CD_MUN"]).to_dict()
-print(f"\n{green}MUNICÍPIOS (DIC.):\n{reset}{mun_dict}\n")
+print(f"\n{green}MUNICÃPIOS (DIC.):\n{reset}{mun_dict}\n")
 casos["municipio_id"] = casos["municipio_id"].astype(str)
 casos["municipio"] = casos["municipio_id"].map(mun_dict)
 casos.sort_values(by = ["data_sintoma"], inplace = True)
@@ -244,12 +246,12 @@ casos_semanal_pivot = casos_semanal_pivot.rename(columns = {"data":"Semana"})
 print(f"\n{green}CASOS:\n{reset}{casos_semanal_pivot}\n")
 print(f"\n{green}CASOS (info):\n{reset}{casos_semanal_pivot.info()}\n")
 print(f"\n{green}CASOS:\n{reset}{casos_semanal_pivot.columns}\n")
-# FINALIZAR DEPURAÇÃO DAS DATAS/MUNICÍPIOS/COLUNAS ANTES DE SALVAR
+# FINALIZAR DEPURAÃ‡ÃƒO DAS DATAS/MUNICÃPIOS/COLUNAS ANTES DE SALVAR
 casos_semanal_pivot.to_csv(f"{caminho_dados}casos_semanal_pivot.csv", index = False)
 print(f"\n{green}SALVANDO CASOS (semanal):\n{reset}{caminho_dados}{casos_semanal_pivot}\n")
 #sys.exit()
 
-### PRÉ-PROCESSAMENTO ############################################################
+### PRÃ‰-PROCESSAMENTO ############################################################
 ### FOCOS
 focos1 = tratar_focos(focos1)
 focos2 = tratar_focos(focos2)
