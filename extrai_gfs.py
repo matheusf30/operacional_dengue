@@ -54,11 +54,11 @@ print(f"\n{green}ONTEM:\n{reset}{_ANO_MES_DIA_ONTEM}\n")
 
 ### Encaminhamento aos Diretórios
 caminho_github = "https://raw.githubusercontent.com/matheusf30/dados_dengue/refs/heads/main/" # WEB
-caminho_dados = f"/home/meteoro/scripts/matheus/teste/operacional_dengue/dados_operacao/{_ANO_FINAL}/{_MES_FINAL}/" # GFS.csv/CLUSTER
+caminho_dados = f"/home/meteoro/scripts/operacional_dengue/dados_operacao/{_ANO_FINAL}/{_MES_FINAL}/" # GFS.csv/CLUSTER
 os.makedirs(caminho_dados, exist_ok = True)
-caminho_dados_ontem = f"/home/meteoro/scripts/matheus/teste/operacional_dengue/dados_operacao/{_ANO_ONTEM}/{_MES_ONTEM}/" # GFS.csv/CLUSTER
+caminho_dados_ontem = f"/home/meteoro/scripts/operacional_dengue/dados_operacao/{_ANO_ONTEM}/{_MES_ONTEM}/" # GFS.csv/CLUSTER
 os.makedirs(caminho_dados_ontem, exist_ok = True)
-caminho_operacional = "/home/meteoro/scripts/matheus/teste/operacional_dengue/"
+caminho_operacional = "/home/meteoro/scripts/operacional_dengue/"
 caminho_shape = "/media/dados/shapefiles/SC/" #SC_Municipios_2022.shp
 caminho_merge = "/media/dados/operacao/merge/daily/2024/" #MERGE_CPTEC_DAILY_SB_2024.nc
 caminho_mergeCDO = "/media/dados/operacao/merge/CDO.MERGE/" #MERGE_CPTEC_DAILY_2024.nc@
@@ -305,4 +305,3 @@ print(f"\n{green}Atualização feita em reanálise preditiva* a partir de: {red}
 print(f"\n{bold}*GFS (Global Forecast System)**{reset}")
 print(f"{bold}**NCEP (National Centers for Environmental Prediction){reset}\n")
 print(f"{red}!{reset}!{green}!{reset}!"*30)
-
