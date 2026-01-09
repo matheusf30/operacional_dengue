@@ -239,6 +239,20 @@ def tempo_epidemiologico(df_original):
 	print(f"\n{green}TEMPO CRONOLÓGICO (epidemiológico):\n{reset}{tempo}\n")
 	return tempo
 	
+#sys.exit()
+tempo = tempo_epidemiologico(tmin)
+tempo = tempo_epidemiologico(casos)
+tempo = tempo_epidemiologico(focos)
+SE = tempo["SE"].iloc[-1]
+ano_epi = tempo["ano_epi"].iloc[-1]
+print(f"\n{green}DATA EPIDEMIOLÓGICA:\n{reset}{tempo['SE'].iloc[-1]}/{tempo['ano_epi'].iloc[-1]}\n")
+print(f"\n{green}SEMANA EPIDEMIOLÓGICA: {reset}{SE}\n{green}ANO EPIDEMIOLÓGICO: {reset}{ano_epi}\n")
+print(f"\n{green}DATA EPIDEMIOLÓGICA:\n{reset}{tempo['SE'].iloc[-2]}/{tempo['ano_epi'].iloc[-2]}\n")
+caminho_resultados = f"resultados/{ano_epi}/SE{SE}/entomologia/"
+if not os.path.exists(caminho_resultados):
+	os.makedirs(caminho_resultados)
+#sys.exit()
+	
 ##########################################################################################
 
 ### Visualizando arquivos
@@ -259,9 +273,7 @@ print(f"\n{green}REGIONAIS:\n{reset}{regionais}\n")
 print(f"\n{green}REGIONAIS (colunas):\n{reset}{regionais.columns}\n")
 print(f"\n{green}REGIONAIS:\n{reset}{regionais['regional'].unique()}\n")
 
-tempo = tempo_epidemiologico(tmin)
-tempo = tempo_epidemiologico(casos)
-print(f"\n{green}DATA EPIDEMIOLÓGICA:\n{reset}{tempo['SE'].iloc[-1]}/{tempo['ano_epi'].iloc[-1]}\n")
+
 #sys.exit()
 previstos = ultimas_previsoes.iloc[:3, :]
 previsao_pivot["Semana"] = pd.to_datetime(previsao_pivot["Semana"])
@@ -326,9 +338,9 @@ plt.plot(previsao_pivot["Semana"], previsao_pivot[_CIDADE],
 plt.plot(casos_atual["Semana"], casos_atual[_CIDADE],
 				label = "Observado", color = "darkgreen")
 plt.xlabel("Semanas Epidemiológicas (Série Temporal)")
-plt.ylabel('Número de focos de $\it{Aedes}$ $\it{sp.}$') #Itálico by Everton
+plt.ylabel('Número de focos de $\it{Aedes}$ sp.') #Itálico by Everton
 #plt.title("COMPARAÇÃO ENTRE FOCOS DE _Aedes_ sp. PREVISTOS E OBSERVADOS", fontsize = 12, y = 1.03, loc = "center", pad = 10)
-plt.title('COMPARAÇÃO ENTRE FOCOS DE $\it{Aedes}$ $\it{sp.}$ PREVISTOS E OBSERVADOS', fontsize = 12, y = 1.03, loc = "center", pad = 10) #Aedes sp. em itálico by Everton
+plt.title('COMPARAÇÃO ENTRE FOCOS DE $\it{Aedes}$ sp. PREVISTOS E OBSERVADOS', fontsize = 12, y = 1.03, loc = "center", pad = 10) #Aedes sp. em itálico by Everton
 plt.suptitle(f"MUNICÍPIO DE {_CIDADE}", fontsize = 16, y = 0.96)
 plt.legend(fontsize = 14)
 #plt.ylim(0, casos_atual_reg.max().max())
@@ -373,9 +385,9 @@ for idx, _REG in enumerate(regionais):
 	plt.plot(casos_atual_reg.index, casos_atual_reg[_REG],
 					label = "Observado", color = "darkgreen")
 	plt.xlabel("Semanas Epidemiológicas (Série Temporal)")
-	plt.ylabel('Número de focos de $\it{Aedes}$ $\it{sp.}$') #Itálico by Everton
+	plt.ylabel('Número de focos de $\it{Aedes}$ sp.') #Itálico by Everton
 	#plt.title("COMPARAÇÃO ENTRE FOCOS DE _Aedes_ sp. PREVISTOS E OBSERVADOS", fontsize = 12, y = 1.03, loc = "center", pad = 10)
-	plt.title('COMPARAÇÃO ENTRE FOCOS DE $\it{Aedes}$ $\it{sp.}$ PREVISTOS E OBSERVADOS', fontsize = 12, y = 1.03, loc = "center", pad = 10) #Aedes sp. em itálico by Everton
+	plt.title('COMPARAÇÃO ENTRE FOCOS DE $\it{Aedes}$ sp. PREVISTOS E OBSERVADOS', fontsize = 12, y = 1.03, loc = "center", pad = 10) #Aedes sp. em itálico by Everton
 	plt.suptitle(f"REGIONAL: {_REG}", fontsize = 16, y = 0.96)
 	plt.legend(fontsize = 14)
 	#plt.ylim(0, casos_atual_reg.max().max())
