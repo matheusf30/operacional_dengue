@@ -132,7 +132,8 @@ troca = {'Á': 'A', 'Â': 'A', 'À': 'A', 'Ã': 'A',
          'Ú': 'U', 'Û': 'U', 'Ù': 'U', 'Ũ': 'U',
          'Ç': 'C', " " : "_", "'" : "_", "-" : "_"}
 cidades = unicos["Município"].copy()
-
+data_atual = _ANO_MES_DIA
+"""
 try:
 	prec_gfs = pd.read_csv(f"{caminho_dados}{_ANO_ATUAL}/{_MES_ATUAL}/gfs_prec_semana_{_ANO_MES_DIA}.csv", low_memory = False)
 	tmin_gfs = pd.read_csv(f"{caminho_dados}{_ANO_ATUAL}/{_MES_ATUAL}/gfs_tmin_semana_{_ANO_MES_DIA}.csv", low_memory = False)
@@ -147,24 +148,24 @@ except FileNotFoundError:
 	tmax_gfs = pd.read_csv(f"{caminho_dados}{_ANO_ONTEM}/{_MES_ONTEM}/gfs_tmax_semana_{_ANO_MES_DIA_ONTEM}.csv", low_memory = False)
 	print(f"\n{green}Arquivos utilizados do dia:\n{bold}{_DIA_ONTEM}/{_MES_ONTEM}/{_ANO_ONTEM}.\n{reset}")
 	data_atual = _ANO_MES_DIA_ONTEM
-	
+"""	
 tmin.reset_index(inplace = True)
 tmed.reset_index(inplace = True)
 tmax.reset_index(inplace = True)
 prec.reset_index(inplace = True)
-prec_total = pd.concat([prec, prec_gfs])
+prec_total = prec.copy()#pd.concat([prec, prec_gfs])
 prec_total.reset_index(inplace = True)
 print(f"\n{green}prec_total:\n{reset}{prec_total}")
 print(f"\n{green}prec_total.info:\n{reset}{prec_total.info()}")
-tmin_total = pd.concat([tmin, tmin_gfs])
+tmin_total = tmin.copy()#pd.concat([tmin, tmin_gfs])
 tmin_total.reset_index(inplace = True)
 print(f"\n{green}tmin_total:\n{reset}{tmin_total}")
 print(f"\n{green}tmin_total.info:\n{reset}{tmin_total.info()}")
-tmed_total = pd.concat([tmed, tmed_gfs])
+tmed_total = tmed.copy()#pd.concat([tmed, tmed_gfs])
 tmed_total.reset_index(inplace = True)
 print(f"\n{green}tmed_total:\n{reset}{tmed_total}")
 print(f"\n{green}tmed_total.info:\n{reset}{tmed_total.info()}")
-tmax_total = pd.concat([tmax, tmax_gfs])
+tmax_total = tmax.copy()#pd.concat([tmax, tmax_gfs])
 tmax_total.reset_index(inplace = True)
 print(f"\n{green}tmax_total:\n{reset}{tmax_total}")
 print(f"\n{green}tmax_total.info:\n{reset}{tmax_total.info()}")
@@ -431,7 +432,18 @@ def tempo_epidemiologico(df_original):
 	tempo.loc[(tempo["Semana"].dt.month == 12) & (tempo["SE"] == 1), "ano_epi"] += 1
 	print(f"\n{green}TEMPO CRONOLÓGICO (epidemiológico):\n{reset}{tempo}\n")
 	return tempo
-
+	
+tempo = tempo_epidemiologico(focos)
+SE = tempo["SE"].iloc[-1]
+ano_epi = tempo["ano_epi"].iloc[-1]
+print(f"\n{green}DATA EPIDEMIOLÓGICA:\n{reset}{tempo['SE'].iloc[-1]}/{tempo['ano_epi'].iloc[-1]}\n")
+print(f"\n{green}SEMANA EPIDEMIOLÓGICA: {reset}{SE}\n{green}ANO EPIDEMIOLÓGICO: {reset}{ano_epi}\n")
+print(f"\n{green}DATA EPIDEMIOLÓGICA ANTERIOR:\n{reset}{tempo['SE'].iloc[-2]}/{tempo['ano_epi'].iloc[-2]}\n")
+caminho_resultados = f"resultados/{ano_epi}/SE{SE}/entomologia/"
+print(f"\n{green}CAMINHO DOS RESULTADOS:\n{reset}{caminho_resultados}\n")
+if not os.path.exists(caminho_resultados):
+	os.makedirs(caminho_resultados)
+sys.exit()
 ######################################################MODELAGEM############################################################
 municipios["NM_MUN"] = municipios["NM_MUN"].str.upper()
 municipios = municipios.merge(regionais[["Municipio", "regional"]],
