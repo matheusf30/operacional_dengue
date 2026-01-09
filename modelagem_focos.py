@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from datetime import date, datetime, timedelta
+from epiweeks import Week, Year
 #import datetime
 # Suporte
 import os
@@ -496,7 +497,7 @@ def salva_modeloRF(modelo, _CIDADE):
 	_MES_FINAL = _AGORA.strftime("%m")
 	_DIA_FINAL = _AGORA.strftime("%d")
 	_ANO_MES_DIA = f"{_ANO_FINAL}{_MES_FINAL}{_DIA_FINAL}"
-	caminho_modelos = f"modelagem/focos/{_ANO_ATUAL}/{_ANO_MES_DIA}/"
+	caminho_modelos = f"resultados/{ano_epi}/SE{SE}/entomologia/modelos/"
 	if not os.path.exists(caminho_modelos):
 		os.makedirs(caminho_modelos)
 	nome_modelo = f"RF_focos_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_{_cidade}.h5"
@@ -720,6 +721,24 @@ def salva_modelo(string_modelo, modeloNN = None):
     else:
         joblib.dump(modeloRF, f"{caminho_modelos}RF_focos_r{_RETROAGIR}_v2_{_CIDADE}.h5")
         print(f"\n\n{caminho_modelos}RF_focos_r{_RETROAGIR}_v2_{_CIDADE}.h5\n\n")
+        
+def tempo_epidemiologico(df_original):
+	tempo = pd.DataFrame()
+	tempo["Semana"] = df_original["Semana"]
+	tempo["Semana"] = pd.to_datetime(tempo["Semana"])
+	tempo["SE"] = tempo["Semana"].apply(lambda data: Week.fromdate(data).week)
+	tempo["ano_epi"] = tempo["Semana"].dt.year
+	tempo.loc[(tempo["Semana"].dt.month == 1) & (tempo["SE"] > 50), "ano_epi"] -= 1
+	tempo.loc[(tempo["Semana"].dt.month == 12) & (tempo["SE"] == 1), "ano_epi"] += 1
+	print(f"\n{green}TEMPO CRONOLÓGICO (epidemiológico):\n{reset}{tempo}\n")
+	return tempo
+	
+tempo = tempo_epidemiologico(focos)
+SE = tempo["SE"].iloc[-1]
+ano_epi = tempo["ano_epi"].iloc[-1]
+print(f"\n{green}DATA EPIDEMIOLÓGICA:\n{reset}{tempo['SE'].iloc[-1]}/{tempo['ano_epi'].iloc[-1]}\n")
+print(f"\n{green}SEMANA EPIDEMIOLÓGICA: {reset}{SE}\n{green}ANO EPIDEMIOLÓGICO: {reset}{ano_epi}\n")
+#sys.exit()
 
 ######################################################RANDOM_FOREST############################################################
 ### Iniciando Dataset
@@ -831,7 +850,7 @@ print(f"\n{green}previsoes2:\n{reset}{previsoes2}")
 print(f"\n{green}type(previsoes2):\n{reset}{type(previsoes2)}")
 #plt.show()
 plt.close()
-
+"""
 ################################################################################################
 ############ Testando 2º Salto de Previsão #####################################################
 ################################################################################################
@@ -864,12 +883,14 @@ except FileNotFoundError:
 	tmin_gfs = pd.read_csv(f"{caminho_dados}gfs_tmin_semana_{_ANO_MES_DIA_ONTEM}.csv", low_memory = False)
 	tmed_gfs = pd.read_csv(f"{caminho_dados}gfs_tmed_semana_{_ANO_MES_DIA_ONTEM}.csv", low_memory = False)
 	tmax_gfs = pd.read_csv(f"{caminho_dados}gfs_tmax_semana_{_ANO_MES_DIA_ONTEM}.csv", low_memory = False)
-	"""
+"""
+"""
 	prec_gfs = pd.read_csv(f"{caminho_dados}gfs_prec_semana_20241014.csv", low_memory = False)
 	tmin_gfs = pd.read_csv(f"{caminho_dados}gfs_tmin_semana_20241014.csv", low_memory = False)
 	tmed_gfs = pd.read_csv(f"{caminho_dados}gfs_tmed_semana_20241014.csv", low_memory = False)
 	tmax_gfs = pd.read_csv(f"{caminho_dados}gfs_tmax_semana_20241014.csv", low_memory = False)
-	"""
+"""
+"""
 	print(f"\n{green}Arquivos utilizados do dia:\n{bold}{_DIA_ONTEM}/{_MES_ONTEM}/{_ANO_ONTEM}.\n{reset}")
 	data_atual = _ANO_MES_DIA_ONTEM
 
@@ -957,9 +978,11 @@ print(f"\n{green}dataset3.info:\n{reset}{dataset3.info()}")
 
 x3.index = pd.to_datetime(x3.index)
 """
+"""
 ultima_semana = x3.index[-12]
 semanas_futuras = pd.date_range(start = ultima_semana + pd.DateOffset(weeks = 1),
 								periods = 12, freq = "W")
+"""
 """
 plt.figure(figsize = (10, 6), layout = "constrained", frameon = False)
 ax = plt.gca()
@@ -979,7 +1002,7 @@ print(f"\n{green}previsoes3:\n{reset}{previsoes3}")
 print(f"\n{green}type(previsoes3):\n{reset}{type(previsoes3)}")
 #plt.show()
 plt.close()
-	
+"""
 #histograma_erro(y, previsoes_modelo)
 #boxplot_erro(y, previsoes_modelo)
 #joblib.dump(modeloRF, f"{caminho_modelos}RF_focos_r{_RETROAGIR}_{_CIDADE}.h5")
