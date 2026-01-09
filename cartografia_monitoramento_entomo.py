@@ -111,7 +111,14 @@ def tempo_epidemiologico(df_original):
 	return tempo
 	
 tempo = tempo_epidemiologico(focos)
+SE = tempo["SE"].iloc[-1]
+ano_epi = tempo["ano_epi"].iloc[-1]
+print(f"\n{green}DATA EPIDEMIOLÓGICA:\n{reset}{tempo['SE'].iloc[-1]}/{tempo['ano_epi'].iloc[-1]}\n")
+print(f"\n{green}SEMANA EPIDEMIOLÓGICA: {reset}{SE}\n{green}ANO EPIDEMIOLÓGICO: {reset}{ano_epi}\n")
 print(f"\n{green}DATA EPIDEMIOLÓGICA:\n{reset}{tempo['SE'].iloc[-2]}/{tempo['ano_epi'].iloc[-2]}\n")
+caminho_resultados = f"resultados/{ano_epi}/SE{SE}/entomologia/"
+if not os.path.exists(caminho_resultados):
+	os.makedirs(caminho_resultados)
 #sys.exit()
 ### Pré-processamento
 print(f"\n{green}FOCOS:\n{reset}{focos}\n")
