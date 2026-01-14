@@ -34,6 +34,7 @@ import regionmask
 import sys
 import os
 from datetime import date, datetime, timedelta
+from epiweeks import Week, Year
 
 ##### Padrão ANSI ###############################################################
 bold = "\033[1m"
@@ -96,9 +97,33 @@ def calcula_numero_se(dia):
 SE = calcula_numero_se(_ANO_MES_DIA) - 1
 print(SE)
 
+def tempo_epidemiologico(df_original):
+	tempo = pd.DataFrame()
+	tempo["Semana"] = df_original["Semana"]
+	tempo["Semana"] = pd.to_datetime(tempo["Semana"])
+	tempo["SE"] = tempo["Semana"].apply(lambda data: Week.fromdate(data).week)
+	tempo["ano_epi"] = tempo["Semana"].dt.year
+	tempo.loc[(tempo["Semana"].dt.month == 1) & (tempo["SE"] > 50), "ano_epi"] -= 1
+	tempo.loc[(tempo["Semana"].dt.month == 12) & (tempo["SE"] == 1), "ano_epi"] += 1
+	print(f"\n{green}TEMPO CRONOLÓGICO (epidemiológico):\n{reset}{tempo}\n")
+	return tempo
+
+caminho_dados = "/home/meteoro/scripts/operacional_dengue/dados_operacao/"
+focos = "focos_semanal_pivot.csv"
+focos = pd.read_csv(f"{caminho_dados}{focos}", low_memory = False)
+tempo = tempo_epidemiologico(focos)
+SE = tempo["SE"].iloc[-1]
+ano_epi = tempo["ano_epi"].iloc[-1]
+print(f"\n{green}DATA EPIDEMIOLÓGICA:\n{reset}{tempo['SE'].iloc[-1]}/{tempo['ano_epi'].iloc[-1]}\n")
+print(f"\n{green}SEMANA EPIDEMIOLÓGICA: {reset}{SE}\n{green}ANO EPIDEMIOLÓGICO: {reset}{ano_epi}\n")
+caminho_resultado = f"/home/meteoro/scripts/operacional_dengue/esultados/{ano_epi}/SE{SE}/meteorologia/"
+print(f"\n{green}CAMINHO DOS RESULTADOS:\n{reset}{caminho_resultado}\n")
+if not os.path.exists(caminho_resultado):
+	os.makedirs(caminho_resultado)
+
 tmed_climatologia = xr.open_dataset("/home/meteoro/scripts/operacional_dengue/meteorologia/climatologia/tmed_climatologia_epidemiosemanal.nc").sel(week = SE)['tmed']
 
-os.makedirs(f"{caminho_resultado}", mode = 0o777, exist_ok = True)
+#os.makedirs(f"{caminho_resultado}", mode = 0o777, exist_ok = True)
 municipios = "/media/dados/shapefiles/SC/SC_Municipios_2024.shp"
 regionais = "/home/meteoro/scripts/operacional_dengue/dados_operacao/censo_sc_regional.csv"
 municipios = gpd.read_file(municipios, low_memory = False)
