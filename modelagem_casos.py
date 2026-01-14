@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from datetime import date, datetime, timedelta
+from epiweeks import Week, Year
 #import datetime
 # Suporte
 import os
@@ -355,6 +356,29 @@ print("="*80)
 #sys.exit()
 #########################################################FUNÇÕES###############################################################
 ### Definições
+def tempo_epidemiologico(df_original):
+	tempo = pd.DataFrame()
+	tempo["Semana"] = df_original["Semana"]
+	tempo["Semana"] = pd.to_datetime(tempo["Semana"])
+	tempo["SE"] = tempo["Semana"].apply(lambda data: Week.fromdate(data).week)
+	tempo["ano_epi"] = tempo["Semana"].dt.year
+	tempo.loc[(tempo["Semana"].dt.month == 1) & (tempo["SE"] > 50), "ano_epi"] -= 1
+	tempo.loc[(tempo["Semana"].dt.month == 12) & (tempo["SE"] == 1), "ano_epi"] += 1
+	print(f"\n{green}TEMPO CRONOLÓGICO (epidemiológico):\n{reset}{tempo}\n")
+	return tempo
+	
+tempo = tempo_epidemiologico(focos)
+SE = tempo["SE"].iloc[-1]
+ano_epi = tempo["ano_epi"].iloc[-1]
+print(f"\n{green}DATA EPIDEMIOLÓGICA:\n{reset}{tempo['SE'].iloc[-1]}/{tempo['ano_epi'].iloc[-1]}\n")
+print(f"\n{green}SEMANA EPIDEMIOLÓGICA: {reset}{SE}\n{green}ANO EPIDEMIOLÓGICO: {reset}{ano_epi}\n")
+print(f"\n{green}DATA EPIDEMIOLÓGICA ANTERIOR:\n{reset}{tempo['SE'].iloc[-2]}/{tempo['ano_epi'].iloc[-2]}\n")
+caminho_resultados = f"/home/meteoro/scripts/operacional_dengue/resultados/{ano_epi}/SE{SE}/epidemiologia/"
+print(f"\n{green}CAMINHO DOS RESULTADOS:\n{reset}{caminho_resultados}\n")
+if not os.path.exists(caminho_resultados):
+	os.makedirs(caminho_resultados)
+#sys.exit()
+
 def monta_dataset(_CIDADE):
 	dataset = tmin[["Semana"]].copy()
 	dataset["TMIN"] = tmin[_CIDADE].copy()
@@ -495,7 +519,7 @@ def salva_modeloRF(modelo, _CIDADE):
 	_MES_FINAL = _AGORA.strftime("%m")
 	_DIA_FINAL = _AGORA.strftime("%d")
 	_ANO_MES_DIA = f"{_ANO_FINAL}{_MES_FINAL}{_DIA_FINAL}"
-	caminho_modelos = f"modelagem/casos/{_ANO_ATUAL}/{_ANO_MES_DIA}/"
+	caminho_modelos = f"/home/meteoro/scripts/operacional_dengue/resultados/{ano_epi}/SE{SE}/epidemiologia/modelos/"
 	if not os.path.exists(caminho_modelos):
 		os.makedirs(caminho_modelos)
 	nome_modelo = f"RF_casos_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_{_cidade}.h5"
