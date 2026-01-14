@@ -187,7 +187,29 @@ print(f"\n{green}DICIONÁRIO POPULAÇÃO:\n{reset}{populacao_dict}\n")
 ###############################################################################
 
 # modelo = joblib.load(f"{caminho_modelos}RF_r{_RETROAGIR}_{cidade}.h5")
-
+def tempo_epidemiologico(df_original):
+	tempo = pd.DataFrame()
+	tempo["Semana"] = df_original["Semana"]
+	tempo["Semana"] = pd.to_datetime(tempo["Semana"])
+	tempo["SE"] = tempo["Semana"].apply(lambda data: Week.fromdate(data).week)
+	tempo["ano_epi"] = tempo["Semana"].dt.year
+	tempo.loc[(tempo["Semana"].dt.month == 1) & (tempo["SE"] > 50), "ano_epi"] -= 1
+	tempo.loc[(tempo["Semana"].dt.month == 12) & (tempo["SE"] == 1), "ano_epi"] += 1
+	print(f"\n{green}TEMPO CRONOLÓGICO (epidemiológico):\n{reset}{tempo}\n")
+	return tempo
+	
+tempo = tempo_epidemiologico(focos)
+SE = tempo["SE"].iloc[-1]
+ano_epi = tempo["ano_epi"].iloc[-1]
+print(f"\n{green}DATA EPIDEMIOLÓGICA:\n{reset}{tempo['SE'].iloc[-1]}/{tempo['ano_epi'].iloc[-1]}\n")
+print(f"\n{green}SEMANA EPIDEMIOLÓGICA: {reset}{SE}\n{green}ANO EPIDEMIOLÓGICO: {reset}{ano_epi}\n")
+caminho_resultados = f"/home/meteoro/scripts/operacional_dengue/resultados/{ano_epi}/SE{SE}/epidemiologia/"
+caminho_modelos = f"/home/meteoro/scripts/operacional_dengue/resultados/{ano_epi}/SE{SE}/epidemiologia/modelos/"
+print(f"\n{green}CAMINHO DOS RESULTADOS:\n{reset}{caminho_resultados}\n")
+print(f"\n{green}CAMINHO DOS MODELOS:\n{reset}{caminho_modelos}\n")
+if not os.path.exists(caminho_resultados):
+	os.makedirs(caminho_resultados)
+	
 def abre_modelo(cidade):
 	troca = {'Á': 'A', 'Â': 'A', 'À': 'A', 'Ã': 'A', 'Ä': 'A',
 		 'É': 'E', 'Ê': 'E', 'È': 'E', 'Ẽ': 'E', 'Ë': 'E',
