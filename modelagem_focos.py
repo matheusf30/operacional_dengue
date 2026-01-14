@@ -357,6 +357,26 @@ print("="*80)
 #sys.exit()
 #########################################################FUNÇÕES###############################################################
 ### Definições
+def tempo_epidemiologico(df_original):
+	tempo = pd.DataFrame()
+	tempo["Semana"] = df_original["Semana"]
+	tempo["Semana"] = pd.to_datetime(tempo["Semana"])
+	tempo["SE"] = tempo["Semana"].apply(lambda data: Week.fromdate(data).week)
+	tempo["ano_epi"] = tempo["Semana"].dt.year
+	tempo.loc[(tempo["Semana"].dt.month == 1) & (tempo["SE"] > 50), "ano_epi"] -= 1
+	tempo.loc[(tempo["Semana"].dt.month == 12) & (tempo["SE"] == 1), "ano_epi"] += 1
+	print(f"\n{green}TEMPO CRONOLÓGICO (epidemiológico):\n{reset}{tempo}\n")
+	return tempo
+	
+tempo = tempo_epidemiologico(focos)
+SE = tempo["SE"].iloc[-1]
+ano_epi = tempo["ano_epi"].iloc[-1]
+print(f"\n{green}DATA EPIDEMIOLÓGICA:\n{reset}{tempo['SE'].iloc[-1]}/{tempo['ano_epi'].iloc[-1]}\n")
+print(f"\n{green}SEMANA EPIDEMIOLÓGICA: {reset}{SE}\n{green}ANO EPIDEMIOLÓGICO: {reset}{ano_epi}\n")
+caminho_resultados = f"/home/meteoro/scripts/operacional_dengue/resultados/{ano_epi}/SE{SE}/epidemiologia/"
+print(f"\n{green}CAMINHO DOS RESULTADOS:\n{reset}{caminho_resultados}\n")
+#sys.exit()
+
 def monta_dataset(_CIDADE):
 	dataset = tmin[["Semana"]].copy()
 	dataset["TMIN"] = tmin[_CIDADE].copy()
@@ -497,7 +517,7 @@ def salva_modeloRF(modelo, _CIDADE):
 	_MES_FINAL = _AGORA.strftime("%m")
 	_DIA_FINAL = _AGORA.strftime("%d")
 	_ANO_MES_DIA = f"{_ANO_FINAL}{_MES_FINAL}{_DIA_FINAL}"
-	caminho_modelos = f"resultados/{ano_epi}/SE{SE}/entomologia/modelos/"
+	caminho_modelos = f"/home/meteoro/scripts/operacional_dengue/resultados/{ano_epi}/SE{SE}/entomologia/modelos/"
 	if not os.path.exists(caminho_modelos):
 		os.makedirs(caminho_modelos)
 	nome_modelo = f"RF_focos_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_{_cidade}.h5"
@@ -721,24 +741,6 @@ def salva_modelo(string_modelo, modeloNN = None):
     else:
         joblib.dump(modeloRF, f"{caminho_modelos}RF_focos_r{_RETROAGIR}_v2_{_CIDADE}.h5")
         print(f"\n\n{caminho_modelos}RF_focos_r{_RETROAGIR}_v2_{_CIDADE}.h5\n\n")
-        
-def tempo_epidemiologico(df_original):
-	tempo = pd.DataFrame()
-	tempo["Semana"] = df_original["Semana"]
-	tempo["Semana"] = pd.to_datetime(tempo["Semana"])
-	tempo["SE"] = tempo["Semana"].apply(lambda data: Week.fromdate(data).week)
-	tempo["ano_epi"] = tempo["Semana"].dt.year
-	tempo.loc[(tempo["Semana"].dt.month == 1) & (tempo["SE"] > 50), "ano_epi"] -= 1
-	tempo.loc[(tempo["Semana"].dt.month == 12) & (tempo["SE"] == 1), "ano_epi"] += 1
-	print(f"\n{green}TEMPO CRONOLÓGICO (epidemiológico):\n{reset}{tempo}\n")
-	return tempo
-	
-tempo = tempo_epidemiologico(focos)
-SE = tempo["SE"].iloc[-1]
-ano_epi = tempo["ano_epi"].iloc[-1]
-print(f"\n{green}DATA EPIDEMIOLÓGICA:\n{reset}{tempo['SE'].iloc[-1]}/{tempo['ano_epi'].iloc[-1]}\n")
-print(f"\n{green}SEMANA EPIDEMIOLÓGICA: {reset}{SE}\n{green}ANO EPIDEMIOLÓGICO: {reset}{ano_epi}\n")
-#sys.exit()
 
 ######################################################RANDOM_FOREST############################################################
 ### Iniciando Dataset
