@@ -116,7 +116,7 @@ SE = tempo["SE"].iloc[-1]
 ano_epi = tempo["ano_epi"].iloc[-1]
 print(f"\n{green}DATA EPIDEMIOLÓGICA:\n{reset}{tempo['SE'].iloc[-1]}/{tempo['ano_epi'].iloc[-1]}\n")
 print(f"\n{green}SEMANA EPIDEMIOLÓGICA: {reset}{SE}\n{green}ANO EPIDEMIOLÓGICO: {reset}{ano_epi}\n")
-caminho_resultado = f"/home/meteoro/scripts/operacional_dengue/esultados/{ano_epi}/SE{SE}/meteorologia/"
+caminho_resultado = f"/home/meteoro/scripts/operacional_dengue/resultados/{ano_epi}/SE{SE}/meteorologia/"
 print(f"\n{green}CAMINHO DOS RESULTADOS:\n{reset}{caminho_resultado}\n")
 if not os.path.exists(caminho_resultado):
 	os.makedirs(caminho_resultado)
