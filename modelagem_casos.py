@@ -122,7 +122,7 @@ url_gh = "https://raw.githubusercontent.com/matheusf30/"
 
 ### Renomeação das Variáveis pelos Arquivos
 casos = "casos_dive_pivot_total.csv"  # TabNet/DiveSC
-#casos = "casos_semanal_pivot.csv"
+#focos = "focos_semanal_pivot.csv"
 #focos = "focos_pivot.csv"
 
 prec = f"{_ANO_ATUAL}/prec_semana_ate_{_ANO_ATUAL}.csv"
@@ -366,7 +366,10 @@ def tempo_epidemiologico(df_original):
 	tempo.loc[(tempo["Semana"].dt.month == 12) & (tempo["SE"] == 1), "ano_epi"] += 1
 	print(f"\n{green}TEMPO CRONOLÓGICO (epidemiológico):\n{reset}{tempo}\n")
 	return tempo
-	
+
+caminho_dados = "/home/meteoro/scripts/operacional_dengue/dados_operacao/"
+focos = "focos_semanal_pivot.csv"
+focos = pd.read_csv(f"{caminho_dados}{focos}", low_memory = False)	
 tempo = tempo_epidemiologico(focos)
 SE = tempo["SE"].iloc[-1]
 ano_epi = tempo["ano_epi"].iloc[-1]
