@@ -53,7 +53,7 @@ _CIDADE = "Joinville"#"Joinville"#"Florianópolis"
 _CIDADE = _CIDADE.upper()
 
 _RETROAGIR = 4 # Semanas Epidemiológicas
-_HORIZONTE = 0 # Tempo de Previsão
+_HORIZONTE = 2 # Tempo de Previsão
 #for r in range(_HORIZONTE + 1, _RETROAGIR + 1):
 
 #_AUTOMATIZA = True#False
@@ -211,7 +211,7 @@ def abre_modelo(cidade):
 		 'Ç': 'C', " " : "_", "'" : "_", "-" : "_"}
 	for velho, novo in troca.items():
 		cidade = cidade.replace(velho, novo)
-	nome_modelo = f"RF_focos_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_{cidade}.h5"
+	nome_modelo = f"RF_focos_vSE{SE}_h{_HORIZONTE}_r{_RETROAGIR}_{cidade}.h5"
 	modelo = joblib.load(f"{caminho_modelos}{nome_modelo}") #RF_focos_v20241017_h0_r2_URUSSANGA.h5
 	print("\n" + f"{red}={cyan}={reset}"*40 + "\n")
 	print(f"\n{green}MODELO RANDOM FOREST DE {bold}{cidade} ABERTO!\n{reset}")
@@ -379,7 +379,7 @@ def grafico(previsoes, R_2):
 				color = "red", alpha = 0.7, linewidth = 3, label = "Previsto")
 	plt.title(f"MODELO RANDOM FOREST (R²: {R_2}): OBSERVAÇÃO E PREVISÃO.\n MUNICÍPIO DE {cidade}, SANTA CATARINA.")
 	plt.xlabel("Semanas Epidemiológicas na Série de Anos")
-	plt.ylabel("Número de Focos de _Aedes_ sp.")
+	plt.ylabel("Número de Focos de $\it{{Aedes}}$ sp.")
 	#plt.show()
 
 def previsao_metricas(dataset, previsoes, n, teste_y, y_previsto):
@@ -426,7 +426,7 @@ def grafico_previsao(previsao, teste, string_modelo):
 				color = "red", alpha = 0.7, linewidth = 3, label = "Previsto")
 	plt.title(f"MODELO {nome_modelo.upper()} (R²: {R_2}): OBSERVAÇÃO E PREVISÃO.\n MUNICÍPIO DE {cidade}, SANTA CATARINA.")
 	plt.xlabel("Semanas Epidemiológicas na Série de Anos")
-	plt.ylabel("Número de Focos de _Aedes_ sp.")
+	plt.ylabel("Número de Focos de $\it{{Aedes}}$ sp.")
 	#plt.show()
 
 def salva_modelo(modelo, cidade):
@@ -481,15 +481,20 @@ _d7 = _d7.strftime("%Y-%m-%d")
 ### Exibindo Informações, Gráficos e Métricas
 #previsao_total = []
 previsao_total = pd.DataFrame()
-tmin_ultimos = tmin_total.iloc[-12:,:]
-previsao_total["Semana"] = tmin_ultimos["Semana"].copy()
- #pd.date_range(start = "2014-01-05", end = "2022-12-25", freq = "W")
+focos_ultimos = focos.iloc[-9:,:]
+print(f"\n{green}FOCOS ÚLTIMOS:\n{reset}{focos_ultimos['Semana']}")
+previsao_total["Semana"] = focos_ultimos["Semana"].copy()
+#pd.date_range(start = "2014-01-05", end = "2022-12-25", freq = "W")
 previsao_total["Semana"] = pd.to_datetime(previsao_total["Semana"])
+#previsao_total.drop(2, axis = 0, inplace = True)
+novas_SE = pd.date_range(start = previsao_total['Semana'].max(), periods = 3, freq = "W-SUN")[1:]
+novas_linhas = pd.DataFrame({"Semana": novas_SE})
+previsao_total = pd.concat([previsao_total, novas_linhas], ignore_index=True)
 previsao_total.reset_index(inplace = True)
-previsao_total.drop(1, axis = 0, inplace = True)
-previsao_total.drop(columns = "index", inplace = True)
+print(f"\n{green}PREVISÃO TOTAL:\n{reset}{previsao_total}")
 #previsao_total.drop([d for d in range(_RETROAGIR)], axis = 0, inplace = True)
 #previsao_total.drop(previsao_total.index[-_RETROAGIR:], axis = 0, inplace = True)
+#sys.exit()
 
 if _AUTOMATIZA == True:
 	for _CIDADE in cidades:
@@ -526,9 +531,11 @@ else:
 	#grafico(previsoes2, R_2)
 
 tempo = tempo_epidemiologico(previsao_total)
-print(f"\n{green}DATA EPIDEMIOLÓGICA:\n{reset}{tempo['SE'].iloc[-1]}/{tempo['ano_epi'].iloc[-1]}\n")
-#sys.exit()
+SE = tempo["SE"].iloc[-1 - _HORIZONTE]
+ano_epi = tempo["ano_epi"].iloc[-1]
+print(f"\n{green}DATA EPIDEMIOLÓGICA:\n{reset}{SE}/{ano_epi}\n")
 print(f"\n{green}previsao_total:\n{cyan}{previsao_total}{reset}\n")
+#sys.exit()
 previsao_melt = pd.melt(previsao_total, id_vars = ["Semana"], 
                         var_name = "Município", value_name = "Focos")
 #value_vars - If not specified, uses all columns that are not set as id_vars.
@@ -540,12 +547,12 @@ previsao_melt_geo = gpd.GeoDataFrame(previsao_melt_xy, geometry = geometry, crs 
 previsao_melt_geo = previsao_melt_geo[["Semana", "Município", "Focos", "geometry"]]
 previsao_melt_geo["Semana"] = pd.to_datetime(previsao_melt_geo["Semana"])
 print(f"\n{green}Caminho e Nome do arquivo:\n{reset}")
-print(f"\n{green}{caminho_modelos}RF_focos_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_{_CIDADE}.h5\n{reset}")
+print(f"\n{green}{caminho_modelos}RF_focos_vSE{SE}_h{_HORIZONTE}_r{_RETROAGIR}_{_CIDADE}.h5\n{reset}")
 if _SALVAR == True:
 	os.makedirs(caminho_resultados, exist_ok = True)
-	previsao_pivot_csv = f"previsao_focos_pivot_total_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
+	previsao_pivot_csv = f"previsao_focos_pivot_total_vSE{SE}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
 	previsao_total.to_csv(f"{caminho_resultados}{previsao_pivot_csv}", index = False)
-	previsao_melt_csv = f"previsao_focos_melt_total_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
+	previsao_melt_csv = f"previsao_focos_melt_total_vSE{SE}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
 	previsao_melt.to_csv(f"{caminho_resultados}{previsao_melt_csv}", index = False)
 	print(f"\n\n{green}{caminho_resultados}\n{previsao_pivot_csv}\nSALVO COM SUCESSO!{reset}\n\n")
 	print(f"\n\n{green}{caminho_resultados}\n{previsao_melt_csv}\nSALVO COM SUCESSO!{reset}\n\n")
@@ -560,8 +567,8 @@ if _SALVAR == True:
 semana_epidemio1 = tempo.loc[tempo.index[-3],:]#previsao_total.loc[previsao_total.index[-3], "Semana"]
 semana_epidemio2 = tempo.loc[tempo.index[-2],:]#previsao_total.loc[previsao_total.index[-2], "Semana"]
 semana_epidemio3 = tempo.loc[tempo.index[-1],:]#previsao_total.loc[previsao_total.index[-1], "Semana"]
-#lista_semanas = [semana_epidemio1, semana_epidemio2, semana_epidemio3]
-lista_semanas = [semana_epidemio2, semana_epidemio3]
+lista_semanas = [semana_epidemio1, semana_epidemio2, semana_epidemio3]
+#lista_semanas = [semana_epidemio2, semana_epidemio3]
 # "2020-04-19" "2021-04-18" "2022-04-17" "2023-04-16"
 
 	
@@ -590,7 +597,7 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 	print(f"\n{green}v_max\n{reset}{v_max}\n")
 	print(f"\n{green}levels\n{reset}{levels}\n")
 	previsao_melt_poligeo[previsao_melt_poligeo["Semana"] == semana_epidemio["Semana"]].plot(ax = ax, column = "Focos",  legend = True, edgecolor = "white",
-		                                                                           label = "Focos", cmap = "PuRd", linewidth = 0.05,  legend_kwds = {"extend": "max", "fraction": 0.035, "pad": 0.03, "label": "Número de Focos de _Aedes_ sp."}, #levels = levels, "PuBuGn"
+		                                                                           label = "Focos", cmap = "PuRd", linewidth = 0.05,  legend_kwds = {"extend": "max", "fraction": 0.035, "pad": 0.03, "label": "Quantidade de $\it{{Aedes}}$ sp."}, #levels = levels, "PuBuGn"
 		                                                                           norm = cls.Normalize(vmin = v_min, vmax = v_max, clip = True))
 	cbar_ax = ax.get_figure().get_axes()[-1]
 	#cbar_ax.tick_params(labelsize = 20)
@@ -619,7 +626,7 @@ modelagem inexistente.""",
 	ax.set_xticklabels(["54°W", "52°W", "50°W", "48°W"])#, fontsize = 18)
 	ax.set_yticks([-29, -28, -27, -26])
 	ax.set_yticklabels(["29°S", "28°S", "27°S", "26°S"])#, fontsize = 18)
-	plt.title(f"Focos de _Aedes_ sp. Previstos em Santa Catarina.\nSemana Epidemiológica: {semana_epidemio['SE']}/{semana_epidemio['ano_epi']}.", fontsize = 14)
+	plt.title(f"Quantidade de $\it{{Aedes}}$ sp. Previstos em Santa Catarina.\nSemana Epidemiológica: {semana_epidemio['SE']}/{semana_epidemio['ano_epi']}.", fontsize = 14)
 	#plt.grid(True)
 	nome_arquivo = f"FOCOS_mapa_preditivo_{data_atual}_{idx}.pdf"
 	nome_arquivo_png = f"FOCOS_mapa_preditivo_v{_ANO_MES_DIA}_SE{semana_epidemio['SE']}-{semana_epidemio['ano_epi']}.png"
@@ -671,7 +678,7 @@ print(f"\n{green}ultimas_previsoes.T_df.T\n{reset}{ultimas_previsoes_vdd}\n")
 #ultimas_previsoes_vdd = ultimas_previsoes_vdd.drop(columns = "Semana")
 if _SALVAR == True:
 	os.makedirs(caminho_resultados, exist_ok = True)
-	ultimas_previsoes_csv = f"ultimas_previsoes_focos_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
+	ultimas_previsoes_csv = f"ultimas_previsoes_focos_vSE{SE}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
 	ultimas_previsoes_vdd.to_csv(f"{caminho_resultados}{ultimas_previsoes_csv}", index = False)
 	print(f"\n\n{green}{caminho_resultados}\n{ultimas_previsoes_csv}\nSALVO COM SUCESSO!{reset}\n\n")
 	print(f"\n\n{green}OS VALORES DAS ÚLTIMAS PREVISÕES SÃO APRESENTADOS ABAIXO:\n{reset}{ultimas_previsoes_vdd}\n\n")
