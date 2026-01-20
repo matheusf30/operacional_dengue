@@ -72,15 +72,40 @@ _DIA_ONTEM = _ONTEM.strftime("%d")
 _ANO_MES_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}"
 _ANO_MES_DIA_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}{_DIA_ONTEM}"
 
+def tempo_epidemiologico(df_original):
+	tempo = pd.DataFrame()
+	tempo["Semana"] = df_original["Semana"]
+	tempo["Semana"] = pd.to_datetime(tempo["Semana"])
+	tempo["SE"] = tempo["Semana"].apply(lambda data: Week.fromdate(data).week)
+	tempo["ano_epi"] = tempo["Semana"].dt.year
+	tempo.loc[(tempo["Semana"].dt.month == 1) & (tempo["SE"] > 50), "ano_epi"] -= 1
+	tempo.loc[(tempo["Semana"].dt.month == 12) & (tempo["SE"] == 1), "ano_epi"] += 1
+	print(f"\n{green}TEMPO CRONOLÓGICO (epidemiológico):\n{reset}{tempo}\n")
+	return tempo
+
+caminho_dados = "/home/meteoro/scripts/operacional_dengue/dados_operacao/"
+casos = "casos_dive_pivot_total.csv"
+casos = pd.read_csv(f"{caminho_dados}{casos}", low_memory = False)	
+tempo = tempo_epidemiologico(casos)
+SE = tempo["SE"].iloc[-1]
+ano_epi = tempo["ano_epi"].iloc[-1]
+print(f"\n{green}DATA EPIDEMIOLÓGICA:\n{reset}{tempo['SE'].iloc[-1]}/{tempo['ano_epi'].iloc[-1]}\n")
+print(f"\n{green}SEMANA EPIDEMIOLÓGICA: {reset}{SE}\n{green}ANO EPIDEMIOLÓGICO: {reset}{ano_epi}\n")
+caminho_resultados = f"/home/meteoro/scripts/operacional_dengue/resultados/{ano_epi}/SE{SE}/epidemiologia/"
+caminho_modelos = f"/home/meteoro/scripts/operacional_dengue/resultados/{ano_epi}/SE{SE}/epidemiologia/modelos/"
+print(f"\n{green}CAMINHO DOS RESULTADOS:\n{reset}{caminho_resultados}\n")
+print(f"\n{green}CAMINHO DOS MODELOS:\n{reset}{caminho_modelos}\n")
+if not os.path.exists(caminho_resultados):
+	os.makedirs(caminho_resultados)
+
 ##################################################################################
 
 ### Encaminhamento aos Diretórios
 caminho_dados = "/home/meteoro/scripts/operacional_dengue/dados_operacao/" # CLUSTER
 caminho_operacional = "/home/meteoro/scripts/operacional_dengue/"
 caminho_shape = "/media/dados/shapefiles/" #SC/SC_Municipios_2022.shp #BR/BR_UF_2022.shp
-caminho_modelos = f"/home/meteoro/scripts/operacional_dengue/modelagem/casos/{_ANO_ATUAL}/{_ANO_MES_DIA}/"
-caminho_resultados = f"home/meteoro/scripts/operacional_dengue/modelagem/resultados/{_ANO_ATUAL}/{_ANO_MES}/"
-caminho_previsao = f"modelagem/resultados/{_ANO_ATUAL}/{_ANO_MES}/"#dados_previstos/"
+caminho_resultados = f"/home/meteoro/scripts/operacional_dengue/resultados/{ano_epi}/SE{SE}/epidemiologia/"
+caminho_modelos = f"/home/meteoro/scripts/operacional_dengue/resultados/{ano_epi}/SE{SE}/epidemiologia/modelos/"
 print(f"\n{green}HOJE:\n{reset}{_ANO_MES_DIA}\n")
 print(f"\n{green}ONTEM:\n{reset}{_ANO_MES_DIA_ONTEM}\n")
 print(f"\n{green}OS DADOS UTILIZADOS ESTÃO ALOCADOS NOS SEGUINTES CAMINHOS:\n\n{caminho_dados}{reset}\n\n")
@@ -90,12 +115,12 @@ print(f"\n{green}OS DADOS UTILIZADOS ESTÃO ALOCADOS NOS SEGUINTES CAMINHOS:\n\n
 
 ### Renomeação das Variáveis pelos Arquivos
 casos = "casos_dive_pivot_total.csv"  # TabNet/DiveSC
-ultimas_previsoes = f"ultimas_previsoes_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
-previsao_pivot = f"previsao_pivot_total_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
-previsao_melt = f"previsao_melt_total_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
-ultimas_previsoes_ontem = f"ultimas_previsoes_v{_ANO_MES_DIA_ONTEM}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
-previsao_pivot_ontem = f"previsao_pivot_total_v{_ANO_MES_DIA_ONTEM}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
-previsao_melt_ontem = f"previsao_melt_total_v{_ANO_MES_DIA_ONTEM}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
+ultimas_previsoes = f"ultimas_previsoes_vSE{SE}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
+previsao_pivot = f"previsao_pivot_total_vSE{SE}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
+previsao_melt = f"previsao_melt_total_vSE{SE}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
+ultimas_previsoes_ontem = f"ultimas_previsoes_vSE{SE}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
+previsao_pivot_ontem = f"previsao_pivot_total_vSE{SE}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
+previsao_melt_ontem = f"previsao_melt_total_vSE{SE}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
 #focos = "focos_pivot.csv"
 prec = f"{_ANO_ATUAL}/prec_semana_ate_{_ANO_ATUAL}.csv"
 tmin = f"{_ANO_ATUAL}/tmin_semana_ate_{_ANO_ATUAL}.csv"
@@ -111,13 +136,13 @@ br = "BR/BR_UF_2022.shp"
 ### Abrindo Arquivo
 casos = pd.read_csv(f"{caminho_dados}{casos}", low_memory = False)
 try:
-	ultimas_previsoes = pd.read_csv(f"{caminho_previsao}{ultimas_previsoes}", low_memory = False)
-	previsao_pivot = pd.read_csv(f"{caminho_previsao}{previsao_pivot}", low_memory = False)
-	previsao_melt = pd.read_csv(f"{caminho_previsao}{previsao_melt}", low_memory = False)
+	ultimas_previsoes = pd.read_csv(f"{caminho_resultados}{ultimas_previsoes}", low_memory = False)
+	previsao_pivot = pd.read_csv(f"{caminho_resultados}{previsao_pivot}", low_memory = False)
+	previsao_melt = pd.read_csv(f"{caminho_resultados}{previsao_melt}", low_memory = False)
 except FileNotFoundError:
-	ultimas_previsoes = pd.read_csv(f"{caminho_previsao}{ultimas_previsoes_ontem}", low_memory = False)
-	previsao_pivot = pd.read_csv(f"{caminho_previsao}{previsao_pivot_ontem}", low_memory = False)
-	previsao_melt = pd.read_csv(f"{caminho_previsao}{previsao_melt_ontem}", low_memory = False)
+	ultimas_previsoes = pd.read_csv(f"{caminho_resultados}{ultimas_previsoes_ontem}", low_memory = False)
+	previsao_pivot = pd.read_csv(f"{caminho_resultados}{previsao_pivot_ontem}", low_memory = False)
+	previsao_melt = pd.read_csv(f"{caminho_resultados}{previsao_melt_ontem}", low_memory = False)
 #focos = pd.read_csv(f"{caminho_dados}{focos}", low_memory = False)
 prec = pd.read_csv(f"{caminho_dados}{prec}", low_memory = False)
 tmin = pd.read_csv(f"{caminho_dados}{tmin}", low_memory = False)
@@ -138,31 +163,6 @@ cidades = unicos["Município"].copy()
 ####################################################################
 
 ### Funções Modelagem-Previsão
-def tempo_epidemiologico(df_original):
-	tempo = pd.DataFrame()
-	tempo["Semana"] = df_original["Semana"]
-	tempo["Semana"] = pd.to_datetime(tempo["Semana"])
-	tempo["SE"] = tempo["Semana"].apply(lambda data: Week.fromdate(data).week)
-	tempo["ano_epi"] = tempo["Semana"].dt.year
-	tempo.loc[(tempo["Semana"].dt.month == 1) & (tempo["SE"] > 50), "ano_epi"] -= 1
-	tempo.loc[(tempo["Semana"].dt.month == 12) & (tempo["SE"] == 1), "ano_epi"] += 1
-	print(f"\n{green}TEMPO CRONOLÓGICO (epidemiológico):\n{reset}{tempo}\n")
-	return tempo
-
-caminho_dados = "/home/meteoro/scripts/operacional_dengue/dados_operacao/"
-focos = "focos_semanal_pivot.csv"
-focos = pd.read_csv(f"{caminho_dados}{focos}", low_memory = False)	
-tempo = tempo_epidemiologico(focos)
-SE = tempo["SE"].iloc[-1]
-ano_epi = tempo["ano_epi"].iloc[-1]
-print(f"\n{green}DATA EPIDEMIOLÓGICA:\n{reset}{tempo['SE'].iloc[-1]}/{tempo['ano_epi'].iloc[-1]}\n")
-print(f"\n{green}SEMANA EPIDEMIOLÓGICA: {reset}{SE}\n{green}ANO EPIDEMIOLÓGICO: {reset}{ano_epi}\n")
-caminho_resultados = f"/home/meteoro/scripts/operacional_dengue/resultados/{ano_epi}/SE{SE}/epidemiologia/"
-caminho_modelos = f"/home/meteoro/scripts/operacional_dengue/resultados/{ano_epi}/SE{SE}/epidemiologia/modelos/"
-print(f"\n{green}CAMINHO DOS RESULTADOS:\n{reset}{caminho_resultados}\n")
-print(f"\n{green}CAMINHO DOS MODELOS:\n{reset}{caminho_modelos}\n")
-if not os.path.exists(caminho_resultados):
-	os.makedirs(caminho_resultados)
 	
 def abre_modelo(cidade):
 	troca = {'Á': 'A', 'Â': 'A', 'À': 'A', 'Ã': 'A', 'Ä': 'A',
@@ -173,7 +173,7 @@ def abre_modelo(cidade):
 		 'Ç': 'C', " " : "_", "'" : "_", "-" : "_"}
 	for velho, novo in troca.items():
 		cidade = cidade.replace(velho, novo)
-	nome_modelo = f"RF_casos_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_{cidade}.h5"
+	nome_modelo = f"RF_casos_vSE{SE}_h{_HORIZONTE}_r{_RETROAGIR}_{cidade}.h5"
 	modelo = joblib.load(f"{caminho_modelos}{nome_modelo}") #RF_casos_v20241017_h0_r2_URUSSANGA.h5
 	print("\n" + f"{red}={cyan}={reset}"*40 + "\n")
 	print(f"\n{green}MODELO RANDOM FOREST DE {bold}{cidade} ABERTO!\n{reset}")
@@ -284,9 +284,6 @@ print(f"\n{green}REGIONAIS:\n{reset}{regionais}\n")
 print(f"\n{green}REGIONAIS (colunas):\n{reset}{regionais.columns}\n")
 print(f"\n{green}REGIONAIS:\n{reset}{regionais['regional'].unique()}\n")
 
-tempo = tempo_epidemiologico(tmin)
-tempo = tempo_epidemiologico(casos)
-print(f"\n{green}DATA EPIDEMIOLÓGICA:\n{reset}{tempo['SE'].iloc[-1]}/{tempo['ano_epi'].iloc[-1]}\n")
 #sys.exit()
 previstos = ultimas_previsoes.iloc[:3, :]
 previsao_pivot["Semana"] = pd.to_datetime(previsao_pivot["Semana"])
@@ -363,8 +360,8 @@ if _VISUALIZAR == True:
 if _SALVAR == True and _AUTOMATIZA == True:
 	for velho, novo in troca.items():
 		_CIDADE = _CIDADE.replace(velho, novo)
-	caminho_png = f"modelagem/resultados/{_ANO_ATUAL}/{_ANO_MES}/graficos_obsXprev/"
-	nome_arquivo = f"CASOS_serie_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_{_CIDADE}_SE{tempo['SE'].iloc[-1]}.png"
+	caminho_png = f"{caminho_resultados}graficos_obsXprev/"
+	nome_arquivo = f"CASOS_serie_vSE{SE}_h{_HORIZONTE}_r{_RETROAGIR}_{_CIDADE}_SE{SE}.png"
 	os.makedirs(caminho_png, exist_ok = True)
 	#plt.savefig(f"{caminho_png}{nome_arquivo}", format = "png", dpi = 300)
 	plt.savefig(f"{caminho_png}{nome_arquivo}", format = "png", dpi = 300,
@@ -405,8 +402,8 @@ for idx, _REG in enumerate(regionais):
 		for velho, novo in troca.items():
 			_REG = _REG.replace(velho, novo)
 		print(f"\n{green}REGIONAL:\n{reset}{_REG}\n")
-		caminho_png = f"modelagem/resultados/{_ANO_ATUAL}/{_ANO_MES}/graficos_obsXprev/"
-		nome_arquivo = f"CASOS_serie_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_{_REG}_SE{tempo['SE'].iloc[-1]}.png"
+		caminho_png = f"{caminho_resultados}graficos_obsXprev/"
+		nome_arquivo = f"CASOS_serie_vSE{SE}_h{_HORIZONTE}_r{_RETROAGIR}_{_REG}_SE{SE}.png"
 		os.makedirs(caminho_png, exist_ok = True)
 		#plt.savefig(f"{caminho_png}{nome_arquivo}", format = "png", dpi = 300)
 		plt.savefig(f"{caminho_png}{nome_arquivo}", format = "png", dpi = 300,
