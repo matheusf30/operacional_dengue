@@ -201,7 +201,7 @@ def tempo_epidemiologico(df_original):
 caminho_dados = "/home/meteoro/scripts/operacional_dengue/dados_operacao/"
 focos = "focos_semanal_pivot.csv"
 focos = pd.read_csv(f"{caminho_dados}{focos}", low_memory = False)	
-tempo = tempo_epidemiologico(focos)
+tempo = tempo_epidemiologico(casos)
 SE = tempo["SE"].iloc[-1]
 ano_epi = tempo["ano_epi"].iloc[-1]
 print(f"\n{green}DATA EPIDEMIOLÓGICA:\n{reset}{tempo['SE'].iloc[-1]}/{tempo['ano_epi'].iloc[-1]}\n")
@@ -222,7 +222,7 @@ def abre_modelo(cidade):
 		 'Ç': 'C', " " : "_", "'" : "_", "-" : "_"}
 	for velho, novo in troca.items():
 		cidade = cidade.replace(velho, novo)
-	nome_modelo = f"RF_casos_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_{cidade}.h5"
+	nome_modelo = f"RF_casos_vSE{SE}_h{_HORIZONTE}_r{_RETROAGIR}_{cidade}.h5"
 	modelo = joblib.load(f"{caminho_modelos}{nome_modelo}") #RF_casos_v20241017_h0_r2_URUSSANGA.h5
 	print("\n" + f"{red}={cyan}={reset}"*40 + "\n")
 	print(f"\n{green}MODELO RANDOM FOREST DE {bold}{cidade} ABERTO!\n{reset}")
@@ -449,7 +449,7 @@ def salva_modelo(modelo, cidade):
 			'Ç': 'C', " " : "_", "'" : "_", "-" : "_"}
 	for velho, novo in troca.items():
 		cidade = cidade.replace(velho, novo)
-	nome_modelo = f"RF_casos_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_{cidade}.h5"
+	nome_modelo = f"RF_casos_vSE{SE}_h{_HORIZONTE}_r{_RETROAGIR}_{cidade}.h5"
 	joblib.dump(modelo, f"{caminho_modelos}{nome_modelo}")
 	print("\n" + f"{red}={cyan}={reset}"*40 + "\n")
 	print(f"\n{green}MODELO RANDOM FOREST DE {bold}{cidade} ABERTO!\n{reset}")
@@ -481,15 +481,23 @@ _d7 = _d7.strftime("%Y-%m-%d")
 ### Exibindo Informações, Gráficos e Métricas
 #previsao_total = []
 previsao_total = pd.DataFrame()
-tmin_ultimos = tmin_total.iloc[-12:,:]
-previsao_total["Semana"] = tmin_ultimos["Semana"].copy()
+casos_ultimos = casos.iloc[-12:,:]
+previsao_total["Semana"] = casos_ultimos["Semana"].copy()
  #pd.date_range(start = "2014-01-05", end = "2022-12-25", freq = "W")
 previsao_total["Semana"] = pd.to_datetime(previsao_total["Semana"])
 previsao_total.reset_index(inplace = True)
-previsao_total.drop(1, axis = 0, inplace = True)
+#previsao_total.drop(1, axis = 0, inplace = True)
 previsao_total.drop(columns = "index", inplace = True)
+novas_SE = pd.date_range(start = previsao_total['Semana'].max(), periods = 3, freq = "W-SUN")[1:]
+novas_linhas = pd.DataFrame({"Semana": novas_SE})
+previsao_total = pd.concat([previsao_total, novas_linhas], ignore_index=True)
+previsao_total.reset_index(inplace = True)
+previsao_total = previsao_total.drop_duplicates(subset = ["Semana"], keep = "first")
+previsao_total.drop(columns = "index", inplace = True)
+print(f"\n{green}PREVISÃO TOTAL:\n{reset}{previsao_total}")
 #previsao_total.drop([d for d in range(_RETROAGIR)], axis = 0, inplace = True)
 #previsao_total.drop(previsao_total.index[-_RETROAGIR:], axis = 0, inplace = True)
+#sys.exit()
 
 if _AUTOMATIZA == True:
 	for _CIDADE in cidades:
@@ -524,8 +532,11 @@ else:
 	grafico(previsoes2, R_2)
 	
 tempo = tempo_epidemiologico(previsao_total)
-print(f"\n{green}DATA EPIDEMIOLÓGICA:\n{reset}{tempo['SE'].iloc[-1]}/{tempo['ano_epi'].iloc[-1]}\n")
-
+SE = tempo["SE"].iloc[-3]
+ano_epi = tempo["ano_epi"].iloc[-3]
+print(f"\n{green}DATA EPIDEMIOLÓGICA:\n{reset}{SE}/{ano_epi}\n")
+print(f"\n{green}previsao_total:\n{cyan}{previsao_total}{reset}\n")
+print(f"\n{green}DATA EPIDEMIOLÓGICA (previsão):\n{reset}{tempo['SE'].iloc[-1]}/{tempo['ano_epi'].iloc[-1]}\n")
 print(f"\n{green}previsao_total:\n{cyan}{previsao_total}{reset}\n")
 incidencia = previsao_total.copy()
 for municipio in incidencia.columns[1: ]:
@@ -541,12 +552,12 @@ previsao_melt_geo = gpd.GeoDataFrame(previsao_melt_xy, geometry = geometry, crs 
 previsao_melt_geo = previsao_melt_geo[["Semana", "Município", "Incidencia", "geometry"]]
 previsao_melt_geo["Semana"] = pd.to_datetime(previsao_melt_geo["Semana"])
 print(f"\n{green}Caminho e Nome do arquivo:\n{reset}")
-print(f"\n{green}{caminho_modelos}RF_casos_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_{_CIDADE}.h5\n{reset}")
+print(f"\n{green}{caminho_modelos}RF_casos_vSE{SE}_h{_HORIZONTE}_r{_RETROAGIR}_{_CIDADE}.h5\n{reset}")
 if _SALVAR == True:
 	os.makedirs(caminho_resultados, exist_ok = True)
-	previsao_pivot_csv = f"previsao_pivot_incidencia_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
+	previsao_pivot_csv = f"previsao_pivot_incidencia_vSE{SE}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
 	previsao_total.to_csv(f"{caminho_resultados}{previsao_pivot_csv}", index = False)
-	previsao_melt_csv = f"previsao_melt_incidencia_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
+	previsao_melt_csv = f"previsao_melt_incidencia_vSE{SE}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
 	previsao_melt.to_csv(f"{caminho_resultados}{previsao_melt_csv}", index = False)
 	print(f"\n\n{green}{caminho_resultados}\n{previsao_pivot_csv}\nSALVO COM SUCESSO!{reset}\n\n")
 	print(f"\n\n{green}{caminho_resultados}\n{previsao_melt_csv}\nSALVO COM SUCESSO!{reset}\n\n")
@@ -617,7 +628,7 @@ modelagem inexistente.""",
 	plt.title(f"Incidência de Dengue Prevista em Santa Catarina.\nSemana Epidemiológica: {semana_epidemio['SE']}/{semana_epidemio['ano_epi']}.")#, fontsize = 28)
 	#plt.grid(True)
 	nome_arquivo = f"INCIDENCIA_mapa_preditivo_{data_atual}_{idx}.pdf"
-	nome_arquivo_png = f"INCIDENCIA_mapa_preditivo_v{_ANO_MES_DIA}_SE{semana_epidemio['SE']}-{semana_epidemio['ano_epi']}.png"
+	nome_arquivo_png = f"INCIDENCIA_mapa_preditivo_vSE{SE}_SE{semana_epidemio['SE']}-{semana_epidemio['ano_epi']}.png"
 	if _AUTOMATIZA == True and _SALVAR == True:
 		os.makedirs(caminho_resultados, exist_ok = True)
 		#plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "pdf", dpi = 150)
@@ -666,7 +677,7 @@ print(f"\n{green}ultimas_previsoes.T_df.T\n{reset}{ultimas_previsoes_vdd}\n")
 #ultimas_previsoes_vdd = ultimas_previsoes_vdd.drop(columns = "Semana")
 if _SALVAR == True:
 	os.makedirs(caminho_resultados, exist_ok = True)
-	ultimas_previsoes_csv = f"ultimas_previsoes_incidencia_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_{semana_epidemio['ano_epi']}_SE{semana_epidemio['SE']}.csv"
+	ultimas_previsoes_csv = f"ultimas_previsoes_incidencia_vSE{SE}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
 	ultimas_previsoes_vdd.to_csv(f"{caminho_resultados}{ultimas_previsoes_csv}", index = False)
 	print(f"\n\n{green}{caminho_resultados}\n{ultimas_previsoes_csv}\nSALVO COM SUCESSO!{reset}\n\n")
 	print(f"\n\n{green}OS VALORES DAS ÚLTIMAS PREVISÕES DE INCIDÊNCIA SÃO APRESENTADOS ABAIXO:\n{reset}{ultimas_previsoes_vdd}\n\n")
