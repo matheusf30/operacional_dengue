@@ -166,7 +166,7 @@ print(f"\n{green}v_min\n{reset}{v_min}\n")
 print(f"\n{green}v_max\n{reset}{v_max}\n")
 print(f"\n{green}levels\n{reset}{levels}\n")
 figure = base_carto.plot(ax = ax, column = "total",  legend = True,
-				edgecolor = "white", label = "Focos de $\it{{Aedes}}$ sp.", legend_kwds = {"extend": "max", "fraction": 0.035, "pad": 0.03, "label": "Número de Focos de $\it{{Aedes}}$ sp."},
+				edgecolor = "white", label = "Quantidade de $\it{{Aedes}}$ sp.", legend_kwds = {"extend": "max", "fraction": 0.035, "pad": 0.03, "label": "Quantidade de $\it{{Aedes}}$ sp."},
 				cmap = "BuPu", linewidth = 0.05, linestyle = ":",
 				norm = cls.Normalize(vmin = v_min, vmax = v_max, clip = True))
 			
@@ -182,7 +182,7 @@ ax.text(-52.5, -28.25, """LEGENDA
 ▢           Sem registro*
 
 *Não há registro oficial
-de focos de $\it{{Aedes}}$ sp.""",
+ de $\it{{Aedes}}$ sp.""",
         color = "black", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 8)
 plt.xlabel("Longitude")
 plt.ylabel("Latitude")
