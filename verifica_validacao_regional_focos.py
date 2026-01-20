@@ -53,7 +53,7 @@ _CIDADE = "Florianópolis"#"Joinville"#"Florianópolis"
 _CIDADE = _CIDADE.upper()
 
 _RETROAGIR = 4 # Semanas Epidemiológicas (SE)
-_HORIZONTE = 0 # Tempo de Previsão em SE
+_HORIZONTE = 2 # Tempo de Previsão em SE
 
 #################################################################################
 
@@ -78,8 +78,8 @@ _ANO_MES_DIA_ONTEM = f"{_ANO_ONTEM}{_MES_ONTEM}{_DIA_ONTEM}"
 caminho_dados = "/home/meteoro/scripts/operacional_dengue/dados_operacao/" # CLUSTER
 caminho_operacional = "/home/meteoro/scripts/operacional_dengue/"
 caminho_shape = "/media/dados/shapefiles/" #SC/SC_Municipios_2022.shp #BR/BR_UF_2022.shp
-caminho_modelos = f"/home/meteoro/scripts/operacional_dengue/modelagem/casos/{_ANO_ATUAL}/{_ANO_MES_DIA}/"
-caminho_resultados = f"home/meteoro/scripts/operacional_dengue/modelagem/resultados/{_ANO_ATUAL}/{_ANO_MES}/"
+#caminho_modelos = f"/home/meteoro/scripts/operacional_dengue/modelagem/casos/{_ANO_ATUAL}/{_ANO_MES_DIA}/"
+#caminho_resultados = f"home/meteoro/scripts/operacional_dengue/modelagem/resultados/{_ANO_ATUAL}/{_ANO_MES}/"
 caminho_previsao = f"modelagem/resultados/{_ANO_ATUAL}/{_ANO_MES}/"#dados_previstos/"
 print(f"\n{green}HOJE:\n{reset}{_ANO_MES_DIA}\n")
 print(f"\n{green}ONTEM:\n{reset}{_ANO_MES_DIA_ONTEM}\n")
@@ -87,16 +87,39 @@ print(f"\n{green}OS DADOS UTILIZADOS ESTÃO ALOCADOS NOS SEGUINTES CAMINHOS:\n\n
 
 
 ######################################################
-
+def tempo_epidemiologico(df_original):
+	tempo = pd.DataFrame()
+	tempo["Semana"] = df_original["Semana"]
+	tempo["Semana"] = pd.to_datetime(tempo["Semana"])
+	tempo["SE"] = tempo["Semana"].apply(lambda data: Week.fromdate(data).week)
+	tempo["ano_epi"] = tempo["Semana"].dt.year
+	tempo.loc[(tempo["Semana"].dt.month == 1) & (tempo["SE"] > 50), "ano_epi"] -= 1
+	tempo.loc[(tempo["Semana"].dt.month == 12) & (tempo["SE"] == 1), "ano_epi"] += 1
+	print(f"\n{green}TEMPO CRONOLÓGICO (epidemiológico):\n{reset}{tempo}\n")
+	return tempo
+focos = "focos_semanal_pivot.csv"
+focos = pd.read_csv(f"{caminho_dados}{focos}", low_memory = False)
+tempo = tempo_epidemiologico(focos)
+SE = tempo["SE"].iloc[-1]
+ano_epi = tempo["ano_epi"].iloc[-1]
+print(f"\n{green}DATA EPIDEMIOLÓGICA:\n{reset}{tempo['SE'].iloc[-1]}/{tempo['ano_epi'].iloc[-1]}\n")
+print(f"\n{green}SEMANA EPIDEMIOLÓGICA: {reset}{SE}\n{green}ANO EPIDEMIOLÓGICO: {reset}{ano_epi}\n")
+caminho_resultados = f"/home/meteoro/scripts/operacional_dengue/resultados/{ano_epi}/SE{SE}/entomologia/"
+caminho_modelos = f"/home/meteoro/scripts/operacional_dengue/resultados/{ano_epi}/SE{SE}/entomologia/modelos/"
+print(f"\n{green}CAMINHO DOS RESULTADOS:\n{reset}{caminho_resultados}\n")
+print(f"\n{green}CAMINHO DOS MODELOS:\n{reset}{caminho_modelos}\n")
+if not os.path.exists(caminho_resultados):
+	os.makedirs(caminho_resultados)
+	
+	
 ### Renomeação das Variáveis pelos Arquivos
 casos = "casos_dive_pivot_total.csv"  # TabNet/DiveSC
-ultimas_previsoes = f"ultimas_previsoes_focos_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
-previsao_pivot = f"previsao_focos_pivot_total_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
-previsao_melt = f"previsao_focos_melt_total_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
-ultimas_previsoes_ontem = f"ultimas_previsoes_v{_ANO_MES_DIA_ONTEM}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
-previsao_pivot_ontem = f"previsao_pivot_total_v{_ANO_MES_DIA_ONTEM}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
-previsao_melt_ontem = f"previsao_melt_total_v{_ANO_MES_DIA_ONTEM}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
-focos = "focos_semanal_pivot.csv"
+ultimas_previsoes = f"ultimas_previsoes_focos_vSE{SE}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
+previsao_pivot = f"previsao_focos_pivot_total_vSE{SE}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
+previsao_melt = f"previsao_focos_melt_total_vSE{SE}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
+ultimas_previsoes_ontem = f"ultimas_previsoes_vSE{SE}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
+previsao_pivot_ontem = f"previsao_pivot_total_vSE{SE}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
+previsao_melt_ontem = f"previsao_melt_total_vSE{SE}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
 prec = f"{_ANO_ATUAL}/prec_semana_ate_{_ANO_ATUAL}.csv"
 tmin = f"{_ANO_ATUAL}/tmin_semana_ate_{_ANO_ATUAL}.csv"
 tmed = f"{_ANO_ATUAL}/tmed_semana_ate_{_ANO_ATUAL}.csv"
@@ -109,16 +132,16 @@ br = "BR/BR_UF_2022.shp"
 ###############################################################
 
 ### Abrindo Arquivo
-focos = pd.read_csv(f"{caminho_dados}{focos}", low_memory = False)
-try:
-	ultimas_previsoes = pd.read_csv(f"{caminho_previsao}{ultimas_previsoes}", low_memory = False)
-	previsao_pivot = pd.read_csv(f"{caminho_previsao}{previsao_pivot}", low_memory = False)
-	previsao_melt = pd.read_csv(f"{caminho_previsao}{previsao_melt}", low_memory = False)
-except FileNotFoundError:
-	ultimas_previsoes = pd.read_csv(f"{caminho_previsao}{ultimas_previsoes_ontem}", low_memory = False)
-	previsao_pivot = pd.read_csv(f"{caminho_previsao}{previsao_pivot_ontem}", low_memory = False)
-	previsao_melt = pd.read_csv(f"{caminho_previsao}{previsao_melt_ontem}", low_memory = False)
 #focos = pd.read_csv(f"{caminho_dados}{focos}", low_memory = False)
+try:
+	ultimas_previsoes = pd.read_csv(f"{caminho_resultados}{ultimas_previsoes}", low_memory = False)
+	previsao_pivot = pd.read_csv(f"{caminho_resultados}{previsao_pivot}", low_memory = False)
+	previsao_melt = pd.read_csv(f"{caminho_resultados}{previsao_melt}", low_memory = False)
+except FileNotFoundError:
+	ultimas_previsoes = pd.read_csv(f"{caminho_resultados}{ultimas_previsoes_ontem}", low_memory = False)
+	previsao_pivot = pd.read_csv(f"{caminho_resultados}{previsao_pivot_ontem}", low_memory = False)
+	previsao_melt = pd.read_csv(f"{caminho_resultados}{previsao_melt_ontem}", low_memory = False)
+
 prec = pd.read_csv(f"{caminho_dados}{prec}", low_memory = False)
 tmin = pd.read_csv(f"{caminho_dados}{tmin}", low_memory = False)
 tmed = pd.read_csv(f"{caminho_dados}{tmed}", low_memory = False)
@@ -138,29 +161,6 @@ cidades = unicos["Município"].copy()
 ####################################################################
 
 ### Funções Modelagem-Previsão
-
-def tempo_epidemiologico(df_original):
-	tempo = pd.DataFrame()
-	tempo["Semana"] = df_original["Semana"]
-	tempo["Semana"] = pd.to_datetime(tempo["Semana"])
-	tempo["SE"] = tempo["Semana"].apply(lambda data: Week.fromdate(data).week)
-	tempo["ano_epi"] = tempo["Semana"].dt.year
-	tempo.loc[(tempo["Semana"].dt.month == 1) & (tempo["SE"] > 50), "ano_epi"] -= 1
-	tempo.loc[(tempo["Semana"].dt.month == 12) & (tempo["SE"] == 1), "ano_epi"] += 1
-	print(f"\n{green}TEMPO CRONOLÓGICO (epidemiológico):\n{reset}{tempo}\n")
-	return tempo
-	
-tempo = tempo_epidemiologico(focos)
-SE = tempo["SE"].iloc[-1]
-ano_epi = tempo["ano_epi"].iloc[-1]
-print(f"\n{green}DATA EPIDEMIOLÓGICA:\n{reset}{tempo['SE'].iloc[-1]}/{tempo['ano_epi'].iloc[-1]}\n")
-print(f"\n{green}SEMANA EPIDEMIOLÓGICA: {reset}{SE}\n{green}ANO EPIDEMIOLÓGICO: {reset}{ano_epi}\n")
-caminho_resultados = f"/home/meteoro/scripts/operacional_dengue/resultados/{ano_epi}/SE{SE}/entomologia/"
-caminho_modelos = f"/home/meteoro/scripts/operacional_dengue/resultados/{ano_epi}/SE{SE}/entomologia/modelos/"
-print(f"\n{green}CAMINHO DOS RESULTADOS:\n{reset}{caminho_resultados}\n")
-print(f"\n{green}CAMINHO DOS MODELOS:\n{reset}{caminho_modelos}\n")
-if not os.path.exists(caminho_resultados):
-	os.makedirs(caminho_resultados)
 
 def abre_modelo(cidade):
 	troca = {'Á': 'A', 'Â': 'A', 'À': 'A', 'Ã': 'A', 'Ä': 'A',
@@ -251,29 +251,6 @@ def metricas(dataset, previsoes, n, y):
 	print("="*80)
 	return EQM, RQ_EQM, R_2
 	
-def tempo_epidemiologico(df_original):
-	tempo = pd.DataFrame()
-	tempo["Semana"] = df_original["Semana"]
-	tempo["Semana"] = pd.to_datetime(tempo["Semana"])
-	tempo["SE"] = tempo["Semana"].apply(lambda data: Week.fromdate(data).week)
-	tempo["ano_epi"] = tempo["Semana"].dt.year
-	tempo.loc[(tempo["Semana"].dt.month == 1) & (tempo["SE"] > 50), "ano_epi"] -= 1
-	tempo.loc[(tempo["Semana"].dt.month == 12) & (tempo["SE"] == 1), "ano_epi"] += 1
-	print(f"\n{green}TEMPO CRONOLÓGICO (epidemiológico):\n{reset}{tempo}\n")
-	return tempo
-	
-#sys.exit()
-tempo = tempo_epidemiologico(tmin)
-tempo = tempo_epidemiologico(casos)
-tempo = tempo_epidemiologico(focos)
-SE = tempo["SE"].iloc[-1]
-ano_epi = tempo["ano_epi"].iloc[-1]
-print(f"\n{green}DATA EPIDEMIOLÓGICA:\n{reset}{tempo['SE'].iloc[-1]}/{tempo['ano_epi'].iloc[-1]}\n")
-print(f"\n{green}SEMANA EPIDEMIOLÓGICA: {reset}{SE}\n{green}ANO EPIDEMIOLÓGICO: {reset}{ano_epi}\n")
-print(f"\n{green}DATA EPIDEMIOLÓGICA:\n{reset}{tempo['SE'].iloc[-2]}/{tempo['ano_epi'].iloc[-2]}\n")
-caminho_resultados = f"resultados/{ano_epi}/SE{SE}/entomologia/"
-if not os.path.exists(caminho_resultados):
-	os.makedirs(caminho_resultados)
 #sys.exit()
 	
 ##########################################################################################
@@ -289,7 +266,7 @@ print(f"\n{green}ÚLTIMAS PREVISÕES:\n{reset}{ultimas_previsoes}\n")
 print(f"\n{green}PREVISÃO TOTAL (pivot):\n{reset}{previsao_pivot}\n")
 print(f"\n{green}PREVISÃO TOTAL (melt):\n{reset}{previsao_melt}\n")
 
-print(f"\n{green}CASOS.dtypes:\n{reset}{casos.dtypes}\n")
+#print(f"\n{green}CASOS.dtypes:\n{reset}{casos.dtypes}\n")
 print(f"\n{green}ÚLTIMAS PREVISÕES.dtypes:\n{reset}{ultimas_previsoes.dtypes}\n")
 
 print(f"\n{green}REGIONAIS:\n{reset}{regionais}\n")
@@ -302,20 +279,20 @@ previstos = ultimas_previsoes.iloc[:3, :]
 previsao_pivot["Semana"] = pd.to_datetime(previsao_pivot["Semana"])
 previsao12 = previsao_pivot.iloc[:-2, :]
 previstos["Semana"] = pd.to_datetime(previstos["Semana"])
-casos["Semana"] = pd.to_datetime(casos["Semana"])
-casos_atual = casos[casos["Semana"].dt.year == 2025]
-casos_atual = casos_atual.iloc[:-1,:]
+focos["Semana"] = pd.to_datetime(focos["Semana"])
+focos_atual = focos[focos["Semana"].dt.year == 2025]
+focos_atual = focos_atual.iloc[:-1,:]
 
 mapeamento = regionais.drop_duplicates(subset = ["Municipio"]).set_index("Municipio")["regional"]
 previstos = previstos.set_index("Semana")
 previsao12 = previsao12.set_index("Semana")
-casos_atual = casos_atual.set_index("Semana")
+focos_atual = focos_atual.set_index("Semana")
 previstos_reg = previstos.groupby(previstos.columns.map(mapeamento), axis = 1).sum()
 previsao12_reg = previsao12.groupby(previsao12.columns.map(mapeamento), axis = 1).sum()
-casos_atual_reg = casos_atual.groupby(casos_atual.columns.map(mapeamento), axis = 1).sum()
+focos_atual_reg = focos_atual.groupby(focos_atual.columns.map(mapeamento), axis = 1).sum()
 previstos.reset_index(inplace = True)
 previsao12.reset_index(inplace = True)
-casos_atual.reset_index(inplace = True)
+focos_atual.reset_index(inplace = True)
 
 previsao_pivot = previsao_pivot.set_index("Semana")
 previsao_pivot_reg = previsao_pivot.groupby(previsao_pivot.columns.map(mapeamento), axis = 1).sum()
@@ -324,16 +301,16 @@ previsao_pivot.reset_index(inplace = True)
 print(f"\n{green}FOCOS PREVISTOS REGIONAIS:\n{reset}{previsao_pivot_reg}\n{previsao12_reg.dtypes}\n")
 
 
-print(f"\n{green}CASOS.dtypes:\n{reset}{casos}\n{casos.dtypes}\n")
-print(f"\n{green}CASOS_ATUAL.dtypes:\n{reset}{casos_atual.dtypes}\n")
+#print(f"\n{green}CASOS.dtypes:\n{reset}{casos}\n{casos.dtypes}\n")
+print(f"\n{green}FOCOS_ATUAL.dtypes:\n{reset}{focos_atual.dtypes}\n")
 print(f"\n{green}PREVISTOS.dtypes:\n{reset}{previstos}\n{previstos.dtypes}\n")
 
-print(f"\n{green}CASOS REGIONAIS:\n{reset}{casos_atual_reg}\n{casos_atual_reg.dtypes}\n")
+print(f"\n{green}FOCOS REGIONAIS:\n{reset}{focos_atual_reg}\n{focos_atual_reg.dtypes}\n")
 print(f"\n{green}PREVISTOS REGIONAIS:\n{reset}{previstos_reg}\n{previstos_reg.dtypes}\n")
 print(f"\n{green}ÚLTIMOS PREVISTOS REGIONAIS:\n{reset}{previsao12_reg}\n{previsao12_reg.dtypes}\n")
 
-print(f"\n{green}VALOR MÁXIMO DOS CASOS ATUAIS (MUNICIPAL):\n{reset}{casos_atual.set_index('Semana').max().max()}")
-print(f"\n{green}VALOR MÁXIMO DOS CASOS ATUAIS (REGIONAL):\n{reset}{casos_atual_reg.max().max()}")
+print(f"\n{green}VALOR MÁXIMO DOS FOCOS ATUAIS (MUNICIPAL):\n{reset}{focos_atual.set_index('Semana').max().max()}")
+print(f"\n{green}VALOR MÁXIMO DOS FOCOS ATUAIS (REGIONAL):\n{reset}{focos_atual.select_dtypes(include = 'number').max().max()}")
 #sys.exit()
 """
 regionais = ["FOZ DO RIO ITAJAÍ", "GRANDE FLORIANÓPOLIS", "EXTREMO OESTE", "OESTE",
@@ -358,12 +335,12 @@ plt.figure(figsize = (10, 6), layout = "constrained", frameon = True) #Alterado 
 #			label = "Previsto (GFS)", color = "red", linewidth = 3, linestyle = ":")
 plt.plot(previsao_pivot["Semana"], previsao_pivot[_CIDADE],
 			label = "Previsto", color = "red", linewidth = 3)
-plt.plot(casos_atual["Semana"], casos_atual[_CIDADE],
+plt.plot(focos_atual["Semana"], focos_atual[_CIDADE],
 				label = "Observado", color = "darkgreen")
 plt.xlabel("Semanas Epidemiológicas (Série Temporal)")
-plt.ylabel('Número de focos de $\it{Aedes}$ sp.') #Itálico by Everton
+plt.ylabel("Quantidade de $\it{Aedes}$ sp.") #Itálico by Everton
 #plt.title("COMPARAÇÃO ENTRE FOCOS DE _Aedes_ sp. PREVISTOS E OBSERVADOS", fontsize = 12, y = 1.03, loc = "center", pad = 10)
-plt.title('COMPARAÇÃO ENTRE FOCOS DE $\it{Aedes}$ sp. PREVISTOS E OBSERVADOS', fontsize = 12, y = 1.03, loc = "center", pad = 10) #Aedes sp. em itálico by Everton
+plt.title("COMPARAÇÃO ENTRE QUANTIDADE DE $\it{Aedes}$ sp. PREVISTOS E OBSERVADOS", fontsize = 12, y = 1.03, loc = "center", pad = 10) #Aedes sp. em itálico by Everton
 plt.suptitle(f"MUNICÍPIO DE {_CIDADE}", fontsize = 16, y = 0.96)
 plt.legend(fontsize = 14)
 #plt.ylim(0, casos_atual_reg.max().max())
@@ -380,8 +357,8 @@ if _VISUALIZAR == True:
 if _SALVAR == True and _AUTOMATIZA == True:
 	for velho, novo in troca.items():
 		_CIDADE = _CIDADE.replace(velho, novo)
-	caminho_png = f"modelagem/resultados/{_ANO_ATUAL}/{_ANO_MES}/graficos_obsXprev/"
-	nome_arquivo = f"FOCOS_serie_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_{_CIDADE}_SE{tempo['SE'].iloc[-1]}.png"
+	caminho_png = f"{caminho_resultados}graficos_obsXprev/"
+	nome_arquivo = f"FOCOS_serie_vSE{SE}_h{_HORIZONTE}_r{_RETROAGIR}_{_CIDADE}_SE{SE}.png"
 	os.makedirs(caminho_png, exist_ok = True)
 	#plt.savefig(f"{caminho_png}{nome_arquivo}", format = "png", dpi = 300)
 	plt.savefig(f"{caminho_png}{nome_arquivo}", format = "png", dpi = 300,
@@ -405,12 +382,12 @@ for idx, _REG in enumerate(regionais):
 	#			label = "Previsto (GFS)", color = "red", linewidth = 3, linestyle = ":")
 	plt.plot(previsao_pivot_reg.index, previsao_pivot_reg[_REG],
 				label = "Previsto", color = "red", linewidth = 3)
-	plt.plot(casos_atual_reg.index, casos_atual_reg[_REG],
+	plt.plot(focos_atual_reg.index, focos_atual_reg[_REG],
 					label = "Observado", color = "darkgreen")
 	plt.xlabel("Semanas Epidemiológicas (Série Temporal)")
-	plt.ylabel('Número de focos de $\it{Aedes}$ sp.') #Itálico by Everton
+	plt.ylabel("Quantidade de $\it{Aedes}$ sp.") #Itálico by Everton
 	#plt.title("COMPARAÇÃO ENTRE FOCOS DE _Aedes_ sp. PREVISTOS E OBSERVADOS", fontsize = 12, y = 1.03, loc = "center", pad = 10)
-	plt.title('COMPARAÇÃO ENTRE FOCOS DE $\it{Aedes}$ sp. PREVISTOS E OBSERVADOS', fontsize = 12, y = 1.03, loc = "center", pad = 10) #Aedes sp. em itálico by Everton
+	plt.title("COMPARAÇÃO ENTRE QUANTIDADE DE $\it{Aedes}$ sp. PREVISTOS E OBSERVADOS", fontsize = 12, y = 1.03, loc = "center", pad = 10) #Aedes sp. em itálico by Everton
 	plt.suptitle(f"REGIONAL: {_REG}", fontsize = 16, y = 0.96)
 	plt.legend(fontsize = 14)
 	#plt.ylim(0, casos_atual_reg.max().max())
@@ -423,8 +400,8 @@ for idx, _REG in enumerate(regionais):
 		for velho, novo in troca.items():
 			_REG = _REG.replace(velho, novo)
 		print(f"\n{green}REGIONAL:\n{reset}{_REG}\n")
-		caminho_png = f"modelagem/resultados/{_ANO_ATUAL}/{_ANO_MES}/graficos_obsXprev/"
-		nome_arquivo = f"FOCOS_serie_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_{_REG}_SE{tempo['SE'].iloc[-1]}.png"
+		caminho_png = f"{caminho_resultados}graficos_obsXprev/"
+		nome_arquivo = f"FOCOS_serie_vSE{SE}_h{_HORIZONTE}_r{_RETROAGIR}_{_REG}_SE{SE}.png"
 		os.makedirs(caminho_png, exist_ok = True)
 		plt.savefig(f"{caminho_png}{nome_arquivo}", format = "png", dpi = 300,
 					transparent = False, pad_inches = 0.02) # Alteradas as propriedades de salvamento para seguir o padrão dos outros mapas by Everton
