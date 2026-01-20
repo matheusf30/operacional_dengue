@@ -118,7 +118,7 @@ def tempo_epidemiologico(df_original):
 caminho_dados = "/home/meteoro/scripts/operacional_dengue/dados_operacao/"
 focos = "focos_semanal_pivot.csv"
 focos = pd.read_csv(f"{caminho_dados}{focos}", low_memory = False)	
-tempo = tempo_epidemiologico(focos)
+tempo = tempo_epidemiologico(casos)
 SE = tempo["SE"].iloc[-1]
 ano_epi = tempo["ano_epi"].iloc[-1]
 print(f"\n{green}DATA EPIDEMIOLÓGICA:\n{reset}{tempo['SE'].iloc[-1]}/{tempo['ano_epi'].iloc[-1]}\n")
@@ -133,6 +133,7 @@ print(f"\n{green}CASOS:\n{reset}{casos}\n")
 casos["Semana"] = pd.to_datetime(casos["Semana"], format = "%Y-%m-%d")
 print(f"\n{green}CASOS.info():\n{reset}{casos.info()}\n")
 casos = casos[casos["Semana"].dt.year == datetime.today().year]
+print(casos) #by Everton
 semana_epidemio = casos.loc[casos.index[-1], "Semana"]
 print(f"\n{green}SEMANA EPIDEMIOLÓGICA:\n{reset}{semana_epidemio}\n")
 casos.set_index("Semana", inplace = True)
@@ -206,9 +207,10 @@ ax.set_xticks([-54, -52, -50, -48])
 ax.set_xticklabels(["54°W", "52°W", "50°W", "48°W"])#, fontsize = 18)
 ax.set_yticks([-29, -28, -27, -26])
 ax.set_yticklabels(["29°S", "28°S", "27°S", "26°S"])#, fontsize = 18)
-plt.title(f"Soma de Casos Prováveis de Dengue em Santa Catarina\nSemana Epidemiológica: {tempo['SE'].iloc[-2]}/{tempo['ano_epi'].iloc[-2]}.", fontsize = 14)
-
-nome_arquivo = f"CASOS_mapa_monitoramento_{tempo['ano_epi'].iloc[-2]}_SE{tempo['SE'].iloc[-2]}.png"
+plt.title(f"Soma de Casos Prováveis de Dengue em Santa Catarina\nSemana Epidemiológica: {tempo['SE'].iloc[-2]}/{tempo['ano_epi'].iloc[-2]}.", fontsize = 14) #by Everton
+#plt.title(f"Soma de Casos Prováveis de Dengue em Santa Catarina\nSemana Epidemiológica: {SE}/{ano_epi}.", fontsize = 14)
+#nome_arquivo = f"CASOS_mapa_monitoramento_{tempo['ano_epi'].iloc[-2]}_SE{tempo['SE'].iloc[-2]}.png" by Everton
+nome_arquivo = f"CASOS_mapa_monitoramento_{ano_epi}_SE{SE}.png"
 if _AUTOMATIZA == True and _SALVAR == True:
 	os.makedirs(caminho_resultados, exist_ok = True)
 	#plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "png", dpi = 300)
@@ -223,6 +225,7 @@ if _AUTOMATIZA == True and _VISUALIZAR == True:
 #fig, ax = plt.subplots(figsize = (8, 6), layout = "constrained", frameon = True)
 fig, ax = plt.subplots(figsize = (8, 5.3), layout = "constrained", frameon = True)
 municipios.plot(ax = ax, color = "lightgray", edgecolor = "red", linewidth = 0.3)
+#print(base_carto["incidencia"]) #by Everton
 v_max = base_carto["incidencia"].max()
 v_min = base_carto["incidencia"].min()
 intervalo = 250
@@ -235,8 +238,9 @@ base_carto.plot(ax = ax, column = "incidencia",  legend = True,
 				cmap = "RdPu", linewidth = 0.05, linestyle = ":",
 				norm = cls.Normalize(vmin = v_min, vmax = v_max, clip = True))
 epidemia = base_carto[base_carto["incidencia"] > 300]
-epidemia.plot(ax = ax, facecolor = "none", edgecolor = "red",
-				linewidth = 0.1, hatch = "..")#, linestyle = ":") #Alterado aqui
+if not epidemia.empty:
+	epidemia.plot(ax = ax, facecolor = "none", edgecolor = "red",
+					linewidth = 0.1, hatch = "..")#, linestyle = ":") #Alterado aqui
 regionais.plot(ax = ax, facecolor = "none",
 				edgecolor = "dimgray", linewidth = 0.6)
 cbar_ax = ax.get_figure().get_axes()[-1]
@@ -279,8 +283,10 @@ ax.set_xticks([-54, -52, -50, -48])
 ax.set_xticklabels(["54°W", "52°W", "50°W", "48°W"])#, fontsize = 18)
 ax.set_yticks([-29, -28, -27, -26])
 ax.set_yticklabels(["29°S", "28°S", "27°S", "26°S"])#, fontsize = 18)
-plt.title(f"Incidência da Soma de Casos Prováveis de Dengue em Santa Catarina\nSemana Epidemiológica: {tempo['SE'].iloc[-2]}/{tempo['ano_epi'].iloc[-2]}", fontsize = 14)
-nome_arquivo = f"INCIDENCIA_mapa_monitoramento_{tempo['ano_epi'].iloc[-2]}_SE{tempo['SE'].iloc[-2]}.png"
+plt.title(f"Incidência da Soma de Casos Prováveis de Dengue em Santa Catarina\nSemana Epidemiológica: {tempo['SE'].iloc[-2]}/{tempo['ano_epi'].iloc[-2]}", fontsize = 14) #by Everton
+#plt.title(f"Incidência da Soma de Casos Prováveis de Dengue em Santa Catarina\nSemana Epidemiológica: {SE}/{ano_epi}", fontsize = 14)
+#nome_arquivo = f"INCIDENCIA_mapa_monitoramento_{tempo['ano_epi'].iloc[-2]}_SE{tempo['SE'].iloc[-2]}.png" by Everton
+nome_arquivo = f"INCIDENCIA_mapa_monitoramento_{ano_epi}_SE{SE}.png"
 if _AUTOMATIZA == True and _SALVAR == True:
 	os.makedirs(caminho_resultados, exist_ok = True)
 	#plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "png", dpi = 300)
