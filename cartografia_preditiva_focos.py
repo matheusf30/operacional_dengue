@@ -532,7 +532,7 @@ else:
 
 tempo = tempo_epidemiologico(previsao_total)
 SE = tempo["SE"].iloc[-1 - _HORIZONTE]
-ano_epi = tempo["ano_epi"].iloc[-1]
+ano_epi = tempo["ano_epi"].iloc[-1 - HORIZONTE]
 print(f"\n{green}DATA EPIDEMIOLÓGICA:\n{reset}{SE}/{ano_epi}\n")
 print(f"\n{green}previsao_total:\n{cyan}{previsao_total}{reset}\n")
 #sys.exit()
