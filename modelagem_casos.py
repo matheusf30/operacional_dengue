@@ -525,7 +525,7 @@ def salva_modeloRF(modelo, _CIDADE):
 	caminho_modelos = f"/home/meteoro/scripts/operacional_dengue/resultados/{ano_epi}/SE{SE}/epidemiologia/modelos/"
 	if not os.path.exists(caminho_modelos):
 		os.makedirs(caminho_modelos)
-	nome_modelo = f"RF_casos_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_{_cidade}.h5"
+	nome_modelo = f"RF_casos_vSE{SE}_h{_HORIZONTE}_r{_RETROAGIR}_{_cidade}.h5"
 	joblib.dump(modelo, f"{caminho_modelos}{nome_modelo}")
 	print(f"\n{green}MODELO RANDOM FOREST DE {bold}{_cidade} SALVO!\n{reset}")
 	print(f"\n{cyan}Caminho e Nome:\n {bold}{caminho_modelos}{nome_modelo}\n{reset}")
