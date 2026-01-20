@@ -113,7 +113,7 @@ def tempo_epidemiologico(df_original):
 tempo = tempo_epidemiologico(focos)
 SE = tempo["SE"].iloc[-1]
 ano_epi = tempo["ano_epi"].iloc[-1]
-print(f"\n{green}DATA EPIDEMIOLÓGICA:\n{reset}{tempo['SE'].iloc[-1]}/{tempo['ano_epi'].iloc[-1]}\n")
+print(f"\n{green}DATA EPIDEMIOLÓGICA:\n{reset}{SE}/{ano_epi}\n")
 print(f"\n{green}SEMANA EPIDEMIOLÓGICA: {reset}{SE}\n{green}ANO EPIDEMIOLÓGICO: {reset}{ano_epi}\n")
 caminho_resultados = f"/home/meteoro/scripts/operacional_dengue/resultados/{ano_epi}/SE{SE}/entomologia/"
 if not os.path.exists(caminho_resultados):
@@ -166,7 +166,7 @@ print(f"\n{green}v_min\n{reset}{v_min}\n")
 print(f"\n{green}v_max\n{reset}{v_max}\n")
 print(f"\n{green}levels\n{reset}{levels}\n")
 figure = base_carto.plot(ax = ax, column = "total",  legend = True,
-				edgecolor = "white", label = "Focos de _Aedes_ sp.", legend_kwds = {"extend": "max", "fraction": 0.035, "pad": 0.03, "label": "Número de Focos de _Aedes_ sp."},
+				edgecolor = "white", label = "Focos de $\it{{Aedes}}$ sp.", legend_kwds = {"extend": "max", "fraction": 0.035, "pad": 0.03, "label": "Número de Focos de $\it{{Aedes}}$ sp."},
 				cmap = "BuPu", linewidth = 0.05, linestyle = ":",
 				norm = cls.Normalize(vmin = v_min, vmax = v_max, clip = True))
 			
@@ -182,7 +182,7 @@ ax.text(-52.5, -28.25, """LEGENDA
 ▢           Sem registro*
 
 *Não há registro oficial
-de focos de _Aedes_ sp.""",
+de focos de $\it{{Aedes}}$ sp.""",
         color = "black", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 8)
 plt.xlabel("Longitude")
 plt.ylabel("Latitude")
@@ -191,7 +191,7 @@ ax.set_xticks([-54, -52, -50, -48])
 ax.set_xticklabels(["54°W", "52°W", "50°W", "48°W"])
 ax.set_yticks([-29, -28, -27, -26])
 ax.set_yticklabels(["29°S", "28°S", "27°S", "26°S"])
-plt.title(f"Soma de Focos de _Aedes_ sp. em Santa Catarina\nSemana Epidemiológica: {tempo['SE'].iloc[-2]}/{tempo['ano_epi'].iloc[-2]}.", fontsize = 14)
+plt.title(f"Soma de $\\it{{Aedes}}$ sp. em Santa Catarina\nSemana Epidemiológica: {tempo['SE'].iloc[-2]}/{tempo['ano_epi'].iloc[-2]}.", fontsize = 14)
 nome_arquivo = f"FOCOS_mapa_monitoramento_{tempo['ano_epi'].iloc[-2]}_SE{tempo['SE'].iloc[-2]}.png"
 if _AUTOMATIZA == True and _SALVAR == True:
 	os.makedirs(caminho_resultados, exist_ok = True)
@@ -214,7 +214,7 @@ print(f"\n{green}v_min\n{reset}{v_min}\n")
 print(f"\n{green}v_max\n{reset}{v_max}\n")
 print(f"\n{green}levels\n{reset}{levels}\n")
 base_carto.plot(ax = ax, column = "incidencia",  legend = True,
-				edgecolor = "white", label = "Focos Ponderados de _Aedes_ sp.", legend_kwds = {"extend": "max", "fraction": 0.035, "pad": 0.03, "label": "Número de Focos de _Aedes_ sp./100 Mil Habitantes"},
+				edgecolor = "white", label = "Quantidade Ponderada de $\it{{Aedes}}$ sp.", legend_kwds = {"extend": "max", "fraction": 0.035, "pad": 0.03, "label": "Quantidade de $\it{{Aedes}}$ sp./100 Mil Habitantes"},
 				cmap = "BuPu", linewidth = 0.05, linestyle = ":",
 				norm = cls.Normalize(vmin = v_min, vmax = v_max, clip = True))
 #epidemia = base_carto[base_carto["incidencia"] > 300]
@@ -232,9 +232,8 @@ ax.text(-52.5, -28.25, """LEGENDA
 ▢       Sem registro**
 
 *Soma Ponderada por População
-(Nº Focos de _Aedes_ sp./100 mil habitantes)
-**Não há registro oficial de
-Focos de _Aedes_ sp.""",
+(Quantidade de $\it{{Aedes}}$ sp./100 mil habitantes)
+**Não há registro oficial de $\it{{Aedes}}$ sp.""",
 	color = "black", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 8)
 plt.xlabel("Longitude")
 plt.ylabel("Latitude")
@@ -243,7 +242,7 @@ ax.set_xticks([-54, -52, -50, -48])
 ax.set_xticklabels(["54°W", "52°W", "50°W", "48°W"])
 ax.set_yticks([-29, -28, -27, -26])
 ax.set_yticklabels(["29°S", "28°S", "27°S", "26°S"])
-plt.title(f"Soma Ponderada* de Focos de _Aedes_ sp. em Santa Catarina\nSemana Epidemiológica: {tempo['SE'].iloc[-2]}/{tempo['ano_epi'].iloc[-2]}", fontsize = 14)
+plt.title(f"Soma Ponderada* de $\it{{Aedes}}$ sp. em Santa Catarina\nSemana Epidemiológica: {tempo['SE'].iloc[-2]}/{tempo['ano_epi'].iloc[-2]}", fontsize = 14)
 nome_arquivo = f"FOCOPONDERADO_mapa_monitoramento_{tempo['ano_epi'].iloc[-2]}_SE{tempo['SE'].iloc[-2]}.png"
 if _AUTOMATIZA == True and _SALVAR == True:
 	os.makedirs(caminho_resultados, exist_ok = True)
