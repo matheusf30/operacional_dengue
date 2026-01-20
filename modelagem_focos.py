@@ -92,7 +92,7 @@ _CIDADE = "Joinville"#"Joinville"#"Florianópolis"
 _CIDADE = _CIDADE.upper()
 
 _RETROAGIR = 4 # Semanas Epidemiológicas
-_HORIZONTE = 0 # Tempo de Previsão
+_HORIZONTE = 2 # Tempo de Previsão
 #for r in range(_HORIZONTE + 1, _RETROAGIR + 1):
 
 _AUTOMATIZAR = sys.argv[1]   # True|False                    #####
@@ -114,7 +114,7 @@ _SALVAR = True if _SALVAR == "True" else False               #####
 #/home/meteoro/scripts/operacional_dengue/#CLUSTER
 caminho_dados = "/home/meteoro/scripts/operacional_dengue/dados_operacao/"
 #os.makedirs(caminho_dados, exist_ok = True)
-caminho_modelos = "home/meteoro/scripts/operacional_dengue/modelagem/casos/"
+caminho_modelos = "home/meteoro/scripts/operacional_dengue/modelagem/focos/"
 #os.makedirs(caminho_modelos, exist_ok = True)
 caminho_resultados = "home/meteoro/scripts/operacional_dengue/modelagem/resultados/"
 #os.makedirs(caminho_resultados, exist_ok = True)
@@ -301,7 +301,7 @@ explicativas = x.columns.tolist() # feature_names = explicativas
 treino_x_explicado = pd.DataFrame(treino_x, columns = explicativas)
 treino_x_explicado = treino_x_explicado.to_numpy().astype(int)
 
-#print(f"""Conjunto de Treino com as Variáveis Explicativas (<{_LIMITE}):\n{treino_x}\n
+print(f"""Conjunto de Treino com as Variáveis Explicativas (<{_LIMITE}):\n{treino_x}\n
 #Conjunto de Treino com as Variáveis Explicativas (>{_FIM}):\n{teste_x}\n 
 #Conjunto de Teste com a Variável Dependente (<{_LIMITE}):\n{treino_y}\n 
 #Conjunto de Teste com a Variável Dependente (>{_FIM}):\n{teste_y}\n
@@ -520,7 +520,7 @@ def salva_modeloRF(modelo, _CIDADE):
 	caminho_modelos = f"/home/meteoro/scripts/operacional_dengue/resultados/{ano_epi}/SE{SE}/entomologia/modelos/"
 	if not os.path.exists(caminho_modelos):
 		os.makedirs(caminho_modelos)
-	nome_modelo = f"RF_focos_v{_ANO_MES_DIA}_h{_HORIZONTE}_r{_RETROAGIR}_{_cidade}.h5"
+	nome_modelo = f"RF_focos_vSE{SE}_h{_HORIZONTE}_r{_RETROAGIR}_{_cidade}.h5"
 	joblib.dump(modelo, f"{caminho_modelos}{nome_modelo}")
 	print(f"\n{green}MODELO RANDOM FOREST DE {bold}{_cidade} SALVO!\n{reset}")
 	print(f"\n{cyan}Caminho e Nome:\n {bold}{caminho_modelos}{nome_modelo}\n{reset}")
