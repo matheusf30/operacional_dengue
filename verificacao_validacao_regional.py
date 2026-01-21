@@ -290,7 +290,7 @@ previsao_pivot["Semana"] = pd.to_datetime(previsao_pivot["Semana"])
 previsao12 = previsao_pivot.iloc[:-2, :]
 previstos["Semana"] = pd.to_datetime(previstos["Semana"])
 casos["Semana"] = pd.to_datetime(casos["Semana"])
-casos_atual = casos[casos["Semana"].dt.year == 2025]
+casos_atual = casos[casos["Semana"].dt.year >= 2025]
 casos_atual = casos_atual.iloc[:-1,:]
 
 mapeamento = regionais.drop_duplicates(subset = ["Municipio"]).set_index("Municipio")["regional"]
