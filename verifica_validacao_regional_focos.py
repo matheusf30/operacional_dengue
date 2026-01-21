@@ -280,7 +280,7 @@ previsao_pivot["Semana"] = pd.to_datetime(previsao_pivot["Semana"])
 previsao12 = previsao_pivot.iloc[:-2, :]
 previstos["Semana"] = pd.to_datetime(previstos["Semana"])
 focos["Semana"] = pd.to_datetime(focos["Semana"])
-focos_atual = focos[focos["Semana"].dt.year == 2025]
+focos_atual = focos[focos["Semana"].dt.year >= 2025]
 focos_atual = focos_atual.iloc[:-1,:]
 
 mapeamento = regionais.drop_duplicates(subset = ["Municipio"]).set_index("Municipio")["regional"]
