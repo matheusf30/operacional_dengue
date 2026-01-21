@@ -1,29 +1,3 @@
-"""
-#################################################################################################
-REGISTRO SINAN/SC >>>(DIVESC)
-Atentar aos dados provenientes do TabNet... http://200.19.223.105/cgi-bin/dh?sinan/def/dengon.def
-
---Seleções:
->>> LINHAS: Município de Infecção SC;
->>> COLUNAS: Semana Epidemilógica dos 1ºs sinais.
-
---Períodos:
->>> Haverá um arquivo por ano.
-
---Seleções Disponíveis(Filtros):
->>> UF F.infecção: 42 Santa Catarina (Desconsiderados todas as outras UFs, Ignorado e Exterior);
-
->>> Classificação Nova: Dengue Clássico, Dengue com Complicações, Febre Hemorrágica do Dengue,
-                         Síndrome do Choque do Dengue, Dengue e Dengue com Sinais de alarme.
-(Nesse filtro foram desconsiderados: Ignorado, Branco, Descartado e Inconclusivo);
-
->>> Conf.Desc pos2010: Laboratorial e Clínico-Epidemiológico.
-(Nesse filtro foram desconsiderados: Ignorado, Branco e Em Investigação);
-
->>>(Também não foram filtrados por sorotipo, pois não há confirmação laboratorial de todos.)
-#################################################################################################
-"""
-
 ### Bibliotecas Correlatas
 import pandas as pd
 import numpy as np
@@ -97,37 +71,6 @@ print(date.today().isoformat())
 #sys.exit()
 ## Dados "Brutos"
 
-print(f"""{green}
- INVESTIGAÇÃO DENGUE A PARTIR DE 2014
-Frequência por Mun infec SC e Sem.Epid.Sintomas{red}
-Classificacao Nova: {green}Dengue com complicações, Febre Hemorrágica do Dengue, Síndrome do Choque do Dengue, Dengue, Dengue com sinais de alarme, Dengre grave{red}
-Conf.Desc pos2010: {green}Laboratórial, Clínico-epidemiológico{red}
-Período: {green}{ANO_ESCOLHIDO}{magenta}
-
-    A partir de 2020 o estado do Espírito Santo passou a utilizar o sistema e-SUS Vigilância em Saúde. Portanto, para os casos de Arboviroses urbanas do Espírito Santo foram considerados apenas os dados disponibilizados pelo Sinan online (dengue e chikungunya) e Sinan Net (zika).
-    Períodos Disponíveis ou período - Correspondem aos anos de notificação dos casos e semana epidemiológica, em cada período pode apresentar notificações com data de notificação do ano anterior (semana epidemiológica 52 ou 53) e posterior (semana epidemiológica 01).{red}
-    Para cálculo da incidência recomenda-se utilizar locais de residência.
-    Dados de 2014 atualizados em 13/07/2015.
-    Dados de 2015 atualizados em 27/09/2016.
-    Dados de 2016 atualizados em 06/07/2017.
-    Dados de 2017 atualizados em 18/07/2018.
-    Dados de 2018 atualizados em 01/10/2019.
-    Dados de 2019 atualizados em 10/07/2020.
-    Dados de 2020 atualizados em 23/07/2021.
-    Dados de 2021 atualizados em 12/07/2022.
-    Dados de 2022 atualizados em 18/07/2023.
-    Dados de 2023 atualizados em 04/03/2024 à 01 hora, sujeitos à revisão.
-    Dados de 2024 atualizados em 11/03/2024 às 08 horas, sujeitos à revisão.
-<<<<<<< HEAD
-{green}
-=======
->>>>>>> 72ec65a... Iniciando com dados brutos TabNet/DiveSC.
-    * Dados disponibilizados no TABNET em março de 2024. 
-
-Legenda:
--	- Dado numérico igual a 0 não resultante de arredondamento.
-0; 0,0	- Dado numérico igual a 0 resultante de arredondamento de um dado originalmente positivo.{reset}
-""")
 
 ### Pré-Processamento
 lista_municipio = {'ABDON BATISTA': 'ABDON BATISTA',
@@ -426,112 +369,27 @@ lista_municipio = {'ABDON BATISTA': 'ABDON BATISTA',
   'ZORTEA': 'ZORTÉA',
   'BALNEARIO RINCAO': 'BALNEÁRIO RINCÃO'}
 #
-"""
-# 2024 (Padronização)
-ano = 2024
-total_semana = 52
-lista_str_semanas = []
-for i in range(1, total_semana + 1):
-    n_semana = str(i).zfill(2)
-    chave_semana = f"Semana {n_semana}"
-    lista_str_semanas.append(chave_semana)
-inicio = datetime(ano-1, 12, 31)
-fim = datetime(ano, 12, 28)
-lista_semanas = []
-semana_corrente = inicio
-while semana_corrente <= fim:
-    lista_semanas.append(semana_corrente)
-    semana_corrente += timedelta(weeks = 1)
-dict_semanas = dict(zip(lista_str_semanas, [date.strftime("%Y-%m-%d") for date in lista_semanas]))
-casos24.rename(columns = {"Mun infec SC" : "Município"}, inplace = True)
-casos24.rename(columns = {"Município infecção" : "Município"}, inplace = True)
-casos24.rename(columns = dict_semanas, inplace = True)
-casos24["Município"] = casos24["Município"].str.replace("\d+ ", "", regex = True)
-casos24["Município"] = casos24["Município"].str.upper()
-casos24.drop(columns = "Total", inplace = True)
-casos24.drop(casos24.index[-1:], axis = 0, inplace = True)
-casos24.set_index("Município", inplace = True)
-casos24 = casos24.T
-casos24.reset_index(inplace=True)
-casos24 = casos24.rename(columns = {"index" : "Semana"})
-casos24.rename(columns = lista_municipio, inplace = True)
-colunas = casos24.columns.drop("Semana")
-semanas = pd.DataFrame(lista_semanas, columns=["Semana"])
-casos24["Semana"] = pd.to_datetime(casos24["Semana"])
-casos24 = pd.merge(semanas, casos24, on = "Semana", how = "left").fillna(0)
-casos24[colunas] = casos24[colunas].astype(int)
-hoje = pd.to_datetime(datetime.today().date())
-casos24 = casos24[casos24["Semana"] <= hoje]
-casos24 = pd.melt(casos24, id_vars = "Semana", var_name = "Município", value_name = "Casos", ignore_index = True)
-casos24.sort_values(by = "Semana",  ignore_index = True, inplace = True)
-print("="*80, f"\n{ano}\n\n", casos24)
-print(casos24.info())
-print(casos24.columns.drop("Semana"))
-print("="*80)
 
-# 2025 (Padronização)
-casos25 = casos.copy()
-ano = 2025
-total_semana = 53
-lista_str_semanas = []
-for i in range(1, total_semana + 1):
-    n_semana = str(i).zfill(2)
-    chave_semana = f"Semana {n_semana}"
-    lista_str_semanas.append(chave_semana)
-inicio = datetime(ano-1, 12, 29)
-fim = datetime(ano, 12, 28)
-lista_semanas = []
-semana_corrente = inicio
-while semana_corrente <= fim:
-    lista_semanas.append(semana_corrente)
-    semana_corrente += timedelta(weeks = 1)
-dict_semanas = dict(zip(lista_str_semanas, [date.strftime("%Y-%m-%d") for date in lista_semanas]))
-casos25.rename(columns = {"Mun infec SC" : "Município"}, inplace = True)
-#casos25.rename(columns = {"Município infecção" : "Município"}, inplace = True)
-casos25.rename(columns = dict_semanas, inplace = True)
-print(casos25)
-casos25["Município"] = casos25["Município"].str.replace("\d+ ", "", regex = True)
-casos25["Município"] = casos25["Município"].str.upper()
-casos25.drop(columns = "Total", inplace = True)
-casos25.drop(casos25.index[-1:], axis = 0, inplace = True)
-casos25.set_index("Município", inplace = True)
-casos25 = casos25.T
-casos25.reset_index(inplace=True)
-casos25 = casos25.rename(columns = {"index" : "Semana"})
-casos25.rename(columns = lista_municipio, inplace = True)
-colunas = casos25.columns.drop("Semana")
-semanas = pd.DataFrame(lista_semanas, columns=["Semana"])
-casos25["Semana"] = pd.to_datetime(casos25["Semana"])
-casos25 = pd.merge(semanas, casos25, on = "Semana", how = "left").fillna(0)
-casos25[colunas] = casos25[colunas].astype(int)
-hoje = pd.to_datetime(datetime.today().date())
-casos25 = casos25[casos25["Semana"] <= hoje]
-casos25 = pd.melt(casos25, id_vars = "Semana", var_name = "Município", value_name = "Casos", ignore_index = True)
-casos25.sort_values(by = "Semana",  ignore_index = True, inplace = True)
-print("="*80, f"\n{ano}\n\n", casos25)
-print(casos25.info())
-print(casos25.columns.drop("Semana"))
-print("="*80)
-"""
 ##$ Concatenando e Extraindo Dados
 hoje = pd.to_datetime(datetime.today().date())
 ano_atual = hoje.year
 serie_casos["Semana"] = pd.to_datetime(serie_casos["Semana"])
 serie_casos = serie_casos[serie_casos["Semana"].dt.year < ano_atual]
-casos25 = casos.copy()
-casostotal = pd.concat([serie_casos, casos25], ignore_index = True)
+casos_atual = casos.copy()
+casostotal = pd.concat([serie_casos, casos_atual], ignore_index = True)
 casostotal.fillna(0, inplace = True)
 colunas = casostotal.drop(columns = "Semana")
 colunas = colunas.columns
 casostotal[colunas] = casostotal[colunas].astype(int)
 casostotal.columns = casostotal.columns.str.strip()
 casostotal["Semana"] = pd.to_datetime(casostotal["Semana"]).dt.strftime("%Y-%m-%d")
+casostotal = casostotal.drop_duplicates(subset = ["Semana"], keep = "first")
 print(f"\n \n {green}SÉRIE TEMPORAL TOTAL{reset}\n{casostotal}\n")
 print(f"\n \n {green}SÉRIE TEMPORAL TOTAL (NULOS){reset}\n{casostotal.isnull().sum()}\n")
 #casos_pivot = pd.pivot_table(casostotal, index = "Semana", columns = "Município",
 #								values = "Casos", fill_value = 0)
 #casos_pivot.reset_index(inplace = True)
-
+#sys.exit()
 casos_pivot = casostotal.copy()
 casos_pivot = casos_pivot[casos_pivot["Semana"] <= str(hoje)]
 casostotal = pd.melt(casos_pivot, id_vars = "Semana", var_name = "Município", value_name = "Casos", ignore_index = True)
