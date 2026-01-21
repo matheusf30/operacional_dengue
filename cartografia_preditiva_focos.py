@@ -629,7 +629,7 @@ modelagem inexistente.""",
 	plt.title(f"Quantidade de $\it{{Aedes}}$ sp. Previstos em Santa Catarina.\nSemana Epidemiológica: {semana_epidemio['SE']}/{semana_epidemio['ano_epi']}.", fontsize = 14)
 	#plt.grid(True)
 	nome_arquivo = f"FOCOS_mapa_preditivo_{data_atual}_{idx}.pdf"
-	nome_arquivo_png = f"FOCOS_mapa_preditivo_vSE{semana_epidemio['SE']}-{semana_epidemio['ano_epi']}.png"
+	nome_arquivo_png = f"FOCOS_mapa_preditivo_vSE{SE}_SE{semana_epidemio['SE']}-{semana_epidemio['ano_epi']}.png"
 	if _AUTOMATIZA == True and _SALVAR == True:
 		os.makedirs(caminho_resultados, exist_ok = True)
 		#plt.savefig(f"{caminho_resultados}{nome_arquivo}", format = "pdf", dpi = 150)
