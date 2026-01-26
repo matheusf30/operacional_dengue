@@ -12,7 +12,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.colors as cls  
+import matplotlib.colors as cls 
 import seaborn as sns 
 from datetime import date, datetime, timedelta
 from epiweeks import Week, Year
@@ -139,6 +139,7 @@ total_dict = total.to_dict()
 print(f"\n{green}TOTAL:\n{reset}{total}\n")
 base_carto = censo[["Municipio", "Populacao"]]
 base_carto["total"] = base_carto["Municipio"].map(total_dict)
+base_carto["total"] = base_carto["total"].astype(float)
 base_carto["incidencia"] = (base_carto["total"] / base_carto["Populacao"]) * 100000
 base_carto["incidencia"] = base_carto["incidencia"].round(2)
 geom_dict = municipios.set_index("NM_MUN")["geometry"].to_dict()
@@ -166,9 +167,10 @@ print(f"\n{green}v_min\n{reset}{v_min}\n")
 print(f"\n{green}v_max\n{reset}{v_max}\n")
 print(f"\n{green}levels\n{reset}{levels}\n")
 figure = base_carto.plot(ax = ax, column = "total",  legend = True,
-				edgecolor = "white", label = "Quantidade de $\it{{Aedes}}$ sp.", legend_kwds = {"extend": "max", "fraction": 0.035, "pad": 0.03, "label": "Quantidade de $\it{{Aedes}}$ sp."},
-				cmap = "BuPu", linewidth = 0.05, linestyle = ":",
-				norm = cls.Normalize(vmin = v_min, vmax = v_max, clip = True))
+				edgecolor = "white", cmap = "BuPu", linewidth = 0.05, linestyle = ":",
+				norm = cls.Normalize(vmin = v_min, vmax = v_max, clip = True),
+				legend_kwds = {"extend": "max", "pad": 0.03, "orientation": "vertical", "shrink": 0.6,#"fraction": 0.035,
+								"label": "Quantidade de $\it{{Aedes}}$ sp."})
 			
 regionais.plot(ax = ax, facecolor = "none",
 			   edgecolor = "dimgray", linewidth = 0.6)
@@ -214,7 +216,8 @@ print(f"\n{green}v_min\n{reset}{v_min}\n")
 print(f"\n{green}v_max\n{reset}{v_max}\n")
 print(f"\n{green}levels\n{reset}{levels}\n")
 base_carto.plot(ax = ax, column = "incidencia",  legend = True,
-				edgecolor = "white", label = "Quantidade Ponderada de $\it{{Aedes}}$ sp.", legend_kwds = {"extend": "max", "fraction": 0.035, "pad": 0.03, "label": "Quantidade de $\it{{Aedes}}$ sp./100 Mil Habitantes"},
+				edgecolor = "white", label = "Quantidade Ponderada de $\it{{Aedes}}$ sp./100 Mil Habitantes",
+				legend_kwds = {"extend": "max", "fraction": 0.035, "pad": 0.03, "label": "Quantidade de $\it{{Aedes}}$ sp./100 Mil Habitantes"},
 				cmap = "BuPu", linewidth = 0.05, linestyle = ":",
 				norm = cls.Normalize(vmin = v_min, vmax = v_max, clip = True))
 #epidemia = base_carto[base_carto["incidencia"] > 300]
