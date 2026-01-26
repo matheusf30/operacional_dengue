@@ -15,6 +15,8 @@ import pandas as pd
 import geopandas as gpd
 import numpy as np
 import os, sys
+from datetime import date, datetime, timedelta
+from epiweeks import Week, Year
 
 ##### Padrão ANSI ###############################################################
 bold = "\033[1m"
@@ -90,6 +92,17 @@ except:
 municipios = gpd.read_file(f"{caminho_shape}{municipios}")
 
 ###### FUNÇÕES ###################################################################
+def tempo_epidemiologico(df_original):
+	tempo = pd.DataFrame()
+	tempo["Semana"] = df_original["Semana"]
+	tempo["Semana"] = pd.to_datetime(tempo["Semana"])
+	tempo["SE"] = tempo["Semana"].apply(lambda data: Week.fromdate(data).week)
+	tempo["ano_epi"] = tempo["Semana"].dt.year
+	tempo.loc[(tempo["Semana"].dt.month == 1) & (tempo["SE"] > 50), "ano_epi"] -= 1
+	tempo.loc[(tempo["Semana"].dt.month == 12) & (tempo["SE"] == 1), "ano_epi"] += 1
+	print(f"\n{green}TEMPO CRONOLÓGICO (epidemiológico):\n{reset}{tempo}\n")
+	return tempo
+	
 def tratar_focos(focos):
 	"""
 	"""	
@@ -177,6 +190,9 @@ for col in [focos_semanal_pivot.columns]:
 		focos_semanal_pivot[col] = focos_semanal_pivot[col].astype(int)
 focos_semanal_pivot.reset_index(inplace = True)
 focos_semanal_pivot.sort_values("Semana", inplace = True)
+focos_semanal_pivot["semana"] = pd.to_datetime(focos_semanal_pivot["Semana"])
+focos_semanal_pivot = focos_semanal_pivot[focos_semanal_pivot["Semana"] <= datetime.now()]
+tempo_epidemiologico(focos_semanal_pivot)
 print(f"\n{green}FOCOS CONSOLIDADOS (17 Regionais):\n{reset}{focos_semanal_pivot}\n")
 print(f"\n{green}FOCOS CONSOLIDADOS (17 Regionais - Colunas):\n{reset}{focos_semanal_pivot.columns}\n")
 focos_semanal_pivot.to_csv(f"{caminho_dados}focos_semanal_pivot.csv", index = False)
