@@ -309,8 +309,8 @@ print(f"\n{green}FOCOS REGIONAIS:\n{reset}{focos_atual_reg}\n{focos_atual_reg.dt
 print(f"\n{green}PREVISTOS REGIONAIS:\n{reset}{previstos_reg}\n{previstos_reg.dtypes}\n")
 print(f"\n{green}ÚLTIMOS PREVISTOS REGIONAIS:\n{reset}{previsao12_reg}\n{previsao12_reg.dtypes}\n")
 
-print(f"\n{green}VALOR MÁXIMO DOS FOCOS ATUAIS (MUNICIPAL):\n{reset}{focos_atual.set_index('Semana').max().max()}")
-print(f"\n{green}VALOR MÁXIMO DOS FOCOS ATUAIS (REGIONAL):\n{reset}{focos_atual.select_dtypes(include = 'number').max().max()}")
+print(f"\n{green}VALOR MÁXIMO DOS FOCOS ATUAIS (MUNICIPAL):\n{reset}{focos_atual.set_index('Semana').max(numeric_only=True).max()}")
+print(f"\n{green}VALOR MÁXIMO DOS FOCOS ATUAIS (REGIONAL):\n{reset}{focos_atual.select_dtypes(include = 'number').max(numeric_only=True).max()}")
 #sys.exit()
 """
 regionais = ["FOZ DO RIO ITAJAÍ", "GRANDE FLORIANÓPOLIS", "EXTREMO OESTE", "OESTE",
