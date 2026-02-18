@@ -1,3 +1,4 @@
+
 ### Bibliotecas Correlatas
 # Básicas e Gráficas
 import pandas as pd
@@ -471,7 +472,7 @@ _d7 = _d7.strftime("%Y-%m-%d")
 ### Exibindo Informações, Gráficos e Métricas
 #previsao_total = []
 previsao_total = pd.DataFrame()
-casos_ultimos = casos.iloc[-12:,:]
+casos_ultimos = casos.iloc[-7:,:]
 previsao_total["Semana"] = casos_ultimos["Semana"].copy()
  #pd.date_range(start = "2014-01-05", end = "2022-12-25", freq = "W")
 previsao_total["Semana"] = pd.to_datetime(previsao_total["Semana"])
@@ -496,9 +497,11 @@ if _AUTOMATIZA == True:
 			dataset, x, y = monta_dataset(_CIDADE)
 			treino_x, teste_x, treino_y, teste_y, treino_x_explicado = treino_teste(x, y, _CIDADE)
 			previsoes = preve(modelo, x, treino_x_explicado)
+			#sys.exit()
 			EQM, RQ_EQM, R_2 = metricas(dataset, previsoes, 5, y)
 			dataset2, x2, y2 = monta_dataset2(_CIDADE, previsoes)
 			previsoes2 = preve(modelo, x2)
+			#sys.exit()
 			previsao_total[_CIDADE] = previsoes2
 			#sys.exit()
 		except ValueError as e:
