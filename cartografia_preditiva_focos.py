@@ -379,7 +379,7 @@ def grafico(previsoes, R_2):
 				color = "red", alpha = 0.7, linewidth = 3, label = "Previsto")
 	plt.title(f"MODELO RANDOM FOREST (R²: {R_2}): OBSERVAÇÃO E PREVISÃO.\n MUNICÍPIO DE {cidade}, SANTA CATARINA.")
 	plt.xlabel("Semanas Epidemiológicas na Série de Anos")
-	plt.ylabel("Número de Focos de $\it{{Aedes}}$ sp.")
+	plt.ylabel("Número de Focos de $\it{{Aedes}}$ spp.")
 	#plt.show()
 
 def previsao_metricas(dataset, previsoes, n, teste_y, y_previsto):
@@ -426,7 +426,7 @@ def grafico_previsao(previsao, teste, string_modelo):
 				color = "red", alpha = 0.7, linewidth = 3, label = "Previsto")
 	plt.title(f"MODELO {nome_modelo.upper()} (R²: {R_2}): OBSERVAÇÃO E PREVISÃO.\n MUNICÍPIO DE {cidade}, SANTA CATARINA.")
 	plt.xlabel("Semanas Epidemiológicas na Série de Anos")
-	plt.ylabel("Número de Focos de $\it{{Aedes}}$ sp.")
+	plt.ylabel("Número de Focos de $\it{{Aedes}}$ spp.")
 	#plt.show()
 
 def salva_modelo(modelo, cidade):
@@ -597,7 +597,7 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 	print(f"\n{green}v_max\n{reset}{v_max}\n")
 	print(f"\n{green}levels\n{reset}{levels}\n")
 	previsao_melt_poligeo[previsao_melt_poligeo["Semana"] == semana_epidemio["Semana"]].plot(ax = ax, column = "Focos",  legend = True, edgecolor = "white",
-		                                                                           label = "Focos", cmap = "PuRd", linewidth = 0.05,  legend_kwds = {"extend": "max", "fraction": 0.035, "pad": 0.03, "label": "Quantidade de $\it{{Aedes}}$ sp."}, #levels = levels, "PuBuGn"
+		                                                                           label = "Focos", cmap = "PuRd", linewidth = 0.05,  legend_kwds = {"extend": "max", "fraction": 0.035, "pad": 0.03, "label": "Quantidade de $\it{{Aedes}}$ spp."}, #levels = levels, "PuBuGn"
 		                                                                           norm = cls.Normalize(vmin = v_min, vmax = v_max, clip = True))
 	cbar_ax = ax.get_figure().get_axes()[-1]
 	#cbar_ax.tick_params(labelsize = 20)
@@ -626,7 +626,7 @@ modelagem inexistente.""",
 	ax.set_xticklabels(["54°W", "52°W", "50°W", "48°W"])#, fontsize = 18)
 	ax.set_yticks([-29, -28, -27, -26])
 	ax.set_yticklabels(["29°S", "28°S", "27°S", "26°S"])#, fontsize = 18)
-	plt.title(f"Quantidade de $\it{{Aedes}}$ sp. Previstos em Santa Catarina.\nSemana Epidemiológica: {semana_epidemio['SE']}/{semana_epidemio['ano_epi']}.", fontsize = 14)
+	plt.title(f"Quantidade de $\it{{Aedes}}$ spp. Previstos em Santa Catarina.\nSemana Epidemiológica: {semana_epidemio['SE']}/{semana_epidemio['ano_epi']}.", fontsize = 14)
 	#plt.grid(True)
 	nome_arquivo = f"FOCOS_mapa_preditivo_{data_atual}_{idx}.pdf"
 	nome_arquivo_png = f"FOCOS_mapa_preditivo_vSE{SE}_SE{semana_epidemio['SE']}-{semana_epidemio['ano_epi']}.png"
