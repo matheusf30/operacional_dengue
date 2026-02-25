@@ -127,7 +127,8 @@ def tratar_focos(focos):
 	colunas = ["A.aegypti", "A.albopictus"]
 	for col in colunas:
 		focos[col] = focos[col].fillna(0).astype(int)
-	focos["focos"] = focos["A.aegypti"] + focos["A.albopictus"]
+	focos["Aedes"] = focos["A.aegypti"] + focos["A.albopictus"]
+	focos["focos"] = np.ones(len(focos)).astype(int)
 	condicao_albopictus = (focos["A.aegypti"] == 0) & (focos["A.albopictus"] > 0)
 	apenas_albopictus = focos[condicao_albopictus]
 	print(f"\n{green}APENAS FOCOS A. albopictus:\n{reset}{apenas_albopictus}\n")
@@ -142,7 +143,7 @@ def tratar_focos(focos):
 	print(f"\n{green}FOCOS A. albopictus > FOCOS A. aegypti:\n{reset}{maior_albopictus}\n")
 	print(f"\n{green}FOCOS (parte2):\n{reset}{focos}\n")
 	print(f"\n{green}FOCOS.columns (parte2):\n{reset}{focos.columns}\n")
-	fator_agregacao = {"A.aegypti":"sum", "A.albopictus":"sum", "focos":"sum"}
+	fator_agregacao = {"A.aegypti":"sum", "A.albopictus":"sum", "Aedes":"sum", "focos":"sum"}
 	focos_semanal = focos.groupby("municipio").resample("W-SUN", label = "left").agg(fator_agregacao)
 	focos_semanal.reset_index(inplace = True)
 	focos_semanal.sort_values(by = ["data"], inplace = True)
