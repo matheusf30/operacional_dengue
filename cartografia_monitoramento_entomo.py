@@ -170,7 +170,7 @@ figure = base_carto.plot(ax = ax, column = "total",  legend = True,
 				edgecolor = "white", cmap = "BuPu", linewidth = 0.05, linestyle = ":",
 				norm = cls.Normalize(vmin = v_min, vmax = v_max, clip = True),
 				legend_kwds = {"extend": "max", "pad": 0.03, "orientation": "vertical", "shrink": 0.6,#"fraction": 0.035,
-								"label": "Quantidade de $\it{{Aedes}}$ sp."})
+								"label": "Quantidade de $\it{{Aedes}}$ spp."})
 			
 regionais.plot(ax = ax, facecolor = "none",
 			   edgecolor = "dimgray", linewidth = 0.6)
@@ -184,7 +184,7 @@ ax.text(-52.5, -28.25, """LEGENDA
 ▢           Sem registro*
 
 *Não há registro oficial
- de $\it{{Aedes}}$ sp.""",
+ de $\it{{Aedes}}$ spp.""",
         color = "black", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 8)
 plt.xlabel("Longitude")
 plt.ylabel("Latitude")
@@ -193,7 +193,7 @@ ax.set_xticks([-54, -52, -50, -48])
 ax.set_xticklabels(["54°W", "52°W", "50°W", "48°W"])
 ax.set_yticks([-29, -28, -27, -26])
 ax.set_yticklabels(["29°S", "28°S", "27°S", "26°S"])
-plt.title(f"Soma de $\\it{{Aedes}}$ sp. em Santa Catarina\nSemana Epidemiológica: {tempo['SE'].iloc[-2]}/{tempo['ano_epi'].iloc[-2]}.", fontsize = 14)
+plt.title(f"Soma de $\\it{{Aedes}}$ spp. em Santa Catarina\nSemana Epidemiológica: {tempo['SE'].iloc[-2]}/{tempo['ano_epi'].iloc[-2]}.", fontsize = 14)
 nome_arquivo = f"FOCOS_mapa_monitoramento_{tempo['ano_epi'].iloc[-2]}_SE{tempo['SE'].iloc[-2]}.png"
 if _AUTOMATIZA == True and _SALVAR == True:
 	os.makedirs(caminho_resultados, exist_ok = True)
@@ -216,8 +216,8 @@ print(f"\n{green}v_min\n{reset}{v_min}\n")
 print(f"\n{green}v_max\n{reset}{v_max}\n")
 print(f"\n{green}levels\n{reset}{levels}\n")
 base_carto.plot(ax = ax, column = "incidencia",  legend = True,
-				edgecolor = "white", label = "Quantidade Ponderada de $\it{{Aedes}}$ sp./100 Mil Habitantes",
-				legend_kwds = {"extend": "max", "fraction": 0.035, "pad": 0.03, "label": "Quantidade de $\it{{Aedes}}$ sp./100 Mil Habitantes"},
+				edgecolor = "white", label = "Quantidade Ponderada de $\it{{Aedes}}$ spp./100 Mil Habitantes",
+				legend_kwds = {"extend": "max", "fraction": 0.035, "pad": 0.03, "label": "Quantidade de $\it{{Aedes}}$ spp./100 Mil Habitantes"},
 				cmap = "BuPu", linewidth = 0.05, linestyle = ":",
 				norm = cls.Normalize(vmin = v_min, vmax = v_max, clip = True))
 #epidemia = base_carto[base_carto["incidencia"] > 300]
@@ -235,8 +235,8 @@ ax.text(-52.5, -28.25, """LEGENDA
 ▢       Sem registro**
 
 *Soma Ponderada por População
-(Quantidade de $\it{{Aedes}}$ sp./100 mil habitantes)
-**Não há registro oficial de $\it{{Aedes}}$ sp.""",
+(Quantidade de $\it{{Aedes}}$ spp./100 mil habitantes)
+**Não há registro oficial de $\it{{Aedes}}$ spp.""",
 	color = "black", backgroundcolor = "lightgray", ha = "center", va = "center", fontsize = 8)
 plt.xlabel("Longitude")
 plt.ylabel("Latitude")
@@ -245,7 +245,7 @@ ax.set_xticks([-54, -52, -50, -48])
 ax.set_xticklabels(["54°W", "52°W", "50°W", "48°W"])
 ax.set_yticks([-29, -28, -27, -26])
 ax.set_yticklabels(["29°S", "28°S", "27°S", "26°S"])
-plt.title(f"Soma Ponderada* de $\it{{Aedes}}$ sp. em Santa Catarina\nSemana Epidemiológica: {tempo['SE'].iloc[-2]}/{tempo['ano_epi'].iloc[-2]}", fontsize = 14)
+plt.title(f"Soma Ponderada* de $\it{{Aedes}}$ spp. em Santa Catarina\nSemana Epidemiológica: {tempo['SE'].iloc[-2]}/{tempo['ano_epi'].iloc[-2]}", fontsize = 14)
 nome_arquivo = f"FOCOPONDERADO_mapa_monitoramento_{tempo['ano_epi'].iloc[-2]}_SE{tempo['SE'].iloc[-2]}.png"
 if _AUTOMATIZA == True and _SALVAR == True:
 	os.makedirs(caminho_resultados, exist_ok = True)
