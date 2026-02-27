@@ -24,18 +24,19 @@ python extrai_clima.py
 python extrai_gfs.py
 ### MODELAGENS
 python modelagem_casos.py True
-python modelagem_focos.py True
+python modelagem_focos.py True 
 ### CARTOGRAFIAS
 python temp_samet.py False True
 python prec_merge.py False True
 python cartografia_monitoramento_epidemio.py True False True
-python cartografia_monitoramento_entomo.py True False True 
+python cartografia_monitoramento_entomo.py True False True
 python cartografia_preditiva_casos.py True False True
 python cartografia_preditiva_incidencia.py True False True
-python cartografia_preditiva_focos.py True False True 
+python cartografia_preditiva_focos.py True False True
 ### VALIDAÇÕES
+python arquivo_preditivo_focos.py True True
 python verificacao_validacao_regional.py True False True
-python verificacao_validacao_regional_focos.py True False True 
+python verificacao_validacao_regional_focos.py True False True
 ###
 conda init
 conda deactivate
