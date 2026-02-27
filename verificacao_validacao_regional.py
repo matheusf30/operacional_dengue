@@ -117,6 +117,7 @@ print(f"\n{green}OS DADOS UTILIZADOS ESTÃO ALOCADOS NOS SEGUINTES CAMINHOS:\n\n
 casos = "casos_dive_pivot_total.csv"  # TabNet/DiveSC
 ultimas_previsoes = f"ultimas_previsoes_vSE{SE}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
 previsao_pivot = f"previsao_pivot_total_vSE{SE}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
+previsao_pivot = f"previsoes_{ano_epi}_focos_vSE{SE}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
 previsao_melt = f"previsao_melt_total_vSE{SE}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
 ultimas_previsoes_ontem = f"ultimas_previsoes_vSE{SE}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
 previsao_pivot_ontem = f"previsao_pivot_total_vSE{SE}_h{_HORIZONTE}_r{_RETROAGIR}.csv"
@@ -285,23 +286,25 @@ print(f"\n{green}REGIONAIS (colunas):\n{reset}{regionais.columns}\n")
 print(f"\n{green}REGIONAIS:\n{reset}{regionais['regional'].unique()}\n")
 
 #sys.exit()
-previstos = ultimas_previsoes.iloc[:3, :]
 previsao_pivot["Semana"] = pd.to_datetime(previsao_pivot["Semana"])
-previsao12 = previsao_pivot.iloc[:-2, :]
+previsao_pivot = previsao_pivot[previsao_pivot["Semana"].dt.year >= 2025]
+previstos = previsao_pivot.copy()#ultimas_previsoes.iloc[:3, :]
+previsao2 = previsao_pivot.iloc[-3:, :]
 previstos["Semana"] = pd.to_datetime(previstos["Semana"])
 casos["Semana"] = pd.to_datetime(casos["Semana"])
 casos_atual = casos[casos["Semana"].dt.year >= 2025]
 casos_atual = casos_atual.iloc[:-1,:]
+previstos = previstos.iloc[:-2,:]
 
 mapeamento = regionais.drop_duplicates(subset = ["Municipio"]).set_index("Municipio")["regional"]
 previstos = previstos.set_index("Semana")
-previsao12 = previsao12.set_index("Semana")
+previsao2 = previsao2.set_index("Semana")
 casos_atual = casos_atual.set_index("Semana")
 previstos_reg = previstos.groupby(previstos.columns.map(mapeamento), axis = 1).sum()
-previsao12_reg = previsao12.groupby(previsao12.columns.map(mapeamento), axis = 1).sum()
+previsao2_reg = previsao2.groupby(previsao2.columns.map(mapeamento), axis = 1).sum()
 casos_atual_reg = casos_atual.groupby(casos_atual.columns.map(mapeamento), axis = 1).sum()
 previstos.reset_index(inplace = True)
-previsao12.reset_index(inplace = True)
+previsao2.reset_index(inplace = True)
 casos_atual.reset_index(inplace = True)
 
 
@@ -311,7 +314,7 @@ print(f"\n{green}PREVISTOS.dtypes:\n{reset}{previstos}\n{previstos.dtypes}\n")
 
 print(f"\n{green}CASOS REGIONAIS:\n{reset}{casos_atual_reg}\n{casos_atual_reg.dtypes}\n")
 print(f"\n{green}PREVISTOS REGIONAIS:\n{reset}{previstos_reg}\n{previstos_reg.dtypes}\n")
-print(f"\n{green}ÚLTIMOS PREVISTOS REGIONAIS:\n{reset}{previsao12_reg}\n{previsao12_reg.dtypes}\n")
+print(f"\n{green}ÚLTIMOS PREVISTOS REGIONAIS:\n{reset}{previsao2_reg}\n{previsao2_reg.dtypes}\n")
 
 print(f"\n{green}VALOR MÁXIMO DOS CASOS ATUAIS (MUNICIPAL):\n{reset}{casos_atual.set_index('Semana').max().max()}")
 print(f"\n{green}VALOR MÁXIMO DOS CASOS ATUAIS (REGIONAL):\n{reset}{casos_atual_reg.max().max()}")
@@ -335,9 +338,9 @@ troca = {'Á': 'A', 'Â': 'A', 'À': 'A', 'Ã': 'A', 'Ä': 'A',
 
 #plt.figure(figsize = (10, 6), layout = "constrained", frameon = False)
 plt.figure(figsize = (10, 6), layout = "constrained", frameon = True) #Alterado frameon = True by Everton
-plt.plot(previstos["Semana"], previstos[_CIDADE],
+plt.plot(previsao2["Semana"], previsao2[_CIDADE],
 			label = "Previsto (GFS)", color = "red", linewidth = 3, linestyle = ":")
-plt.plot(previsao12["Semana"], previsao12[_CIDADE],
+plt.plot(previstos["Semana"], previstos[_CIDADE],
 			label = "Previsto", color = "red", linewidth = 3)
 plt.plot(casos_atual["Semana"], casos_atual[_CIDADE],
 				label = "Observado", color = "blue")
@@ -381,9 +384,9 @@ for idx, _REG in enumerate(regionais):
 	print(f"\n{green}REGIONAL - {idx}:\n{reset}{_REG}\n")
 	#plt.figure(figsize = (10, 6), layout = "constrained", frameon = False)
 	plt.figure(figsize = (10, 6), layout = "constrained", frameon = True) #Alterado frameon = True by Everton
-	plt.plot(previstos_reg.index, previstos_reg[_REG],
+	plt.plot(previsao2_reg.index, previsao2_reg[_REG],
 				label = "Previsto (GFS)", color = "red", linewidth = 3, linestyle = ":")
-	plt.plot(previsao12_reg.index, previsao12_reg[_REG],
+	plt.plot(previstos_reg.index, previstos_reg[_REG],
 				label = "Previsto", color = "red", linewidth = 3)
 	plt.plot(casos_atual_reg.index, casos_atual_reg[_REG],
 					label = "Observado", color = "blue")
