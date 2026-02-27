@@ -34,6 +34,7 @@ python cartografia_preditiva_casos.py True False True
 python cartografia_preditiva_incidencia.py True False True
 python cartografia_preditiva_focos.py True False True
 ### VALIDAÇÕES
+python arquivo_preditivo_casos.py True True
 python arquivo_preditivo_focos.py True True
 python verificacao_validacao_regional.py True False True
 python verificacao_validacao_regional_focos.py True False True
