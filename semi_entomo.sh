@@ -29,6 +29,7 @@ python prec_merge.py False True
 python cartografia_monitoramento_entomo.py True False True
 python cartografia_preditiva_focos.py True False True
 ### VALIDAÇÕES
+python arquivo_preditivo_focos.py True True
 python verificacao_validacao_regional_focos.py True False True
 ###
 conda init
