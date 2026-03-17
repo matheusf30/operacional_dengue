@@ -62,28 +62,26 @@ colunas_renomear = {"ID_AGRAVO":"doenca",
 					"CRITERIO":"criterio ",
 					"SOROTIPO":"sorotipo"}
 """
-
-try: # Colunas com padrão anomolo de nomenclatura (Nacional)
-	colunas_renomear = {"ID_AGRAVO,C,4":"doenca",
-					"DT_NOTIFIC,D":"data_notificacao",
-					"DT_SIN_PRI,D":"data_sintoma",
-					"SEM_PRI,C,7":"semana_sintoma",
-					"ID_MN_RESI,C,7":"municipio_id",
-					#ID_RG_RESI,C,8":"regional",
-					"CLASSI_FIN,C,3":"classificacao",
-					"CRITERIO,C,2":"criterio ",
-					"SOROTIPO,C,2":"sorotipo"}
-
-except KeyError: # Colunas com padrão anomolo de nomenclatura
+try: # Colunas com padrão anomolo de nomenclatura
 	colunas_renomear = {"ID_AGRAVO,C,5":"doenca",
 					"DT_NOTIFIC,D":"data_notificacao",
 					"DT_SIN_PRI,D":"data_sintoma",
 					"SEM_PRI,C,6":"semana_sintoma",
 					"ID_MN_RESI,C,6":"municipio_id",
-					#ID_RG_RESI,C,8":"regional",
+					"ID_RG_RESI,C,8":"regional",
 					"CLASSI_FIN,C,2":"classificacao",
 					"CRITERIO,C,1":"criterio ",
 					"SOROTIPO,C,1":"sorotipo"}
+except KeyError: # Colunas com padrão anomolo de nomenclatura (Nacional)
+	colunas_renomear = {"ID_AGRAVO,C,4":"doenca",
+					"DT_NOTIFIC,D":"data_notificacao",
+					"DT_SIN_PRI,D":"data_sintoma",
+					"SEM_PRI,C,7":"semana_sintoma",
+					"ID_MN_RESI,C,7":"municipio_id",
+					#"ID_RG_RESI,C,8":"regional",
+					"CLASSI_FIN,C,3":"classificacao",
+					"CRITERIO,C,2":"criterio ",
+					"SOROTIPO,C,2":"sorotipo"}
 casos = casos.rename(columns = colunas_renomear)
 casos = casos[["data_sintoma", "semana_sintoma", "data_notificacao",
 				"municipio_id", "doenca",
