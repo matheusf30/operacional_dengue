@@ -62,20 +62,32 @@ colunas_renomear = {"ID_AGRAVO":"doenca",
 					"CRITERIO":"criterio ",
 					"SOROTIPO":"sorotipo"}
 """
-#except KeyError: # Colunas com padrão anomolo de nomenclatura
-colunas_renomear = {"ID_AGRAVO,C,5":"doenca",
+
+try: # Colunas com padrão anomolo de nomenclatura (Nacional)
+	colunas_renomear = {"ID_AGRAVO,C,4":"doenca",
+					"DT_NOTIFIC,D":"data_notificacao",
+					"DT_SIN_PRI,D":"data_sintoma",
+					"SEM_PRI,C,7":"semana_sintoma",
+					"ID_MN_RESI,C,7":"municipio_id",
+					#ID_RG_RESI,C,8":"regional",
+					"CLASSI_FIN,C,3":"classificacao",
+					"CRITERIO,C,2":"criterio ",
+					"SOROTIPO,C,2":"sorotipo"}
+
+except KeyError: # Colunas com padrão anomolo de nomenclatura
+	colunas_renomear = {"ID_AGRAVO,C,5":"doenca",
 					"DT_NOTIFIC,D":"data_notificacao",
 					"DT_SIN_PRI,D":"data_sintoma",
 					"SEM_PRI,C,6":"semana_sintoma",
 					"ID_MN_RESI,C,6":"municipio_id",
-					"ID_RG_RESI,C,8":"regional",
+					#ID_RG_RESI,C,8":"regional",
 					"CLASSI_FIN,C,2":"classificacao",
 					"CRITERIO,C,1":"criterio ",
 					"SOROTIPO,C,1":"sorotipo"}
 casos = casos.rename(columns = colunas_renomear)
 casos = casos[["data_sintoma", "semana_sintoma", "data_notificacao",
-				"municipio_id", "regional",	"doenca",
-				"classificacao", "criterio ", "sorotipo"]]
+				"municipio_id", "doenca",
+				"classificacao", "criterio ", "sorotipo"]] #"regional",
 casos.columns = casos.columns.str.strip()
 
 print(f"\n{green}CLASSIFICAÇÃO:\n{reset}{casos['classificacao'].unique()}\n")
@@ -137,6 +149,18 @@ casos_semanal_pivot = casos_semanal_pivot.rename(columns = {"data":"Semana"})
 #casos_semanal_pivot = casos_semanal_pivot.iloc[:-1,:]
 #casos_semanal_pivot.drop(0, axis = 0, inplace = True)
 casos_semanal_pivot = casos_semanal_pivot[casos_semanal_pivot["Semana"].dt.year == 2026]
+semana_atual = pd.Timestamp.today().to_period("W-SUN").start_time
+primeira_semana = casos_semanal_pivot["Semana"].min()
+casos_semanal_pivot = casos_semanal_pivot.set_index("Semana")
+casos_semanal_pivot = casos_semanal_pivot.reindex(pd.date_range(start = primeira_semana,
+																end = semana_atual,
+																freq = "W-SUN"))
+casos_semanal_pivot = casos_semanal_pivot.fillna(0)
+casos_semanal_pivot.reset_index(inplace = True)
+casos_semanal_pivot.rename(columns = {"index": "Semana"}, inplace = True)
+for c in casos_semanal_pivot.columns:
+	if c != "Semana":
+		casos_semanal_pivot[c] = casos_semanal_pivot[c].astype(int)
 print(f"\n{green}CASOS:\n{reset}{casos_semanal_pivot}\n")
 print(f"\n{green}CASOS (info):\n{reset}{casos_semanal_pivot.info()}\n")
 print(f"\n{green}CASOS:\n{reset}{casos_semanal_pivot.columns}\n")
