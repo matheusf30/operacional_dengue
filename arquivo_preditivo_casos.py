@@ -290,7 +290,7 @@ def monta_dataset2(cidade, previsoes):
 	print(f"\n{green}dataset2:\n{reset}{dataset2}")
 	print(f"\n{green}dataset2.info:\n{reset}{dataset2.info()}")
 	### Dividindo Dataset em Treino e Teste
-	x2 = dataset2.copy().iloc[:-1,:]
+	x2 = dataset2.copy()#.iloc[:-1,:]
 	print(f"\n{green}x2:\n{reset}{x2}")
 	print(f"\n{green}x2.info:\n{reset}{x2.info()}")
 	y2 = dataset2["CASOS"]
