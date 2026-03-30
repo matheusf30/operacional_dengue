@@ -157,6 +157,19 @@ def tratar_focos(focos):
 	focos_semanal_pivot.reset_index(inplace = True)
 	focos_semanal_pivot = focos_semanal_pivot.rename(columns = {"data":"Semana"})
 	#focos_semanal_pivot = focos_semanal_pivot.iloc[:-2,:]
+	focos_semanal_pivot = focos_semanal_pivot[focos_semanal_pivot["Semana"].dt.year == 2026]
+	semana_atual = pd.Timestamp.today().to_period("W-SUN").start_time
+	primeira_semana = focos_semanal_pivot["Semana"].min()
+	focos_semanal_pivot = focos_semanal_pivot.set_index("Semana")
+	focos_semanal_pivot = focos_semanal_pivot.reindex(pd.date_range(start = primeira_semana,
+																	end = semana_atual,
+																	freq = "W-SUN"))
+	focos_semanal_pivot = focos_semanal_pivot.fillna(0)
+	focos_semanal_pivot.reset_index(inplace = True)
+	focos_semanal_pivot.rename(columns = {"index": "Semana"}, inplace = True)
+	for c in focos_semanal_pivot.columns:
+		if c != "Semana":
+			focos_semanal_pivot[c] = focos_semanal_pivot[c].astype(int)
 	print(f"\n{green}FOCOS (parte4):\n{reset}{focos_semanal_pivot}\n")
 	print(f"\n{green}FOCOS.columns (parte4):\n{reset}{focos_semanal_pivot.columns}\n")
 	return focos_semanal_pivot
