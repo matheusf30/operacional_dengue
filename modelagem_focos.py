@@ -830,6 +830,7 @@ dataset2.reset_index(inplace = True)
 print(f"\n{green}dataset2:\n{reset}{dataset2}")
 print(f"\n{green}dataset2.info:\n{reset}{dataset2.info()}")
 #sys.exit()
+"""
 x2.index = pd.to_datetime(x2.index)
 ultima_semana = x2.index[-12]
 semanas_futuras = pd.date_range(start = ultima_semana + pd.DateOffset(weeks = 1),
@@ -852,7 +853,7 @@ print(f"\n{green}previsoes2:\n{reset}{previsoes2}")
 print(f"\n{green}type(previsoes2):\n{reset}{type(previsoes2)}")
 #plt.show()
 plt.close()
-"""
+
 ################################################################################################
 ############ Testando 2º Salto de Previsão #####################################################
 ################################################################################################
