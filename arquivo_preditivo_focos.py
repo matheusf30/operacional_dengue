@@ -471,7 +471,7 @@ previsao_total["Semana"] = focos_ultimos["Semana"].copy()
 previsao_total["Semana"] = pd.to_datetime(previsao_total["Semana"])
 #previsao_total.drop(2, axis = 0, inplace = True)
 previsao_total = previsao_total.iloc[5:,:]
-novas_SE = pd.date_range(start = previsao_total['Semana'].max(), periods = 3, freq = "W-SUN")[1:]
+novas_SE = pd.date_range(start = previsao_total["Semana"].max(), periods = 3, freq = "W-SUN")[1:]
 novas_linhas = pd.DataFrame({"Semana": novas_SE})
 previsao_total = pd.concat([previsao_total, novas_linhas], ignore_index=True)
 previsao_total.reset_index(inplace = True)
