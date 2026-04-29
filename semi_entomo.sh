@@ -17,7 +17,6 @@ conda activate dados_nc
 ###
 ### EXTRAÇÃO E PRÉ-PROCESSAMENTO DE DADOS ENTOMO-EPIDEMIOLÓGICOS
 python preprocess_entomo.py
-python une_casos_tabnet.py 
 #### EXTRAÇÃO E PRÉ-PROCESSAMENTO DE DADOS METEROLÓGICOS #SAMeT, MERGE e GFS
 python extrai_clima.py 
 python extrai_gfs.py
