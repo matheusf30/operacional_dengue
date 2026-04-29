@@ -24,15 +24,19 @@ cyan = "\033[36m"
 white = "\033[37m"
 reset = "\033[0m"
 
-t0 = datetime.now()
+t0 = datetime.now()# - timedelta(days = 7)
 SE = int(str(Week.fromdate(t0))[-2:])
 EPI_YEAR = int(str(Week.fromdate(t0))[:-2])
+EPI_YY_START = pd.to_datetime(Week(EPI_YEAR, 1).startdate())
 caminho = f"/home/meteoro/scripts/operacional_dengue/resultados/{EPI_YEAR}/SE{SE}"
 caminho_dados = "/home/meteoro/scripts/operacional_dengue/dados_operacao/"
 censo = "censo_sc_xy.csv"
 censo = pd.read_csv(f"{caminho_dados}{censo}")
 censo = censo[["Municipio", "Populacao"]].set_index("Municipio")
 censo.index = censo.index.str.upper()
+regional = "censo_sc_regional.csv"
+regional = pd.read_csv(f"{caminho_dados}{regional}")
+mapeamento = regional.drop_duplicates(subset = ["Municipio"]).set_index("Municipio")["regional"]
 
 def printa(str_var, var):
 	STR_VAR = str_var.upper()
@@ -40,73 +44,72 @@ def printa(str_var, var):
 	
 printa("se", SE)
 printa("ano_epi", EPI_YEAR)
-printa("censo", censo)
+#printa("censo", censo)
+#printa("regional", regional)
+#printa("mapeamento", mapeamento)
 
-def previsao(analise, arquivo, colunas):
-	arquivo_csv = pd.read_csv(arquivo).iloc[0:3]
-	printa(f"{analise}", arquivo_csv)
-	#input(f"{green}Selecione um município: {reset}")
-	arquivo_csv_municipio = arquivo_csv[["index", "Semana", "FLORIANÓPOLIS"]]
-	printa("focos", arquivo_csv)
-	S0 = arquivo_csv.drop(columns = colunas).loc[0].sort_values(ascending = False).head(20)
-	S1 = arquivo_csv.drop(columns = colunas).loc[1].sort_values(ascending = False).head(20)
-	S2 = arquivo_csv.drop(columns = colunas).loc[2].sort_values(ascending = False).head(20)
-	printa(f"PREVISAO DE {analise} PARA SE{SE}", S0)
-	printa(f"PREVISAO DE {analise} PARA SE{SE + 1}", S1)
-	printa(f"PREVISAO DE {analise} PARA SE{SE + 2}", S2)
-	print(arquivo_csv_municipio)
-	
-def monitoramento(analise, arquivo, colunas = None, visu = 30):
-	arquivo_csv = pd.read_csv(arquivo)
-	arquivo_csv["Semana"]
-	printa(f"{analise}", arquivo_csv)
-	arquivo_csv = arquivo_csv.drop(columns = colunas)
-	arquivo_csv = arquivo_csv.sum()
-	printa(f"{analise}", arquivo_csv)
-	if analise in ["soma_incidencia", "soma_ponderados"]:
-		printa("censo", censo)
-		arquivo_csv = (arquivo_csv / censo["Populacao"]) * 100000
-		arquivo_csv = arquivo_csv.dropna().round(2)
-		printa(f"Final: {analise}", arquivo_csv)
-	arquivo_csv = arquivo_csv.sort_values(ascending = False).head(visu)
-	printa(f"{analise}", arquivo_csv)
-	#input(f"{green}Selecione um município: {reset}")
 
+def visualiza(analise, arquivo, visu = 50, monitora = None):
+	arquivo_csv = pd.read_csv(arquivo)	
+	#printa(f"{analise}", arquivo_csv)
+	if analise in ["casos_previsao", "incidencia_previsao", "focos_previsao"]:
+		#arquivo_csv["regional"] = arquivo_csv["Municipio"].map(mapeamento)
+		print("VISUALIZANDO PREVISÃO")
+		S0 = arquivo_csv.loc[0].sort_values(ascending = False).head(visu)
+		S0 = S0.to_frame(name = "total")
+		S0["regional"] = S0.index.map(mapeamento)
+		S1 = arquivo_csv.loc[1].sort_values(ascending = False).head(visu)
+		S1 = S1.to_frame(name = "total")
+		S1["regional"] = S1.index.map(mapeamento)
+		S2 = arquivo_csv.loc[2].sort_values(ascending = False).head(visu)
+		S2 = S2.to_frame(name = "total")
+		S2["regional"] = S2.index.map(mapeamento)
+		printa(f"PREVISAO DE {analise} PARA SE{SE}", S0)
+		printa(f"PREVISAO DE {analise} PARA SE{SE + 1}", S1)
+		printa(f"PREVISAO DE {analise} PARA SE{SE + 2}", S2)
+	elif analise in ["casos_monitoramento", "incidencia_monitoramento", "focos_monitoramento", "ponderados_monitoramento"]:
+		variavel = {"incidencia_monitoramento": "incidencia",
+		"casos_monitoramento": "casos",
+		"focos_monitoramento": "focos",
+		"ponderados_monitoramento": "focoponderados"}
+		arquivo_csv = arquivo_csv[["Municipio", monitora]]
+		arquivo_csv = arquivo_csv.sort_values(by = monitora, ascending = False).head(visu).reset_index(drop=True)
+		arquivo_csv["regional"] = arquivo_csv["Municipio"].map(mapeamento)
+		#arquivo_csv = arquivo_csv[["Municipio", "regional", "total"]]
+		#arquivo_csv = arquivo_csv.sort_values(by = monitora, ascending = False).head(visu)
+		printa(f"monitoramento de {variavel[analise]} até a SE{SE-1}", arquivo_csv)
 
 print(f"{green}Insira o comportamento a ser analisado.{reset}")
-print(f"{cyan}incidencia\ncasos\nfocos\n{reset}")
+print(f"{cyan}incidencia_monitoramento\ncasos_monitoramento\nfocos_monitoramento\nponderados_monitoramento\ncasos_previsao\nincidencia_previsao\nfocos_previsao{reset}")
 analise = input(f"{green}Insira o comportamento a ser analisado... {reset}")
 
 match analise:
-	case "casos":
-		colunas = ["index", "Semana"]
-		arquivo = f"{caminho}/epidemiologia/ultimas_previsoes_vSE{SE}_h0_r2.csv"
-		previsao(analise, arquivo, colunas)
-	case "focos":
-		colunas = ["level_0", "index", "Semana"]
-		arquivo = f"{caminho}/entomologia/ultimas_previsoes_focos_vSE{SE}_h2_r4.csv"
-		previsao(analise, arquivo, colunas)
-	case "incidencia":
-		colunas = ["index", "Semana"]
-		arquivo = f"{caminho}/epidemiologia/ultimas_previsoes_incidencia_vSE{SE}_h0_r2.csv"
-		previsao(analise, arquivo, colunas)
-	case "soma_casos":
-		arquivo = f"{caminho_dados}/casos_semanal_pivot.csv"
-		colunas = ["Semana"]
-		monitoramento(analise, arquivo, colunas)
-	case "soma_focos":
-		arquivo = f"{caminho_dados}/focos_semanal_pivot.csv"
-		colunas = ["Semana", "semana"]
-		monitoramento(analise, arquivo, colunas)
-	case "soma_incidencia":
-		arquivo = f"{caminho_dados}/casos_semanal_pivot.csv"
-		colunas = ["Semana"]
-		monitoramento(analise, arquivo, colunas)
-	case "soma_ponderados":
-		arquivo = f"{caminho_dados}/focos_semanal_pivot.csv"
-		colunas = ["Semana", "semana"]
-		monitoramento(analise, arquivo, colunas, 50)
-
+	case "casos_previsao":
+		arquivo = f"{caminho}/epidemiologia/visualiza_preditivo_casos_vSE{SE}.csv"
+		visualiza(analise, arquivo, visu = 30)
+	case "focos_previsao":
+		arquivo = f"{caminho}/entomologia/visualiza_preditivo_focos_vSE{SE}.csv"
+		visualiza(analise, arquivo, visu = 30)
+	case "incidencia_previsao":
+		arquivo = f"{caminho}/epidemiologia/visualiza_preditivo_incidencia_vSE{SE}.csv"
+		visualiza(analise, arquivo, visu = 30)
+	case "casos_monitoramento":
+		arquivo = f"{caminho}/epidemiologia/visualiza_monitoramento_epidemio_vSE{SE}.csv"
+		visualiza(analise, arquivo, visu = 30, monitora = "total")
+	case "focos_monitoramento":
+		arquivo = f"{caminho}/entomologia/visualiza_monitoramento_entomo_vSE{SE}.csv"
+		visualiza(analise, arquivo, visu = 30, monitora = "total")
+	case "incidencia_monitoramento":
+		arquivo = f"{caminho}/epidemiologia/visualiza_monitoramento_epidemio_vSE{SE}.csv"
+		visualiza(analise, arquivo, visu = 30, monitora = "incidencia")
+	case "ponderados_monitoramento":
+		arquivo = f"{caminho}/entomologia/visualiza_monitoramento_entomo_vSE{SE}.csv"
+		visualiza(analise, arquivo, visu = 30, monitora = "incidencia")
+sys.exit()
+print("=="*50)
+previsao("casos", f"{caminho}/epidemiologia/previsao_pivot_total_vSE{SE}_h0_r2.csv", ["index", "Semana"])
+print("=="*50)
+previsao("casos_1", f"{caminho}/epidemiologia/ultimas_previsoes_vSE{SE}_h0_r2.csv", ["index", "Semana"])
 
 
 #CASOS: ultimas_previsoes_vSE14_h0_r2.csv
