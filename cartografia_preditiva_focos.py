@@ -241,7 +241,7 @@ def monta_dataset(cidade):
 	dataset.columns.name = f"{_CIDADE}"
 	print(f"\n{green}dataset:\n{reset}{dataset}")
 	print(f"\n{green}dataset.info:\n{reset}{dataset.info()}")
-	dataset1 = dataset.iloc[-12:-1,:]
+	dataset1 = dataset.copy().iloc[-12:-1,:]
 	print(f"\n{green}dataset1:\n{reset}{dataset1}")
 	print(f"\n{green}dataset1.info:\n{reset}{dataset1.info()}")
 	x1 = dataset1.copy() #dataset.drop(columns = "FOCOS")
@@ -573,6 +573,7 @@ lista_semanas = [semana_epidemio1, semana_epidemio2, semana_epidemio3]
 
 	
 #sys.exit()
+dados_por_semana = []
 for idx, semana_epidemio in enumerate(lista_semanas):
 	print(f"\n{green}CALENDÁRIO EPIDEMIOLÓGICO:\n{cyan}{semana_epidemio}{reset}\n")
 	print(f"\n{green}SEMANA EPIDEMIOLÓGICA:\n{cyan}{semana_epidemio['SE']}{reset}\n")
@@ -588,6 +589,10 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 	fig, ax = plt.subplots(figsize = (8, 5.3), layout = "constrained", frameon = True)
 	municipios.plot(ax = ax, color = "lightgray", edgecolor = "white", linewidth = 0.05)
 	v_max = previsao_melt_poligeo.select_dtypes(include = ["number"]).max().max()
+	#valores = previsao_melt_poligeo.select_dtypes(include=["number"]).values.flatten()
+	#valores = pd.Series(valores).dropna().drop_duplicates()
+	#v_max4 = valores.nlargest(4).iloc[-1]
+	#v_max2 = np.unique(valores)[-2]
 	v_min = previsao_melt_poligeo.select_dtypes(include = ["number"]).min().min()
 	v_max = int(v_max)
 	v_min = int(v_min)
@@ -599,6 +604,17 @@ for idx, semana_epidemio in enumerate(lista_semanas):
 	previsao_melt_poligeo[previsao_melt_poligeo["Semana"] == semana_epidemio["Semana"]].plot(ax = ax, column = "Focos",  legend = True, edgecolor = "white",
 		                                                                           label = "Focos", cmap = "PuRd", linewidth = 0.05,  legend_kwds = {"extend": "max", "fraction": 0.035, "pad": 0.03, "label": "Focos de $\it{{Aedes}}$ spp."}, #levels = levels, "PuBuGn"
 		                                                                           norm = cls.Normalize(vmin = v_min, vmax = v_max, clip = True))
+	#ARQUIVO DE VISUALIZACAO@
+	dados_semana = previsao_melt_poligeo[previsao_melt_poligeo["Semana"] == semana_epidemio["Semana"]
+	].copy()
+	# Seleciona apenas as colunas necessárias
+	dados_semana = dados_semana[["Semana", "Município", "Focos", "regional"]]
+	dados_semana["Municipio_Regional"] = dados_semana["Município"] + " - " + dados_semana["regional"]
+
+	# Adiciona à lista
+	dados_por_semana.append(dados_semana)
+	#ARQUIVO DE VISUALIZACAO
+	
 	cbar_ax = ax.get_figure().get_axes()[-1]
 	#cbar_ax.tick_params(labelsize = 20)
 	zero = previsao_melt_poligeo[previsao_melt_poligeo["Focos"] <= 0]
@@ -643,3 +659,16 @@ modelagem inexistente.""",
 		print(f"{cyan}\nVISUALIZANDO:\n{caminho_resultados}\n{nome_arquivo}\n{reset}\n\n")
 		plt.show()
 		print(f"{cyan}\nENCERRADO:\n{caminho_resultados}\n{nome_arquivo}\n{reset}\n\n")
+		
+# Concatena os dados de todas as semanas
+df_completo = pd.concat(dados_por_semana, ignore_index=True)
+# Cria o DataFrame com municípios como colunas e semanas como linhas
+df_pivot = df_completo.pivot(index="Semana", columns="Município", values="Focos")
+#df_pivot = df_completo.pivot(index="Semana", columns="Municipio_Regional", values="Focos")
+print(df_pivot)
+if _SALVAR == True:
+	previsao_total.to_csv(f"{caminho_resultados}previsao_total_focos_vSE{SE}.csv", index = False)
+	df_pivot.to_csv(f"{caminho_resultados}visualiza_preditivo_focos_vSE{SE}.csv", index = False)
+print(f"{green}ARQUIVO DE VISUALIZAÇÃO DE PREVISÃO DE FOCOS SALVO COMO:{reset}\n")
+print(f"{caminho_resultados}visualiza_preditivo_focos_vSE{SE}.csv")	
+print(f"{caminho_resultados}previsao_total_focos_vSE{SE}.csv")
